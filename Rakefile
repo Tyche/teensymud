@@ -55,10 +55,10 @@ end
   
 task :release do
   baseurl = "http://sourcery.dyndns.org/svn/teensymud"
-  sh "svn cp pkg/tmud-#{TMUDV}.tar.gz ../release"
-  sh "svn cp pkg/tmud-#{TMUDV}.zip ../release"
+  sh "cp pkg/tmud-#{TMUDV}.* ../release"
+  sh "svn add ../release/tmud-#{TMUDV}.*"
   sh "svn ci -m 'create new packages for #{TMUDV}'"
-  sh "svn cp -m 'released #{TMUDV}' #{baseurl}/trunk #{baseurl}/release/tmud-#{TMUDV}"
+  sh "svn cp -m 'tagged release #{TMUDV}' #{baseurl}/trunk #{baseurl}/release/tmud-#{TMUDV}"
 end
 
 task :release => [:package]
