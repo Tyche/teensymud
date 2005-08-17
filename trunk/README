@@ -1,0 +1,77 @@
+= TeensyMUD Server
+= v2.0.0
+
+---
+== Introduction
+TeensyMUD is a very simple mud server written in Ruby.  It uses a one thread per connection network model and YAML formatted text files as a database.
+
+This server was initially created in response to an Aprils Fool's joke posted by Erwin Andreasen on TheMudConnector forum announcing a 1K mud contest.  Those obfuscated versions can be found in the repository.
+
+Does TeensyMUD have a future?  Who knows?  I don't.
+
+== Download
+The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud or checked out of http://sourcery.dyndns.org/svn/teensymud/release
+
+== System Dependencies
+=== Required
+[Ruby 1.8.2] Can be obtained at the home of Ruby, http://www.ruby-lang.org.  It runs on most platforms.
+
+=== Optional
+[RubyGems] To install rake and various things.  See - http://rubyforge.org/projects/rubygems
+[Rake] To build documentation, run tests, etc.  See - http://rake.rubyforge.org
+
+== Features
+* Multithreaded, network server and chat driver run in their own threads.
+* Supports multiple users
+* Global chat
+* Virtual world (room system with unlimited exits)
+* Player movement
+* Player has inventory
+* Player can get and drop objects
+* Help system 
+* World is persistent
+* OLC for rooms and objects
+* Offline creation in friendly markup language
+* Turn-based combat system
+* Permadeath and suicide
+* Maintainability (hey how hard could 27 lines of code be)
+* Sexy features like autolook and autoexits
+* Portable - runs on Unix, OS/X, Windows
+* Documentation - see 'doc/index.html' in distro
+* More extras!!! Comes with mini-distro builder utility (see 'rakefile package')
+* Threads racing at no extra charge
+
+---
+== Installation
+
+1. $ tar xzvf tmud*
+2. $ cd tmud*
+3. $ ruby tmud.rb
+
+That's it.  It will boot on port 4000 and build an initial database in the db directory. 
+
+== Operation
+* CTL-C  - Will shut down the server
+* quit   - Will disconnect your session
+* help   - Prints a brief description of the commands
+
+== Help 
+- i = displays player inventory
+- l = displays the contents of a room
+- d = drops all objects in your inventory into the room
+- g = gets all objects in the room into your inventory
+- k <name> = attempts to kill player (ex. k bubba)
+- c <message> = sends <message> to all players in the game
+- h = displays help
+- q = quits the game (saves player)
+- O <object name> = creates a new object (ex. O rose)
+- R <room name> <exit name to> <exit name back> = creates a new room and autolinks the exits using the exit names provided.
+- <exit name> = moves player through exit named (ex. south)
+ 
+---
+== Contributors
+:include:CONTRIBUTORS
+
+== License
+:include:LICENSE
+
