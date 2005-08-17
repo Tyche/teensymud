@@ -50,6 +50,7 @@ Rake::PackageTask.new("tmud", TMUDV) do |p|
     p.need_tar_gz = true
     p.need_zip = true
     p.package_files.include(PKG_FILES)
+    p.package_files.exclude(/\.svn/)
 end
   
 task :release do
