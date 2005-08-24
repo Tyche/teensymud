@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue Aug 16 22:21:08 GMT-5:00 2005</td>
+      <td>Wed Aug 24 08:02:22 GMT-5:00 2005</td>
     </tr>
     </table>
   </div>
@@ -75,7 +75,7 @@
 
     <div id="description">
       <h1>TeensyMUD Server</h1>
-<h1>v2.0.0</h1>
+<h1>v2.0.1</h1>
 <hr size="1"></hr><h2>Introduction</h2>
 <p>
 TeensyMUD is a very simple mud server written in Ruby. It uses a one thread
@@ -206,40 +206,54 @@ the db directory.
 </li>
 </ul>
 <h2>Help</h2>
+<p>
+Play commands
+</p>
 <ul>
-<li>i = displays player inventory
+<li>i[nventory] = displays player inventory
 
 </li>
-<li>l = displays the contents of a room
+<li>l[ook] = displays the contents of a room
 
 </li>
-<li>d = drops all objects in your inventory into the room
+<li>dr[op] = drops all objects in your inventory into the room
 
 </li>
-<li>g = gets all objects in the room into your inventory
+<li>g[get] = gets all objects in the room into your inventory
 
 </li>
-<li>k &lt;name&gt; = attempts to kill player (ex. k bubba)
+<li>k[ill] &lt;name&gt; = attempts to kill player (e.g. k bubba)
 
 </li>
-<li>c &lt;message&gt; = sends &lt;message&gt; to all players in the game
+<li>s[ay] &lt;message&gt; = sends &lt;message&gt; to all players in the room
 
 </li>
-<li>h = displays help
+<li>c[hat] &lt;message&gt; = sends &lt;message&gt; to all players in the game
 
 </li>
-<li>q = quits the game (saves player)
+<li>h[elp]|? = displays help
 
 </li>
-<li>O &lt;object name&gt; = creates a new object (ex. O rose)
-
-</li>
-<li>R &lt;room name&gt; &lt;exit name to&gt; &lt;exit name back&gt; = creates a
-new room and autolinks the exits using the exit names provided.
+<li>q[uit] = quits the game (saves player)
 
 </li>
 <li>&lt;exit name&gt; = moves player through exit named (ex. south)
 
+</li>
+</ul>
+<p>
+OLC
+</p>
+<ul>
+<li>O &lt;object name&gt; = creates a new object (ex. O rose)
+
+</li>
+<li>R &lt;room name&gt; &lt;exit name to&gt; &lt;exit name back&gt; = creates a
+new room and
+
+<pre>
+ autolinks the exits using the exit names provided.
+</pre>
 </li>
 </ul>
 <hr size="1"></hr><h2>Contributors</h2>

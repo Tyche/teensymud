@@ -1,5 +1,5 @@
 = TeensyMUD Server
-= v2.0.0
+= v2.0.1
 
 ---
 == Introduction
@@ -56,17 +56,22 @@ That's it.  It will boot on port 4000 and build an initial database in the db di
 * help   - Prints a brief description of the commands
 
 == Help 
-- i = displays player inventory
-- l = displays the contents of a room
-- d = drops all objects in your inventory into the room
-- g = gets all objects in the room into your inventory
-- k <name> = attempts to kill player (ex. k bubba)
-- c <message> = sends <message> to all players in the game
-- h = displays help
-- q = quits the game (saves player)
-- O <object name> = creates a new object (ex. O rose)
-- R <room name> <exit name to> <exit name back> = creates a new room and autolinks the exits using the exit names provided.
-- <exit name> = moves player through exit named (ex. south)
+Play commands
+-  i[nventory] = displays player inventory
+-  l[ook] = displays the contents of a room
+-  dr[op] = drops all objects in your inventory into the room
+-  g[get] = gets all objects in the room into your inventory
+-  k[ill] <name> = attempts to kill player (e.g. k bubba)
+-  s[ay] <message> = sends <message> to all players in the room
+-  c[hat] <message> = sends <message> to all players in the game
+-  h[elp]|?  = displays help
+-  q[uit]    = quits the game (saves player)
+-  <exit name> = moves player through exit named (ex. south)
+
+OLC
+-  O <object name> = creates a new object (ex. O rose)
+-  R <room name> <exit name to> <exit name back> = creates a new room and
+    autolinks the exits using the exit names provided.
  
 ---
 == Contributors
