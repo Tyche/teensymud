@@ -40,6 +40,8 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 * Documentation - see 'doc/index.html' in distro
 * More extras!!! Comes with mini-distro builder utility (see 'rakefile package')
 * Threads racing at no extra charge
+* Color
+* Secure login
 
 ---
 == Installation
@@ -70,8 +72,7 @@ Play commands
 
 OLC
 -  O <object name> = creates a new object (ex. O rose)
--  R <room name> <exit name to> <exit name back> = creates a new room and
-    autolinks the exits using the exit names provided.
+-  R <room name> <exit name to> <exit name back> = creates a new room and autolinks the exits using the exit names provided.
 -  S #<objectid> <description> = sets the description for an object
 
 ---
