@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Wed Aug 24 08:07:31 GMT-5:00 2005</td>
+      <td>Thu Aug 25 11:17:53 GMT-5:00 2005</td>
     </tr>
     </table>
   </div>
@@ -130,7 +130,7 @@ for additional information.
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">Version</td>
           <td>=</td>
-          <td class="context-item-value">&quot;2.0.1&quot;</td>
+          <td class="context-item-value">&quot;2.0.2&quot;</td>
         </tr>
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">EOL</td>
@@ -155,12 +155,17 @@ Displayed upon connecting
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">HELP</td>
           <td>=</td>
-          <td class="context-item-value">&lt;&lt;-EOH.gsub!(/\n/,EOL) =========================================================================== Play commands   i[nventory] = displays player inventory   l[ook] = displays the contents of a room   dr[op] = drops all objects in your inventory into the room   g[get] = gets all objects in the room into your inventory   k[ill] &lt;name&gt; = attempts to kill player (e.g. k bubba)   s[ay] &lt;message&gt; = sends &lt;message&gt; to all players in the room   c[hat] &lt;message&gt; = sends &lt;message&gt; to all players in the game   h[elp]|?  = displays help   q[uit]    = quits the game (saves player)   &lt;exit name&gt; = moves player through exit named (ex. south) =========================================================================== OLC   O &lt;object name&gt; = creates a new object (ex. O rose)   R &lt;room name&gt; &lt;exit name to&gt; &lt;exit name back&gt; = creates a new room and     autolinks the exits using the exit names provided. =========================================================================== EOH .gsub!(/\n/,EOL)</td>
+          <td class="context-item-value">&lt;&lt;-EOH.gsub!(/\n/,EOL) =========================================================================== Play commands   i[nventory] = displays player inventory   l[ook] = displays the contents of a room   dr[op] = drops all objects in your inventory into the room   g[get] = gets all objects in the room into your inventory   k[ill] &lt;name&gt; = attempts to kill player (e.g. k bubba)   s[ay] &lt;message&gt; = sends &lt;message&gt; to all players in the room   c[hat] &lt;message&gt; = sends &lt;message&gt; to all players in the game   h[elp]|?  = displays help   q[uit]    = quits the game (saves player)   &lt;exit name&gt; = moves player through exit named (ex. south) =========================================================================== OLC   O &lt;object name&gt; = creates a new object (ex. O rose)   R &lt;room name&gt; &lt;exit name to&gt; &lt;exit name back&gt; = creates a new room and     autolinks the exits using the exit names provided.   S #&lt;objectid&gt; &lt;description&gt; = sets the description for an object =========================================================================== EOH .gsub!(/\n/,EOL)</td>
           <td width="3em">&nbsp;</td>
           <td class="context-item-desc">
 Displayed when help requested
 
 </td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">Colors</td>
+          <td>=</td>
+          <td class="context-item-value">{:black =&gt; &quot;\e[30m&quot;, :red =&gt; &quot;\e[31m&quot;, :green =&gt; &quot;\e[32m&quot;,   :yellow =&gt; &quot;\e[33m&quot;, :blue =&gt; &quot;\e[34m&quot;, :magenta =&gt; &quot;\e[35m&quot;,   :cyan =&gt; &quot;\e[36m&quot;, :white =&gt; &quot;\e[37m&quot;, :reset =&gt; &quot;\e[0m&quot;}</td>
         </tr>
         </table>
       </div>

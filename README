@@ -1,5 +1,5 @@
 = TeensyMUD Server
-= v2.0.1
+= v2.0.2
 
 ---
 == Introduction
@@ -72,7 +72,8 @@ OLC
 -  O <object name> = creates a new object (ex. O rose)
 -  R <room name> <exit name to> <exit name back> = creates a new room and
     autolinks the exits using the exit names provided.
- 
+-  S #<objectid> <description> = sets the description for an object
+
 ---
 == Contributors
 :include:CONTRIBUTORS

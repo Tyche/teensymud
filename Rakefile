@@ -37,6 +37,7 @@ end
 
 task :rdoc do
   sh 'cp -r tmp/* doc' 
+  sh 'rm -rf tmp'
 end
 
 # run tests

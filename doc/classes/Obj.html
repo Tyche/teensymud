@@ -122,6 +122,14 @@ The <a href="Obj.html">Obj</a> class is the mother of all objects.
       <div class="name-list">
         <table>
         <tr class="top-aligned-row context-row">
+          <td class="context-item-name">desc</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+The displayed description of the object
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
           <td class="context-item-name">location</td>
           <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
           <td class="context-item-desc">
@@ -183,10 +191,11 @@ Create a new Object
             onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000007-source">
 <pre>
-    <span class="ruby-comment cmt"># File tmud.rb, line 71</span>
-71:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>)
-72:     <span class="ruby-ivar">@name</span>,<span class="ruby-ivar">@location</span>,<span class="ruby-ivar">@oid</span>=<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>,<span class="ruby-identifier">$world</span>.<span class="ruby-identifier">getid</span>
-73:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tmud.rb, line 78</span>
+78:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>)
+79:     <span class="ruby-ivar">@name</span>,<span class="ruby-ivar">@location</span>,<span class="ruby-ivar">@oid</span>=<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>,<span class="ruby-identifier">$world</span>.<span class="ruby-identifier">getid</span>
+80:     <span class="ruby-ivar">@desc</span> = <span class="ruby-value str">&quot;&quot;</span>
+81:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

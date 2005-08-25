@@ -13,7 +13,7 @@
 require 'socket'
 require 'yaml'
 
-Version = "2.0.1"
+Version = "2.0.2"
 
 # Telnet end of line
 EOL="\r\n"
@@ -49,8 +49,13 @@ OLC
   O <object name> = creates a new object (ex. O rose)
   R <room name> <exit name to> <exit name back> = creates a new room and
     autolinks the exits using the exit names provided.
+  S #<objectid> <description> = sets the description for an object
 ===========================================================================
 EOH
+
+Colors = {:black => "\e[30m", :red => "\e[31m", :green => "\e[32m",
+  :yellow => "\e[33m", :blue => "\e[34m", :magenta => "\e[35m",
+  :cyan => "\e[36m", :white => "\e[37m", :reset => "\e[0m"}
 
 # The Obj class is the mother of all objects.
 #
@@ -61,6 +66,8 @@ class Obj
   attr_accessor :name
   # The object that holds this object or nil if none
   attr_accessor :location
+  # The displayed description of the object
+  attr_accessor :desc
 
   # Create a new Object
   # [+name+]     Every object needs a name
@@ -68,6 +75,7 @@ class Obj
   # [+return+]   A handle to the new Object
   def initialize(name,location)
     @name,@location,@oid=name,location,$world.getid
+    @desc = ""
   end
 end
 
@@ -112,6 +120,7 @@ class Player < Obj
     @sock.write(s+EOL) if @sock
   end
 
+private
   # Encrypts a password
   # [+passwd+] The string to be encrypted
   # [+return+] The encrypted string
@@ -121,6 +130,7 @@ class Player < Obj
     passwd.crypt(salt)
   end
 
+public
   # Compares the password with the players
   # [+p+] The string passed as password in clear text
   # [+return+] true if they are equal, false if not
@@ -166,8 +176,9 @@ class Player < Obj
         x.sendto("#{@name} says, \"#{$1}\".")
       end
     when /^c.* (.*)/
-      sendto("You chat, \"#{$1}\".")
-      $world.global_message_others("#{@name} chats, \"#{$1}\".",@oid)
+      sendto(Colors[:magenta] + "You chat, \"#{$1}\"." + Colors[:reset])
+      $world.global_message_others(Colors[:magenta] +
+        "#{@name} chats, \"#{$1}\"." + Colors[:reset],@oid)
     when /^g.*/
       $world.objects_at_location(@location).each do |q|
         q.location=@oid
@@ -186,17 +197,29 @@ class Player < Obj
       $world.add(d)
       $world.find_by_oid(@location).exits[$2]=d.oid
       d.exits[$3]=$world.find_by_oid(@location).oid
-      sendto("Ok."+EOL)
+      sendto("Ok." + EOL)
+    when /^S #(\d+) (.*)/
+      r = $world.find_by_oid($1.to_i)
+      case r
+      when nil, 0
+        sendto("No object."+EOL)
+      else
+        r.desc = $2
+        sendto("Object #" + $1 + " description set." + EOL)
+      end
     # look
     when /^l.*/
-      sendto("Room: "+$world.find_by_oid(@location).name+EOL)
-      sendto("Players:"+EOL)
+      sendto(Colors[:green] + "(" + @location.to_s + ") " +
+        $world.find_by_oid(@location).name + Colors[:reset] + EOL +
+        $world.find_by_oid(@location).desc + EOL)
       $world.other_players_at_location(@location,@oid).each do |x|
-        sendto(x.name+" is here.") if x.sock
+        sendto(Colors[:blue] + x.name + " is here." + Colors[:reset]) if x.sock
       end
-      sendto("Objects:"+EOL)
-      $world.objects_at_location(@location).each{|x|sendto("A "+x.name+" is here")}
-      sendto("Exits: "+$world.find_by_oid(@location).exits.keys.join(' | '))
+      $world.objects_at_location(@location).each do |x|
+        sendto(Colors[:yellow] + "A " + x.name + " is here" + Colors[:reset])
+      end
+      sendto(Colors[:red] + "Exits: " +
+        $world.find_by_oid(@location).exits.keys.join(' | ') + Colors[:reset])
     # for the last check create a list of exit names to scan.
     when /(^#{$world.find_by_oid(@location).exits.empty? ? "\1" : $world.find_by_oid(@location).exits.keys.join('|^')})/
       $world.other_players_at_location(@location,@oid).each do |x|
@@ -229,6 +252,7 @@ MINIMAL_DB=<<EOH
 - !ruby/object:Room
   exits: {}
   location:
+  desc: "This is home."
   name: Home
   oid: 1
 EOH
@@ -410,6 +434,7 @@ begin
         end
       rescue => e  # Override
         $stderr.puts "Caught error in client thread: #{e}"
+        $stderr.puts $@
         player.disconnect
         $world.global_message_others("#{player.name} has rudely disconnected.",player.oid)
         Thread.exit
@@ -417,7 +442,8 @@ begin
     end
   end
 rescue => e
-  $stdout.puts "Caught error in server thread: #{e}"
+  $stderr.puts "Caught error in server thread: #{e}"
+  $stderr.puts $@
   exit
 end
 
