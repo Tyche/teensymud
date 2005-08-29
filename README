@@ -1,9 +1,9 @@
 = TeensyMUD Server
-= v2.0.2
+= v2.1.0
 
 ---
 == Introduction
-TeensyMUD is a very simple mud server written in Ruby.  It uses a one thread per connection network model and YAML formatted text files as a database.
+TeensyMUD is a very simple mud server written in Ruby.  It uses a multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns and YAML formatted text files as a database.
 
 This server was initially created in response to an Aprils Fool's joke posted by Erwin Andreasen on TheMudConnector forum announcing a 1K mud contest.  Those obfuscated versions can be found in the repository.
 
@@ -21,7 +21,7 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 [Rake] To build documentation, run tests, etc.  See - http://rake.rubyforge.org
 
 == Features
-* Multithreaded, network server and chat driver run in their own threads.
+* Multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns.
 * Supports multiple users
 * Global chat
 * Virtual world (room system with unlimited exits)

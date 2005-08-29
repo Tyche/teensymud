@@ -79,10 +79,13 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="7,113,79,161"      href="Player.html" alt="Player">
-  <area shape="RECT" coords="55,17,127,65"      href="Obj.html" alt="Obj">
-  <area shape="RECT" coords="103,113,175,161"      href="Room.html" alt="Room">
-  <area shape="RECT" coords="151,17,223,65"      href="World.html" alt="World">
+  <area shape="RECT" coords="102,113,174,161"      href="Player.html" alt="Player">
+  <area shape="RECT" coords="30,17,102,65"      href="Obj.html" alt="Obj">
+  <area shape="RECT" coords="6,113,78,161"      href="Room.html" alt="Room">
+  <area shape="RECT" coords="272,17,344,65"      href="Engine.html" alt="Engine">
+  <area shape="RECT" coords="368,17,440,65"      href="World.html" alt="World">
+  <area shape="RECT" coords="198,113,270,161"      href="Incoming.html" alt="Incoming">
+  <area shape="RECT" coords="173,17,248,65"      href="Observable.html" alt="Observable">
 </map>
 <img src="../dot/f_1.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
@@ -113,18 +116,18 @@ big global thing.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000012">add</a>&nbsp;&nbsp;
-      <a href="#M000013">delete</a>&nbsp;&nbsp;
-      <a href="#M000014">find_by_oid</a>&nbsp;&nbsp;
-      <a href="#M000015">find_player_by_name</a>&nbsp;&nbsp;
-      <a href="#M000010">getid</a>&nbsp;&nbsp;
-      <a href="#M000018">global_message</a>&nbsp;&nbsp;
-      <a href="#M000019">global_message_others</a>&nbsp;&nbsp;
-      <a href="#M000009">new</a>&nbsp;&nbsp;
-      <a href="#M000020">objects_at_location</a>&nbsp;&nbsp;
-      <a href="#M000017">other_players_at_location</a>&nbsp;&nbsp;
-      <a href="#M000016">players_at_location</a>&nbsp;&nbsp;
-      <a href="#M000011">save</a>&nbsp;&nbsp;
+      <a href="#M000036">add</a>&nbsp;&nbsp;
+      <a href="#M000037">delete</a>&nbsp;&nbsp;
+      <a href="#M000038">find_by_oid</a>&nbsp;&nbsp;
+      <a href="#M000039">find_player_by_name</a>&nbsp;&nbsp;
+      <a href="#M000034">getid</a>&nbsp;&nbsp;
+      <a href="#M000042">global_message</a>&nbsp;&nbsp;
+      <a href="#M000043">global_message_others</a>&nbsp;&nbsp;
+      <a href="#M000033">new</a>&nbsp;&nbsp;
+      <a href="#M000044">objects_at_location</a>&nbsp;&nbsp;
+      <a href="#M000041">other_players_at_location</a>&nbsp;&nbsp;
+      <a href="#M000040">players_at_location</a>&nbsp;&nbsp;
+      <a href="#M000035">save</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -164,11 +167,11 @@ The minimal database will be used in the absence of detecting one.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000009" class="method-detail">
-        <a name="M000009"></a>
+      <div id="method-M000033" class="method-detail">
+        <a name="M000033"></a>
 
         <div class="method-heading">
-          <a href="#M000009" class="method-signature">
+          <a href="#M000033" class="method-signature">
           <span class="method-name">new</span><span class="method-args">()</span>
           </a>
         </div>
@@ -184,24 +187,24 @@ database depending on whether it finds it.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000009-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000009-source">
+            onclick="toggleCode('M000033-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000033-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 266</span>
-266:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>
-267:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">test</span>(<span class="ruby-value">?e</span>,<span class="ruby-value str">'db/world.yaml'</span>)
-268:       <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Building minimal world database...&quot;</span>
-269:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-value str">'db/world.yaml'</span>,<span class="ruby-value str">'w'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
-270:         <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-constant">MINIMAL_DB</span>)
-271:       <span class="ruby-keyword kw">end</span>
-272:       <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Done.&quot;</span>
-273:     <span class="ruby-keyword kw">end</span>
-274:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Loading world...&quot;</span>
-275:     <span class="ruby-ivar">@dbtop</span> = <span class="ruby-value">0</span>
-276:     <span class="ruby-ivar">@db</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load_file</span>(<span class="ruby-value str">'db/world.yaml'</span>)
-277:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@dbtop</span> = <span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span> <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@dbtop</span>}
-278:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Loaded...dbtop=#{@dbtop}.&quot;</span>
-279:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 292</span>
+292:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>
+293:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">test</span>(<span class="ruby-value">?e</span>,<span class="ruby-value str">'db/world.yaml'</span>)
+294:       <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Building minimal world database...&quot;</span>
+295:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-value str">'db/world.yaml'</span>,<span class="ruby-value str">'w'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+296:         <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-constant">MINIMAL_DB</span>)
+297:       <span class="ruby-keyword kw">end</span>
+298:       <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Done.&quot;</span>
+299:     <span class="ruby-keyword kw">end</span>
+300:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Loading world...&quot;</span>
+301:     <span class="ruby-ivar">@dbtop</span> = <span class="ruby-value">0</span>
+302:     <span class="ruby-ivar">@db</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load_file</span>(<span class="ruby-value str">'db/world.yaml'</span>)
+303:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@dbtop</span> = <span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span> <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@dbtop</span>}
+304:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Loaded...dbtop=#{@dbtop}.&quot;</span>
+305:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -209,11 +212,11 @@ database depending on whether it finds it.
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000012" class="method-detail">
-        <a name="M000012"></a>
+      <div id="method-M000036" class="method-detail">
+        <a name="M000036"></a>
 
         <div class="method-heading">
-          <a href="#M000012" class="method-signature">
+          <a href="#M000036" class="method-signature">
           <span class="method-name">add</span><span class="method-args">(obj)</span>
           </a>
         </div>
@@ -231,23 +234,23 @@ Adds a new object to the database.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000012-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000012-source">
+            onclick="toggleCode('M000036-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000036-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 296</span>
-296:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add</span>(<span class="ruby-identifier">obj</span>)
-297:     <span class="ruby-ivar">@db</span><span class="ruby-operator">&lt;&lt;</span><span class="ruby-identifier">obj</span>
-298:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 322</span>
+322:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add</span>(<span class="ruby-identifier">obj</span>)
+323:     <span class="ruby-ivar">@db</span><span class="ruby-operator">&lt;&lt;</span><span class="ruby-identifier">obj</span>
+324:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000013" class="method-detail">
-        <a name="M000013"></a>
+      <div id="method-M000037" class="method-detail">
+        <a name="M000037"></a>
 
         <div class="method-heading">
-          <a href="#M000013" class="method-signature">
+          <a href="#M000037" class="method-signature">
           <span class="method-name">delete</span><span class="method-args">(obj)</span>
           </a>
         </div>
@@ -265,23 +268,23 @@ Deletes an object from the database.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000013-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000013-source">
+            onclick="toggleCode('M000037-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000037-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 303</span>
-303:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">obj</span>)
-304:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">obj</span>)
-305:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 329</span>
+329:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">obj</span>)
+330:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">obj</span>)
+331:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000014" class="method-detail">
-        <a name="M000014"></a>
+      <div id="method-M000038" class="method-detail">
+        <a name="M000038"></a>
 
         <div class="method-heading">
-          <a href="#M000014" class="method-signature">
+          <a href="#M000038" class="method-signature">
           <span class="method-name">find_by_oid</span><span class="method-args">(i)</span>
           </a>
         </div>
@@ -299,23 +302,23 @@ Finds an object in the database by oid.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000014-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000014-source">
+            onclick="toggleCode('M000038-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000038-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 310</span>
-310:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_by_oid</span>(<span class="ruby-identifier">i</span>)
-311:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">==</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span>}
-312:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 336</span>
+336:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_by_oid</span>(<span class="ruby-identifier">i</span>)
+337:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">==</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span>}
+338:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000015" class="method-detail">
-        <a name="M000015"></a>
+      <div id="method-M000039" class="method-detail">
+        <a name="M000039"></a>
 
         <div class="method-heading">
-          <a href="#M000015" class="method-signature">
+          <a href="#M000039" class="method-signature">
           <span class="method-name">find_player_by_name</span><span class="method-args">(nm)</span>
           </a>
         </div>
@@ -333,23 +336,23 @@ Finds a <a href="Player.html">Player</a> object in the database by name.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000015-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000015-source">
+            onclick="toggleCode('M000039-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000039-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 317</span>
-317:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_player_by_name</span>(<span class="ruby-identifier">nm</span>)
-318:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span><span class="ruby-constant">Player</span><span class="ruby-operator">==</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">&amp;&amp;</span><span class="ruby-identifier">nm</span><span class="ruby-operator">==</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">name</span>}
-319:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 343</span>
+343:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_player_by_name</span>(<span class="ruby-identifier">nm</span>)
+344:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span><span class="ruby-constant">Player</span><span class="ruby-operator">==</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">&amp;&amp;</span><span class="ruby-identifier">nm</span><span class="ruby-operator">==</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">name</span>}
+345:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000010" class="method-detail">
-        <a name="M000010"></a>
+      <div id="method-M000034" class="method-detail">
+        <a name="M000034"></a>
 
         <div class="method-heading">
-          <a href="#M000010" class="method-signature">
+          <a href="#M000034" class="method-signature">
           <span class="method-name">getid</span><span class="method-args">()</span>
           </a>
         </div>
@@ -364,23 +367,23 @@ Fetch the next available oid.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000010-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000010-source">
+            onclick="toggleCode('M000034-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000034-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 283</span>
-283:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">getid</span>
-284:     <span class="ruby-ivar">@dbtop</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>
-285:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 309</span>
+309:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">getid</span>
+310:     <span class="ruby-ivar">@dbtop</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>
+311:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000018" class="method-detail">
-        <a name="M000018"></a>
+      <div id="method-M000042" class="method-detail">
+        <a name="M000042"></a>
 
         <div class="method-heading">
-          <a href="#M000018" class="method-signature">
+          <a href="#M000042" class="method-signature">
           <span class="method-name">global_message</span><span class="method-args">(msg)</span>
           </a>
         </div>
@@ -398,23 +401,23 @@ Sends a message to all players in the world.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000018-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000018-source">
+            onclick="toggleCode('M000042-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000042-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 339</span>
-339:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">global_message</span>(<span class="ruby-identifier">msg</span>)
-340:     <span class="ruby-identifier">players_at_location</span>(<span class="ruby-keyword kw">nil</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">plr</span><span class="ruby-operator">|</span><span class="ruby-identifier">plr</span>.<span class="ruby-identifier">sendto</span>(<span class="ruby-identifier">msg</span>)}
-341:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 365</span>
+365:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">global_message</span>(<span class="ruby-identifier">msg</span>)
+366:     <span class="ruby-identifier">players_at_location</span>(<span class="ruby-keyword kw">nil</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">plr</span><span class="ruby-operator">|</span><span class="ruby-identifier">plr</span>.<span class="ruby-identifier">sendto</span>(<span class="ruby-identifier">msg</span>)}
+367:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000019" class="method-detail">
-        <a name="M000019"></a>
+      <div id="method-M000043" class="method-detail">
+        <a name="M000043"></a>
 
         <div class="method-heading">
-          <a href="#M000019" class="method-signature">
+          <a href="#M000043" class="method-signature">
           <span class="method-name">global_message_others</span><span class="method-args">(msg,plrid)</span>
           </a>
         </div>
@@ -435,23 +438,23 @@ Sends a message to all players in the world except the passed player.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000019-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000019-source">
+            onclick="toggleCode('M000043-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000043-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 347</span>
-347:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">global_message_others</span>(<span class="ruby-identifier">msg</span>,<span class="ruby-identifier">plrid</span>)
-348:     <span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-keyword kw">nil</span>,<span class="ruby-identifier">plrid</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">plr</span><span class="ruby-operator">|</span><span class="ruby-identifier">plr</span>.<span class="ruby-identifier">sendto</span>(<span class="ruby-identifier">msg</span>)}
-349:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 373</span>
+373:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">global_message_others</span>(<span class="ruby-identifier">msg</span>,<span class="ruby-identifier">plrid</span>)
+374:     <span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-keyword kw">nil</span>,<span class="ruby-identifier">plrid</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">plr</span><span class="ruby-operator">|</span><span class="ruby-identifier">plr</span>.<span class="ruby-identifier">sendto</span>(<span class="ruby-identifier">msg</span>)}
+375:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000020" class="method-detail">
-        <a name="M000020"></a>
+      <div id="method-M000044" class="method-detail">
+        <a name="M000044"></a>
 
         <div class="method-heading">
-          <a href="#M000020" class="method-signature">
+          <a href="#M000044" class="method-signature">
           <span class="method-name">objects_at_location</span><span class="method-args">(loc)</span>
           </a>
         </div>
@@ -469,23 +472,23 @@ Finds all Objects at a location
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000020-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000020-source">
+            onclick="toggleCode('M000044-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000044-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 354</span>
-354:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">objects_at_location</span>(<span class="ruby-identifier">loc</span>)
-355:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>(<span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">==</span><span class="ruby-constant">Obj</span>)<span class="ruby-operator">&amp;&amp;</span>(<span class="ruby-operator">!</span><span class="ruby-identifier">loc</span><span class="ruby-operator">||</span><span class="ruby-identifier">loc</span><span class="ruby-operator">==</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">location</span>)}
-356:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 380</span>
+380:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">objects_at_location</span>(<span class="ruby-identifier">loc</span>)
+381:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>(<span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">==</span><span class="ruby-constant">Obj</span>)<span class="ruby-operator">&amp;&amp;</span>(<span class="ruby-operator">!</span><span class="ruby-identifier">loc</span><span class="ruby-operator">||</span><span class="ruby-identifier">loc</span><span class="ruby-operator">==</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">location</span>)}
+382:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000017" class="method-detail">
-        <a name="M000017"></a>
+      <div id="method-M000041" class="method-detail">
+        <a name="M000041"></a>
 
         <div class="method-heading">
-          <a href="#M000017" class="method-signature">
+          <a href="#M000041" class="method-signature">
           <span class="method-name">other_players_at_location</span><span class="method-args">(loc,plrid)</span>
           </a>
         </div>
@@ -506,23 +509,23 @@ Finds all the players at a location except the passed player.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000017-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000017-source">
+            onclick="toggleCode('M000041-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000041-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 332</span>
-332:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-identifier">loc</span>,<span class="ruby-identifier">plrid</span>)
-333:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>(<span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">==</span><span class="ruby-constant">Player</span>)<span class="ruby-operator">&amp;&amp;</span>(<span class="ruby-operator">!</span><span class="ruby-identifier">loc</span><span class="ruby-operator">||</span><span class="ruby-identifier">loc</span><span class="ruby-operator">==</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">location</span>)<span class="ruby-operator">&amp;&amp;</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid!</span>=<span class="ruby-identifier">plrid</span>}
-334:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 358</span>
+358:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-identifier">loc</span>,<span class="ruby-identifier">plrid</span>)
+359:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>(<span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">==</span><span class="ruby-constant">Player</span>)<span class="ruby-operator">&amp;&amp;</span>(<span class="ruby-operator">!</span><span class="ruby-identifier">loc</span><span class="ruby-operator">||</span><span class="ruby-identifier">loc</span><span class="ruby-operator">==</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">location</span>)<span class="ruby-operator">&amp;&amp;</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid!</span>=<span class="ruby-identifier">plrid</span>}
+360:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000016" class="method-detail">
-        <a name="M000016"></a>
+      <div id="method-M000040" class="method-detail">
+        <a name="M000040"></a>
 
         <div class="method-heading">
-          <a href="#M000016" class="method-signature">
+          <a href="#M000040" class="method-signature">
           <span class="method-name">players_at_location</span><span class="method-args">(loc)</span>
           </a>
         </div>
@@ -540,23 +543,23 @@ Finds all the players at a location.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000016-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000016-source">
+            onclick="toggleCode('M000040-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000040-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 324</span>
-324:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">players_at_location</span>(<span class="ruby-identifier">loc</span>)
-325:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>(<span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">==</span><span class="ruby-constant">Player</span>)<span class="ruby-operator">&amp;&amp;</span>(<span class="ruby-operator">!</span><span class="ruby-identifier">loc</span><span class="ruby-operator">||</span><span class="ruby-identifier">loc</span><span class="ruby-operator">==</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">location</span>)}
-326:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 350</span>
+350:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">players_at_location</span>(<span class="ruby-identifier">loc</span>)
+351:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>(<span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">==</span><span class="ruby-constant">Player</span>)<span class="ruby-operator">&amp;&amp;</span>(<span class="ruby-operator">!</span><span class="ruby-identifier">loc</span><span class="ruby-operator">||</span><span class="ruby-identifier">loc</span><span class="ruby-operator">==</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">location</span>)}
+352:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000011" class="method-detail">
-        <a name="M000011"></a>
+      <div id="method-M000035" class="method-detail">
+        <a name="M000035"></a>
 
         <div class="method-heading">
-          <a href="#M000011" class="method-signature">
+          <a href="#M000035" class="method-signature">
           <span class="method-name">save</span><span class="method-args">()</span>
           </a>
         </div>
@@ -571,13 +574,13 @@ Save the world
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000011-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000011-source">
+            onclick="toggleCode('M000035-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000035-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 289</span>
-289:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save</span>
-290:     <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-value str">'db/world.yaml'</span>,<span class="ruby-value str">'w'</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span><span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">dump</span>(<span class="ruby-ivar">@db</span>,<span class="ruby-identifier">f</span>)}
-291:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 315</span>
+315:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save</span>
+316:     <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-value str">'db/world.yaml'</span>,<span class="ruby-value str">'w'</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span><span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">dump</span>(<span class="ruby-ivar">@db</span>,<span class="ruby-identifier">f</span>)}
+317:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

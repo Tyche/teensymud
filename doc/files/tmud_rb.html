@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Thu Aug 25 11:17:53 GMT-5:00 2005</td>
+      <td>Sun Aug 28 22:18:43 GMT-5:00 2005</td>
     </tr>
     </table>
   </div>
@@ -69,10 +69,13 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="7,113,79,161"      href="../classes/Player.html" alt="Player">
-  <area shape="RECT" coords="55,17,127,65"      href="../classes/Obj.html" alt="Obj">
-  <area shape="RECT" coords="103,113,175,161"      href="../classes/Room.html" alt="Room">
-  <area shape="RECT" coords="151,17,223,65"      href="../classes/World.html" alt="World">
+  <area shape="RECT" coords="102,113,174,161"      href="../classes/Player.html" alt="Player">
+  <area shape="RECT" coords="30,17,102,65"      href="../classes/Obj.html" alt="Obj">
+  <area shape="RECT" coords="6,113,78,161"      href="../classes/Room.html" alt="Room">
+  <area shape="RECT" coords="272,17,344,65"      href="../classes/Engine.html" alt="Engine">
+  <area shape="RECT" coords="368,17,440,65"      href="../classes/World.html" alt="World">
+  <area shape="RECT" coords="198,113,270,161"      href="../classes/Incoming.html" alt="Incoming">
+  <area shape="RECT" coords="173,17,248,65"      href="../classes/Observable.html" alt="Observable">
 </map>
 <img src="../dot/f_1.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
@@ -85,7 +88,7 @@
 <tr><td valign="top">author:</td><td>Jon A. Lambert
 
 </td></tr>
-<tr><td valign="top">version:</td><td>2.0.1
+<tr><td valign="top">version:</td><td>2.1.0
 
 </td></tr>
 <tr><td valign="top">date:</td><td>08/23/2005
@@ -106,13 +109,21 @@ for additional information.
       <h3 class="section-bar">Required files</h3>
 
       <div class="name-list">
-      socket&nbsp;&nbsp;
+      <a href="net_rb.html">net</a>&nbsp;&nbsp;
+      observer&nbsp;&nbsp;
       yaml&nbsp;&nbsp;
       </div>
     </div>
 
    </div>
 
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000001">handle_signal</a>&nbsp;&nbsp;
+      </div>
+    </div>
 
   </div>
 
@@ -130,7 +141,7 @@ for additional information.
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">Version</td>
           <td>=</td>
-          <td class="context-item-value">&quot;2.0.2&quot;</td>
+          <td class="context-item-value">&quot;2.1.0&quot;</td>
         </tr>
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">EOL</td>
@@ -177,6 +188,41 @@ Displayed when help requested
 
 
     <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000001" class="method-detail">
+        <a name="M000001"></a>
+
+        <div class="method-heading">
+          <a href="#M000001" class="method-signature">
+          <span class="method-name">handle_signal</span><span class="method-args">(sig)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Setup traps - invoke one of these signals to shut down the mud
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000001-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000001-source">
+<pre>
+     <span class="ruby-comment cmt"># File tmud.rb, line 511</span>
+511: <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_signal</span>(<span class="ruby-identifier">sig</span>)
+512:   <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Signal caught request to shutdown.&quot;</span>
+513:   <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Saving world...&quot;</span>
+514:   <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">players_at_location</span>(<span class="ruby-keyword kw">nil</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">plr</span><span class="ruby-operator">|</span><span class="ruby-identifier">plr</span>.<span class="ruby-identifier">disconnect</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">plr</span>.<span class="ruby-identifier">session</span>}
+515:   <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">save</span>
+516:   <span class="ruby-identifier">exit</span>
+517: <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
 
 
   </div>

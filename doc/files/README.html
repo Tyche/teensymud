@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Thu Aug 25 11:26:35 GMT-5:00 2005</td>
+      <td>Sun Aug 28 21:30:48 GMT-5:00 2005</td>
     </tr>
     </table>
   </div>
@@ -75,11 +75,14 @@
 
     <div id="description">
       <h1>TeensyMUD Server</h1>
-<h1>v2.0.2</h1>
+<h1>v2.1.0</h1>
 <hr size="1"></hr><h2>Introduction</h2>
 <p>
-TeensyMUD is a very simple mud server written in Ruby. It uses a one thread
-per connection network model and YAML formatted text files as a database.
+TeensyMUD is a very simple mud server written in Ruby. It uses a
+multiplexed single-threaded network driver using <a
+href="../classes/Acceptor.html">Acceptor</a>/<a
+href="../classes/Reactor.html">Reactor</a> and Observer patterns and YAML
+formatted text files as a database.
 </p>
 <p>
 This server was initially created in response to an Aprils Fool&#8217;s
@@ -118,7 +121,9 @@ href="http://rake.rubyforge.org">rake.rubyforge.org</a>
 </dl>
 <h2>Features</h2>
 <ul>
-<li>Multithreaded, network server and chat driver run in their own threads.
+<li>Multiplexed single-threaded network driver using <a
+href="../classes/Acceptor.html">Acceptor</a>/<a
+href="../classes/Reactor.html">Reactor</a> and Observer patterns.
 
 </li>
 <li>Supports multiple users

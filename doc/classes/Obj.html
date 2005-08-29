@@ -79,10 +79,13 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="7,113,79,161"      href="Player.html" alt="Player">
-  <area shape="RECT" coords="55,17,127,65"      href="Obj.html" alt="Obj">
-  <area shape="RECT" coords="103,113,175,161"      href="Room.html" alt="Room">
-  <area shape="RECT" coords="151,17,223,65"      href="World.html" alt="World">
+  <area shape="RECT" coords="102,113,174,161"      href="Player.html" alt="Player">
+  <area shape="RECT" coords="30,17,102,65"      href="Obj.html" alt="Obj">
+  <area shape="RECT" coords="6,113,78,161"      href="Room.html" alt="Room">
+  <area shape="RECT" coords="272,17,344,65"      href="Engine.html" alt="Engine">
+  <area shape="RECT" coords="368,17,440,65"      href="World.html" alt="World">
+  <area shape="RECT" coords="198,113,270,161"      href="Incoming.html" alt="Incoming">
+  <area shape="RECT" coords="173,17,248,65"      href="Observable.html" alt="Observable">
 </map>
 <img src="../dot/f_1.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
@@ -101,7 +104,7 @@ The <a href="Obj.html">Obj</a> class is the mother of all objects.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000007">new</a>&nbsp;&nbsp;
+      <a href="#M000014">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -163,11 +166,11 @@ The unique database id of the object
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000007" class="method-detail">
-        <a name="M000007"></a>
+      <div id="method-M000014" class="method-detail">
+        <a name="M000014"></a>
 
         <div class="method-heading">
-          <a href="#M000007" class="method-signature">
+          <a href="#M000014" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(name,location)</span>
           </a>
         </div>
@@ -188,14 +191,14 @@ Create a new Object
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000007-source">
+            onclick="toggleCode('M000014-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000014-source">
 <pre>
-    <span class="ruby-comment cmt"># File tmud.rb, line 78</span>
-78:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>)
-79:     <span class="ruby-ivar">@name</span>,<span class="ruby-ivar">@location</span>,<span class="ruby-ivar">@oid</span>=<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>,<span class="ruby-identifier">$world</span>.<span class="ruby-identifier">getid</span>
-80:     <span class="ruby-ivar">@desc</span> = <span class="ruby-value str">&quot;&quot;</span>
-81:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tmud.rb, line 79</span>
+79:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>)
+80:     <span class="ruby-ivar">@name</span>,<span class="ruby-ivar">@location</span>,<span class="ruby-ivar">@oid</span>=<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>,<span class="ruby-identifier">$world</span>.<span class="ruby-identifier">getid</span>
+81:     <span class="ruby-ivar">@desc</span> = <span class="ruby-value str">&quot;&quot;</span>
+82:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

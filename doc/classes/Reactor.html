@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Reactor</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">Reactor</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/net_rb.html">
+                net.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+    <div id="diagram">
+      <map id="map" name="map">
+  <area shape="RECT" coords="6,209,81,257"      href="Acceptor.html" alt="Acceptor">
+  <area shape="RECT" coords="156,17,228,65"      href="Reactor.html" alt="Reactor">
+  <area shape="RECT" coords="58,113,130,161"      href="Session.html" alt="Session">
+  <area shape="RECT" coords="105,209,188,257"      href="Connection.html" alt="Connection">
+  <area shape="RECT" coords="252,17,324,65"      href="LineIO.html" alt="LineIO">
+  <area shape="RECT" coords="57,17,132,65"      href="Observable.html" alt="Observable">
+</map>
+<img src="../dot/f_2.gif" usemap="#map" border=0 alt="TopLevel">
+    </div>
+
+    <div id="description">
+      <p>
+The <a href="Reactor.html">Reactor</a> class defines a representation of a
+multiplexer. It defines the traditional non-blocking select() server.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000015">new</a>&nbsp;&nbsp;
+      <a href="#M000018">poll</a>&nbsp;&nbsp;
+      <a href="#M000019">register</a>&nbsp;&nbsp;
+      <a href="#M000016">start</a>&nbsp;&nbsp;
+      <a href="#M000017">stop</a>&nbsp;&nbsp;
+      <a href="#M000020">unregister</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000015" class="method-detail">
+        <a name="M000015"></a>
+
+        <div class="method-heading">
+          <a href="#M000015" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(port)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Constructor for <a href="Reactor.html">Reactor</a>
+</p>
+<dl>
+<dt><tt>port</tt></dt><dd>The port the server will listen on.
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000015-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000015-source">
+<pre>
+     <span class="ruby-comment cmt"># File net.rb, line 329</span>
+329:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">port</span>)
+330:     <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>       <span class="ruby-comment cmt"># port server will listen on</span>
+331:     <span class="ruby-ivar">@shutdown</span> = <span class="ruby-keyword kw">false</span>  <span class="ruby-comment cmt"># Flag to indicate that server is shutting down.</span>
+332:     <span class="ruby-ivar">@acceptor</span> = <span class="ruby-keyword kw">nil</span>    <span class="ruby-comment cmt"># Listening socket for incoming connections.</span>
+333:     <span class="ruby-ivar">@registry</span> = []     <span class="ruby-comment cmt"># list of sessions</span>
+334:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000018" class="method-detail">
+        <a name="M000018"></a>
+
+        <div class="method-heading">
+          <a href="#M000018" class="method-signature">
+          <span class="method-name">poll</span><span class="method-args">(tm_out)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+poll starts the <a href="Reactor.html">Reactor</a> running to process
+incoming connection, input and output requests. It also executes commands
+from input requests.
+</p>
+<dl>
+<dt>+tm_out*</dt><dd>time to poll in seconds
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000018-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000018-source">
+<pre>
+     <span class="ruby-comment cmt"># File net.rb, line 360</span>
+360:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">poll</span>(<span class="ruby-identifier">tm_out</span>)
+361:     <span class="ruby-comment cmt"># Reset our socket interest set</span>
+362:     <span class="ruby-identifier">infds</span> = [];<span class="ruby-identifier">outfds</span> = [];<span class="ruby-identifier">oobfds</span> = []
+363:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+364:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">is_readable?</span>
+365:         <span class="ruby-identifier">infds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>
+366:         <span class="ruby-identifier">oobfds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>
+367:       <span class="ruby-keyword kw">end</span>
+368:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">is_writable?</span>
+369:         <span class="ruby-identifier">outfds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>
+370:       <span class="ruby-keyword kw">end</span>
+371:     <span class="ruby-keyword kw">end</span>
+372: 
+373:     <span class="ruby-comment cmt"># Poll our socket interest set</span>
+374:     <span class="ruby-identifier">infds</span>,<span class="ruby-identifier">outfds</span>,<span class="ruby-identifier">oobfds</span> = <span class="ruby-identifier">select</span>(<span class="ruby-identifier">infds</span>, <span class="ruby-identifier">outfds</span>, <span class="ruby-identifier">oobfds</span>, <span class="ruby-identifier">tm_out</span>)
+375: 
+376:     <span class="ruby-comment cmt"># Dispatch events to handlers</span>
+377:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+378:       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">handle_output</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">outfds</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">outfds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>)
+379:       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">handle_oob</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">oobfds</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">oobfds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>)
+380:       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">handle_input</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">infds</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">infds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>)
+381:       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">handle_close</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">closing</span>
+382:     <span class="ruby-keyword kw">end</span>
+383:   <span class="ruby-keyword kw">rescue</span>
+384:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;ERROR-Reactor(select): &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$!</span>
+385:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">$@</span>
+386:     <span class="ruby-identifier">raise</span>
+387:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000019" class="method-detail">
+        <a name="M000019"></a>
+
+        <div class="method-heading">
+          <a href="#M000019" class="method-signature">
+          <span class="method-name">register</span><span class="method-args">(session)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+register adds a session to the registry [<tt>session</tt>]
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000019-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000019-source">
+<pre>
+     <span class="ruby-comment cmt"># File net.rb, line 391</span>
+391:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">session</span>)
+392:     <span class="ruby-ivar">@registry</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">session</span>
+393:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000016" class="method-detail">
+        <a name="M000016"></a>
+
+        <div class="method-heading">
+          <a href="#M000016" class="method-signature">
+          <span class="method-name">start</span><span class="method-args">(engine)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Start initializes the reactor and gets it ready to accept incoming
+connections.
+</p>
+<dl>
+<dt><tt>engine</tt></dt><dd>The client engine that will be observing the acceptor.
+
+</dd>
+<dt><tt>return</tt>&#8216;</dt><dd>true if server boots correctly, false if an error occurs.
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000016-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000016-source">
+<pre>
+     <span class="ruby-comment cmt"># File net.rb, line 340</span>
+340:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>(<span class="ruby-identifier">engine</span>)
+341:     <span class="ruby-comment cmt"># Create an acceptor to listen for this server.</span>
+342:     <span class="ruby-ivar">@acceptor</span> = <span class="ruby-constant">Acceptor</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-ivar">@port</span>)
+343:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@acceptor</span>.<span class="ruby-identifier">init</span>
+344:     <span class="ruby-ivar">@acceptor</span>.<span class="ruby-identifier">add_observer</span>(<span class="ruby-identifier">engine</span>)
+345:     <span class="ruby-keyword kw">true</span>
+346:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000017" class="method-detail">
+        <a name="M000017"></a>
+
+        <div class="method-heading">
+          <a href="#M000017" class="method-signature">
+          <span class="method-name">stop</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+stop requests each of the connections to disconnect in the server&#8217;s
+user list, deletes the connections, and erases them from the user list. It
+then closes its own listening port.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000017-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000017-source">
+<pre>
+     <span class="ruby-comment cmt"># File net.rb, line 351</span>
+351:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop</span>
+352:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">closing</span> = <span class="ruby-keyword kw">true</span>}
+353:     <span class="ruby-ivar">@acceptor</span>.<span class="ruby-identifier">delete_observers</span>
+354:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;INFO-Reactor(shutdown): Reactor shutting down&quot;</span>
+355:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000020" class="method-detail">
+        <a name="M000020"></a>
+
+        <div class="method-heading">
+          <a href="#M000020" class="method-signature">
+          <span class="method-name">unregister</span><span class="method-args">(session)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+unregister removes a session from the registry [<tt>session</tt>]
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000020-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000020-source">
+<pre>
+     <span class="ruby-comment cmt"># File net.rb, line 397</span>
+397:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unregister</span>(<span class="ruby-identifier">session</span>)
+398:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">session</span>)
+399:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

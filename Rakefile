@@ -5,6 +5,7 @@ require 'rake/packagetask'
 # files to distribute
 PKG_FILES = FileList[
   'tmud.rb',
+  'net.rb',
   'LICENSE',
   'CONTRIBUTORS', 
   'README',
@@ -31,7 +32,7 @@ Rake::RDocTask.new do |rd|
   rd.title = "TeensyMUD #{TMUDV} Mud Server"
 #  rd.template = 'kilmer'
 #  rd.template = './rdoctemplate.rb'
-  rd.rdoc_files.include('README', 'tmud.rb')
+  rd.rdoc_files.include('README', 'tmud.rb', 'net.rb')
   rd.options << '-adSN -I gif' 
 end
 

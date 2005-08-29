@@ -1,7 +1,7 @@
 #
 # file::    tmud.rb
 # author::  Jon A. Lambert
-# version:: 2.0.1
+# version:: 2.1.0
 # date::    08/23/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
@@ -10,10 +10,11 @@
 # Released under the terms of the TeensyMUD Public License
 # See LICENSE file for additional information.
 #
-require 'socket'
+require 'net'
+require 'observer'
 require 'yaml'
 
-Version = "2.0.2"
+Version = "2.1.0"
 
 # Telnet end of line
 EOL="\r\n"
@@ -99,16 +100,18 @@ end
 # Who's their daddy?
 #
 class Player < Obj
-  # The socket object this player is connected on or nil if not.
-  attr_accessor :sock
+  include Observable
+
+  # The session object this player is connected on or nil if not.
+  attr_accessor :session
 
   # Create a new Player object
-  # [+name+]   The displayed name of the player.
-  # [+name+]   The player password in clear text.
-  # [+sock+]   The socket object this player is connected on or nil if not.
-  # [+return+] A handle to the new Player.
-  def initialize(name,passwd,sock)
-    @sock = sock
+  # [+name+]    The displayed name of the player.
+  # [+passwd+]  The player password in clear text.
+  # [+session+] The session object this player is connected on or nil if not.
+  # [+return+]  A handle to the new Player.
+  def initialize(name,passwd,session)
+    @session = session
     @passwd = encrypt(passwd)
     super(name,1)
   end
@@ -117,7 +120,31 @@ class Player < Obj
   # [+s+]      The message string
   # [+return+] Undefined.
   def sendto(s)
-    @sock.write(s+EOL) if @sock
+    sendmsg(s+EOL) if @session
+  end
+
+  # Helper method to notify all observers
+  # [+msg+]      The message string
+  def sendmsg(msg)
+    changed
+    notify_observers(msg)
+  end
+
+  # Receives messages from connection and passes text ones on to parse.
+  # [+msg+]      The message string
+  def update(msg)
+    case msg
+    when :logged_out
+      @session = nil
+      delete_observers
+      $world.global_message_others("#{@name} has quit.",@oid)
+    when :disconnected
+      @session = nil
+      delete_observers
+      $world.global_message_others("#{@name} has disconnected.",@oid)
+    else
+      parse(msg)
+    end
   end
 
 private
@@ -140,8 +167,9 @@ public
 
   # Disconnects this player
   def disconnect
-    @sock.close
-    @sock = nil
+    sendmsg(:logged_out)
+    delete_observers
+    @session = nil
   end
 
   # All input routed through here and parsed.
@@ -153,9 +181,7 @@ public
     arg=$2
     case m
     when /^q/
-      $world.global_message_others("#{@name} has quit.",@oid)
       disconnect
-      Thread.exit
     when /^h|\?/
       sendto(HELP)
     when /^i.*/
@@ -163,7 +189,7 @@ public
     when /^k.* (.*)/
       d=$world.find_player_by_name($1)
       if d && rand<0.3
-        $world.global_message(@name+" kills "+d.name)
+        $world.global_message(@name+" kills "+ d.name)
         d.disconnect
         $world.delete(d)
       else
@@ -213,7 +239,7 @@ public
         $world.find_by_oid(@location).name + Colors[:reset] + EOL +
         $world.find_by_oid(@location).desc + EOL)
       $world.other_players_at_location(@location,@oid).each do |x|
-        sendto(Colors[:blue] + x.name + " is here." + Colors[:reset]) if x.sock
+        sendto(Colors[:blue] + x.name + " is here." + Colors[:reset]) if x.session
       end
       $world.objects_at_location(@location).each do |x|
         sendto(Colors[:yellow] + "A " + x.name + " is here" + Colors[:reset])
@@ -223,11 +249,11 @@ public
     # for the last check create a list of exit names to scan.
     when /(^#{$world.find_by_oid(@location).exits.empty? ? "\1" : $world.find_by_oid(@location).exits.keys.join('|^')})/
       $world.other_players_at_location(@location,@oid).each do |x|
-        x.sendto(@name+" has left #{$1}.") if x.sock
+        x.sendto(@name+" has left #{$1}.") if x.session
       end
       @location=$world.find_by_oid(@location).exits[$1]
       $world.other_players_at_location(@location,@oid).each do |x|
-        x.sendto(@name+" has arrived from #{$1}.") if x.sock
+        x.sendto(@name+" has arrived from #{$1}.") if x.session
       end
       parse('look')
     else
@@ -354,95 +380,151 @@ EOH
 
 end
 
-###########################################################################
-# This is start of the network code.
-###########################################################################
 
-# Setup traps - invoke one of these signals to shut down the mud
-begin
-  Signal.trap("INT") do
-    $stdout.puts "Interrupt control request to shutdown."
-    $stdout.puts "Saving world..."
-    $world.players_at_location(nil).each{|plr|plr.disconnect if plr.sock}
-    $world.save
-    exit
-  end
-  Signal.trap("TERM") do
-    $stdout.puts "Termination request to shutdown."
-    $stdout.puts "Saving world..."
-    $world.players_at_location(nil).each{|plr|plr.disconnect if plr.sock}
-    $world.save
-    exit
-  end
-  Signal.trap("KILL") do
-    $stdout.puts "Kill request to shutdown."
-    $stdout.puts "Saving world..."
-    $world.players_at_location(nil).each{|plr|plr.disconnect if plr.sock}
-    $world.save
-    exit
+# The Incoming class handles connection login and passes them to
+# player.
+class Incoming
+  include Observable
+
+  # Create an incoming connection.  This is a temporary object that handles
+  # login for player and gets them connected.
+  # [+conn+]   The session associated with this incoming connection.
+  # [+return+] A handle to the incoming object.
+  def initialize(conn)
+    @conn = conn
+    @state = :name
+    @checked = 0
+    @player = nil
   end
 
-  # Create the $world a global object containing everything.
-  $world=World.new
-  $stdout.puts "Booting server on port 4000"
-  server=TCPServer.new(0,4000)
-  $stdout.puts "TMUD is ready"
-
-  # Server accept loop.
-  # It blocks on accept and spawns a thread everytime someone connects.
-  while sk=server.accept
-    Thread.new(sk) do |sock|
-      begin
-        logged_in = false
-        checked = 0
-        sock.write(BANNER)
-        while !logged_in
-          checked += 1
-          if checked > 3
-            sock.write "Bye!"
-            sock.close
-            Thread.exit
+  # Receives messages from connection and handles login state.  On
+  # successful login the observer status will be transferred to the
+  # player object.
+  # [+msg+]      The message string
+  def update(msg)
+    case msg
+    when :logged_out, :disconnected
+      delete_observers
+    else
+      if (@checked += 1) > 3
+        sendmsg("Bye!")
+        sendmsg(:logged_out)
+        delete_observers
+      end
+      case @state
+      when :name
+        @login_name = msg
+        @player = $world.find_player_by_name(@login_name)
+        sendmsg("password> ")
+        @state = :password
+      when :password
+        @login_passwd = msg
+        if @player
+          if @player.check_passwd(@login_passwd)  # good login
+            @player.session = @conn
+            login
+          else  # bad login
+            sendmsg("Sorry wrong password" + EOL)
+            @state = :name
+            sendmsg("login> ")
           end
-          sock.write "login> "
-          sock.gets
-          login_name = $_.chomp
-          player = $world.find_player_by_name(login_name)
-          # needs a state machine
-          sock.write "password> "
-          sock.gets
-          login_passwd = $_.chomp
-          if player
-            if player.check_passwd(login_passwd)
-              player.sock = sock
-              logged_in = true
-            else
-              sock.write "Sorry wrong password" + EOL
-            end
-          else
-            player = Player.new(login_name,login_passwd,sock)
-            $world.add(player)
-            logged_in = true
-          end
+        else  # new player
+          @player = Player.new(@login_name,@login_passwd,@conn)
+          $world.add(@player)
+          login
         end
-        player.sendto("Welcome " + player.name + "@" + sock.peeraddr[2] + "!")
-        $world.global_message_others("#{player.name} has connected.",player.oid)
-        player.parse('look')
-        sock.write "> "
-        while sock.gets
-          player.parse($_.chomp)
-          sock.write "> "
-        end
-      rescue => e  # Override
-        $stderr.puts "Caught error in client thread: #{e}"
-        $stderr.puts $@
-        player.disconnect
-        $world.global_message_others("#{player.name} has rudely disconnected.",player.oid)
-        Thread.exit
       end
     end
   end
+
+  def sendmsg(msg)
+    changed
+    notify_observers(msg)
+  end
+
+private
+  # Called on successful login
+  def login
+    # deregister all observers here and on connection
+    delete_observers
+    @conn.delete_observers
+
+    # reregister all observers to @player
+    @conn.add_observer(@player)
+    @player.add_observer(@conn)
+
+    @player.sendto("Welcome " + @login_name + "@" + @conn.sock.peeraddr[2] + "!")
+    $world.global_message_others("#{@player.name} has connected.",@player.oid)
+    @player.parse('look')
+  end
+
+end
+
+
+# The Engine class sets up the server, polls it regularly and observes
+# acceptor for incoming connections.
+class Engine
+  attr_accessor :shutdown
+
+  # Create the an engine.
+  # [+port+]   The port passed to create a reactor.
+  # [+return+] A handle to the engine.
+  def initialize(port)
+    $stdout.puts "Booting server on port #{port}"
+    @server = Reactor.new(port)
+    @incoming = []
+    @shutdown = false
+  end
+
+  # main loop to run engine.
+  # note:: @shutdown never set by anyone yet
+  def run
+    @server.start(self)
+    $stdout.puts "TMUD is ready"
+    until @shutdown
+      @server.poll(0.2)
+    end # until
+    @server.stop
+  end
+
+  # Update is called by an acceptor passing us a new session.  We create
+  # an incoming object and set it and the connection to watch each other.
+  def update(newconn)
+    inc = Incoming.new(newconn)
+    # Observe each other
+    newconn.add_observer(inc)
+    inc.add_observer(newconn)
+    inc.sendmsg(BANNER)
+    inc.sendmsg("login> ")
+  end
+end
+
+
+###########################################################################
+# This is start of the main driver.
+###########################################################################
+
+# Setup traps - invoke one of these signals to shut down the mud
+def handle_signal(sig)
+  $stdout.puts "Signal caught request to shutdown."
+  $stdout.puts "Saving world..."
+  $world.players_at_location(nil).each{|plr|plr.disconnect if plr.session}
+  $world.save
+  exit
+end
+
+Signal.trap("INT", method(:handle_signal))
+Signal.trap("TERM", method(:handle_signal))
+Signal.trap("KILL", method(:handle_signal))
+
+begin
+  # Create the $world a global object containing everything.
+  $world=World.new
+
+  $engine = Engine.new(4000)
+  $engine.run
 rescue => e
-  $stderr.puts "Caught error in server thread: #{e}"
+  $stderr.puts "Exception caught error in server: " + $!
   $stderr.puts $@
   exit
 end
