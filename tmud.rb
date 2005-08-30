@@ -1,8 +1,8 @@
 #
 # file::    tmud.rb
 # author::  Jon A. Lambert
-# version:: 2.1.0
-# date::    08/23/2005
+# version:: 2.2.0
+# date::    08/29/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -10,11 +10,14 @@
 # Released under the terms of the TeensyMUD Public License
 # See LICENSE file for additional information.
 #
-require 'net'
 require 'observer'
 require 'yaml'
 
-Version = "2.1.0"
+$:.unshift "lib"
+require 'net'
+require 'command'
+
+Version = "2.2.0"
 
 # Telnet end of line
 EOL="\r\n"
@@ -29,29 +32,6 @@ BANNER=<<-EOH.gsub!(/\n/,EOL)
  Released under the terms of the TeensyMUD Public License
 
 
-EOH
-
-# Displayed when help requested
-HELP=<<-EOH.gsub!(/\n/,EOL)
-===========================================================================
-Play commands
-  i[nventory] = displays player inventory
-  l[ook] = displays the contents of a room
-  dr[op] = drops all objects in your inventory into the room
-  g[get] = gets all objects in the room into your inventory
-  k[ill] <name> = attempts to kill player (e.g. k bubba)
-  s[ay] <message> = sends <message> to all players in the room
-  c[hat] <message> = sends <message> to all players in the game
-  h[elp]|?  = displays help
-  q[uit]    = quits the game (saves player)
-  <exit name> = moves player through exit named (ex. south)
-===========================================================================
-OLC
-  O <object name> = creates a new object (ex. O rose)
-  R <room name> <exit name to> <exit name back> = creates a new room and
-    autolinks the exits using the exit names provided.
-  S #<objectid> <description> = sets the description for an object
-===========================================================================
 EOH
 
 Colors = {:black => "\e[30m", :red => "\e[31m", :green => "\e[32m",
@@ -102,13 +82,13 @@ end
 class Player < Obj
   include Observable
 
-  # The session object this player is connected on or nil if not.
+  # The Session object this player is connected on or nil if not connected.
   attr_accessor :session
 
   # Create a new Player object
   # [+name+]    The displayed name of the player.
   # [+passwd+]  The player password in clear text.
-  # [+session+] The session object this player is connected on or nil if not.
+  # [+session+] The session object this player is connecting on.
   # [+return+]  A handle to the new Player.
   def initialize(name,passwd,session)
     @session = session
@@ -147,17 +127,6 @@ class Player < Obj
     end
   end
 
-private
-  # Encrypts a password
-  # [+passwd+] The string to be encrypted
-  # [+return+] The encrypted string
-  def encrypt(passwd)
-    alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./'
-    salt = "#{alphabet[rand(64)].chr}#{alphabet[rand(64)].chr}"
-    passwd.crypt(salt)
-  end
-
-public
   # Compares the password with the players
   # [+p+] The string passed as password in clear text
   # [+return+] true if they are equal, false if not
@@ -176,76 +145,34 @@ public
   # [+m+]      The input message to be parsed
   # [+return+] Undefined.
   def parse(m)
-    m=~/(\w+)\W(.*)/
+
+    # match legal command
+    m=~/([A-Za-z@?]+)(.*)/
     cmd=$1
-    arg=$2
+
+    # cmds take an array - we ought to parse this into an array of strings
+    # instead of sending an array of one string or nil
+    arg = $2.strip if $2
+    arg = nil if arg.nil? || arg.empty?
+
+    # look for a command in our spanking new table
+    c = $world.cmds.find(cmd)
+    # there are three possibilities here
+    if c.nil?  # not found
+      # onward to big case
+    elsif c.size > 1   # Ambiguous command - tell luser about them.
+      ln = "Which did you mean, "
+      c.each {|x| ln += "\'" + x.name + "\' "}
+      ln += "?"
+      sendto(ln)
+      return
+    else  # We found it
+      self.send(c[0].cmd, arg)
+      return
+    end
+
+    # big switch - was that is
     case m
-    when /^q/
-      disconnect
-    when /^h|\?/
-      sendto(HELP)
-    when /^i.*/
-      $world.objects_at_location(@oid).each{|o|sendto(o.name)}
-    when /^k.* (.*)/
-      d=$world.find_player_by_name($1)
-      if d && rand<0.3
-        $world.global_message(@name+" kills "+ d.name)
-        d.disconnect
-        $world.delete(d)
-      else
-        $world.global_message(@name+" misses")
-      end
-    # say - only to room
-    when /^s.* (.*)/
-      sendto("You say, \"#{$1}\"."+EOL)
-      $world.other_players_at_location(@location,@oid).each do |x|
-        x.sendto("#{@name} says, \"#{$1}\".")
-      end
-    when /^c.* (.*)/
-      sendto(Colors[:magenta] + "You chat, \"#{$1}\"." + Colors[:reset])
-      $world.global_message_others(Colors[:magenta] +
-        "#{@name} chats, \"#{$1}\"." + Colors[:reset],@oid)
-    when /^g.*/
-      $world.objects_at_location(@location).each do |q|
-        q.location=@oid
-      end
-      sendto("Ok."+EOL)
-    when /^dr.*/
-      $world.objects_at_location(@oid).each do |q|
-        q.location=@location
-      end
-      sendto("Ok."+EOL)
-    when /^O (.*)/
-      $world.add(Obj.new($1,@location))
-      sendto("Ok."+EOL)
-    when /^R (.*) (.*) (.*)/
-      d=Room.new($1)
-      $world.add(d)
-      $world.find_by_oid(@location).exits[$2]=d.oid
-      d.exits[$3]=$world.find_by_oid(@location).oid
-      sendto("Ok." + EOL)
-    when /^S #(\d+) (.*)/
-      r = $world.find_by_oid($1.to_i)
-      case r
-      when nil, 0
-        sendto("No object."+EOL)
-      else
-        r.desc = $2
-        sendto("Object #" + $1 + " description set." + EOL)
-      end
-    # look
-    when /^l.*/
-      sendto(Colors[:green] + "(" + @location.to_s + ") " +
-        $world.find_by_oid(@location).name + Colors[:reset] + EOL +
-        $world.find_by_oid(@location).desc + EOL)
-      $world.other_players_at_location(@location,@oid).each do |x|
-        sendto(Colors[:blue] + x.name + " is here." + Colors[:reset]) if x.session
-      end
-      $world.objects_at_location(@location).each do |x|
-        sendto(Colors[:yellow] + "A " + x.name + " is here" + Colors[:reset])
-      end
-      sendto(Colors[:red] + "Exits: " +
-        $world.find_by_oid(@location).exits.keys.join(' | ') + Colors[:reset])
     # for the last check create a list of exit names to scan.
     when /(^#{$world.find_by_oid(@location).exits.empty? ? "\1" : $world.find_by_oid(@location).exits.keys.join('|^')})/
       $world.other_players_at_location(@location,@oid).each do |x|
@@ -260,6 +187,18 @@ public
       sendto("Huh?")
     end
   end
+
+private
+  # Encrypts a password
+  # [+passwd+] The string to be encrypted
+  # [+return+] The encrypted string
+  def encrypt(passwd)
+    alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./'
+    salt = "#{alphabet[rand(64)].chr}#{alphabet[rand(64)].chr}"
+    passwd.crypt(salt)
+  end
+
+
 end
 
 
@@ -283,6 +222,9 @@ MINIMAL_DB=<<EOH
   oid: 1
 EOH
 
+  attr_accessor :cmds
+
+
   # Create the World.  This loads or creates the database depending on
   # whether it finds it.
   # [+return+] A handle to the World object.
@@ -298,7 +240,10 @@ EOH
     @dbtop = 0
     @db = YAML::load_file('db/world.yaml')
     @db.each {|o| @dbtop = o.oid if o.oid > @dbtop}
-    $stdout.puts "Loaded...dbtop=#{@dbtop}."
+    $stdout.puts "Done database loaded...top oid=#{@dbtop}."
+    $stdout.puts "Loading commands..."
+    @cmds = Command.load
+    $stdout.puts "Done."
   end
 
   # Fetch the next available oid.

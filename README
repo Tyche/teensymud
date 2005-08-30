@@ -1,5 +1,5 @@
 = TeensyMUD Server
-= v2.1.0
+= v2.2.0
 
 ---
 == Introduction
@@ -32,16 +32,14 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 * World is persistent
 * OLC for rooms and objects
 * Offline creation in friendly markup language
-* Turn-based combat system
-* Permadeath and suicide
-* Maintainability (hey how hard could 27 lines of code be)
 * Sexy features like autolook and autoexits
 * Portable - runs on Unix, OS/X, Windows
 * Documentation - see 'doc/index.html' in distro
 * More extras!!! Comes with mini-distro builder utility (see 'rakefile package')
-* Threads racing at no extra charge
 * Color
 * Secure login
+* Turn based combat featureing link death and link suicide. ;-)
+* Runtime extensible commands.  Add new commands with rebooting.
 
 ---
 == Installation

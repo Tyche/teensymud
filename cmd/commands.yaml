@@ -1,0 +1,61 @@
+--- 
+- !ruby/object:Command 
+  cmd: :cmd_help
+  help: displays help
+  name: help
+- !ruby/object:Command 
+  cmd: :cmd_help
+  help: displays help
+  name: "?"
+- !ruby/object:Command 
+  cmd: :cmd_look
+  help: displays the contents of a room
+  name: look
+- !ruby/object:Command 
+  cmd: :cmd_quit
+  help: quits the game (saves player)
+  name: quit
+- !ruby/object:Command 
+  cmd: :cmd_inv
+  help: displays player inventory
+  name: inventory
+- !ruby/object:Command 
+  cmd: :cmd_reload
+  help: reloads the command table
+  name: '@reload'
+- !ruby/object:Command 
+  cmd: :cmd_hello
+  help: the hello social
+  name: hello
+- !ruby/object:Command 
+  cmd: :cmd_kill
+  help: attempts to kill player (e.g. kill Bubba)
+  name: kill
+- !ruby/object:Command 
+  cmd: :cmd_say
+  help: "sends <message> to all players in the room"
+  name: say
+- !ruby/object:Command 
+  cmd: :cmd_chat
+  help: "sends <message> to all players in the game"
+  name: chat
+- !ruby/object:Command 
+  cmd: :cmd_get
+  help: gets all objects in the room into your inventory
+  name: get
+- !ruby/object:Command 
+  cmd: :cmd_drop
+  help: drops all objects in your inventory into the room
+  name: drop
+- !ruby/object:Command 
+  cmd: :cmd_object
+  help: "creates a new object (ex. @object rose)"
+  name: '@object'
+- !ruby/object:Command 
+  cmd: :cmd_room
+  help: "creates a new room and autolinks the exits using the exit names provided.\n\t (ex. @room My Room north south)"
+  name: '@room'
+- !ruby/object:Command 
+  cmd: :cmd_set
+  help: "sets the description for an object (ex. @set #1 A beautiful rose.)"
+  name: '@set'

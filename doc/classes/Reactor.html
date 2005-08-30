@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../files/net_rb.html">
-                net.rb
+                <a href="../files/lib/net_rb.html">
+                lib/net.rb
                 </a>
         <br />
             </td>
@@ -86,7 +86,7 @@
   <area shape="RECT" coords="252,17,324,65"      href="LineIO.html" alt="LineIO">
   <area shape="RECT" coords="57,17,132,65"      href="Observable.html" alt="Observable">
 </map>
-<img src="../dot/f_2.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_3.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -104,12 +104,12 @@ multiplexer. It defines the traditional non-blocking select() server.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000015">new</a>&nbsp;&nbsp;
-      <a href="#M000018">poll</a>&nbsp;&nbsp;
-      <a href="#M000019">register</a>&nbsp;&nbsp;
-      <a href="#M000016">start</a>&nbsp;&nbsp;
-      <a href="#M000017">stop</a>&nbsp;&nbsp;
-      <a href="#M000020">unregister</a>&nbsp;&nbsp;
+      <a href="#M000014">new</a>&nbsp;&nbsp;
+      <a href="#M000017">poll</a>&nbsp;&nbsp;
+      <a href="#M000018">register</a>&nbsp;&nbsp;
+      <a href="#M000015">start</a>&nbsp;&nbsp;
+      <a href="#M000016">stop</a>&nbsp;&nbsp;
+      <a href="#M000019">unregister</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -131,11 +131,11 @@ multiplexer. It defines the traditional non-blocking select() server.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000015" class="method-detail">
-        <a name="M000015"></a>
+      <div id="method-M000014" class="method-detail">
+        <a name="M000014"></a>
 
         <div class="method-heading">
-          <a href="#M000015" class="method-signature">
+          <a href="#M000014" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(port)</span>
           </a>
         </div>
@@ -150,10 +150,10 @@ Constructor for <a href="Reactor.html">Reactor</a>
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000015-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000015-source">
+            onclick="toggleCode('M000014-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000014-source">
 <pre>
-     <span class="ruby-comment cmt"># File net.rb, line 329</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 329</span>
 329:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">port</span>)
 330:     <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>       <span class="ruby-comment cmt"># port server will listen on</span>
 331:     <span class="ruby-ivar">@shutdown</span> = <span class="ruby-keyword kw">false</span>  <span class="ruby-comment cmt"># Flag to indicate that server is shutting down.</span>
@@ -167,11 +167,11 @@ Constructor for <a href="Reactor.html">Reactor</a>
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000018" class="method-detail">
-        <a name="M000018"></a>
+      <div id="method-M000017" class="method-detail">
+        <a name="M000017"></a>
 
         <div class="method-heading">
-          <a href="#M000018" class="method-signature">
+          <a href="#M000017" class="method-signature">
           <span class="method-name">poll</span><span class="method-args">(tm_out)</span>
           </a>
         </div>
@@ -188,10 +188,10 @@ from input requests.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000018-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000018-source">
+            onclick="toggleCode('M000017-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000017-source">
 <pre>
-     <span class="ruby-comment cmt"># File net.rb, line 360</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 360</span>
 360:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">poll</span>(<span class="ruby-identifier">tm_out</span>)
 361:     <span class="ruby-comment cmt"># Reset our socket interest set</span>
 362:     <span class="ruby-identifier">infds</span> = [];<span class="ruby-identifier">outfds</span> = [];<span class="ruby-identifier">oobfds</span> = []
@@ -225,11 +225,11 @@ from input requests.
         </div>
       </div>
 
-      <div id="method-M000019" class="method-detail">
-        <a name="M000019"></a>
+      <div id="method-M000018" class="method-detail">
+        <a name="M000018"></a>
 
         <div class="method-heading">
-          <a href="#M000019" class="method-signature">
+          <a href="#M000018" class="method-signature">
           <span class="method-name">register</span><span class="method-args">(session)</span>
           </a>
         </div>
@@ -239,10 +239,10 @@ from input requests.
 register adds a session to the registry [<tt>session</tt>]
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000019-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000019-source">
+            onclick="toggleCode('M000018-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000018-source">
 <pre>
-     <span class="ruby-comment cmt"># File net.rb, line 391</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 391</span>
 391:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">session</span>)
 392:     <span class="ruby-ivar">@registry</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">session</span>
 393:   <span class="ruby-keyword kw">end</span>
@@ -251,11 +251,11 @@ register adds a session to the registry [<tt>session</tt>]
         </div>
       </div>
 
-      <div id="method-M000016" class="method-detail">
-        <a name="M000016"></a>
+      <div id="method-M000015" class="method-detail">
+        <a name="M000015"></a>
 
         <div class="method-heading">
-          <a href="#M000016" class="method-signature">
+          <a href="#M000015" class="method-signature">
           <span class="method-name">start</span><span class="method-args">(engine)</span>
           </a>
         </div>
@@ -274,10 +274,10 @@ connections.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000016-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000016-source">
+            onclick="toggleCode('M000015-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000015-source">
 <pre>
-     <span class="ruby-comment cmt"># File net.rb, line 340</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 340</span>
 340:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>(<span class="ruby-identifier">engine</span>)
 341:     <span class="ruby-comment cmt"># Create an acceptor to listen for this server.</span>
 342:     <span class="ruby-ivar">@acceptor</span> = <span class="ruby-constant">Acceptor</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-ivar">@port</span>)
@@ -290,11 +290,11 @@ connections.
         </div>
       </div>
 
-      <div id="method-M000017" class="method-detail">
-        <a name="M000017"></a>
+      <div id="method-M000016" class="method-detail">
+        <a name="M000016"></a>
 
         <div class="method-heading">
-          <a href="#M000017" class="method-signature">
+          <a href="#M000016" class="method-signature">
           <span class="method-name">stop</span><span class="method-args">()</span>
           </a>
         </div>
@@ -306,10 +306,10 @@ user list, deletes the connections, and erases them from the user list. It
 then closes its own listening port.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000017-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000017-source">
+            onclick="toggleCode('M000016-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000016-source">
 <pre>
-     <span class="ruby-comment cmt"># File net.rb, line 351</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 351</span>
 351:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop</span>
 352:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">closing</span> = <span class="ruby-keyword kw">true</span>}
 353:     <span class="ruby-ivar">@acceptor</span>.<span class="ruby-identifier">delete_observers</span>
@@ -320,11 +320,11 @@ then closes its own listening port.
         </div>
       </div>
 
-      <div id="method-M000020" class="method-detail">
-        <a name="M000020"></a>
+      <div id="method-M000019" class="method-detail">
+        <a name="M000019"></a>
 
         <div class="method-heading">
-          <a href="#M000020" class="method-signature">
+          <a href="#M000019" class="method-signature">
           <span class="method-name">unregister</span><span class="method-args">(session)</span>
           </a>
         </div>
@@ -334,10 +334,10 @@ then closes its own listening port.
 unregister removes a session from the registry [<tt>session</tt>]
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000020-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000020-source">
+            onclick="toggleCode('M000019-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000019-source">
 <pre>
-     <span class="ruby-comment cmt"># File net.rb, line 397</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 397</span>
 397:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unregister</span>(<span class="ruby-identifier">session</span>)
 398:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">session</span>)
 399:   <span class="ruby-keyword kw">end</span>

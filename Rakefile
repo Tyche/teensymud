@@ -5,7 +5,6 @@ require 'rake/packagetask'
 # files to distribute
 PKG_FILES = FileList[
   'tmud.rb',
-  'net.rb',
   'LICENSE',
   'CONTRIBUTORS', 
   'README',
@@ -15,6 +14,8 @@ PKG_FILES = FileList[
 #  'db/**/*',
   'test',
   'test/**/*',
+  'lib/**/*',
+  'cmd/**/*',
   'doc/**/*'
 ]
 
@@ -32,8 +33,8 @@ Rake::RDocTask.new do |rd|
   rd.title = "TeensyMUD #{TMUDV} Mud Server"
 #  rd.template = 'kilmer'
 #  rd.template = './rdoctemplate.rb'
-  rd.rdoc_files.include('README', 'tmud.rb', 'net.rb')
-  rd.options << '-adSN -I gif' 
+  rd.rdoc_files.include('README', 'tmud.rb', 'lib/*.rb', 'cmd/*.rb')
+  rd.options << '-dSN -I gif' 
 end
 
 task :rdoc do
@@ -53,6 +54,17 @@ Rake::PackageTask.new("tmud", TMUDV) do |p|
     p.need_zip = true
     p.package_files.include(PKG_FILES)
     p.package_files.exclude(/\.svn/)
+end
+  
+desc "Report code statistics (KLOCs, etc) from the application"
+task :stats do
+  require 'code_statistics'
+  CodeStatistics.new(
+    ["Main", ".", /^tmud.rb$/], 
+    ["Library", "lib", /.*\.rb$/], 
+    ["Commands", "cmd", /.*\.rb$/],
+    ["Tests", "test", /.*\.rb$/]
+  ).to_s
 end
   
 task :release do
