@@ -18,9 +18,9 @@ module Cmd
     when nil
       sendto("What are you trying to tell everyone?")
     else
-      sendto(Colors[:magenta] + "You chat, \"#{$1}\"." + Colors[:reset])
+      sendto(Colors[:magenta] + "You chat, \"#{args[0]}\"." + Colors[:reset])
       $world.global_message_others(Colors[:magenta] +
-        "#{@name} chats, \"#{$1}\"." + Colors[:reset],@oid)
+        "#{@name} chats, \"#{args[0]}\"." + Colors[:reset],@oid)
     end
   end
 

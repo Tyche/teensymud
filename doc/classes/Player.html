@@ -319,59 +319,22 @@ All input routed through here and parsed.
 172:       <span class="ruby-keyword kw">return</span>
 173:     <span class="ruby-keyword kw">end</span>
 174: 
-175:     <span class="ruby-comment cmt"># big switch</span>
+175:     <span class="ruby-comment cmt"># big switch - was that is</span>
 176:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">m</span>
-177:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^s.* (.*)/</span>
-178:       <span class="ruby-identifier">sendto</span>(<span class="ruby-node">&quot;You say, \&quot;#{$1}\&quot;.&quot;</span><span class="ruby-operator">+</span><span class="ruby-constant">EOL</span>)
+177:     <span class="ruby-comment cmt"># for the last check create a list of exit names to scan.</span>
+178:     <span class="ruby-keyword kw">when</span> <span class="ruby-node">/(^#{$world.find_by_oid(@location).exits.empty? ? &quot;\1&quot; : $world.find_by_oid(@location).exits.keys.join('|^')})/</span>
 179:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-ivar">@location</span>,<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
-180:         <span class="ruby-identifier">x</span>.<span class="ruby-identifier">sendto</span>(<span class="ruby-node">&quot;#{@name} says, \&quot;#{$1}\&quot;.&quot;</span>)
+180:         <span class="ruby-identifier">x</span>.<span class="ruby-identifier">sendto</span>(<span class="ruby-ivar">@name</span><span class="ruby-operator">+</span><span class="ruby-node">&quot; has left #{$1}.&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">session</span>
 181:       <span class="ruby-keyword kw">end</span>
-182:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^c.* (.*)/</span>
-183:       <span class="ruby-identifier">sendto</span>(<span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:magenta</span>] <span class="ruby-operator">+</span> <span class="ruby-node">&quot;You chat, \&quot;#{$1}\&quot;.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>])
-184:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">global_message_others</span>(<span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:magenta</span>] <span class="ruby-operator">+</span>
-185:         <span class="ruby-node">&quot;#{@name} chats, \&quot;#{$1}\&quot;.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>],<span class="ruby-ivar">@oid</span>)
-186:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^g.*/</span>
-187:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">objects_at_location</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">q</span><span class="ruby-operator">|</span>
-188:         <span class="ruby-identifier">q</span>.<span class="ruby-identifier">location</span>=<span class="ruby-ivar">@oid</span>
-189:       <span class="ruby-keyword kw">end</span>
-190:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Ok.&quot;</span><span class="ruby-operator">+</span><span class="ruby-constant">EOL</span>)
-191:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^dr.*/</span>
-192:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">objects_at_location</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">q</span><span class="ruby-operator">|</span>
-193:         <span class="ruby-identifier">q</span>.<span class="ruby-identifier">location</span>=<span class="ruby-ivar">@location</span>
-194:       <span class="ruby-keyword kw">end</span>
-195:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Ok.&quot;</span><span class="ruby-operator">+</span><span class="ruby-constant">EOL</span>)
-196:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^O (.*)/</span>
-197:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add</span>(<span class="ruby-constant">Obj</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">$1</span>,<span class="ruby-ivar">@location</span>))
-198:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Ok.&quot;</span><span class="ruby-operator">+</span><span class="ruby-constant">EOL</span>)
-199:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^R (.*) (.*) (.*)/</span>
-200:       <span class="ruby-identifier">d</span>=<span class="ruby-constant">Room</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">$1</span>)
-201:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add</span>(<span class="ruby-identifier">d</span>)
-202:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">find_by_oid</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">exits</span>[<span class="ruby-identifier">$2</span>]=<span class="ruby-identifier">d</span>.<span class="ruby-identifier">oid</span>
-203:       <span class="ruby-identifier">d</span>.<span class="ruby-identifier">exits</span>[<span class="ruby-identifier">$3</span>]=<span class="ruby-identifier">$world</span>.<span class="ruby-identifier">find_by_oid</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">oid</span>
-204:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Ok.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">EOL</span>)
-205:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^S #(\d+) (.*)/</span>
-206:       <span class="ruby-identifier">r</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">find_by_oid</span>(<span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_i</span>)
-207:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">r</span>
-208:       <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>, <span class="ruby-value">0</span>
-209:         <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;No object.&quot;</span><span class="ruby-operator">+</span><span class="ruby-constant">EOL</span>)
-210:       <span class="ruby-keyword kw">else</span>
-211:         <span class="ruby-identifier">r</span>.<span class="ruby-identifier">desc</span> = <span class="ruby-identifier">$2</span>
-212:         <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Object #&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$1</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; description set.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">EOL</span>)
-213:       <span class="ruby-keyword kw">end</span>
-214:     <span class="ruby-comment cmt"># for the last check create a list of exit names to scan.</span>
-215:     <span class="ruby-keyword kw">when</span> <span class="ruby-node">/(^#{$world.find_by_oid(@location).exits.empty? ? &quot;\1&quot; : $world.find_by_oid(@location).exits.keys.join('|^')})/</span>
-216:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-ivar">@location</span>,<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
-217:         <span class="ruby-identifier">x</span>.<span class="ruby-identifier">sendto</span>(<span class="ruby-ivar">@name</span><span class="ruby-operator">+</span><span class="ruby-node">&quot; has left #{$1}.&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">session</span>
-218:       <span class="ruby-keyword kw">end</span>
-219:       <span class="ruby-ivar">@location</span>=<span class="ruby-identifier">$world</span>.<span class="ruby-identifier">find_by_oid</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">exits</span>[<span class="ruby-identifier">$1</span>]
-220:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-ivar">@location</span>,<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
-221:         <span class="ruby-identifier">x</span>.<span class="ruby-identifier">sendto</span>(<span class="ruby-ivar">@name</span><span class="ruby-operator">+</span><span class="ruby-node">&quot; has arrived from #{$1}.&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">session</span>
-222:       <span class="ruby-keyword kw">end</span>
-223:       <span class="ruby-identifier">parse</span>(<span class="ruby-value str">'look'</span>)
-224:     <span class="ruby-keyword kw">else</span>
-225:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Huh?&quot;</span>)
-226:     <span class="ruby-keyword kw">end</span>
-227:   <span class="ruby-keyword kw">end</span>
+182:       <span class="ruby-ivar">@location</span>=<span class="ruby-identifier">$world</span>.<span class="ruby-identifier">find_by_oid</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">exits</span>[<span class="ruby-identifier">$1</span>]
+183:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-ivar">@location</span>,<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+184:         <span class="ruby-identifier">x</span>.<span class="ruby-identifier">sendto</span>(<span class="ruby-ivar">@name</span><span class="ruby-operator">+</span><span class="ruby-node">&quot; has arrived from #{$1}.&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">session</span>
+185:       <span class="ruby-keyword kw">end</span>
+186:       <span class="ruby-identifier">parse</span>(<span class="ruby-value str">'look'</span>)
+187:     <span class="ruby-keyword kw">else</span>
+188:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Huh?&quot;</span>)
+189:     <span class="ruby-keyword kw">end</span>
+190:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
