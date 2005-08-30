@@ -56,22 +56,21 @@ That's it.  It will boot on port 4000 and build an initial database in the db di
 * help   - Prints a brief description of the commands
 
 == Help 
-Play commands
--  i[nventory] = displays player inventory
--  l[ook] = displays the contents of a room
--  dr[op] = drops all objects in your inventory into the room
--  g[get] = gets all objects in the room into your inventory
--  k[ill] <name> = attempts to kill player (e.g. k bubba)
--  s[ay] <message> = sends <message> to all players in the room
--  c[hat] <message> = sends <message> to all players in the game
--  h[elp]|?  = displays help
--  q[uit]    = quits the game (saves player)
--  <exit name> = moves player through exit named (ex. south)
-
-OLC
--  O <object name> = creates a new object (ex. O rose)
--  R <room name> <exit name to> <exit name back> = creates a new room and autolinks the exits using the exit names provided.
--  S #<objectid> <description> = sets the description for an object
+-	drop - drops all objects in your inventory into the room
+-	quit - quits the game (saves player)
+-	look - displays the contents of a room
+-	chat - sends <message> to all players in the game
+-	help - displays help
+-	@set - sets the description for an object (ex. @set #1 A beautiful rose.)
+-	@object - creates a new object (ex. @object rose)
+-	@reload - reloads the command table
+-	get - gets all objects in the room into your inventory
+-	say - sends <message> to all players in the room
+-	kill - attempts to kill player (e.g. kill Bubba)
+-	hello - the hello social
+-	@room - creates a new room and autolinks the exits using the exit names provided. (ex. @room My Room north south)
+-	? - displays help
+-	inventory - displays player inventory
 
 ---
 == Contributors

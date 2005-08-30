@@ -220,9 +220,9 @@ sends &lt;message&gt; to all players in the game
 18:     <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>
 19:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;What are you trying to tell everyone?&quot;</span>)
 20:     <span class="ruby-keyword kw">else</span>
-21:       <span class="ruby-identifier">sendto</span>(<span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:magenta</span>] <span class="ruby-operator">+</span> <span class="ruby-node">&quot;You chat, \&quot;#{$1}\&quot;.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>])
+21:       <span class="ruby-identifier">sendto</span>(<span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:magenta</span>] <span class="ruby-operator">+</span> <span class="ruby-node">&quot;You chat, \&quot;#{args[0]}\&quot;.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>])
 22:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">global_message_others</span>(<span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:magenta</span>] <span class="ruby-operator">+</span>
-23:         <span class="ruby-node">&quot;#{@name} chats, \&quot;#{$1}\&quot;.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>],<span class="ruby-ivar">@oid</span>)
+23:         <span class="ruby-node">&quot;#{@name} chats, \&quot;#{args[0]}\&quot;.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>],<span class="ruby-ivar">@oid</span>)
 24:     <span class="ruby-keyword kw">end</span>
 25:   <span class="ruby-keyword kw">end</span>
 </pre>
