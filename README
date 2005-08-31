@@ -1,9 +1,9 @@
 = TeensyMUD Server
-= v2.2.0
+= v2.3.0
 
 ---
 == Introduction
-TeensyMUD is a very simple mud server written in Ruby.  It uses a multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns and YAML formatted text files as a database.
+TeensyMUD is a very simple mud server written in Ruby.  It uses a multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns and YAML formatted text files as a database. It is also a pure event driven system where all game objects communicate with each other via events. 
 
 This server was initially created in response to an Aprils Fool's joke posted by Erwin Andreasen on TheMudConnector forum announcing a 1K mud contest.  Those obfuscated versions can be found in the repository.
 
@@ -40,6 +40,8 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 * Secure login
 * Turn based combat featureing link death and link suicide. ;-)
 * Runtime extensible commands.  Add new commands with rebooting.
+* Completely event-driven system.  All first class game objects communicate with
+  each other via TITS (Tyche's Immediate Temporality System).
 
 ---
 == Installation
@@ -59,6 +61,7 @@ That's it.  It will boot on port 4000 and build an initial database in the db di
 -	drop - drops all objects in your inventory into the room
 -	quit - quits the game (saves player)
 -	look - displays the contents of a room
+-	examine - displays the contents of a room
 -	chat - sends <message> to all players in the game
 -	help - displays help
 -	@set - sets the description for an object (ex. @set #1 A beautiful rose.)
@@ -68,6 +71,7 @@ That's it.  It will boot on port 4000 and build an initial database in the db di
 -	say - sends <message> to all players in the room
 -	kill - attempts to kill player (e.g. kill Bubba)
 -	hello - the hello social
+-	who - shows a list of all connected players
 -	@room - creates a new room and autolinks the exits using the exit names provided. (ex. @room My Room north south)
 -	? - displays help
 -	inventory - displays player inventory

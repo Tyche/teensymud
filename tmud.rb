@@ -1,8 +1,8 @@
 #
 # file::    tmud.rb
 # author::  Jon A. Lambert
-# version:: 2.2.0
-# date::    08/29/2005
+# version:: 2.3.0
+# date::    08/31/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -17,7 +17,7 @@ $:.unshift "lib"
 require 'net'
 require 'command'
 
-Version = "2.2.0"
+Version = "2.3.0"
 
 # Telnet end of line
 EOL="\r\n"

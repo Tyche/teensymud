@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue Aug 30 01:58:02 GMT-5:00 2005</td>
+      <td>Wed Aug 31 12:49:23 GMT-5:00 2005</td>
     </tr>
     </table>
   </div>
@@ -75,14 +75,15 @@
 
     <div id="description">
       <h1>TeensyMUD Server</h1>
-<h1>v2.2.0</h1>
+<h1>v2.3.0</h1>
 <hr size="1"></hr><h2>Introduction</h2>
 <p>
 TeensyMUD is a very simple mud server written in Ruby. It uses a
 multiplexed single-threaded network driver using <a
 href="../classes/Acceptor.html">Acceptor</a>/<a
 href="../classes/Reactor.html">Reactor</a> and Observer patterns and YAML
-formatted text files as a database.
+formatted text files as a database. It is also a pure event driven system
+where all game objects communicate with each other via events.
 </p>
 <p>
 This server was initially created in response to an Aprils Fool&#8217;s
@@ -181,6 +182,10 @@ package&#8217;)
 <li>Runtime extensible commands. Add new commands with rebooting.
 
 </li>
+<li>Completely event-driven system. All first class game objects communicate
+with each other via TITS (Tyche&#8217;s Immediate Temporality System).
+
+</li>
 </ul>
 <hr size="1"></hr><h2>Installation</h2>
 <ol>
@@ -221,6 +226,9 @@ the db directory.
 <li>look - displays the contents of a room
 
 </li>
+<li>examine - displays the contents of a room
+
+</li>
 <li>chat - sends &lt;message&gt; to all players in the game
 
 </li>
@@ -246,6 +254,9 @@ the db directory.
 
 </li>
 <li>hello - the hello social
+
+</li>
+<li>who - shows a list of all connected players
 
 </li>
 <li>@room - creates a new room and autolinks the exits using the exit names
