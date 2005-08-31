@@ -1,8 +1,8 @@
 #
 # file::    cmd_kill.rb
 # author::  Jon A. Lambert
-# version:: 2.2.0
-# date::    08/29/2005
+# version:: 2.3.0
+# date::    08/31/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -24,11 +24,17 @@ module Cmd
         return
       end
       if rand < 0.3
-        $world.global_message(@name+" kills " + d.name)
+        sendto("You kill #{d.name}.")
+        $world.players_connected(@oid).each {|p|
+          $world.add_event(@oid,p.oid,:show,"#{@name} kills #{d.name}.")
+        }
         d.disconnect
         # $world.delete(d)  Dont delete player, it's annoying
       else
-        $world.global_message(@name+" misses " + d.name)
+        sendto("You attacks and misses #{d.name}.")
+        $world.players_connected(@oid).each {|p|
+          $world.add_event(@oid,p.oid,:show,"#{@name} attacks and misses #{d.name}.")
+        }
       end
     end
   end

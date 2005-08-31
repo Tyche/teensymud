@@ -14,7 +14,9 @@ module Cmd
 
   # The inventory command
   def cmd_inv(*args)
-    $world.objects_at_location(@oid).each{|o|sendto(o.name)}
+    $world.objects_at_location(@oid).each do |x|
+      $world.add_event(@oid,x.oid,:describe)
+    end
   end
 
 end

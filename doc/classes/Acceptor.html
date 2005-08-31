@@ -105,10 +105,10 @@ The acceptor class handles client connection requests for a reactor
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000005">handle_close</a>&nbsp;&nbsp;
-      <a href="#M000004">handle_input</a>&nbsp;&nbsp;
-      <a href="#M000003">init</a>&nbsp;&nbsp;
-      <a href="#M000002">new</a>&nbsp;&nbsp;
+      <a href="#M000006">handle_close</a>&nbsp;&nbsp;
+      <a href="#M000005">handle_input</a>&nbsp;&nbsp;
+      <a href="#M000004">init</a>&nbsp;&nbsp;
+      <a href="#M000003">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -130,11 +130,11 @@ The acceptor class handles client connection requests for a reactor
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000002" class="method-detail">
-        <a name="M000002"></a>
+      <div id="method-M000003" class="method-detail">
+        <a name="M000003"></a>
 
         <div class="method-heading">
-          <a href="#M000002" class="method-signature">
+          <a href="#M000003" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(server, port)</span>
           </a>
         </div>
@@ -155,8 +155,8 @@ Create a new acceptor object
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000002-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000002-source">
+            onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000003-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/net.rb, line 267</span>
 267:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">port</span>)
@@ -170,23 +170,23 @@ Create a new acceptor object
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000005" class="method-detail">
-        <a name="M000005"></a>
+      <div id="method-M000006" class="method-detail">
+        <a name="M000006"></a>
 
         <div class="method-heading">
-          <a href="#M000005" class="method-signature">
+          <a href="#M000006" class="method-signature">
           <span class="method-name">handle_close</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Acceptor.html#M000005">handle_close</a> is called when a close
+<a href="Acceptor.html#M000006">handle_close</a> is called when a close
 event occurs for this acceptor.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000005-source">
+            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000006-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/net.rb, line 311</span>
 311:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
@@ -202,25 +202,25 @@ event occurs for this acceptor.
         </div>
       </div>
 
-      <div id="method-M000004" class="method-detail">
-        <a name="M000004"></a>
+      <div id="method-M000005" class="method-detail">
+        <a name="M000005"></a>
 
         <div class="method-heading">
-          <a href="#M000004" class="method-signature">
+          <a href="#M000005" class="method-signature">
           <span class="method-name">handle_input</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Acceptor.html#M000004">handle_input</a> is called when an pending
+<a href="Acceptor.html#M000005">handle_input</a> is called when an pending
 connection occurs on the listening socket&#8217;s port. This function
 creates a <a href="Connection.html">Connection</a> object and calls
 it&#8217;s init routine.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000004-source">
+            onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000005-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/net.rb, line 290</span>
 290:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_input</span>
@@ -247,11 +247,11 @@ it&#8217;s init routine.
         </div>
       </div>
 
-      <div id="method-M000003" class="method-detail">
-        <a name="M000003"></a>
+      <div id="method-M000004" class="method-detail">
+        <a name="M000004"></a>
 
         <div class="method-heading">
-          <a href="#M000003" class="method-signature">
+          <a href="#M000004" class="method-signature">
           <span class="method-name">init</span><span class="method-args">()</span>
           </a>
         </div>
@@ -266,8 +266,8 @@ init is called before using the acceptor
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000003-source">
+            onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000004-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/net.rb, line 274</span>
 274:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>

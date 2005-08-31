@@ -106,13 +106,13 @@ handles all events dispatched by the reactor.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000050">handle_close</a>&nbsp;&nbsp;
-      <a href="#M000048">handle_input</a>&nbsp;&nbsp;
-      <a href="#M000049">handle_output</a>&nbsp;&nbsp;
-      <a href="#M000046">init</a>&nbsp;&nbsp;
-      <a href="#M000045">new</a>&nbsp;&nbsp;
-      <a href="#M000051">sendmsg</a>&nbsp;&nbsp;
-      <a href="#M000047">update</a>&nbsp;&nbsp;
+      <a href="#M000055">handle_close</a>&nbsp;&nbsp;
+      <a href="#M000053">handle_input</a>&nbsp;&nbsp;
+      <a href="#M000054">handle_output</a>&nbsp;&nbsp;
+      <a href="#M000051">init</a>&nbsp;&nbsp;
+      <a href="#M000050">new</a>&nbsp;&nbsp;
+      <a href="#M000056">sendmsg</a>&nbsp;&nbsp;
+      <a href="#M000052">update</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -134,11 +134,11 @@ handles all events dispatched by the reactor.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000045" class="method-detail">
-        <a name="M000045"></a>
+      <div id="method-M000050" class="method-detail">
+        <a name="M000050"></a>
 
         <div class="method-heading">
-          <a href="#M000045" class="method-signature">
+          <a href="#M000050" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(server, sock)</span>
           </a>
         </div>
@@ -159,8 +159,8 @@ Create a new connection object
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000045-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000045-source">
+            onclick="toggleCode('M000050-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000050-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/net.rb, line 147</span>
 147:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">sock</span>)
@@ -177,23 +177,23 @@ Create a new connection object
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000050" class="method-detail">
-        <a name="M000050"></a>
+      <div id="method-M000055" class="method-detail">
+        <a name="M000055"></a>
 
         <div class="method-heading">
-          <a href="#M000050" class="method-signature">
+          <a href="#M000055" class="method-signature">
           <span class="method-name">handle_close</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Connection.html#M000050">handle_close</a> is called to when an
+<a href="Connection.html#M000055">handle_close</a> is called to when an
 close event occurs for this session.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000050-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000050-source">
+            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000055-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/net.rb, line 238</span>
 238:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
@@ -212,18 +212,18 @@ close event occurs for this session.
         </div>
       </div>
 
-      <div id="method-M000048" class="method-detail">
-        <a name="M000048"></a>
+      <div id="method-M000053" class="method-detail">
+        <a name="M000053"></a>
 
         <div class="method-heading">
-          <a href="#M000048" class="method-signature">
+          <a href="#M000053" class="method-signature">
           <span class="method-name">handle_input</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Connection.html#M000048">handle_input</a> is called to order a
+<a href="Connection.html#M000053">handle_input</a> is called to order a
 connection to process any input waiting on its socket. Input is parsed into
 lines based on the occurance of the CRLF terminator and pushed into a
 buffer which is a list of lines. The buffer expands dynamically as input is
@@ -231,8 +231,8 @@ processed. Input that has yet to see a CRLF terminator is left in the
 connection&#8217;s inbuffer.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000048-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000048-source">
+            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000053-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/net.rb, line 191</span>
 191:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_input</span>
@@ -262,23 +262,23 @@ connection&#8217;s inbuffer.
         </div>
       </div>
 
-      <div id="method-M000049" class="method-detail">
-        <a name="M000049"></a>
+      <div id="method-M000054" class="method-detail">
+        <a name="M000054"></a>
 
         <div class="method-heading">
-          <a href="#M000049" class="method-signature">
+          <a href="#M000054" class="method-signature">
           <span class="method-name">handle_output</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Connection.html#M000049">handle_output</a> is called to order a
+<a href="Connection.html#M000054">handle_output</a> is called to order a
 connection to process any output waiting on its socket.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000049-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000049-source">
+            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000054-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/net.rb, line 216</span>
 216:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_output</span>
@@ -306,11 +306,11 @@ connection to process any output waiting on its socket.
         </div>
       </div>
 
-      <div id="method-M000046" class="method-detail">
-        <a name="M000046"></a>
+      <div id="method-M000051" class="method-detail">
+        <a name="M000051"></a>
 
         <div class="method-heading">
-          <a href="#M000046" class="method-signature">
+          <a href="#M000051" class="method-signature">
           <span class="method-name">init</span><span class="method-args">()</span>
           </a>
         </div>
@@ -325,8 +325,8 @@ init is called before using the connection.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000046-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000046-source">
+            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000051-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/net.rb, line 157</span>
 157:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>
@@ -344,11 +344,11 @@ init is called before using the connection.
         </div>
       </div>
 
-      <div id="method-M000051" class="method-detail">
-        <a name="M000051"></a>
+      <div id="method-M000056" class="method-detail">
+        <a name="M000056"></a>
 
         <div class="method-heading">
-          <a href="#M000051" class="method-signature">
+          <a href="#M000056" class="method-signature">
           <span class="method-name">sendmsg</span><span class="method-args">(msg)</span>
           </a>
         </div>
@@ -364,8 +364,8 @@ href="Connection.html">Connection</a>&#8217;s output buffer.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000051-source">
+            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000056-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/net.rb, line 252</span>
 252:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">msg</span>)
@@ -377,11 +377,11 @@ href="Connection.html">Connection</a>&#8217;s output buffer.
         </div>
       </div>
 
-      <div id="method-M000047" class="method-detail">
-        <a name="M000047"></a>
+      <div id="method-M000052" class="method-detail">
+        <a name="M000052"></a>
 
         <div class="method-heading">
-          <a href="#M000047" class="method-signature">
+          <a href="#M000052" class="method-signature">
           <span class="method-name">update</span><span class="method-args">(msg)</span>
           </a>
         </div>
@@ -398,8 +398,8 @@ entanglements&quot;. We simply support a message to be sent to the socket
 or a token indicating the clent wants to disconnect this connection.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000047-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000047-source">
+            onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000052-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/net.rb, line 177</span>
 177:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)

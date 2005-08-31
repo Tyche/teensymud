@@ -86,6 +86,7 @@
   <area shape="RECT" coords="6,113,78,161"      href="Room.html" alt="Room">
   <area shape="RECT" coords="272,17,344,65"      href="Engine.html" alt="Engine">
   <area shape="RECT" coords="368,17,440,65"      href="World.html" alt="World">
+  <area shape="RECT" coords="464,17,536,65"      href="Event.html" alt="Event">
   <area shape="RECT" coords="198,113,270,161"      href="Incoming.html" alt="Incoming">
   <area shape="RECT" coords="173,17,248,65"      href="Observable.html" alt="Observable">
 </map>
@@ -106,7 +107,8 @@ The <a href="Room.html">Room</a> class is the mother of all rooms.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000032">new</a>&nbsp;&nbsp;
+      <a href="#M000036">ass</a>&nbsp;&nbsp;
+      <a href="#M000035">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -145,11 +147,11 @@ exit and the value is the room oid at the end of the exit.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000032" class="method-detail">
-        <a name="M000032"></a>
+      <div id="method-M000035" class="method-detail">
+        <a name="M000035"></a>
 
         <div class="method-heading">
-          <a href="#M000032" class="method-signature">
+          <a href="#M000035" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(name)</span>
           </a>
         </div>
@@ -167,14 +169,62 @@ Create a new <a href="Room.html">Room</a> object
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000032-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000032-source">
+            onclick="toggleCode('M000035-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000035-source">
 <pre>
-    <span class="ruby-comment cmt"># File tmud.rb, line 74</span>
-74:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>)
-75:     <span class="ruby-ivar">@exits</span>={}
-76:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>)
-77:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tmud.rb, line 90</span>
+90:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>)
+91:     <span class="ruby-ivar">@exits</span>={}
+92:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>)
+93:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000036" class="method-detail">
+        <a name="M000036"></a>
+
+        <div class="method-heading">
+          <a href="#M000036" class="method-signature">
+          <span class="method-name">ass</span><span class="method-args">(e)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000036-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000036-source">
+<pre>
+     <span class="ruby-comment cmt"># File tmud.rb, line 95</span>
+ 95:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ass</span>(<span class="ruby-identifier">e</span>)
+ 96:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">kind</span>
+ 97:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:describe</span>
+ 98:       <span class="ruby-identifier">msg</span> = <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:green</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;(&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@oid</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;) &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">+</span>
+ 99:         <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>] <span class="ruby-operator">+</span> <span class="ruby-constant">EOL</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">desc</span> <span class="ruby-operator">+</span> <span class="ruby-constant">EOL</span>
+100:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-identifier">msg</span>)
+101:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:describe_exits</span>
+102:       <span class="ruby-identifier">msg</span> = <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:red</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;Exits: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@exits</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' | '</span>) <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>]
+103:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-identifier">msg</span>)
+104:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:leave</span>
+105:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">find_by_oid</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
+106:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+107:         <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">x</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>, <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot; has left #{e.msg}.&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">session</span>
+108:       <span class="ruby-keyword kw">end</span>
+109:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">location</span> = <span class="ruby-ivar">@exits</span>[<span class="ruby-identifier">e</span>.<span class="ruby-identifier">msg</span>]
+110:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-ivar">@exits</span>[<span class="ruby-identifier">e</span>.<span class="ruby-identifier">msg</span>],<span class="ruby-identifier">:arrive</span>,<span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">oid</span>)
+111:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:arrive</span>
+112:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">find_by_oid</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">msg</span>)
+113:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">msg</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+114:         <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">x</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>, <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">name</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot; has arrived.&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">session</span>
+115:       <span class="ruby-keyword kw">end</span>
+116:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-value str">'look'</span>)
+117:     <span class="ruby-keyword kw">else</span>
+118:       <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">e</span>)
+119:     <span class="ruby-keyword kw">end</span>
+120:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

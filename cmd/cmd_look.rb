@@ -14,17 +14,14 @@ module Cmd
 
   # Look command displays the contents of a room
   def cmd_look(*args)
-    sendto(Colors[:green] + "(" + @location.to_s + ") " +
-      $world.find_by_oid(@location).name + Colors[:reset] + EOL +
-      $world.find_by_oid(@location).desc + EOL)
-    $world.other_players_at_location(@location,@oid).each do |x|
-      sendto(Colors[:blue] + x.name + " is here." + Colors[:reset]) if x.session
-    end
+    $world.add_event(@oid,@location,:describe)
     $world.objects_at_location(@location).each do |x|
-      sendto(Colors[:yellow] + "A " + x.name + " is here" + Colors[:reset])
+      $world.add_event(@oid,x.oid,:describe)
     end
-    sendto(Colors[:red] + "Exits: " +
-      $world.find_by_oid(@location).exits.keys.join(' | ') + Colors[:reset])
+    $world.other_players_at_location(@location,@oid).each do |x|
+      $world.add_event(@oid,x.oid,:describe) if x.session
+    end
+    $world.add_event(@oid,@location,:describe_exits)
   end
 
 end

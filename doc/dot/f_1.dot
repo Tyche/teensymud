@@ -55,6 +55,15 @@ digraph TopLevel {
         label = "World"
     ]
 
+    Event [
+        fontcolor = black,
+        URL = "classes/Event.html",
+        shape = ellipse,
+        color = palegoldenrod,
+        style = filled,
+        label = "Event"
+    ]
+
     Incoming [
         fontcolor = black,
         URL = "classes/Incoming.html",

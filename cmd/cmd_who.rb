@@ -1,8 +1,8 @@
 #
-# file::    cmd_get.rb
+# file::    cmd_who.rb
 # author::  Jon A. Lambert
-# version:: 2.2.0
-# date::    08/29/2005
+# version:: 2.3.0
+# date::    08/31/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -12,11 +12,9 @@
 #
 module Cmd
 
-  # gets all objects in the room into your inventory
-  def cmd_get(*args)
-    $world.objects_at_location(@location).each do |q|
-      $world.add_event(@oid,q.oid,:get)
-    end
+  # The inventory command
+  def cmd_who(*args)
+    $world.players_connected.each {|p| sendto(p.name)}
   end
 
 end

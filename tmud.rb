@@ -58,6 +58,22 @@ class Obj
     @name,@location,@oid=name,location,$world.getid
     @desc = ""
   end
+
+  def ass(e)
+    case e.kind
+    when :describe
+      msg = Colors[:yellow] + "A " + @name + " is here" + Colors[:reset]
+      $world.add_event(@oid,e.from,:show,msg)
+    when :get
+      plyr = $world.find_by_oid(e.from)
+      @location=plyr.oid
+      $world.add_event(@oid,e.from,:show,"You get the #{@name}")
+    when :drop
+      plyr = $world.find_by_oid(e.from)
+      @location=plyr.location
+      $world.add_event(@oid,e.from,:show,"You drop the #{@name}")
+    end
+  end
 end
 
 # The Room class is the mother of all rooms.
@@ -74,6 +90,34 @@ class Room < Obj
     @exits={}
     super(name,location)
   end
+
+  def ass(e)
+    case e.kind
+    when :describe
+      msg = Colors[:green] + "(" + @oid.to_s + ") " + name +
+        Colors[:reset] + EOL + desc + EOL
+      $world.add_event(@oid,e.from,:show,msg)
+    when :describe_exits
+      msg = Colors[:red] + "Exits: " + @exits.keys.join(' | ') + Colors[:reset]
+      $world.add_event(@oid,e.from,:show,msg)
+    when :leave
+      plyr = $world.find_by_oid(e.from)
+      $world.other_players_at_location(@oid,e.from).each do |x|
+        $world.add_event(@oid,x.oid,:show, plyr.name + " has left #{e.msg}.") if x.session
+      end
+      plyr.location = @exits[e.msg]
+      $world.add_event(@oid,@exits[e.msg],:arrive,plyr.oid)
+    when :arrive
+      plyr = $world.find_by_oid(e.msg)
+      $world.other_players_at_location(@oid,e.msg).each do |x|
+        $world.add_event(@oid,x.oid,:show, plyr.name+" has arrived.") if x.session
+      end
+      plyr.parse('look')
+    else
+      super(e)
+    end
+  end
+
 end
 
 # The Player class is the mother of all players.
@@ -117,11 +161,15 @@ class Player < Obj
     when :logged_out
       @session = nil
       delete_observers
-      $world.global_message_others("#{@name} has quit.",@oid)
+      $world.players_connected(@oid).each {|p|
+        $world.add_event(@oid,p.oid,:show,"#{@name} has quit.")
+      }
     when :disconnected
       @session = nil
       delete_observers
-      $world.global_message_others("#{@name} has disconnected.",@oid)
+      $world.players_connected(@oid).each {|p|
+        $world.add_event(@oid,p.oid,:show,"#{@name} has disconnected.")
+      }
     else
       parse(msg)
     end
@@ -145,9 +193,8 @@ class Player < Obj
   # [+m+]      The input message to be parsed
   # [+return+] Undefined.
   def parse(m)
-
     # match legal command
-    m=~/([A-Za-z@?]+)(.*)/
+    m=~/([A-Za-z@?"'#!]+)(.*)/
     cmd=$1
 
     # cmds take an array - we ought to parse this into an array of strings
@@ -158,35 +205,38 @@ class Player < Obj
     # look for a command in our spanking new table
     c = $world.cmds.find(cmd)
     # there are three possibilities here
-    if c.nil?  # not found
-      # onward to big case
-    elsif c.size > 1   # Ambiguous command - tell luser about them.
+    if c && c.size > 1   # Ambiguous command - tell luser about them.
       ln = "Which did you mean, "
       c.each {|x| ln += "\'" + x.name + "\' "}
       ln += "?"
       sendto(ln)
       return
-    else  # We found it
+    elsif c && c.size == 1  # We found it
       self.send(c[0].cmd, arg)
       return
-    end
-
-    # big switch - was that is
-    case m
-    # for the last check create a list of exit names to scan.
-    when /(^#{$world.find_by_oid(@location).exits.empty? ? "\1" : $world.find_by_oid(@location).exits.keys.join('|^')})/
-      $world.other_players_at_location(@location,@oid).each do |x|
-        x.sendto(@name+" has left #{$1}.") if x.session
-      end
-      @location=$world.find_by_oid(@location).exits[$1]
-      $world.other_players_at_location(@location,@oid).each do |x|
-        x.sendto(@name+" has arrived from #{$1}.") if x.session
-      end
-      parse('look')
     else
-      sendto("Huh?")
+      case m
+      # for the last check create a list of exit names to scan.
+      when /(^#{$world.find_by_oid(@location).exits.empty? ? "\1" : $world.find_by_oid(@location).exits.keys.join('|^')})/
+        $world.add_event(@oid,@location,:leave,$1)
+      else
+        sendto("Huh?")
+      end
     end
   end
+
+  def ass(e)
+    case e.kind
+    when :describe
+      msg = Colors[:cyan] + @name + " is here." + Colors[:reset]
+      $world.add_event(@oid,e.from,:show,msg)
+    when :show
+      sendto(e.msg)
+    else
+      super(e)
+    end
+  end
+
 
 private
   # Encrypts a password
@@ -198,9 +248,23 @@ private
     passwd.crypt(salt)
   end
 
-
 end
 
+# The Event class is a temporally immediate message that is to be propagated
+# to another object.
+class Event
+  attr_accessor :from, :to, :kind, :msg
+
+  # Constructor for an Event.
+  # [+from+]   The oid of the issuer of the event.
+  # [+to+]     The oid of the target of the event.
+  # [+kind+]   The symbol that defines the kind of event.
+  # [+msg+]    Optional information needed to process the event.
+  # [+return+] A reference to the Event.
+  def initialize(from,to,kind,msg=nil)
+    @from,@to,@kind,@msg=from,to,kind,msg
+  end
+end
 
 # The World class is the mother of all worlds.
 #
@@ -222,13 +286,15 @@ MINIMAL_DB=<<EOH
   oid: 1
 EOH
 
-  attr_accessor :cmds
+  attr_accessor :cmds, :tits
+  attr_reader :options
 
 
   # Create the World.  This loads or creates the database depending on
   # whether it finds it.
   # [+return+] A handle to the World object.
-  def initialize
+  def initialize(options)
+    @options=options
     if !test(?e,'db/world.yaml')
       $stdout.puts "Building minimal world database..."
       File.open('db/world.yaml','w') do |f|
@@ -238,12 +304,17 @@ EOH
     end
     $stdout.puts "Loading world..."
     @dbtop = 0
-    @db = YAML::load_file('db/world.yaml')
-    @db.each {|o| @dbtop = o.oid if o.oid > @dbtop}
+    @db = {}
+    tmp = YAML::load_file('db/world.yaml')
+    tmp.each do |o|
+      @dbtop = o.oid if o.oid > @dbtop
+      @db[o.oid]=o
+    end
     $stdout.puts "Done database loaded...top oid=#{@dbtop}."
     $stdout.puts "Loading commands..."
     @cmds = Command.load
     $stdout.puts "Done."
+    @tits = []
   end
 
   # Fetch the next available oid.
@@ -255,14 +326,14 @@ EOH
   # Save the world
   # [+return+] Undefined.
   def save
-    File.open('db/world.yaml','w'){|f|YAML::dump(@db,f)}
+    File.open('db/world.yaml','w'){|f|YAML::dump(@db.values,f)}
   end
 
   # Adds a new object to the database.
   # [+obj+] is a reference to object to be added
   # [+return+] Undefined.
   def add(obj)
-    @db<<obj
+    @db[obj.oid] = obj
   end
 
   # Deletes an object from the database.
@@ -276,21 +347,28 @@ EOH
   # [+i+] is the oid to use in the search.
   # [+return+] Handle to the object or nil.
   def find_by_oid(i)
-    @db.find{|o|i==o.oid}
+    @db[i]
   end
 
   # Finds a Player object in the database by name.
   # [+nm+] is the string to use in the search.
   # [+return+] Handle to the Player object or nil.
   def find_player_by_name(nm)
-    @db.find{|o|Player==o.class&&nm==o.name}
+    @db.values.find{|o|Player==o.class&&nm==o.name}
   end
 
   # Finds all the players at a location.
   # [+loc+]    The location oid searched or nil for everywhere.
   # [+return+] Handle to a list of the Player objects.
   def players_at_location(loc)
-    @db.find_all{|o|(o.class==Player)&&(!loc||loc==o.location)}
+    @db.values.find_all{|o|(o.class==Player)&&(!loc||loc==o.location)}
+  end
+
+  # Finds all connected players
+  # [+exempt+] The oid of a player to be exempt from the returned array.
+  # [+return+] An array of  connected players
+  def players_connected(exempt=nil)
+    @db.values.find_all{|o| o.class == Player && o.oid != exempt && o.session}
   end
 
   # Finds all the players at a location except the passed player.
@@ -298,31 +376,28 @@ EOH
   # [+plrid+]  The player oid excepted from the list.
   # [+return+] Handle to a list of the Player objects.
   def other_players_at_location(loc,plrid)
-    @db.find_all{|o|(o.class==Player)&&(!loc||loc==o.location)&&o.oid!=plrid}
-  end
-
-  # Sends a message to all players in the world.
-  # [+msg+]    The message text to send
-  # [+return+] Undefined.
-  def global_message(msg)
-    players_at_location(nil).each{|plr|plr.sendto(msg)}
-  end
-
-  # Sends a message to all players in the world except the passed player.
-  # [+msg+]    The message text to send
-  # [+plrid+]  The player oid excepted from the list.
-  # [+return+] Undefined.
-  def global_message_others(msg,plrid)
-    other_players_at_location(nil,plrid).each{|plr|plr.sendto(msg)}
+    @db.values.find_all{|o|(o.class==Player)&&(!loc||loc==o.location)&&o.oid!=plrid}
   end
 
   # Finds all Objects at a location
   # [+loc+]    The location oid searched or nil for everywhere.
   # [+return+] Handle to a list of the Obj objects.
   def objects_at_location(loc)
-    @db.find_all{|o|(o.class==Obj)&&(!loc||loc==o.location)}
+    @db.values.find_all{|o|(o.class==Obj)&&(!loc||loc==o.location)}
   end
 
+  # Add an Event to the TITS queue.
+  # [+e+]      The event to be added.
+  # [+return+] Undefined.
+  def add_event(from,to,kind,msg=nil)
+    @tits.push(Event.new(from,to,kind,msg))
+  end
+
+  # Get an Event from the TITS queue.
+  # [+return+] The Event or nil
+  def get_event
+    @tits.shift
+  end
 end
 
 
@@ -399,7 +474,9 @@ private
     @player.add_observer(@conn)
 
     @player.sendto("Welcome " + @login_name + "@" + @conn.sock.peeraddr[2] + "!")
-    $world.global_message_others("#{@player.name} has connected.",@player.oid)
+    $world.players_connected(@player.oid).each {|p|
+      $world.add_event(@oid,p.oid,:show,"#{@player.name} has connected.")
+    }
     @player.parse('look')
   end
 
@@ -428,6 +505,9 @@ class Engine
     $stdout.puts "TMUD is ready"
     until @shutdown
       @server.poll(0.2)
+      while e = $world.get_event
+        $world.find_by_oid(e.to).ass(e)
+      end
     end # until
     @server.stop
   end
@@ -449,6 +529,50 @@ end
 # This is start of the main driver.
 ###########################################################################
 
+#
+# Processes command line arguments
+#
+require 'optparse'
+require 'ostruct'
+def get_options
+  # parse options
+  begin
+    # The myopts specified on the command line will be collected in *myopts*.
+    # We set default values here.
+    myopts = OpenStruct.new
+    myopts.port = 4000
+    myopts.verbose = false
+
+    opts = OptionParser.new do |opts|
+      opts.banner = BANNER
+      opts.separator ""
+      opts.separator "Usage: ruby #{$0} [options]"
+      opts.separator ""
+      opts.on("-p", "--port PORT", Integer,
+        "Select the port the mud will run on (defaults to 4000)") {|myopts.port|}
+      opts.on("-v", "--[no-]verbose", "Run verbosely") {|myopts.verbose|}
+      opts.on_tail("-h", "--help", "Show this message") do
+        puts opts.help
+        exit
+      end
+      opts.on_tail("--version", "Show version") do
+        puts "TeensyMud #{Version}"
+        exit
+      end
+    end
+
+    opts.parse!(ARGV)
+
+    return myopts
+  rescue OptionParser::ParseError
+    puts "ERROR - #{$!}"
+    puts "For help..."
+    puts " ruby #{$0} --help"
+    exit
+  end
+end
+
+
 # Setup traps - invoke one of these signals to shut down the mud
 def handle_signal(sig)
   $stdout.puts "Signal caught request to shutdown."
@@ -464,9 +588,8 @@ Signal.trap("KILL", method(:handle_signal))
 
 begin
   # Create the $world a global object containing everything.
-  $world=World.new
-
-  $engine = Engine.new(4000)
+  $world=World.new(get_options)
+  $engine = Engine.new($world.options.port)
   $engine.run
 rescue => e
   $stderr.puts "Exception caught error in server: " + $!

@@ -12,6 +12,10 @@
   help: displays the contents of a room
   name: look
 - !ruby/object:Command 
+  cmd: :cmd_look
+  help: displays the contents of a room
+  name: examine
+- !ruby/object:Command 
   cmd: :cmd_quit
   help: quits the game (saves player)
   name: quit
@@ -59,3 +63,7 @@
   cmd: :cmd_set
   help: "sets the description for an object (ex. @set #1 A beautiful rose.)"
   name: '@set'
+- !ruby/object:Command 
+  cmd: :cmd_who
+  help: shows a list of all connected players
+  name: who
