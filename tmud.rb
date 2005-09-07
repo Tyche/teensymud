@@ -1,8 +1,8 @@
 #
 # file::    tmud.rb
 # author::  Jon A. Lambert
-# version:: 2.3.0
-# date::    08/31/2005
+# version:: 2.4.0
+# date::    09/06/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -16,8 +16,9 @@ require 'yaml'
 $:.unshift "lib"
 require 'net'
 require 'command'
+require 'database'
 
-Version = "2.3.0"
+Version = "2.4.0"
 
 # Telnet end of line
 EOL="\r\n"
@@ -54,23 +55,78 @@ class Obj
   # [+name+]     Every object needs a name
   # [+location+] The object oid containing this object or nil.
   # [+return+]   A handle to the new Object
-  def initialize(name,location)
-    @name,@location,@oid=name,location,$world.getid
+  def initialize(name,location=nil)
+    @name,@location,@oid=name,location,$world.db.getid
+    @contents = []
     @desc = ""
+    $world.db.get(@location).add_contents(@oid) if @location
   end
 
+  # Add an object to the contents of this object
+  # [+oid+] The object id to add
+  def add_contents(oid)
+    @contents << oid
+  end
+
+  # Deletes an object from the contents of this object
+  # [+oid+] The object id to delete
+  def delete_contents(oid)
+    @contents.delete(oid)
+  end
+
+  # Returns the contents of the object
+  # [+return+] An array of object ids
+  def get_contents
+    @contents
+  end
+
+  # Finds all objects contained in this object
+  # [+return+] Handle to a array of the objects.
+  def objects
+    ary = @contents.collect do |oid|
+      o = $world.db.get(oid)
+      o.class == Obj ? o : nil
+    end
+    ary.compact
+  end
+
+  # Finds all the players contained in this object except the passed player.
+  # [+exempt+]  The player oid exempted from the list.
+  # [+return+] Handle to a list of the Player objects.
+  def players(exempt=nil)
+    ary = @contents.collect do |oid|
+      o = $world.db.get(oid)
+      (o.class == Player && oid != exempt && o.session) ? o : nil
+    end
+    ary.compact
+  end
+
+  # Event handler
+  # [+e+]      The event
+  # [+return+] Undefined
   def ass(e)
     case e.kind
     when :describe
       msg = Colors[:yellow] + "A " + @name + " is here" + Colors[:reset]
       $world.add_event(@oid,e.from,:show,msg)
     when :get
-      plyr = $world.find_by_oid(e.from)
-      @location=plyr.oid
+      plyr = $world.db.get(e.from)
+      place = $world.db.get(@location)
+      # remove it
+      place.delete_contents(@oid)
+      # add it
+      plyr.add_contents(@oid)
+      @location = plyr.oid
+
       $world.add_event(@oid,e.from,:show,"You get the #{@name}")
     when :drop
-      plyr = $world.find_by_oid(e.from)
-      @location=plyr.location
+      plyr = $world.db.get(e.from)
+      place = $world.db.get(plyr.location)
+      # remove it
+      plyr.delete_contents(@oid)
+      # add it
+      place.add_contents(@oid)
+      @location = place.oid
       $world.add_event(@oid,e.from,:show,"You drop the #{@name}")
     end
   end
@@ -88,9 +144,12 @@ class Room < Obj
   # [+return+] A handle to the new Room.
   def initialize(name)
     @exits={}
-    super(name,location)
+    super(name)
   end
 
+  # Event handler
+  # [+e+]      The event
+  # [+return+] Undefined
   def ass(e)
     case e.kind
     when :describe
@@ -101,15 +160,20 @@ class Room < Obj
       msg = Colors[:red] + "Exits: " + @exits.keys.join(' | ') + Colors[:reset]
       $world.add_event(@oid,e.from,:show,msg)
     when :leave
-      plyr = $world.find_by_oid(e.from)
-      $world.other_players_at_location(@oid,e.from).each do |x|
+      plyr = $world.db.get(e.from)
+      players(e.from).each do |x|
         $world.add_event(@oid,x.oid,:show, plyr.name + " has left #{e.msg}.") if x.session
       end
-      plyr.location = @exits[e.msg]
+      # remove player
+      delete_contents(plyr.oid)
+      plyr.location = nil
       $world.add_event(@oid,@exits[e.msg],:arrive,plyr.oid)
     when :arrive
-      plyr = $world.find_by_oid(e.msg)
-      $world.other_players_at_location(@oid,e.msg).each do |x|
+      plyr = $world.db.get(e.msg)
+      # add player
+      add_contents(plyr.oid)
+      plyr.location = @oid
+      players(e.msg).each do |x|
         $world.add_event(@oid,x.oid,:show, plyr.name+" has arrived.") if x.session
       end
       plyr.parse('look')
@@ -137,7 +201,7 @@ class Player < Obj
   def initialize(name,passwd,session)
     @session = session
     @passwd = encrypt(passwd)
-    super(name,1)
+    super(name,$world.options.home)
   end
 
   # Sends a message to the player if they are connected.
@@ -161,13 +225,13 @@ class Player < Obj
     when :logged_out
       @session = nil
       delete_observers
-      $world.players_connected(@oid).each {|p|
+      $world.db.players_connected(@oid).each {|p|
         $world.add_event(@oid,p.oid,:show,"#{@name} has quit.")
       }
     when :disconnected
       @session = nil
       delete_observers
-      $world.players_connected(@oid).each {|p|
+      $world.db.players_connected(@oid).each {|p|
         $world.add_event(@oid,p.oid,:show,"#{@name} has disconnected.")
       }
     else
@@ -217,7 +281,7 @@ class Player < Obj
     else
       case m
       # for the last check create a list of exit names to scan.
-      when /(^#{$world.find_by_oid(@location).exits.empty? ? "\1" : $world.find_by_oid(@location).exits.keys.join('|^')})/
+      when /(^#{$world.db.get(@location).exits.empty? ? "\1" : $world.db.get(@location).exits.keys.join('|^')})/
         $world.add_event(@oid,@location,:leave,$1)
       else
         sendto("Huh?")
@@ -225,6 +289,9 @@ class Player < Obj
     end
   end
 
+  # Event handler
+  # [+e+]      The event
+  # [+return+] Undefined
   def ass(e)
     case e.kind
     when :describe
@@ -271,23 +338,14 @@ end
 # It contains the database and all manner of utility functions. It's a
 # big global thing.
 #
-# [+db+] is a handle to the database which is a simple list of all objects.
-# [+dbtop+] stores the highest oid used in the database.
+# [+db+] is a handle to the database.
+# [+cmds+] is a handle to the commands table (a ternary trie).
+# [+tits+] is a handle to the tits event queue (an array).
+# [+options+] is a handle to the configuration options structure.
 class World
 
-# The minimal database will be used in the absence of detecting one.
-MINIMAL_DB=<<EOH
----
-- !ruby/object:Room
-  exits: {}
-  location:
-  desc: "This is home."
-  name: Home
-  oid: 1
-EOH
-
   attr_accessor :cmds, :tits
-  attr_reader :options
+  attr_reader :options, :db
 
 
   # Create the World.  This loads or creates the database depending on
@@ -295,95 +353,11 @@ EOH
   # [+return+] A handle to the World object.
   def initialize(options)
     @options=options
-    if !test(?e,'db/world.yaml')
-      $stdout.puts "Building minimal world database..."
-      File.open('db/world.yaml','w') do |f|
-        f.write(MINIMAL_DB)
-      end
-      $stdout.puts "Done."
-    end
-    $stdout.puts "Loading world..."
-    @dbtop = 0
-    @db = {}
-    tmp = YAML::load_file('db/world.yaml')
-    tmp.each do |o|
-      @dbtop = o.oid if o.oid > @dbtop
-      @db[o.oid]=o
-    end
-    $stdout.puts "Done database loaded...top oid=#{@dbtop}."
+    @db = Database.new(@options)
     $stdout.puts "Loading commands..."
     @cmds = Command.load
     $stdout.puts "Done."
     @tits = []
-  end
-
-  # Fetch the next available oid.
-  # [+return+] An oid.
-  def getid
-    @dbtop+=1
-  end
-
-  # Save the world
-  # [+return+] Undefined.
-  def save
-    File.open('db/world.yaml','w'){|f|YAML::dump(@db.values,f)}
-  end
-
-  # Adds a new object to the database.
-  # [+obj+] is a reference to object to be added
-  # [+return+] Undefined.
-  def add(obj)
-    @db[obj.oid] = obj
-  end
-
-  # Deletes an object from the database.
-  # [+obj+] is a reference to object to be deleted.
-  # [+return+] Undefined.
-  def delete(obj)
-    @db.delete(obj)
-  end
-
-  # Finds an object in the database by oid.
-  # [+i+] is the oid to use in the search.
-  # [+return+] Handle to the object or nil.
-  def find_by_oid(i)
-    @db[i]
-  end
-
-  # Finds a Player object in the database by name.
-  # [+nm+] is the string to use in the search.
-  # [+return+] Handle to the Player object or nil.
-  def find_player_by_name(nm)
-    @db.values.find{|o|Player==o.class&&nm==o.name}
-  end
-
-  # Finds all the players at a location.
-  # [+loc+]    The location oid searched or nil for everywhere.
-  # [+return+] Handle to a list of the Player objects.
-  def players_at_location(loc)
-    @db.values.find_all{|o|(o.class==Player)&&(!loc||loc==o.location)}
-  end
-
-  # Finds all connected players
-  # [+exempt+] The oid of a player to be exempt from the returned array.
-  # [+return+] An array of  connected players
-  def players_connected(exempt=nil)
-    @db.values.find_all{|o| o.class == Player && o.oid != exempt && o.session}
-  end
-
-  # Finds all the players at a location except the passed player.
-  # [+loc+]    The location oid searched or nil for everywhere.
-  # [+plrid+]  The player oid excepted from the list.
-  # [+return+] Handle to a list of the Player objects.
-  def other_players_at_location(loc,plrid)
-    @db.values.find_all{|o|(o.class==Player)&&(!loc||loc==o.location)&&o.oid!=plrid}
-  end
-
-  # Finds all Objects at a location
-  # [+loc+]    The location oid searched or nil for everywhere.
-  # [+return+] Handle to a list of the Obj objects.
-  def objects_at_location(loc)
-    @db.values.find_all{|o|(o.class==Obj)&&(!loc||loc==o.location)}
   end
 
   # Add an Event to the TITS queue.
@@ -434,7 +408,7 @@ class Incoming
       case @state
       when :name
         @login_name = msg
-        @player = $world.find_player_by_name(@login_name)
+        @player = $world.db.find_player_by_name(@login_name)
         sendmsg("password> ")
         @state = :password
       when :password
@@ -450,7 +424,7 @@ class Incoming
           end
         else  # new player
           @player = Player.new(@login_name,@login_passwd,@conn)
-          $world.add(@player)
+          $world.db.put(@player)
           login
         end
       end
@@ -474,7 +448,7 @@ private
     @player.add_observer(@conn)
 
     @player.sendto("Welcome " + @login_name + "@" + @conn.sock.peeraddr[2] + "!")
-    $world.players_connected(@player.oid).each {|p|
+    $world.db.players_connected(@player.oid).each {|p|
       $world.add_event(@oid,p.oid,:show,"#{@player.name} has connected.")
     }
     @player.parse('look')
@@ -506,7 +480,7 @@ class Engine
     until @shutdown
       @server.poll(0.2)
       while e = $world.get_event
-        $world.find_by_oid(e.to).ass(e)
+        $world.db.get(e.to).ass(e)
       end
     end # until
     @server.stop
@@ -541,6 +515,8 @@ def get_options
     # We set default values here.
     myopts = OpenStruct.new
     myopts.port = 4000
+    myopts.home = 1
+    myopts.dbname = "db/world.yaml"
     myopts.verbose = false
 
     opts = OptionParser.new do |opts|
@@ -549,7 +525,14 @@ def get_options
       opts.separator "Usage: ruby #{$0} [options]"
       opts.separator ""
       opts.on("-p", "--port PORT", Integer,
-        "Select the port the mud will run on (defaults to 4000)") {|myopts.port|}
+        "Select the port the mud will run on",
+        "  (defaults to 4000)") {|myopts.port|}
+      opts.on("-d", "--database DBNAME", String,
+        "Select the name of the database the mud will use",
+        "  (defaults to \'db/world.yaml\')") {|myopts.dbname|}
+      opts.on("-h", "--home LOCATIONID", Integer,
+        "Select the object id where new players will start",
+        "  (defaults to 1)") {|myopts.home|}
       opts.on("-v", "--[no-]verbose", "Run verbosely") {|myopts.verbose|}
       opts.on_tail("-h", "--help", "Show this message") do
         puts opts.help
@@ -577,8 +560,8 @@ end
 def handle_signal(sig)
   $stdout.puts "Signal caught request to shutdown."
   $stdout.puts "Saving world..."
-  $world.players_at_location(nil).each{|plr|plr.disconnect if plr.session}
-  $world.save
+  $world.db.players_connected.each{|plr|plr.disconnect if plr.session}
+  $world.db.save
   exit
 end
 

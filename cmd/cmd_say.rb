@@ -19,7 +19,7 @@ module Cmd
       sendto("What are you trying to say?")
     else
       sendto("You say, \"#{args[0]}\"."+EOL)
-      $world.other_players_at_location(@location,@oid).each do |p|
+      $world.db.get(@location).players(@oid).each do |p|
         $world.add_event(@oid,p.oid,:show,"#{@name} says, \"#{args[0]}\".")
       end
     end

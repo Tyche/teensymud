@@ -16,7 +16,7 @@ module Cmd
   def cmd_object(*args)
     case args[0]
     when /(.*)/
-      $world.add(Obj.new($1,@location))
+      $world.db.put(Obj.new($1,@location))
       sendto("Ok."+EOL)
     else
       sendto("What!!?")

@@ -14,7 +14,7 @@ module Cmd
 
   # The inventory command
   def cmd_who(*args)
-    $world.players_connected.each {|p| sendto(p.name)}
+    $world.db.players_connected.each {|p| sendto(p.name)}
   end
 
 end

@@ -16,7 +16,7 @@ module Cmd
   def cmd_set(*args)
     case args[0]
     when /#(\d+) (.*)/
-      o = $world.find_by_oid($1.to_i)
+      o = $world.db.get($1.to_i)
       case o
       when nil, 0
         sendto("No object."+EOL)

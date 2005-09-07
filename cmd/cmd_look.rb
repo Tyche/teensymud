@@ -14,12 +14,13 @@ module Cmd
 
   # Look command displays the contents of a room
   def cmd_look(*args)
+    place = $world.db.get(@location)
     $world.add_event(@oid,@location,:describe)
-    $world.objects_at_location(@location).each do |x|
+    place.objects.each do |x|
       $world.add_event(@oid,x.oid,:describe)
     end
-    $world.other_players_at_location(@location,@oid).each do |x|
-      $world.add_event(@oid,x.oid,:describe) if x.session
+    place.players(@oid).each do |x|
+      $world.add_event(@oid,x.oid,:describe)
     end
     $world.add_event(@oid,@location,:describe_exits)
   end

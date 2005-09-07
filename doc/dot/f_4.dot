@@ -3,20 +3,74 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/ternarytrie.rb"
+    label = "lib/net.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    TernaryTrie [
+    Acceptor [
         fontcolor = black,
-        URL = "classes/TernaryTrie.html",
+        URL = "classes/Acceptor.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "TernaryTrie"
+        label = "Acceptor"
+    ]
+
+    Reactor [
+        fontcolor = black,
+        URL = "classes/Reactor.html",
+        shape = ellipse,
+        color = palegoldenrod,
+        style = filled,
+        label = "Reactor"
+    ]
+
+    Session [
+        fontcolor = black,
+        URL = "classes/Session.html",
+        shape = ellipse,
+        color = palegoldenrod,
+        style = filled,
+        label = "Session"
+    ]
+
+    Connection [
+        fontcolor = black,
+        URL = "classes/Connection.html",
+        shape = ellipse,
+        color = palegoldenrod,
+        style = filled,
+        label = "Connection"
+    ]
+
+    LineIO [
+        fontcolor = black,
+        URL = "classes/LineIO.html",
+        shape = ellipse,
+        color = palegoldenrod,
+        style = filled,
+        label = "LineIO"
+    ]
+
+    Session -> Acceptor [
+
+    ]
+
+    Observable [
+        URL = "classes/Observable.html",
+        shape = box,
+        label = "Observable"
+    ]
+
+    Observable -> Session [
+
+    ]
+
+    Session -> Connection [
+
     ]
 
 }

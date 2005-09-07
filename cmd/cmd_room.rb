@@ -18,9 +18,9 @@ module Cmd
     case args[0]
     when /(.*) (.*) (.*)/
       d=Room.new($1)
-      $world.add(d)
-      $world.find_by_oid(@location).exits[$2]=d.oid
-      d.exits[$3]=$world.find_by_oid(@location).oid
+      $world.db.put(d)
+      $world.db.get(@location).exits[$2]=d.oid
+      d.exits[$3]=$world.db.get(@location).oid
       sendto("Ok." + EOL)
     else
       sendto("say what??")

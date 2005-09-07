@@ -19,7 +19,7 @@ module Cmd
       sendto("What are you trying to tell everyone?")
     else
       sendto(Colors[:magenta] + "You chat, \"#{args[0]}\"." + Colors[:reset])
-      $world.other_players_at_location(nil,@oid).each do |p|
+      $world.db.players_connected(@oid).each do |p|
         $world.add_event(@oid,p.oid,:show,
           Colors[:magenta] + "#{@name} chats, \"#{args[0]}\"." + Colors[:reset])
       end

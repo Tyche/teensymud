@@ -131,7 +131,7 @@
       <map id="map" name="map">
   <area shape="RECT" coords="17,17,111,61"      href="Cmd.html" alt="Cmd">
 </map>
-<img src="../dot/m_19_0.gif" usemap="#map" border=0 alt="Module: Cmd">
+<img src="../dot/m_20_0.gif" usemap="#map" border=0 alt="Module: Cmd">
     </div>
 
     <div id="description">
@@ -166,21 +166,21 @@ for additional information.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000070">cmd_chat</a>&nbsp;&nbsp;
-      <a href="#M000071">cmd_drop</a>&nbsp;&nbsp;
-      <a href="#M000072">cmd_get</a>&nbsp;&nbsp;
-      <a href="#M000073">cmd_hello</a>&nbsp;&nbsp;
-      <a href="#M000074">cmd_help</a>&nbsp;&nbsp;
-      <a href="#M000075">cmd_inv</a>&nbsp;&nbsp;
-      <a href="#M000076">cmd_kill</a>&nbsp;&nbsp;
-      <a href="#M000077">cmd_look</a>&nbsp;&nbsp;
-      <a href="#M000078">cmd_object</a>&nbsp;&nbsp;
-      <a href="#M000079">cmd_quit</a>&nbsp;&nbsp;
-      <a href="#M000080">cmd_reload</a>&nbsp;&nbsp;
-      <a href="#M000081">cmd_room</a>&nbsp;&nbsp;
-      <a href="#M000082">cmd_say</a>&nbsp;&nbsp;
-      <a href="#M000083">cmd_set</a>&nbsp;&nbsp;
-      <a href="#M000084">cmd_who</a>&nbsp;&nbsp;
+      <a href="#M000073">cmd_chat</a>&nbsp;&nbsp;
+      <a href="#M000074">cmd_drop</a>&nbsp;&nbsp;
+      <a href="#M000075">cmd_get</a>&nbsp;&nbsp;
+      <a href="#M000076">cmd_hello</a>&nbsp;&nbsp;
+      <a href="#M000077">cmd_help</a>&nbsp;&nbsp;
+      <a href="#M000078">cmd_inv</a>&nbsp;&nbsp;
+      <a href="#M000079">cmd_kill</a>&nbsp;&nbsp;
+      <a href="#M000080">cmd_look</a>&nbsp;&nbsp;
+      <a href="#M000081">cmd_object</a>&nbsp;&nbsp;
+      <a href="#M000082">cmd_quit</a>&nbsp;&nbsp;
+      <a href="#M000083">cmd_reload</a>&nbsp;&nbsp;
+      <a href="#M000084">cmd_room</a>&nbsp;&nbsp;
+      <a href="#M000085">cmd_say</a>&nbsp;&nbsp;
+      <a href="#M000086">cmd_set</a>&nbsp;&nbsp;
+      <a href="#M000087">cmd_who</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -202,11 +202,11 @@ for additional information.
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000070" class="method-detail">
-        <a name="M000070"></a>
+      <div id="method-M000073" class="method-detail">
+        <a name="M000073"></a>
 
         <div class="method-heading">
-          <a href="#M000070" class="method-signature">
+          <a href="#M000073" class="method-signature">
           <span class="method-name">cmd_chat</span><span class="method-args">(*args)</span>
           </a>
         </div>
@@ -216,8 +216,8 @@ for additional information.
 sends &lt;message&gt; to all players in the game
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000070-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000070-source">
+            onclick="toggleCode('M000073-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000073-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_chat.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_chat</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
@@ -226,7 +226,7 @@ sends &lt;message&gt; to all players in the game
 19:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;What are you trying to tell everyone?&quot;</span>)
 20:     <span class="ruby-keyword kw">else</span>
 21:       <span class="ruby-identifier">sendto</span>(<span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:magenta</span>] <span class="ruby-operator">+</span> <span class="ruby-node">&quot;You chat, \&quot;#{args[0]}\&quot;.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>])
-22:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-keyword kw">nil</span>,<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+22:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">players_connected</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
 23:         <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>,
 24:           <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:magenta</span>] <span class="ruby-operator">+</span> <span class="ruby-node">&quot;#{@name} chats, \&quot;#{args[0]}\&quot;.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>])
 25:       <span class="ruby-keyword kw">end</span>
@@ -237,11 +237,11 @@ sends &lt;message&gt; to all players in the game
         </div>
       </div>
 
-      <div id="method-M000071" class="method-detail">
-        <a name="M000071"></a>
+      <div id="method-M000074" class="method-detail">
+        <a name="M000074"></a>
 
         <div class="method-heading">
-          <a href="#M000071" class="method-signature">
+          <a href="#M000074" class="method-signature">
           <span class="method-name">cmd_drop</span><span class="method-args">(*args)</span>
           </a>
         </div>
@@ -251,12 +251,12 @@ sends &lt;message&gt; to all players in the game
 drops all objects in your inventory into the room
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000071-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000071-source">
+            onclick="toggleCode('M000074-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000074-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_drop.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_drop</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-17:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">objects_at_location</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">q</span><span class="ruby-operator">|</span>
+17:     <span class="ruby-identifier">objects</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">q</span><span class="ruby-operator">|</span>
 18:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">q</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:drop</span>)
 19:     <span class="ruby-keyword kw">end</span>
 20:   <span class="ruby-keyword kw">end</span>
@@ -265,11 +265,11 @@ drops all objects in your inventory into the room
         </div>
       </div>
 
-      <div id="method-M000072" class="method-detail">
-        <a name="M000072"></a>
+      <div id="method-M000075" class="method-detail">
+        <a name="M000075"></a>
 
         <div class="method-heading">
-          <a href="#M000072" class="method-signature">
+          <a href="#M000075" class="method-signature">
           <span class="method-name">cmd_get</span><span class="method-args">(*args)</span>
           </a>
         </div>
@@ -279,12 +279,12 @@ drops all objects in your inventory into the room
 gets all objects in the room into your inventory
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000072-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000072-source">
+            onclick="toggleCode('M000075-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000075-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_get.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_get</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-17:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">objects_at_location</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">q</span><span class="ruby-operator">|</span>
+17:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">objects</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">q</span><span class="ruby-operator">|</span>
 18:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">q</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:get</span>)
 19:     <span class="ruby-keyword kw">end</span>
 20:   <span class="ruby-keyword kw">end</span>
@@ -293,11 +293,11 @@ gets all objects in the room into your inventory
         </div>
       </div>
 
-      <div id="method-M000073" class="method-detail">
-        <a name="M000073"></a>
+      <div id="method-M000076" class="method-detail">
+        <a name="M000076"></a>
 
         <div class="method-heading">
-          <a href="#M000073" class="method-signature">
+          <a href="#M000076" class="method-signature">
           <span class="method-name">cmd_hello</span><span class="method-args">(*args)</span>
           </a>
         </div>
@@ -307,8 +307,8 @@ gets all objects in the room into your inventory
 The hello social command
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000073-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000073-source">
+            onclick="toggleCode('M000076-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000076-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_hello.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_hello</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
@@ -319,11 +319,11 @@ The hello social command
         </div>
       </div>
 
-      <div id="method-M000074" class="method-detail">
-        <a name="M000074"></a>
+      <div id="method-M000077" class="method-detail">
+        <a name="M000077"></a>
 
         <div class="method-heading">
-          <a href="#M000074" class="method-signature">
+          <a href="#M000077" class="method-signature">
           <span class="method-name">cmd_help</span><span class="method-args">(*args)</span>
           </a>
         </div>
@@ -333,8 +333,8 @@ The hello social command
 The help command
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000074-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000074-source">
+            onclick="toggleCode('M000077-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000077-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_help.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_help</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
@@ -360,11 +360,11 @@ The help command
         </div>
       </div>
 
-      <div id="method-M000075" class="method-detail">
-        <a name="M000075"></a>
+      <div id="method-M000078" class="method-detail">
+        <a name="M000078"></a>
 
         <div class="method-heading">
-          <a href="#M000075" class="method-signature">
+          <a href="#M000078" class="method-signature">
           <span class="method-name">cmd_inv</span><span class="method-args">(*args)</span>
           </a>
         </div>
@@ -374,128 +374,15 @@ The help command
 The inventory command
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000075-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000075-source">
-<pre>
-    <span class="ruby-comment cmt"># File cmd/cmd_inv.rb, line 16</span>
-16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_inv</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-17:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">objects_at_location</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
-18:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">x</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:describe</span>)
-19:     <span class="ruby-keyword kw">end</span>
-20:   <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000076" class="method-detail">
-        <a name="M000076"></a>
-
-        <div class="method-heading">
-          <a href="#M000076" class="method-signature">
-          <span class="method-name">cmd_kill</span><span class="method-args">(*args)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-This kills a player anywhere - it&#8217;s link death (30% chance)
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000076-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000076-source">
-<pre>
-    <span class="ruby-comment cmt"># File cmd/cmd_kill.rb, line 16</span>
-16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_kill</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-17:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>]
-18:     <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>
-19:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Who do you want to kill?&quot;</span>)
-20:     <span class="ruby-keyword kw">else</span>
-21:       <span class="ruby-identifier">d</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">find_player_by_name</span>(<span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>])
-22:       <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">d</span>
-23:         <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Can't find them.&quot;</span>)
-24:         <span class="ruby-keyword kw">return</span>
-25:       <span class="ruby-keyword kw">end</span>
-26:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">rand</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0</span><span class="ruby-value">.3</span>
-27:         <span class="ruby-identifier">sendto</span>(<span class="ruby-node">&quot;You kill #{d.name}.&quot;</span>)
-28:         <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">players_connected</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
-29:           <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;#{@name} kills #{d.name}.&quot;</span>)
-30:         }
-31:         <span class="ruby-identifier">d</span>.<span class="ruby-identifier">disconnect</span>
-32:         <span class="ruby-comment cmt"># $world.delete(d)  Dont delete player, it's annoying</span>
-33:       <span class="ruby-keyword kw">else</span>
-34:         <span class="ruby-identifier">sendto</span>(<span class="ruby-node">&quot;You attacks and misses #{d.name}.&quot;</span>)
-35:         <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">players_connected</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
-36:           <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;#{@name} attacks and misses #{d.name}.&quot;</span>)
-37:         }
-38:       <span class="ruby-keyword kw">end</span>
-39:     <span class="ruby-keyword kw">end</span>
-40:   <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000077" class="method-detail">
-        <a name="M000077"></a>
-
-        <div class="method-heading">
-          <a href="#M000077" class="method-signature">
-          <span class="method-name">cmd_look</span><span class="method-args">(*args)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-Look command displays the contents of a room
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000077-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000077-source">
-<pre>
-    <span class="ruby-comment cmt"># File cmd/cmd_look.rb, line 16</span>
-16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_look</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-17:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-ivar">@location</span>,<span class="ruby-identifier">:describe</span>)
-18:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">objects_at_location</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
-19:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">x</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:describe</span>)
-20:     <span class="ruby-keyword kw">end</span>
-21:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-ivar">@location</span>,<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
-22:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">x</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:describe</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">session</span>
-23:     <span class="ruby-keyword kw">end</span>
-24:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-ivar">@location</span>,<span class="ruby-identifier">:describe_exits</span>)
-25:   <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000078" class="method-detail">
-        <a name="M000078"></a>
-
-        <div class="method-heading">
-          <a href="#M000078" class="method-signature">
-          <span class="method-name">cmd_object</span><span class="method-args">(*args)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-sets the description for an object (ex. @set 1 A beautiful rose.)
-</p>
-          <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000078-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000078-source">
 <pre>
-    <span class="ruby-comment cmt"># File cmd/cmd_object.rb, line 16</span>
-16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_object</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-17:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>]
-18:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/(.*)/</span>
-19:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add</span>(<span class="ruby-constant">Obj</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">$1</span>,<span class="ruby-ivar">@location</span>))
-20:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Ok.&quot;</span><span class="ruby-operator">+</span><span class="ruby-constant">EOL</span>)
-21:     <span class="ruby-keyword kw">else</span>
-22:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;What!!?&quot;</span>)
-23:     <span class="ruby-keyword kw">end</span>
-24:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File cmd/cmd_inv.rb, line 16</span>
+16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_inv</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+17:     <span class="ruby-identifier">objects</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+18:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">x</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:describe</span>)
+19:     <span class="ruby-keyword kw">end</span>
+20:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -506,22 +393,44 @@ sets the description for an object (ex. @set 1 A beautiful rose.)
 
         <div class="method-heading">
           <a href="#M000079" class="method-signature">
-          <span class="method-name">cmd_quit</span><span class="method-args">(*args)</span>
+          <span class="method-name">cmd_kill</span><span class="method-args">(*args)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-The quit command
+This kills a player anywhere - it&#8217;s link death (30% chance)
 </p>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000079-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000079-source">
 <pre>
-    <span class="ruby-comment cmt"># File cmd/cmd_quit.rb, line 16</span>
-16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_quit</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-17:     <span class="ruby-identifier">disconnect</span>
-18:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File cmd/cmd_kill.rb, line 16</span>
+16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_kill</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+17:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>]
+18:     <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>
+19:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Who do you want to kill?&quot;</span>)
+20:     <span class="ruby-keyword kw">else</span>
+21:       <span class="ruby-identifier">d</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">find_player_by_name</span>(<span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>])
+22:       <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">d</span>
+23:         <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Can't find them.&quot;</span>)
+24:         <span class="ruby-keyword kw">return</span>
+25:       <span class="ruby-keyword kw">end</span>
+26:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">rand</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0</span><span class="ruby-value">.3</span>
+27:         <span class="ruby-identifier">sendto</span>(<span class="ruby-node">&quot;You kill #{d.name}.&quot;</span>)
+28:         <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">players_connected</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+29:           <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;#{@name} kills #{d.name}.&quot;</span>)
+30:         }
+31:         <span class="ruby-identifier">d</span>.<span class="ruby-identifier">disconnect</span>
+32:         <span class="ruby-comment cmt"># $world.db.delete(d)  Dont delete player, it's annoying</span>
+33:       <span class="ruby-keyword kw">else</span>
+34:         <span class="ruby-identifier">sendto</span>(<span class="ruby-node">&quot;You attacks and misses #{d.name}.&quot;</span>)
+35:         <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">players_connected</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+36:           <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;#{@name} attacks and misses #{d.name}.&quot;</span>)
+37:         }
+38:       <span class="ruby-keyword kw">end</span>
+39:     <span class="ruby-keyword kw">end</span>
+40:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -532,6 +441,98 @@ The quit command
 
         <div class="method-heading">
           <a href="#M000080" class="method-signature">
+          <span class="method-name">cmd_look</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Look command displays the contents of a room
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000080-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000080-source">
+<pre>
+    <span class="ruby-comment cmt"># File cmd/cmd_look.rb, line 16</span>
+16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_look</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+17:     <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>)
+18:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-ivar">@location</span>,<span class="ruby-identifier">:describe</span>)
+19:     <span class="ruby-identifier">place</span>.<span class="ruby-identifier">objects</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+20:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">x</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:describe</span>)
+21:     <span class="ruby-keyword kw">end</span>
+22:     <span class="ruby-identifier">place</span>.<span class="ruby-identifier">players</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+23:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">x</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:describe</span>)
+24:     <span class="ruby-keyword kw">end</span>
+25:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-ivar">@location</span>,<span class="ruby-identifier">:describe_exits</span>)
+26:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000081" class="method-detail">
+        <a name="M000081"></a>
+
+        <div class="method-heading">
+          <a href="#M000081" class="method-signature">
+          <span class="method-name">cmd_object</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+sets the description for an object (ex. @set 1 A beautiful rose.)
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000081-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000081-source">
+<pre>
+    <span class="ruby-comment cmt"># File cmd/cmd_object.rb, line 16</span>
+16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_object</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+17:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>]
+18:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/(.*)/</span>
+19:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">put</span>(<span class="ruby-constant">Obj</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">$1</span>,<span class="ruby-ivar">@location</span>))
+20:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Ok.&quot;</span><span class="ruby-operator">+</span><span class="ruby-constant">EOL</span>)
+21:     <span class="ruby-keyword kw">else</span>
+22:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;What!!?&quot;</span>)
+23:     <span class="ruby-keyword kw">end</span>
+24:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000082" class="method-detail">
+        <a name="M000082"></a>
+
+        <div class="method-heading">
+          <a href="#M000082" class="method-signature">
+          <span class="method-name">cmd_quit</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The quit command
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000082-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000082-source">
+<pre>
+    <span class="ruby-comment cmt"># File cmd/cmd_quit.rb, line 16</span>
+16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_quit</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+17:     <span class="ruby-identifier">disconnect</span>
+18:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000083" class="method-detail">
+        <a name="M000083"></a>
+
+        <div class="method-heading">
+          <a href="#M000083" class="method-signature">
           <span class="method-name">cmd_reload</span><span class="method-args">(*args)</span>
           </a>
         </div>
@@ -541,8 +542,8 @@ The quit command
 This reloads the commands
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000080-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000080-source">
+            onclick="toggleCode('M000083-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000083-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_reload.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_reload</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
@@ -554,11 +555,11 @@ This reloads the commands
         </div>
       </div>
 
-      <div id="method-M000081" class="method-detail">
-        <a name="M000081"></a>
+      <div id="method-M000084" class="method-detail">
+        <a name="M000084"></a>
 
         <div class="method-heading">
-          <a href="#M000081" class="method-signature">
+          <a href="#M000084" class="method-signature">
           <span class="method-name">cmd_room</span><span class="method-args">(*args)</span>
           </a>
         </div>
@@ -569,17 +570,17 @@ creates a new room and autolinks the exits using the exit names provided.
 (ex. @room My <a href="Room.html">Room</a> north south)
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000081-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000081-source">
+            onclick="toggleCode('M000084-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000084-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_room.rb, line 17</span>
 17:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_room</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
 18:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>]
 19:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/(.*) (.*) (.*)/</span>
 20:       <span class="ruby-identifier">d</span>=<span class="ruby-constant">Room</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">$1</span>)
-21:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add</span>(<span class="ruby-identifier">d</span>)
-22:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">find_by_oid</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">exits</span>[<span class="ruby-identifier">$2</span>]=<span class="ruby-identifier">d</span>.<span class="ruby-identifier">oid</span>
-23:       <span class="ruby-identifier">d</span>.<span class="ruby-identifier">exits</span>[<span class="ruby-identifier">$3</span>]=<span class="ruby-identifier">$world</span>.<span class="ruby-identifier">find_by_oid</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">oid</span>
+21:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">put</span>(<span class="ruby-identifier">d</span>)
+22:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">exits</span>[<span class="ruby-identifier">$2</span>]=<span class="ruby-identifier">d</span>.<span class="ruby-identifier">oid</span>
+23:       <span class="ruby-identifier">d</span>.<span class="ruby-identifier">exits</span>[<span class="ruby-identifier">$3</span>]=<span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">oid</span>
 24:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Ok.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">EOL</span>)
 25:     <span class="ruby-keyword kw">else</span>
 26:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;say what??&quot;</span>)
@@ -590,11 +591,11 @@ creates a new room and autolinks the exits using the exit names provided.
         </div>
       </div>
 
-      <div id="method-M000082" class="method-detail">
-        <a name="M000082"></a>
+      <div id="method-M000085" class="method-detail">
+        <a name="M000085"></a>
 
         <div class="method-heading">
-          <a href="#M000082" class="method-signature">
+          <a href="#M000085" class="method-signature">
           <span class="method-name">cmd_say</span><span class="method-args">(*args)</span>
           </a>
         </div>
@@ -604,8 +605,8 @@ creates a new room and autolinks the exits using the exit names provided.
 sends &lt;message&gt; to all players in the room
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000082-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000082-source">
+            onclick="toggleCode('M000085-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000085-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_say.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_say</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
@@ -614,7 +615,7 @@ sends &lt;message&gt; to all players in the room
 19:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;What are you trying to say?&quot;</span>)
 20:     <span class="ruby-keyword kw">else</span>
 21:       <span class="ruby-identifier">sendto</span>(<span class="ruby-node">&quot;You say, \&quot;#{args[0]}\&quot;.&quot;</span><span class="ruby-operator">+</span><span class="ruby-constant">EOL</span>)
-22:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">other_players_at_location</span>(<span class="ruby-ivar">@location</span>,<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+22:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">players</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
 23:         <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;#{@name} says, \&quot;#{args[0]}\&quot;.&quot;</span>)
 24:       <span class="ruby-keyword kw">end</span>
 25:     <span class="ruby-keyword kw">end</span>
@@ -624,11 +625,11 @@ sends &lt;message&gt; to all players in the room
         </div>
       </div>
 
-      <div id="method-M000083" class="method-detail">
-        <a name="M000083"></a>
+      <div id="method-M000086" class="method-detail">
+        <a name="M000086"></a>
 
         <div class="method-heading">
-          <a href="#M000083" class="method-signature">
+          <a href="#M000086" class="method-signature">
           <span class="method-name">cmd_set</span><span class="method-args">(*args)</span>
           </a>
         </div>
@@ -638,14 +639,14 @@ sends &lt;message&gt; to all players in the room
 sets the description for an object (ex. @set 1 A beautiful rose.)
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000083-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000083-source">
+            onclick="toggleCode('M000086-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000086-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_set.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_set</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
 17:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>]
 18:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/#(\d+) (.*)/</span>
-19:       <span class="ruby-identifier">o</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">find_by_oid</span>(<span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_i</span>)
+19:       <span class="ruby-identifier">o</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_i</span>)
 20:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">o</span>
 21:       <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>, <span class="ruby-value">0</span>
 22:         <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;No object.&quot;</span><span class="ruby-operator">+</span><span class="ruby-constant">EOL</span>)
@@ -662,11 +663,11 @@ sets the description for an object (ex. @set 1 A beautiful rose.)
         </div>
       </div>
 
-      <div id="method-M000084" class="method-detail">
-        <a name="M000084"></a>
+      <div id="method-M000087" class="method-detail">
+        <a name="M000087"></a>
 
         <div class="method-heading">
-          <a href="#M000084" class="method-signature">
+          <a href="#M000087" class="method-signature">
           <span class="method-name">cmd_who</span><span class="method-args">(*args)</span>
           </a>
         </div>
@@ -676,12 +677,12 @@ sets the description for an object (ex. @set 1 A beautiful rose.)
 The inventory command
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000084-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000084-source">
+            onclick="toggleCode('M000087-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000087-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_who.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_who</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-17:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">players_connected</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">sendto</span>(<span class="ruby-identifier">p</span>.<span class="ruby-identifier">name</span>)}
+17:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">players_connected</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">sendto</span>(<span class="ruby-identifier">p</span>.<span class="ruby-identifier">name</span>)}
 18:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
