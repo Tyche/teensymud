@@ -99,4 +99,32 @@ EOH
     @db.values.find_all{|o| o.class == Player && o.oid != exempt && o.session}
   end
 
+  # produces a statistical report of the database
+  # [+return+] a string containing the report
+  def stats
+    rooms = objs = players = 0
+    @db.values.each do |val|
+      case val
+      when Room
+        rooms += 1
+      when Player
+        players += 1
+      when Obj
+        objs += 1
+      end
+    end
+    stats=<<EOH
+#{Colors[:cyan]}
+---* Database Statistics *---
+  Rooms   - #{rooms}
+  Players - #{players}
+  Objects - #{objs}
+  Total Objects - #{rooms+objs+players}
+  Highest OID in use - #{@dbtop}
+---*                     *---
+#{Colors[:reset]}
+EOH
+    return stats
+  end
+
 end

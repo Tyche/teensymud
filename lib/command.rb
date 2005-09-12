@@ -24,6 +24,11 @@ require 'ternarytrie'
 class Command
   attr_reader :cmd, :name, :help
 
+  # Create a command
+  def initialize(cmd, name, help)
+    @cmd,@name,@help=cmd,name,help
+  end
+
   # load builds a command lookup trie from the commands listed in a yaml
   # config file and in the and then defines/redefines them on the Player
   # class.

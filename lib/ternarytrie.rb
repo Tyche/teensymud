@@ -48,7 +48,6 @@ public
     key = key.to_str
     match = []
     find_r(@root, key, match, 0)
-    return nil if match.empty?
     match
   end
 
