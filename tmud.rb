@@ -157,7 +157,24 @@ class Room < Obj
         Colors[:reset] + EOL + desc + EOL
       $world.add_event(@oid,e.from,:show,msg)
     when :describe_exits
-      msg = Colors[:red] + "Exits: " + @exits.keys.join(' | ') + Colors[:reset]
+      msg = Colors[:red] + "Exits:" + EOL
+      s = @exits.size
+      if s == 0
+        msg << "None." + Colors[:reset]
+      else
+        i = 0
+        @exits.keys.each do |ex|
+          msg << ex
+          i += 1
+          case s - i
+          when 1 then s > 2 ? msg << ", and " : msg << " and "
+          when 0 then msg << "."
+          else
+            msg << ", "
+          end
+        end
+        msg << Colors[:reset]
+      end
       $world.add_event(@oid,e.from,:show,msg)
     when :leave
       plyr = $world.db.get(e.from)
@@ -268,24 +285,25 @@ class Player < Obj
 
     # look for a command in our spanking new table
     c = $world.cmds.find(cmd)
+    # add any exits to our command list
+    $world.db.get(@location).exits.keys.grep(/^#{m}/).each do |ex|
+      c << Command.new(:cmd_go,"go #{ex}",nil)
+      arg = ex
+    end
+
     # there are three possibilities here
-    if c && c.size > 1   # Ambiguous command - tell luser about them.
-      ln = "Which did you mean, "
-      c.each {|x| ln += "\'" + x.name + "\' "}
-      ln += "?"
-      sendto(ln)
-      return
-    elsif c && c.size == 1  # We found it
+    case c.size
+    when 0   # no commands found
+      sendto("Huh?")
+    when 1   # command found
       self.send(c[0].cmd, arg)
-      return
-    else
-      case m
-      # for the last check create a list of exit names to scan.
-      when /(^#{$world.db.get(@location).exits.empty? ? "\1" : $world.db.get(@location).exits.keys.join('|^')})/
-        $world.add_event(@oid,@location,:leave,$1)
-      else
-        sendto("Huh?")
+    else     # ambiguous command - tell luser about them.
+      ln = "Which did you mean, "
+      c.each do |x|
+        ln += "\'" + x.name + "\'"
+        x.name == c.last.name ? ln += "?" : ln += " or "
       end
+      sendto(ln)
     end
   end
 
@@ -565,18 +583,20 @@ def handle_signal(sig)
   exit
 end
 
-Signal.trap("INT", method(:handle_signal))
-Signal.trap("TERM", method(:handle_signal))
-Signal.trap("KILL", method(:handle_signal))
+if $0 == __FILE__
+  Signal.trap("INT", method(:handle_signal))
+  Signal.trap("TERM", method(:handle_signal))
+  Signal.trap("KILL", method(:handle_signal))
 
-begin
-  # Create the $world a global object containing everything.
-  $world=World.new(get_options)
-  $engine = Engine.new($world.options.port)
-  $engine.run
-rescue => e
-  $stderr.puts "Exception caught error in server: " + $!
-  $stderr.puts $@
-  exit
+  begin
+    # Create the $world a global object containing everything.
+    $world=World.new(get_options)
+    $engine = Engine.new($world.options.port)
+    $engine.run
+  rescue => e
+    $stderr.puts "Exception caught error in server: " + $!
+    $stderr.puts $@
+    exit
+  end
 end
 
