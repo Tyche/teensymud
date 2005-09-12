@@ -1,8 +1,8 @@
 #
 # file::    cmd_help.rb
 # author::  Jon A. Lambert
-# version:: 2.2.0
-# date::    08/29/2005
+# version:: 2.4.0
+# date::    09/12/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -18,17 +18,17 @@ module Cmd
       q = $world.cmds.find(args[0])
       if q
         q.each do |h|
-          sendto "#{h.name} - #{h.help}"
+          sendto("====================HELP=======================")
+          sendto(sprintf("%-10s - %s", h.name, h.help))
         end
       else
-        sendto "No help on that"
+        sendto "No help on that."
       end
     else
-      sendto("===========HELP=============")
+      sendto("====================HELP=======================")
       $world.cmds.to_hash.values.each do |h|
-        sendto "#{h.name} - #{h.help}"
+        sendto(sprintf("%-10s - %s", h.name, h.help))
       end
-      sendto("============================")
     end
   end
 
