@@ -114,7 +114,11 @@ class Obj
   # [+return+] true or false
   def fart(ev)
     t = get_trigger(ev.kind)
-    t.execute(ev) if t
+    if t
+      t.execute(ev)
+    else
+      true
+    end
   end
 
   # Finds all objects contained in this object
@@ -168,6 +172,7 @@ class Obj
   def ass(e)
     case e.kind
     when :describe
+      return if !fart
       msg = Colors[:yellow] + "A " + @name + " is here" + Colors[:reset]
       $world.add_event(@oid,e.from,:show,msg)
     when :get
@@ -178,7 +183,6 @@ class Obj
       # add it
       plyr.add_contents(@oid)
       @location = plyr.oid
-
       $world.add_event(@oid,e.from,:show,"You get the #{@name}")
     when :drop
       plyr = $world.db.get(e.from)
@@ -190,6 +194,7 @@ class Obj
       @location = place.oid
       $world.add_event(@oid,e.from,:show,"You drop the #{@name}")
     end
+    fart(e)
   end
 end
 
@@ -217,6 +222,7 @@ class Room < Obj
       msg = Colors[:green] + "(" + @oid.to_s + ") " + name +
         Colors[:reset] + EOL + desc + EOL
       $world.add_event(@oid,e.from,:show,msg)
+      fart(e)
     when :describe_exits
       msg = Colors[:red] + "Exits:" + EOL
       s = @exits.size
@@ -237,8 +243,8 @@ class Room < Obj
         msg << Colors[:reset]
       end
       $world.add_event(@oid,e.from,:show,msg)
-    when :leave
       fart(e)
+    when :leave
       plyr = $world.db.get(e.from)
       players(e.from).each do |x|
         $world.add_event(@oid,x.oid,:show, plyr.name + " has left #{e.msg}.") if x.session
@@ -247,16 +253,17 @@ class Room < Obj
       delete_contents(plyr.oid)
       plyr.location = nil
       $world.add_event(@oid,@exits[e.msg],:arrive,plyr.oid)
+      fart(e)
     when :arrive
       plyr = $world.db.get(e.msg)
       # add player
       add_contents(plyr.oid)
       plyr.location = @oid
-      fart(e)
       players(e.msg).each do |x|
         $world.add_event(@oid,x.oid,:show, plyr.name+" has arrived.") if x.session
       end
       plyr.parse('look')
+      fart(e)
     else
       super(e)
     end
@@ -375,8 +382,10 @@ class Player < Obj
     when :describe
       msg = Colors[:cyan] + @name + " is here." + Colors[:reset]
       $world.add_event(@oid,e.from,:show,msg)
+      fart(e)
     when :show
       sendto(e.msg)
+      fart(e)
     else
       super(e)
     end

@@ -168,13 +168,13 @@ Create the an engine.
             onclick="toggleCode('M000034-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000034-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 548</span>
-548:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">port</span>)
-549:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Booting server on port #{port}&quot;</span>
-550:     <span class="ruby-ivar">@server</span> = <span class="ruby-constant">Reactor</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">port</span>)
-551:     <span class="ruby-ivar">@incoming</span> = []
-552:     <span class="ruby-ivar">@shutdown</span> = <span class="ruby-keyword kw">false</span>
-553:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 557</span>
+557:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">port</span>)
+558:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Booting server on port #{port}&quot;</span>
+559:     <span class="ruby-ivar">@server</span> = <span class="ruby-constant">Reactor</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">port</span>)
+560:     <span class="ruby-ivar">@incoming</span> = []
+561:     <span class="ruby-ivar">@shutdown</span> = <span class="ruby-keyword kw">false</span>
+562:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -204,18 +204,18 @@ main loop to run engine.
             onclick="toggleCode('M000035-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000035-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 557</span>
-557:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>
-558:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">start</span>(<span class="ruby-keyword kw">self</span>)
-559:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;TMUD is ready&quot;</span>
-560:     <span class="ruby-keyword kw">until</span> <span class="ruby-ivar">@shutdown</span>
-561:       <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">poll</span>(<span class="ruby-value">0</span><span class="ruby-value">.2</span>)
-562:       <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">e</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">get_event</span>
-563:         <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">to</span>).<span class="ruby-identifier">ass</span>(<span class="ruby-identifier">e</span>)
-564:       <span class="ruby-keyword kw">end</span>
-565:     <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># until</span>
-566:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">stop</span>
-567:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 566</span>
+566:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>
+567:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">start</span>(<span class="ruby-keyword kw">self</span>)
+568:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;TMUD is ready&quot;</span>
+569:     <span class="ruby-keyword kw">until</span> <span class="ruby-ivar">@shutdown</span>
+570:       <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">poll</span>(<span class="ruby-value">0</span><span class="ruby-value">.2</span>)
+571:       <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">e</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">get_event</span>
+572:         <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">to</span>).<span class="ruby-identifier">ass</span>(<span class="ruby-identifier">e</span>)
+573:       <span class="ruby-keyword kw">end</span>
+574:     <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># until</span>
+575:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">stop</span>
+576:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -239,15 +239,15 @@ incoming object and set it and the connection to watch each other.
             onclick="toggleCode('M000036-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000036-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 571</span>
-571:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">newconn</span>)
-572:     <span class="ruby-identifier">inc</span> = <span class="ruby-constant">Incoming</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">newconn</span>)
-573:     <span class="ruby-comment cmt"># Observe each other</span>
-574:     <span class="ruby-identifier">newconn</span>.<span class="ruby-identifier">add_observer</span>(<span class="ruby-identifier">inc</span>)
-575:     <span class="ruby-identifier">inc</span>.<span class="ruby-identifier">add_observer</span>(<span class="ruby-identifier">newconn</span>)
-576:     <span class="ruby-identifier">inc</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">BANNER</span>)
-577:     <span class="ruby-identifier">inc</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-value str">&quot;login&gt; &quot;</span>)
-578:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 580</span>
+580:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">newconn</span>)
+581:     <span class="ruby-identifier">inc</span> = <span class="ruby-constant">Incoming</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">newconn</span>)
+582:     <span class="ruby-comment cmt"># Observe each other</span>
+583:     <span class="ruby-identifier">newconn</span>.<span class="ruby-identifier">add_observer</span>(<span class="ruby-identifier">inc</span>)
+584:     <span class="ruby-identifier">inc</span>.<span class="ruby-identifier">add_observer</span>(<span class="ruby-identifier">newconn</span>)
+585:     <span class="ruby-identifier">inc</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">BANNER</span>)
+586:     <span class="ruby-identifier">inc</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-value str">&quot;login&gt; &quot;</span>)
+587:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

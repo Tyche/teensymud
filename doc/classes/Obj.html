@@ -309,33 +309,34 @@ Add a trigger to this object
             onclick="toggleCode('M000027-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000027-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 169</span>
-169:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ass</span>(<span class="ruby-identifier">e</span>)
-170:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">kind</span>
-171:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:describe</span>
-172:       <span class="ruby-identifier">msg</span> = <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:yellow</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;A &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@name</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; is here&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>]
-173:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-identifier">msg</span>)
-174:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:get</span>
-175:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
-176:       <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>)
-177:       <span class="ruby-comment cmt"># remove it</span>
-178:       <span class="ruby-identifier">place</span>.<span class="ruby-identifier">delete_contents</span>(<span class="ruby-ivar">@oid</span>)
-179:       <span class="ruby-comment cmt"># add it</span>
-180:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>)
-181:       <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">oid</span>
-182: 
-183:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;You get the #{@name}&quot;</span>)
-184:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:drop</span>
-185:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
-186:       <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">location</span>)
-187:       <span class="ruby-comment cmt"># remove it</span>
-188:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">delete_contents</span>(<span class="ruby-ivar">@oid</span>)
-189:       <span class="ruby-comment cmt"># add it</span>
-190:       <span class="ruby-identifier">place</span>.<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>)
-191:       <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">oid</span>
-192:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;You drop the #{@name}&quot;</span>)
-193:     <span class="ruby-keyword kw">end</span>
-194:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 173</span>
+173:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ass</span>(<span class="ruby-identifier">e</span>)
+174:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">kind</span>
+175:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:describe</span>
+176:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">fart</span>
+177:       <span class="ruby-identifier">msg</span> = <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:yellow</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;A &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@name</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; is here&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>]
+178:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-identifier">msg</span>)
+179:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:get</span>
+180:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
+181:       <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>)
+182:       <span class="ruby-comment cmt"># remove it</span>
+183:       <span class="ruby-identifier">place</span>.<span class="ruby-identifier">delete_contents</span>(<span class="ruby-ivar">@oid</span>)
+184:       <span class="ruby-comment cmt"># add it</span>
+185:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>)
+186:       <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">oid</span>
+187:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;You get the #{@name}&quot;</span>)
+188:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:drop</span>
+189:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
+190:       <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">location</span>)
+191:       <span class="ruby-comment cmt"># remove it</span>
+192:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">delete_contents</span>(<span class="ruby-ivar">@oid</span>)
+193:       <span class="ruby-comment cmt"># add it</span>
+194:       <span class="ruby-identifier">place</span>.<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>)
+195:       <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">oid</span>
+196:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;You drop the #{@name}&quot;</span>)
+197:     <span class="ruby-keyword kw">end</span>
+198:     <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
+199:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -432,8 +433,12 @@ Fart handler
      <span class="ruby-comment cmt"># File tmud.rb, line 116</span>
 116:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">ev</span>)
 117:     <span class="ruby-identifier">t</span> = <span class="ruby-identifier">get_trigger</span>(<span class="ruby-identifier">ev</span>.<span class="ruby-identifier">kind</span>)
-118:     <span class="ruby-identifier">t</span>.<span class="ruby-identifier">execute</span>(<span class="ruby-identifier">ev</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">t</span>
-119:   <span class="ruby-keyword kw">end</span>
+118:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">t</span>
+119:       <span class="ruby-identifier">t</span>.<span class="ruby-identifier">execute</span>(<span class="ruby-identifier">ev</span>)
+120:     <span class="ruby-keyword kw">else</span>
+121:       <span class="ruby-keyword kw">true</span>
+122:     <span class="ruby-keyword kw">end</span>
+123:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -555,14 +560,14 @@ Finds all objects contained in this object
             onclick="toggleCode('M000024-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000024-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 123</span>
-123:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">objects</span>
-124:     <span class="ruby-identifier">ary</span> = <span class="ruby-ivar">@contents</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">oid</span><span class="ruby-operator">|</span>
-125:       <span class="ruby-identifier">o</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">oid</span>)
-126:       <span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Obj</span> <span class="ruby-value">? </span><span class="ruby-identifier">o</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
-127:     <span class="ruby-keyword kw">end</span>
-128:     <span class="ruby-identifier">ary</span>.<span class="ruby-identifier">compact</span>
-129:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 127</span>
+127:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">objects</span>
+128:     <span class="ruby-identifier">ary</span> = <span class="ruby-ivar">@contents</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">oid</span><span class="ruby-operator">|</span>
+129:       <span class="ruby-identifier">o</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">oid</span>)
+130:       <span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Obj</span> <span class="ruby-value">? </span><span class="ruby-identifier">o</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
+131:     <span class="ruby-keyword kw">end</span>
+132:     <span class="ruby-identifier">ary</span>.<span class="ruby-identifier">compact</span>
+133:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -593,27 +598,27 @@ All command input routed through here and parsed.
             onclick="toggleCode('M000026-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000026-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 145</span>
-145:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">m</span>)
-146:     <span class="ruby-comment cmt"># match legal command</span>
-147:     <span class="ruby-identifier">m</span><span class="ruby-operator">=~</span><span class="ruby-regexp re">/([A-Za-z@?&quot;'#!]+)(.*)/</span>
-148:     <span class="ruby-identifier">cmd</span>=<span class="ruby-identifier">$1</span>
-149:     <span class="ruby-identifier">arg</span>=<span class="ruby-identifier">$2</span>
-150:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">strip!</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">arg</span>
-151: 
-152:     <span class="ruby-comment cmt"># look for a command from our table for objects</span>
-153:     <span class="ruby-identifier">c</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">ocmds</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">cmd</span>)
-154: 
-155:     <span class="ruby-comment cmt"># there are three possibilities here</span>
-156:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">size</span>
-157:     <span class="ruby-keyword kw">when</span> <span class="ruby-value">0</span>   <span class="ruby-comment cmt"># no commands found</span>
-158:       <span class="ruby-keyword kw">false</span>
-159:     <span class="ruby-keyword kw">when</span> <span class="ruby-value">1</span>   <span class="ruby-comment cmt"># command found</span>
-160:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">c</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">cmd</span>, <span class="ruby-identifier">arg</span>)
-161:     <span class="ruby-keyword kw">else</span>     <span class="ruby-comment cmt"># ambiguous command - tell luser about them.</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 149</span>
+149:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">m</span>)
+150:     <span class="ruby-comment cmt"># match legal command</span>
+151:     <span class="ruby-identifier">m</span><span class="ruby-operator">=~</span><span class="ruby-regexp re">/([A-Za-z@?&quot;'#!]+)(.*)/</span>
+152:     <span class="ruby-identifier">cmd</span>=<span class="ruby-identifier">$1</span>
+153:     <span class="ruby-identifier">arg</span>=<span class="ruby-identifier">$2</span>
+154:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">strip!</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">arg</span>
+155: 
+156:     <span class="ruby-comment cmt"># look for a command from our table for objects</span>
+157:     <span class="ruby-identifier">c</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">ocmds</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">cmd</span>)
+158: 
+159:     <span class="ruby-comment cmt"># there are three possibilities here</span>
+160:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">size</span>
+161:     <span class="ruby-keyword kw">when</span> <span class="ruby-value">0</span>   <span class="ruby-comment cmt"># no commands found</span>
 162:       <span class="ruby-keyword kw">false</span>
-163:     <span class="ruby-keyword kw">end</span>
-164:   <span class="ruby-keyword kw">end</span>
+163:     <span class="ruby-keyword kw">when</span> <span class="ruby-value">1</span>   <span class="ruby-comment cmt"># command found</span>
+164:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">c</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">cmd</span>, <span class="ruby-identifier">arg</span>)
+165:     <span class="ruby-keyword kw">else</span>     <span class="ruby-comment cmt"># ambiguous command - tell luser about them.</span>
+166:       <span class="ruby-keyword kw">false</span>
+167:     <span class="ruby-keyword kw">end</span>
+168:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -644,14 +649,14 @@ Finds all the players contained in this object except the passed player.
             onclick="toggleCode('M000025-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000025-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 134</span>
-134:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">players</span>(<span class="ruby-identifier">exempt</span>=<span class="ruby-keyword kw">nil</span>)
-135:     <span class="ruby-identifier">ary</span> = <span class="ruby-ivar">@contents</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">oid</span><span class="ruby-operator">|</span>
-136:       <span class="ruby-identifier">o</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">oid</span>)
-137:       (<span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Player</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">oid</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">exempt</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">session</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">o</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
-138:     <span class="ruby-keyword kw">end</span>
-139:     <span class="ruby-identifier">ary</span>.<span class="ruby-identifier">compact</span>
-140:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 138</span>
+138:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">players</span>(<span class="ruby-identifier">exempt</span>=<span class="ruby-keyword kw">nil</span>)
+139:     <span class="ruby-identifier">ary</span> = <span class="ruby-ivar">@contents</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">oid</span><span class="ruby-operator">|</span>
+140:       <span class="ruby-identifier">o</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">oid</span>)
+141:       (<span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Player</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">oid</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">exempt</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">session</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">o</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
+142:     <span class="ruby-keyword kw">end</span>
+143:     <span class="ruby-identifier">ary</span>.<span class="ruby-identifier">compact</span>
+144:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

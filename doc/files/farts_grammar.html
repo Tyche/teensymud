@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue Sep 13 07:22:59 GMT-5:00 2005</td>
+      <td>Tue Sep 13 09:35:13 GMT-5:00 2005</td>
     </tr>
     </table>
   </div>
@@ -74,75 +74,102 @@
     </div>
 
     <div id="description">
-      <p>
-program : stmts
+      <h1>Functional Automated Response Triggers System</h1>
+<p>
+Programs are stored in the farts directory under the name
+&lt;program_name.fart&gt;
 </p>
 <p>
-stmts :
+<a href="../classes/Command.html">Command</a> to manipulate triggers online
+is @fart:
 </p>
+<ul>
+<li>Syntax:
+
 <pre>
-          | stmts stmt
+ @fart add #&lt;oid&gt; &lt;progname&gt; &lt;eventtype&gt;
+ @fart del #&lt;oid&gt; &lt;eventtype&gt;
+ @fart show #&lt;oid&gt;
 </pre>
+</li>
+</ul>
+<h2>Events</h2>
 <p>
-stmt : expr
+The following event types are available:
 </p>
+<ul>
+<li>describe
+
+</li>
+<li>show
+
+</li>
+<li>get
+
+</li>
+<li>drop
+
+</li>
+<li>describe_exits
+
+</li>
+<li>leave
+
+</li>
+<li>arrive
+
+</li>
+</ul>
+<h2>Grammar</h2>
 <pre>
-          | command
-          | if
-          | END
-          | END TRUE
-          | END FALSE
-          | '#' COMMENT
-</pre>
-<p>
-if : IF expr stmts else ENDIF
-</p>
-<p>
-else : ELSE stmts
-</p>
-<pre>
-          | command   : ID
-          | ID STRING
-</pre>
-<p>
-expr : NOT expr
-</p>
-<pre>
-          | expr '==' expr
-          | expr '!=' expr
-          | expr '&gt;' expr
-          | expr '&gt;=' expr
-          | expr '&lt;' expr
-          | expr '&lt;=' expr
-          | expr &lt;AND|'&amp;&amp;'&gt; expr
-          | expr &lt;OR|'||'&gt; expr
-          | '(' expr ')'
-          | '-' expr
-          | function
-          | atom
-</pre>
-<p>
-atom : NUMBER
-</p>
-<pre>
-          | FLOAT
-          | STRING
-          | ACTOR
-          | ACTOR '.' ID
-          | THIS
-          | THIS '.' ID
-          | ARGS
-          | ARGS '.' ID
-</pre>
-<p>
-function : ID &#8217;(&#8217; args &#8217;)&#8217;
-</p>
-<p>
-args :
-</p>
-<pre>
-          | expr
-          | args ',' expr
+        program   : stmts
+
+        stmts     :
+                  | stmts stmt
+
+        stmt      : expr
+                  | command
+                  | if
+                  | END
+                  | END TRUE
+                  | END FALSE
+                  | '#' COMMENT
+
+        if        : IF expr stmts else ENDIF
+
+        else      : ELSE stmts
+                  | command   : ID
+                  | ID STRING
+
+        expr      : '!' expr
+                  | expr '==' expr
+                  | expr '!=' expr
+                  | expr '&gt;' expr
+                  | expr '&gt;=' expr
+                  | expr '&lt;' expr
+                  | expr '&lt;=' expr
+                  | expr &lt;AND|'&amp;&amp;'&gt; expr
+                  | expr &lt;OR|'||'&gt; expr
+                  | '(' expr ')'
+                  | '-' expr
+                  | function
+                  | atom
+
+        atom      : NUMBER
+                  | FLOAT
+                  | STRING
+                  | ACTOR
+                  | ACTOR '.' ID
+                  | THIS
+                  | THIS '.' ID
+                  | ARGS
+                  | ARGS '.' ID
+
+        function  : ID '(' args ')'
+
+        args      :
+                  | expr
+                  | args ',' expr
 </pre>
 
     </div>

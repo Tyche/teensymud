@@ -3,7 +3,7 @@
 
 ---
 == Introduction
-TeensyMUD is a very simple mud server written in Ruby.  It uses a multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns and YAML formatted text files as a database. It is also a pure event driven system where all game objects communicate with each other via events. 
+TeensyMUD is a very simple mud server written in Ruby.  It uses a multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns and YAML formatted text files as a database. It is also a pure event driven system where all game objects communicate with each other via events.  
 
 This server was initially created in response to an Aprils Fool's joke posted by Erwin Andreasen on TheMudConnector forum announcing a 1K mud contest.  Those obfuscated versions can be found in the repository.
 
@@ -41,9 +41,8 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 * Secure login
 * Turn based combat featuring link death and link suicide. ;-)
 * Runtime extensible commands.  Add new commands with rebooting.
-* Completely event-driven system.  All first class game objects communicate with
-  each other via TITS (Tyche's Immediate Temporality System).
-* Object level event programming using FARTS (Functional Automated Response Trigger System)   
+* Completely event-driven system.  All first class game objects communicate with each other via TITS (Tyche's Immediate Temporality System).
+* Object level event programming using FARTS (Functional Automated Response Trigger System). See link:files/farts_grammar.html
 
 ---
 == Installation
@@ -60,23 +59,36 @@ That's it.  It will boot on port 4000 and build an initial database in the db di
 * help   - Prints a brief description of the commands
 
 == Help 
--	drop - drops all objects in your inventory into the room
--	quit - quits the game (saves player)
--	look - displays the contents of a room
--	examine - displays the contents of a room
--	chat - sends <message> to all players in the game
--	help - displays help
--	@set - sets the description for an object (ex. @set #1 A beautiful rose.)
--	@object - creates a new object (ex. @object rose)
--	@reload - reloads the command table
--	get - gets all objects in the room into your inventory
--	say - sends <message> to all players in the room
--	kill - attempts to kill player (e.g. kill Bubba)
--	hello - the hello social
--	who - shows a list of all connected players
--	@room - creates a new room and autolinks the exits using the exit names provided. (ex. @room My Room north south)
--	? - displays help
--	inventory - displays player inventory
+- look       - displays the contents of a room
+- chat       - sends <message> to all players in the game
+- !          - displays <message> to all players in the room
+- quit       - quits the game (saves player)
+- help       - displays help
+- @object    - creates a new object (ex. @object rose)
+- @reload    - reloads the command table
+- get        - gets all objects in the room into your inventory
+- @fart      - adds or deletes a farts trigger to an object
+        Syntax:
+                @fart add #<oid> <progname> <eventtype>
+                @fart del #<oid> <eventtype>
+                @fart show #<oid>
+                (ex. @fart add #1 myprog arrive)
+- examine    - displays the contents of a room
+- "          - sends <message> to all players in the room
+- go         - go through the exit specified (ex. go west)
+- @echoat    - echos input to location
+- say        - sends <message> to all players in the room
+- kill       - attempts to kill player (e.g. kill Bubba)
+- hello      - the hello social
+- who        - shows a list of all connected players
+- @room      - creates a new room and autolinks the exits using the exit names provided.
+                 (ex. @room My Room north south)
+- emote      - displays <message> to all players in the room
+- @set       - sets the description for an object (ex. @set #1 A beautiful rose.)
+- ?          - displays help
+- inventory  - displays player inventory
+- drop       - drops all objects in your inventory into the room
+- @stats     - displays a statistical report of the database
 
 ---
 == Contributors

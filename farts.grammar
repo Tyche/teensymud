@@ -1,50 +1,75 @@
 
-program   : stmts
+= Functional Automated Response Triggers System
 
-stmts     :
-          | stmts stmt
+Programs are stored in the farts directory under the name <program_name.fart>
 
-stmt      : expr
-          | command
-          | if
-          | END
-          | END TRUE
-          | END FALSE
-          | '#' COMMENT
+Command to manipulate triggers online is @fart:
 
-if        : IF expr stmts else ENDIF
+-  Syntax:
+    @fart add #<oid> <progname> <eventtype>
+    @fart del #<oid> <eventtype>
+    @fart show #<oid>
+    
+== Events
+ 
+The following event types are available:
 
-else      : ELSE stmts
-          | command   : ID
-          | ID STRING
+- describe
+- show
+- get
+- drop
+- describe_exits
+- leave
+- arrive
 
-expr      : NOT expr
-          | expr '==' expr
-          | expr '!=' expr
-          | expr '>' expr
-          | expr '>=' expr
-          | expr '<' expr
-          | expr '<=' expr
-          | expr <AND|'&&'> expr
-          | expr <OR|'||'> expr
-          | '(' expr ')'
-          | '-' expr 
-          | function
-          | atom
+== Grammar
 
-atom      : NUMBER
-          | FLOAT
-          | STRING
-          | ACTOR 
-          | ACTOR '.' ID
-          | THIS
-          | THIS '.' ID
-          | ARGS
-          | ARGS '.' ID
+	program   : stmts
 
-function  : ID '(' args ')'
+	stmts     :
+		  | stmts stmt
 
-args      :
-          | expr
-          | args ',' expr
+	stmt      : expr
+		  | command
+		  | if
+		  | END
+		  | END TRUE
+		  | END FALSE
+		  | '#' COMMENT
+
+	if        : IF expr stmts else ENDIF
+
+	else      : ELSE stmts
+		  | command   : ID
+		  | ID STRING
+
+	expr      : '!' expr
+		  | expr '==' expr
+		  | expr '!=' expr
+		  | expr '>' expr
+		  | expr '>=' expr
+		  | expr '<' expr
+		  | expr '<=' expr
+		  | expr <AND|'&&'> expr
+		  | expr <OR|'||'> expr
+		  | '(' expr ')'
+		  | '-' expr 
+		  | function
+		  | atom
+
+	atom      : NUMBER
+		  | FLOAT
+		  | STRING
+		  | ACTOR 
+		  | ACTOR '.' ID
+		  | THIS
+		  | THIS '.' ID
+		  | ARGS
+		  | ARGS '.' ID
+
+	function  : ID '(' args ')'
+
+	args      :
+		  | expr
+		  | args ',' expr
 

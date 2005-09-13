@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue Sep 13 07:05:23 GMT-5:00 2005</td>
+      <td>Tue Sep 13 09:32:43 GMT-5:00 2005</td>
     </tr>
     </table>
   </div>
@@ -192,7 +192,8 @@ with each other via TITS (Tyche&#8217;s Immediate Temporality System).
 
 </li>
 <li>Object level event programming using FARTS (Functional Automated Response
-Trigger System)
+Trigger System). See <a
+href="farts_grammar.html">files/farts_grammar.html</a>
 
 </li>
 </ul>
@@ -226,25 +227,19 @@ the db directory.
 </ul>
 <h2>Help</h2>
 <ul>
-<li>drop - drops all objects in your inventory into the room
-
-</li>
-<li>quit - quits the game (saves player)
-
-</li>
 <li>look - displays the contents of a room
-
-</li>
-<li>examine - displays the contents of a room
 
 </li>
 <li>chat - sends &lt;message&gt; to all players in the game
 
 </li>
-<li>help - displays help
+<li>! - displays &lt;message&gt; to all players in the room
 
 </li>
-<li>@set - sets the description for an object (ex. @set 1 A beautiful rose.)
+<li>quit - quits the game (saves player)
+
+</li>
+<li>help - displays help
 
 </li>
 <li>@object - creates a new object (ex. @object rose)
@@ -254,6 +249,28 @@ the db directory.
 
 </li>
 <li>get - gets all objects in the room into your inventory
+
+</li>
+<li>@fart - adds or deletes a farts trigger to an object
+
+<pre>
+      Syntax:
+              @fart add #&lt;oid&gt; &lt;progname&gt; &lt;eventtype&gt;
+              @fart del #&lt;oid&gt; &lt;eventtype&gt;
+              @fart show #&lt;oid&gt;
+              (ex. @fart add #1 myprog arrive)
+</pre>
+</li>
+<li>examine - displays the contents of a room
+
+</li>
+<li>&quot; - sends &lt;message&gt; to all players in the room
+
+</li>
+<li>go - go through the exit specified (ex. go west)
+
+</li>
+<li>@echoat - echos input to location
 
 </li>
 <li>say - sends &lt;message&gt; to all players in the room
@@ -269,14 +286,28 @@ the db directory.
 
 </li>
 <li>@room - creates a new room and autolinks the exits using the exit names
-provided. (ex. @room My <a href="../classes/Room.html">Room</a> north
-south)
+provided.
+
+<pre>
+               (ex. @room My Room north south)
+</pre>
+</li>
+<li>emote - displays &lt;message&gt; to all players in the room
+
+</li>
+<li>@set - sets the description for an object (ex. @set 1 A beautiful rose.)
 
 </li>
 <li>? - displays help
 
 </li>
 <li>inventory - displays player inventory
+
+</li>
+<li>drop - drops all objects in your inventory into the room
+
+</li>
+<li>@stats - displays a statistical report of the database
 
 </li>
 </ul>
