@@ -114,10 +114,11 @@ The <a href="Database.html">Database</a> class manages all object storage.
       <a href="#M000052">get</a>&nbsp;&nbsp;
       <a href="#M000048">getid</a>&nbsp;&nbsp;
       <a href="#M000047">new</a>&nbsp;&nbsp;
+      <a href="#M000055">objects</a>&nbsp;&nbsp;
       <a href="#M000054">players_connected</a>&nbsp;&nbsp;
       <a href="#M000050">put</a>&nbsp;&nbsp;
       <a href="#M000049">save</a>&nbsp;&nbsp;
-      <a href="#M000055">stats</a>&nbsp;&nbsp;
+      <a href="#M000056">stats</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -332,6 +333,37 @@ Fetch the next available oid.
         </div>
       </div>
 
+      <div id="method-M000055" class="method-detail">
+        <a name="M000055"></a>
+
+        <div class="method-heading">
+          <a href="#M000055" class="method-signature">
+          <span class="method-name">objects</span><span class="method-args">() {|obj| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Iterate through all objects
+</p>
+<dl>
+<dt><tt>yield</tt></dt><dd>Each object in database to block of caller.
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000055-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/database.rb, line 106</span>
+106:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">objects</span>
+107:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">obj</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">obj</span>)}
+108:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
       <div id="method-M000054" class="method-detail">
         <a name="M000054"></a>
 
@@ -431,11 +463,11 @@ Save the world
         </div>
       </div>
 
-      <div id="method-M000055" class="method-detail">
-        <a name="M000055"></a>
+      <div id="method-M000056" class="method-detail">
+        <a name="M000056"></a>
 
         <div class="method-heading">
-          <a href="#M000055" class="method-signature">
+          <a href="#M000056" class="method-signature">
           <span class="method-name">stats</span><span class="method-args">()</span>
           </a>
         </div>
@@ -450,25 +482,25 @@ produces a statistical report of the database
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000055-source">
+            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000056-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/database.rb, line 106</span>
-106:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stats</span>
-107:     <span class="ruby-identifier">rooms</span> = <span class="ruby-identifier">objs</span> = <span class="ruby-identifier">players</span> = <span class="ruby-value">0</span>
-108:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
-109:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">val</span>
-110:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Room</span>
-111:         <span class="ruby-identifier">rooms</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
-112:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Player</span>
-113:         <span class="ruby-identifier">players</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
-114:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Obj</span>
-115:         <span class="ruby-identifier">objs</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
-116:       <span class="ruby-keyword kw">end</span>
-117:     <span class="ruby-keyword kw">end</span>
-118:     <span class="ruby-identifier">stats</span>=<span class="ruby-value str">&quot;\#{Colors[:cyan]}\n---* Database Statistics *---\n  Rooms   - \#{rooms}\n  Players - \#{players}\n  Objects - \#{objs}\n  Total Objects - \#{rooms+objs+players}\n  Highest OID in use - \#{@dbtop}\n---*                     *---\n\#{Colors[:reset]}\n&quot;</span>
-119:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">stats</span>
-120:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/database.rb, line 112</span>
+112:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stats</span>
+113:     <span class="ruby-identifier">rooms</span> = <span class="ruby-identifier">objs</span> = <span class="ruby-identifier">players</span> = <span class="ruby-value">0</span>
+114:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+115:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">val</span>
+116:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Room</span>
+117:         <span class="ruby-identifier">rooms</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+118:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Player</span>
+119:         <span class="ruby-identifier">players</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+120:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Obj</span>
+121:         <span class="ruby-identifier">objs</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+122:       <span class="ruby-keyword kw">end</span>
+123:     <span class="ruby-keyword kw">end</span>
+124:     <span class="ruby-identifier">stats</span>=<span class="ruby-value str">&quot;\#{Colors[:cyan]}\n---* Database Statistics *---\n  Rooms   - \#{rooms}\n  Players - \#{players}\n  Objects - \#{objs}\n  Total Objects - \#{rooms+objs+players}\n  Highest OID in use - \#{@dbtop}\n---*                     *---\n\#{Colors[:reset]}\n&quot;</span>
+125:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">stats</span>
+126:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

@@ -12,6 +12,7 @@
 #
 require 'observer'
 require 'yaml'
+require 'thread'
 require 'pp'
 
 $:.unshift "lib"
@@ -52,6 +53,8 @@ class Obj
   attr_accessor :location
   # The displayed description of the object
   attr_accessor :desc
+  # Flag indicating whether this object is interested in timer events
+  attr_accessor :powered
 
   # Create a new Object
   # [+name+]     Every object needs a name
@@ -62,6 +65,7 @@ class Obj
     @contents = []
     @farts = {}
     @desc = ""
+    @powered = false
     $world.db.get(@location).add_contents(@oid) if @location
   end
 
@@ -175,6 +179,7 @@ class Obj
       return if !fart
       msg = Colors[:yellow] + "A " + @name + " is here" + Colors[:reset]
       $world.add_event(@oid,e.from,:show,msg)
+      fart(e)
     when :get
       plyr = $world.db.get(e.from)
       place = $world.db.get(@location)
@@ -184,6 +189,7 @@ class Obj
       plyr.add_contents(@oid)
       @location = plyr.oid
       $world.add_event(@oid,e.from,:show,"You get the #{@name}")
+      fart(e)
     when :drop
       plyr = $world.db.get(e.from)
       place = $world.db.get(plyr.location)
@@ -193,8 +199,10 @@ class Obj
       place.add_contents(@oid)
       @location = place.oid
       $world.add_event(@oid,e.from,:show,"You drop the #{@name}")
+      fart(e)
+    when :timer
+      fart(e)
     end
-    fart(e)
   end
 end
 
@@ -289,6 +297,7 @@ class Player < Obj
     @session = session
     @passwd = encrypt(passwd)
     super(name,$world.options.home)
+    @powered = true
   end
 
   # Sends a message to the player if they are connected.
@@ -404,6 +413,52 @@ private
 
 end
 
+# The Hamster class is a timer mechanism that issues timing events
+#
+class Hamster < Thread
+
+  # Constructor for a Hamster.
+  # [+time+]      The interval time for events in flaoting point seconds.
+  # [+eventtype+] The symbol that defines the kind of event to be issued.
+  # [+return+] A reference to the Hamster.
+  def initialize(time, eventtype)
+    @time = time
+    @eventtype = eventtype
+    @interested = []
+    @mutex = Mutex.new
+    super {run}
+  end
+
+  # Register one's interest in talking to the Hamster.
+  # [+obj+]     The interval time for events in flaoting point seconds.
+  def register(obj)
+    @mutex.synchronize do
+      @interested << obj
+    end
+  end
+
+  # Unregister from the Hamster.
+  # [+obj+]     The interval time for events in flaoting point seconds.
+  def unregister(obj)
+    @mutex.synchronize do
+      @interested.delete(obj)
+    end
+  end
+
+  # The timing thread loop
+  def run
+    while true
+      sleep @time
+      @mutex.synchronize do
+        @interested.each do |o|
+          $world.add_event(nil, o.oid, @eventtype, nil)
+        end
+      end
+    end
+  end
+
+end
+
 # The Event class is a temporally immediate message that is to be propagated
 # to another object.
 class Event
@@ -431,7 +486,7 @@ end
 # [+options+] is a handle to the configuration options structure.
 class World
 
-  attr_accessor :cmds, :ocmds, :tits
+  attr_accessor :cmds, :ocmds, :tits, :hamster
   attr_reader :options, :db
 
 
@@ -446,19 +501,28 @@ class World
     @ocmds = Command.load("obj_cmds.yaml", Obj, :ObjCmd)
     $stdout.puts "Done."
     @tits = []
+    @bra = Mutex.new
+    $stdout.puts "Releasing Hamster..."
+    @hamster = Hamster.new(2.0, :timer)
+    @db.objects {|obj| @hamster.register(obj) if obj.powered}
+    $stdout.puts "World initialized."
   end
 
   # Add an Event to the TITS queue.
   # [+e+]      The event to be added.
   # [+return+] Undefined.
   def add_event(from,to,kind,msg=nil)
-    @tits.push(Event.new(from,to,kind,msg))
+    @bra.synchronize do
+      @tits.push(Event.new(from,to,kind,msg))
+    end
   end
 
   # Get an Event from the TITS queue.
   # [+return+] The Event or nil
   def get_event
-    @tits.shift
+    @bra.synchronize do
+      @tits.shift
+    end
   end
 end
 
@@ -649,6 +713,8 @@ def handle_signal(sig)
   $stdout.puts "Signal caught request to shutdown."
   $stdout.puts "Saving world..."
   $world.db.players_connected.each{|plr|plr.disconnect if plr.session}
+  # clear compiled progs out before saving
+  $world.db.objects {|o| o.get_triggers.each {|t| t.prog = nil }}
   $world.db.save
   exit
 end

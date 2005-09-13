@@ -46,6 +46,15 @@ digraph TopLevel {
         label = "Room"
     ]
 
+    Hamster [
+        fontcolor = black,
+        URL = "classes/Hamster.html",
+        shape = ellipse,
+        color = palegoldenrod,
+        style = filled,
+        label = "Hamster"
+    ]
+
     World [
         fontcolor = black,
         URL = "classes/World.html",
@@ -88,6 +97,15 @@ digraph TopLevel {
     ]
 
     Obj -> Room [
+
+    ]
+
+    Thread [
+        URL = "classes/Thread.html",
+        label = "Thread"
+    ]
+
+    Thread -> Hamster [
 
     ]
 

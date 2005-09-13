@@ -1,8 +1,8 @@
 #
 # file::    cmd_set.rb
 # author::  Jon A. Lambert
-# version:: 2.2.0
-# date::    08/29/2005
+# version:: 2.4.0
+# date::    09/13/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -12,19 +12,39 @@
 #
 module Cmd
 
-  # sets the description for an object (ex. @set #1 A beautiful rose.)
+  # sets the description or timer for an object
+  # Syntax:
+  #   @set desc #<oid> <description>
+  #   @set timer #<oid> <on|off>
+  # (ex. @set desc #1 A beautiful rose.)
   def cmd_set(args)
     case args
     when nil, ""
       sendto("What??")
-    when /#(\d+) (.*)/
+    when /desc\s+#(\d+)\s+(.*)/
       o = $world.db.get($1.to_i)
       case o
       when nil, 0
         sendto("No object."+EOL)
       else
         o.desc = $2
-        sendto("Object #" + $1 + " description set." + EOL)
+        sendto("Object #" + $1 + " description set.")
+      end
+    when /timer\s+#(\d+)\s+(on|off)/
+      o = $world.db.get($1.to_i)
+      case o
+      when nil, 0
+        sendto("No object."+EOL)
+      else
+        if $2 == 'on'
+          o.powered = true
+          $world.hamster.register(o)
+          sendto("Object #" + $1 + " registered with timer.")
+        else
+          o.powered = false
+          $world.hamster.unregister(o)
+          sendto("Object #" + $1 + " unregistered with timer.")
+        end
       end
     else
       sendto("What??")

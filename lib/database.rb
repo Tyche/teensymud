@@ -100,6 +100,12 @@ EOH
     @db.values.find_all{|o| o.class == Player && o.oid != exempt && o.session}
   end
 
+  # Iterate through all objects
+  # [+yield+] Each object in database to block of caller.
+  def objects
+    @db.values.each{|obj| yield(obj)}
+  end
+
   # produces a statistical report of the database
   # [+return+] a string containing the report
   def stats

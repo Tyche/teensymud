@@ -81,11 +81,11 @@
   name: '@object'
 - !ruby/object:Command 
   cmd: :cmd_room
-  help: "creates a new room and autolinks the exits using the exit names provided.\n\t\t (ex. @room My Room north south)"
+  help: "creates a new room and autolinks the exits using the exit names provided.\r\n\t\t(ex. @room My Room north south)"
   name: '@room'
 - !ruby/object:Command 
   cmd: :cmd_set
-  help: "sets the description for an object (ex. @set #1 A beautiful rose.)"
+  help: "sets the description or timer for an object\r\n\tSyntax:\r\n\t\t@set desc #<oid><description>\r\n\t\t@set timer #<oid> <on|off>\r\n\t\t(ex. @set desc #1 A beautiful rose.)"
   name: '@set'
 - !ruby/object:Command 
   cmd: :cmd_who

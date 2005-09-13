@@ -80,13 +80,15 @@
     <div id="diagram">
       <map id="map" name="map">
   <area shape="RECT" coords="102,113,174,161"      href="Player.html" alt="Player">
-  <area shape="RECT" coords="30,17,102,65"      href="Obj.html" alt="Obj">
+  <area shape="RECT" coords="53,17,125,65"      href="Obj.html" alt="Obj">
   <area shape="RECT" coords="6,113,78,161"      href="Room.html" alt="Room">
   <area shape="RECT" coords="272,17,344,65"      href="Engine.html" alt="Engine">
-  <area shape="RECT" coords="368,17,440,65"      href="World.html" alt="World">
-  <area shape="RECT" coords="464,17,536,65"      href="Event.html" alt="Event">
+  <area shape="RECT" coords="368,113,440,161"      href="Hamster.html" alt="Hamster">
+  <area shape="RECT" coords="464,17,536,65"      href="World.html" alt="World">
+  <area shape="RECT" coords="560,17,632,65"      href="Event.html" alt="Event">
   <area shape="RECT" coords="198,113,270,161"      href="Incoming.html" alt="Incoming">
   <area shape="RECT" coords="173,17,248,65"      href="Observable.html" alt="Observable">
+  <area shape="RECT" coords="368,17,440,65"      href="Thread.html" alt="Thread">
 </map>
 <img src="../dot/f_2.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
@@ -123,9 +125,9 @@ big global thing.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000059">add_event</a>&nbsp;&nbsp;
-      <a href="#M000060">get_event</a>&nbsp;&nbsp;
-      <a href="#M000058">new</a>&nbsp;&nbsp;
+      <a href="#M000064">add_event</a>&nbsp;&nbsp;
+      <a href="#M000065">get_event</a>&nbsp;&nbsp;
+      <a href="#M000063">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -156,6 +158,11 @@ big global thing.
           <td class="context-item-desc"></td>
         </tr>
         <tr class="top-aligned-row context-row">
+          <td class="context-item-name">hamster</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
           <td class="context-item-name">ocmds</td>
           <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
           <td class="context-item-desc"></td>
@@ -180,11 +187,11 @@ big global thing.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000058" class="method-detail">
-        <a name="M000058"></a>
+      <div id="method-M000063" class="method-detail">
+        <a name="M000063"></a>
 
         <div class="method-heading">
-          <a href="#M000058" class="method-signature">
+          <a href="#M000063" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(options)</span>
           </a>
         </div>
@@ -200,19 +207,24 @@ database depending on whether it finds it.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000058-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000058-source">
+            onclick="toggleCode('M000063-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000063-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 442</span>
-442:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span>)
-443:     <span class="ruby-ivar">@options</span>=<span class="ruby-identifier">options</span>
-444:     <span class="ruby-ivar">@db</span> = <span class="ruby-constant">Database</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@options</span>)
-445:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Loading commands...&quot;</span>
-446:     <span class="ruby-ivar">@cmds</span> = <span class="ruby-constant">Command</span>.<span class="ruby-identifier">load</span>(<span class="ruby-value str">&quot;commands.yaml&quot;</span>, <span class="ruby-constant">Player</span>, <span class="ruby-identifier">:Cmd</span>)
-447:     <span class="ruby-ivar">@ocmds</span> = <span class="ruby-constant">Command</span>.<span class="ruby-identifier">load</span>(<span class="ruby-value str">&quot;obj_cmds.yaml&quot;</span>, <span class="ruby-constant">Obj</span>, <span class="ruby-identifier">:ObjCmd</span>)
-448:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Done.&quot;</span>
-449:     <span class="ruby-ivar">@tits</span> = []
-450:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 497</span>
+497:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span>)
+498:     <span class="ruby-ivar">@options</span>=<span class="ruby-identifier">options</span>
+499:     <span class="ruby-ivar">@db</span> = <span class="ruby-constant">Database</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@options</span>)
+500:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Loading commands...&quot;</span>
+501:     <span class="ruby-ivar">@cmds</span> = <span class="ruby-constant">Command</span>.<span class="ruby-identifier">load</span>(<span class="ruby-value str">&quot;commands.yaml&quot;</span>, <span class="ruby-constant">Player</span>, <span class="ruby-identifier">:Cmd</span>)
+502:     <span class="ruby-ivar">@ocmds</span> = <span class="ruby-constant">Command</span>.<span class="ruby-identifier">load</span>(<span class="ruby-value str">&quot;obj_cmds.yaml&quot;</span>, <span class="ruby-constant">Obj</span>, <span class="ruby-identifier">:ObjCmd</span>)
+503:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Done.&quot;</span>
+504:     <span class="ruby-ivar">@tits</span> = []
+505:     <span class="ruby-ivar">@bra</span> = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>
+506:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Releasing Hamster...&quot;</span>
+507:     <span class="ruby-ivar">@hamster</span> = <span class="ruby-constant">Hamster</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">2.0</span>, <span class="ruby-identifier">:timer</span>)
+508:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">objects</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">obj</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@hamster</span>.<span class="ruby-identifier">register</span>(<span class="ruby-identifier">obj</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">powered</span>}
+509:     <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;World initialized.&quot;</span>
+510:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -220,11 +232,11 @@ database depending on whether it finds it.
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000059" class="method-detail">
-        <a name="M000059"></a>
+      <div id="method-M000064" class="method-detail">
+        <a name="M000064"></a>
 
         <div class="method-heading">
-          <a href="#M000059" class="method-signature">
+          <a href="#M000064" class="method-signature">
           <span class="method-name">add_event</span><span class="method-args">(from,to,kind,msg=nil)</span>
           </a>
         </div>
@@ -242,23 +254,25 @@ Add an <a href="Event.html">Event</a> to the TITS queue.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000059-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000059-source">
+            onclick="toggleCode('M000064-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000064-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 455</span>
-455:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_event</span>(<span class="ruby-identifier">from</span>,<span class="ruby-identifier">to</span>,<span class="ruby-identifier">kind</span>,<span class="ruby-identifier">msg</span>=<span class="ruby-keyword kw">nil</span>)
-456:     <span class="ruby-ivar">@tits</span>.<span class="ruby-identifier">push</span>(<span class="ruby-constant">Event</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">from</span>,<span class="ruby-identifier">to</span>,<span class="ruby-identifier">kind</span>,<span class="ruby-identifier">msg</span>))
-457:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 515</span>
+515:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_event</span>(<span class="ruby-identifier">from</span>,<span class="ruby-identifier">to</span>,<span class="ruby-identifier">kind</span>,<span class="ruby-identifier">msg</span>=<span class="ruby-keyword kw">nil</span>)
+516:     <span class="ruby-ivar">@bra</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+517:       <span class="ruby-ivar">@tits</span>.<span class="ruby-identifier">push</span>(<span class="ruby-constant">Event</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">from</span>,<span class="ruby-identifier">to</span>,<span class="ruby-identifier">kind</span>,<span class="ruby-identifier">msg</span>))
+518:     <span class="ruby-keyword kw">end</span>
+519:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000060" class="method-detail">
-        <a name="M000060"></a>
+      <div id="method-M000065" class="method-detail">
+        <a name="M000065"></a>
 
         <div class="method-heading">
-          <a href="#M000060" class="method-signature">
+          <a href="#M000065" class="method-signature">
           <span class="method-name">get_event</span><span class="method-args">()</span>
           </a>
         </div>
@@ -273,13 +287,15 @@ Get an <a href="Event.html">Event</a> from the TITS queue.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000060-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000060-source">
+            onclick="toggleCode('M000065-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000065-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 461</span>
-461:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_event</span>
-462:     <span class="ruby-ivar">@tits</span>.<span class="ruby-identifier">shift</span>
-463:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 523</span>
+523:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_event</span>
+524:     <span class="ruby-ivar">@bra</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+525:       <span class="ruby-ivar">@tits</span>.<span class="ruby-identifier">shift</span>
+526:     <span class="ruby-keyword kw">end</span>
+527:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
