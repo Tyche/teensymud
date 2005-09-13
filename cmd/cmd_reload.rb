@@ -1,8 +1,8 @@
 #
 # file::    cmd_reload.rb
 # author::  Jon A. Lambert
-# version:: 2.2.0
-# date::    08/29/2005
+# version:: 2.4.0
+# date::    09/12/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -14,7 +14,8 @@ module Cmd
 
   # This reloads the commands
   def cmd_reload(args)
-    $world.cmds = Command.load
+    $world.cmds = Command.load("commands.yaml", Player, :Cmd)
+    $world.ocmds = Command.load("obj_cmds.yaml", Obj, :ObjCmd)
     sendto("Command table reloaded.")
   end
 

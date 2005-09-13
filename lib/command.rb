@@ -33,14 +33,14 @@ class Command
   # config file and in the and then defines/redefines them on the Player
   # class.
   # [+return+] A trie of commands (see TernaryTrie class)
-  def self.load
-    cmds = YAML::load_file("cmd/commands.yaml")
+  def self.load(fname,forclass,mname)
+    cmds = YAML::load_file("cmd/" + fname)
     cmdtable = TernaryTrie.new
     cmds.each do |c|
       Kernel::load("cmd/" + c.cmd.to_s + ".rb")
       cmdtable.insert(c.name, c)
     end
-    Player.send(:include,Cmd)
+    forclass.send(:include,const_get(mname))
     cmdtable
   rescue Exception
     puts $!

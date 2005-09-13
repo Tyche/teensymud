@@ -17,6 +17,7 @@ $:.unshift "lib"
 require 'net'
 require 'command'
 require 'database'
+require 'farts_parser'
 
 Version = "2.4.0"
 
@@ -99,6 +100,30 @@ class Obj
       (o.class == Player && oid != exempt && o.session) ? o : nil
     end
     ary.compact
+  end
+
+  # All command input routed through here and parsed.
+  # [+m+]      The input message to be parsed
+  # [+return+] false or true depending on whether command succeeded.
+  def parse(m)
+    # match legal command
+    m=~/([A-Za-z@?"'#!]+)(.*)/
+    cmd=$1
+    arg=$2
+    arg.strip! if arg
+
+    # look for a command from our table for objects
+    c = $world.objcmds.find(cmd)
+
+    # there are three possibilities here
+    case c.size
+    when 0   # no commands found
+      false
+    when 1   # command found
+      return self.send(c[0].cmd, arg)
+    else     # ambiguous command - tell luser about them.
+      false
+    end
   end
 
   # Event handler
@@ -270,23 +295,20 @@ class Player < Obj
     @session = nil
   end
 
-  # All input routed through here and parsed.
+  # All command input routed through here and parsed.
   # [+m+]      The input message to be parsed
   # [+return+] Undefined.
   def parse(m)
     # match legal command
     m=~/([A-Za-z@?"'#!]+)(.*)/
     cmd=$1
-
-    # cmds take an array - we ought to parse this into an array of strings
-    # instead of sending an array of one string or nil
-    arg = $2.strip if $2
-    arg = nil if arg.nil? || arg.empty?
+    arg=$2
+    arg.strip! if arg
 
     # look for a command in our spanking new table
     c = $world.cmds.find(cmd)
     # add any exits to our command list
-    $world.db.get(@location).exits.keys.grep(/^#{m}/).each do |ex|
+    $world.db.get(@location).exits.keys.grep(/^#{cmd}/).each do |ex|
       c << Command.new(:cmd_go,"go #{ex}",nil)
       arg = ex
     end
@@ -362,7 +384,7 @@ end
 # [+options+] is a handle to the configuration options structure.
 class World
 
-  attr_accessor :cmds, :tits
+  attr_accessor :cmds, :ocmds, :tits
   attr_reader :options, :db
 
 
@@ -373,7 +395,8 @@ class World
     @options=options
     @db = Database.new(@options)
     $stdout.puts "Loading commands..."
-    @cmds = Command.load
+    @cmds = Command.load("commands.yaml", Player, :Cmd)
+    @ocmds = Command.load("obj_cmds.yaml", Obj, :ObjCmd)
     $stdout.puts "Done."
     @tits = []
   end

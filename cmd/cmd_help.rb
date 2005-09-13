@@ -14,7 +14,13 @@ module Cmd
 
   # The help command
   def cmd_help(args)
-    if args
+    case args
+    when nil, ""
+      sendto("====================HELP=======================")
+      $world.cmds.to_hash.values.each do |h|
+        sendto(sprintf("%-10s - %s", h.name, h.help))
+      end
+    else
       q = $world.cmds.find(args)
       if q
         q.each do |h|
@@ -23,11 +29,6 @@ module Cmd
         end
       else
         sendto "No help on that."
-      end
-    else
-      sendto("====================HELP=======================")
-      $world.cmds.to_hash.values.each do |h|
-        sendto(sprintf("%-10s - %s", h.name, h.help))
       end
     end
   end

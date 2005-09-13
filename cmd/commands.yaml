@@ -87,3 +87,7 @@
   cmd: :cmd_go
   help: "go through the exit specified (ex. go west)"
   name: 'go'
+- !ruby/object:Command 
+  cmd: :ocmd_echoat
+  help: echos input to location
+  name: '@echoat'

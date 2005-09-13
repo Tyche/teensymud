@@ -1,0 +1,5 @@
+--- 
+- !ruby/object:Command 
+  cmd: :ocmd_echoat
+  help: echos input to location
+  name: echoat
