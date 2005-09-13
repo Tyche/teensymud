@@ -15,7 +15,7 @@ PKG_FILES = FileList[
   'db/testworld.yaml',
   'farts',
   'farts/README',
-  'farts/arrival.fart',
+  'farts/**/*',
   'test',
   'test/README',
 #  'test/**/*',
