@@ -13,12 +13,12 @@
 module Cmd
 
   # This kills a player anywhere - it's link death (30% chance)
-  def cmd_kill(*args)
-    case args[0]
-    when nil
+  def cmd_kill(args)
+    case args
+    when nil, ""
       sendto("Who do you want to kill?")
     else
-      d = $world.db.find_player_by_name(args[0])
+      d = $world.db.find_player_by_name(args)
       if !d
         sendto("Can't find them.")
         return

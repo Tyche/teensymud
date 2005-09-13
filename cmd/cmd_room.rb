@@ -14,8 +14,8 @@ module Cmd
 
   # creates a new room and autolinks the exits using the exit names provided.
   # (ex. @room My Room north south)
-  def cmd_room(*args)
-    case args[0]
+  def cmd_room(args)
+    case args
     when /(.*) (.*) (.*)/
       d=Room.new($1)
       $world.db.put(d)

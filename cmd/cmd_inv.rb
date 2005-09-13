@@ -13,7 +13,7 @@
 module Cmd
 
   # The inventory command
-  def cmd_inv(*args)
+  def cmd_inv(args)
     objects.each do |x|
       $world.add_event(@oid,x.oid,:describe)
     end

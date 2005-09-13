@@ -13,7 +13,7 @@
 module Cmd
 
   # gets all objects in the room into your inventory
-  def cmd_get(*args)
+  def cmd_get(args)
     $world.db.get(@location).objects.each do |q|
       $world.add_event(@oid,q.oid,:get)
     end

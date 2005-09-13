@@ -13,14 +13,14 @@
 module Cmd
 
   # sends <message> to all players in the room
-  def cmd_say(*args)
-    case args[0]
-    when nil
+  def cmd_say(args)
+    case args
+    when nil, ""
       sendto("What are you trying to say?")
     else
-      sendto("You say, \"#{args[0]}\"."+EOL)
+      sendto("You say, \"#{args}\"."+EOL)
       $world.db.get(@location).players(@oid).each do |p|
-        $world.add_event(@oid,p.oid,:show,"#{@name} says, \"#{args[0]}\".")
+        $world.add_event(@oid,p.oid,:show,"#{@name} says, \"#{args}\".")
       end
     end
   end

@@ -13,8 +13,8 @@
 module Cmd
 
   # sets the description for an object (ex. @set #1 A beautiful rose.)
-  def cmd_object(*args)
-    case args[0]
+  def cmd_object(args)
+    case args
     when /(.*)/
       $world.db.put(Obj.new($1,@location))
       sendto("Ok."+EOL)

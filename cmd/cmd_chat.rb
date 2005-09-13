@@ -13,15 +13,15 @@
 module Cmd
 
   # sends <message> to all players in the game
-  def cmd_chat(*args)
-    case args[0]
-    when nil
+  def cmd_chat(args)
+    case args
+    when nil, ""
       sendto("What are you trying to tell everyone?")
     else
-      sendto(Colors[:magenta] + "You chat, \"#{args[0]}\"." + Colors[:reset])
+      sendto(Colors[:magenta] + "You chat, \"#{args}\"." + Colors[:reset])
       $world.db.players_connected(@oid).each do |p|
         $world.add_event(@oid,p.oid,:show,
-          Colors[:magenta] + "#{@name} chats, \"#{args[0]}\"." + Colors[:reset])
+          Colors[:magenta] + "#{@name} chats, \"#{args}\"." + Colors[:reset])
       end
     end
   end

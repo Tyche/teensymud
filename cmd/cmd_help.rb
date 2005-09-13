@@ -13,9 +13,9 @@
 module Cmd
 
   # The help command
-  def cmd_help(*args)
-    if args[0]
-      q = $world.cmds.find(args[0])
+  def cmd_help(args)
+    if args
+      q = $world.cmds.find(args)
       if q
         q.each do |h|
           sendto("====================HELP=======================")

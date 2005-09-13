@@ -13,12 +13,12 @@
 module Cmd
 
   # sends <message> to all players in the room
-  def cmd_go(*args)
-    case args[0]
-    when nil
+  def cmd_go(args)
+    case args
+    when nil, ""
       sendto("Where do you want to go?")
     else
-      ex = $world.db.get(@location).exits.keys.grep(/^#{args[0]}/)
+      ex = $world.db.get(@location).exits.keys.grep(/^#{args}/)
       if ex.empty?
         sendto("Can't find that place")
       elsif ex.size > 1

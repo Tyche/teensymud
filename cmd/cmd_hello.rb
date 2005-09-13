@@ -13,7 +13,7 @@
 module Cmd
 
   # The hello social command
-  def cmd_hello(*args)
+  def cmd_hello(args)
     parse("say hello")
   end
 

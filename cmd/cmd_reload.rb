@@ -13,7 +13,7 @@
 module Cmd
 
   # This reloads the commands
-  def cmd_reload(*args)
+  def cmd_reload(args)
     $world.cmds = Command.load
     sendto("Command table reloaded.")
   end

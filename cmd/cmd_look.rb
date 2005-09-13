@@ -13,7 +13,7 @@
 module Cmd
 
   # Look command displays the contents of a room
-  def cmd_look(*args)
+  def cmd_look(args)
     place = $world.db.get(@location)
     $world.add_event(@oid,@location,:describe)
     place.objects.each do |x|
