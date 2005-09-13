@@ -91,3 +91,7 @@
   cmd: :ocmd_echoat
   help: echos input to location
   name: '@echoat'
+- !ruby/object:Command 
+  cmd: :cmd_fart
+  help: "adds or deletes a farts trigger to an object\r\n\tSyntax:\r\n\t\t@fart add #<oid> <progname> <eventtype>\r\n\t\t@fart del #<oid> <eventtype>\r\n\t\t@fart show #<oid>\r\n\t\t(ex. @fart add #1 myprog arrive)"
+  name: '@fart'

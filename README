@@ -19,6 +19,7 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 === Optional
 [RubyGems] To install rake and various things.  See - http://rubyforge.org/projects/rubygems
 [Rake] To build documentation, run tests, etc.  See - http://rake.rubyforge.org
+[Racc] To rebuild FARTS parser.  Ruby comes with Racc runtime so this is not needed for execution. See - http://i.loveruby.net/en/prog/racc.html
 
 == Features
 * Multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns.
@@ -38,10 +39,11 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 * More extras!!! Comes with mini-distro builder utility (see 'rakefile package')
 * Color
 * Secure login
-* Turn based combat featureing link death and link suicide. ;-)
+* Turn based combat featuring link death and link suicide. ;-)
 * Runtime extensible commands.  Add new commands with rebooting.
 * Completely event-driven system.  All first class game objects communicate with
   each other via TITS (Tyche's Immediate Temporality System).
+* Object level event programming using FARTS (Functional Automated Response Trigger System)   
 
 ---
 == Installation

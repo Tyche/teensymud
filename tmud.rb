@@ -12,6 +12,7 @@
 #
 require 'observer'
 require 'yaml'
+require 'pp'
 
 $:.unshift "lib"
 require 'net'
@@ -59,6 +60,7 @@ class Obj
   def initialize(name,location=nil)
     @name,@location,@oid=name,location,$world.db.getid
     @contents = []
+    @farts = {}
     @desc = ""
     $world.db.get(@location).add_contents(@oid) if @location
   end
@@ -79,6 +81,40 @@ class Obj
   # [+return+] An array of object ids
   def get_contents
     @contents
+  end
+
+  # Add a trigger to this object
+  # [+oid+] The object id to add
+  def add_trigger(t)
+    @farts[t.event] = t
+  end
+
+  # Deletes a trigger from this object
+  # [+oid+] The object id to delete
+  def delete_trigger(event)
+    event = event.intern if event.respond_to?(:to_str)
+    @farts.delete(event)
+  end
+
+  # Returns a specific trigger from the object
+  # [+return+] A trigger or nil
+  def get_trigger(event)
+    event = event.intern if event.respond_to?(:to_str)
+    @farts[event]
+  end
+
+  # Returns the triggers on the object
+  # [+return+] An array of triggers
+  def get_triggers
+    @farts.values
+  end
+
+  # Fart handler
+  # [+e+]      The event
+  # [+return+] true or false
+  def fart(ev)
+    t = get_trigger(ev.kind)
+    t.execute(ev) if t
   end
 
   # Finds all objects contained in this object
@@ -113,7 +149,7 @@ class Obj
     arg.strip! if arg
 
     # look for a command from our table for objects
-    c = $world.objcmds.find(cmd)
+    c = $world.ocmds.find(cmd)
 
     # there are three possibilities here
     case c.size
@@ -202,6 +238,7 @@ class Room < Obj
       end
       $world.add_event(@oid,e.from,:show,msg)
     when :leave
+      fart(e)
       plyr = $world.db.get(e.from)
       players(e.from).each do |x|
         $world.add_event(@oid,x.oid,:show, plyr.name + " has left #{e.msg}.") if x.session
@@ -215,6 +252,7 @@ class Room < Obj
       # add player
       add_contents(plyr.oid)
       plyr.location = @oid
+      fart(e)
       players(e.msg).each do |x|
         $world.add_event(@oid,x.oid,:show, plyr.name+" has arrived.") if x.session
       end

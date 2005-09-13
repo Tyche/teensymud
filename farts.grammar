@@ -1,0 +1,50 @@
+
+program   : stmts
+
+stmts     :
+          | stmts stmt
+
+stmt      : expr
+          | command
+          | if
+          | END
+          | END TRUE
+          | END FALSE
+          | '#' COMMENT
+
+if        : IF expr stmts else ENDIF
+
+else      : ELSE stmts
+          | command   : ID
+          | ID STRING
+
+expr      : NOT expr
+          | expr '==' expr
+          | expr '!=' expr
+          | expr '>' expr
+          | expr '>=' expr
+          | expr '<' expr
+          | expr '<=' expr
+          | expr <AND|'&&'> expr
+          | expr <OR|'||'> expr
+          | '(' expr ')'
+          | '-' expr 
+          | function
+          | atom
+
+atom      : NUMBER
+          | FLOAT
+          | STRING
+          | ACTOR 
+          | ACTOR '.' ID
+          | THIS
+          | THIS '.' ID
+          | ARGS
+          | ARGS '.' ID
+
+function  : ID '(' args ')'
+
+args      :
+          | expr
+          | args ',' expr
+

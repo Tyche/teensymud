@@ -8,12 +8,14 @@ PKG_FILES = FileList[
   'LICENSE',
   'CONTRIBUTORS', 
   'README',
+  'farts.grammar',
   'Rakefile', 
   'db',
   'db/README',
 #  'db/**/*',
   'test',
-  'test/**/*',
+  'test/README',
+#  'test/**/*',
   'lib/**/*',
   'cmd/**/*',
   'doc/**/*'
@@ -33,7 +35,7 @@ Rake::RDocTask.new do |rd|
   rd.title = "TeensyMUD #{TMUDV} Mud Server"
 #  rd.template = 'kilmer'
 #  rd.template = './rdoctemplate.rb'
-  rd.rdoc_files.include('README', 'tmud.rb', 'lib/*.rb', 'cmd/*.rb')
+  rd.rdoc_files.include('README', 'farts.grammar', 'tmud.rb', 'lib/*.rb', 'cmd/*.rb')
   rd.options << '-dSN -I gif' 
 end
 
@@ -76,7 +78,11 @@ task :release do
   sh "svn cp -m 'tagged release #{TMUDV}' #{baseurl}/trunk #{baseurl}/release/tmud-#{TMUDV}"
 end
 
+task :farts do
+  sh "racc -o lib/farts_parser.rb lib/farts_parser.y"
+end
+
 task :release => [:package]
 task :clean => [:clobber_rdoc]
 task :package => [:rdoc]
-task :default => [:rdoc, :test]
+task :default => [:farts, :rdoc, :test]

@@ -24,6 +24,7 @@ MINIMAL_DB=<<EOH
 ---
 - !ruby/object:Room
   exits: {}
+  farts: {}
   contents: []
   location:
   desc: "This is home."

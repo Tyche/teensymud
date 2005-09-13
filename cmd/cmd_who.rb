@@ -12,7 +12,7 @@
 #
 module Cmd
 
-  # The inventory command
+  # shows a list of all connected players
   def cmd_who(args)
     $world.db.players_connected.each {|p| sendto(p.name)}
   end

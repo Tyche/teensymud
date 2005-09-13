@@ -88,7 +88,7 @@
   <area shape="RECT" coords="198,113,270,161"      href="Incoming.html" alt="Incoming">
   <area shape="RECT" coords="173,17,248,65"      href="Observable.html" alt="Observable">
 </map>
-<img src="../dot/f_1.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_2.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -106,9 +106,9 @@ passes them to player.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000070">new</a>&nbsp;&nbsp;
-      <a href="#M000072">sendmsg</a>&nbsp;&nbsp;
-      <a href="#M000071">update</a>&nbsp;&nbsp;
+      <a href="#M000078">new</a>&nbsp;&nbsp;
+      <a href="#M000080">sendmsg</a>&nbsp;&nbsp;
+      <a href="#M000079">update</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -137,11 +137,11 @@ passes them to player.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000070" class="method-detail">
-        <a name="M000070"></a>
+      <div id="method-M000078" class="method-detail">
+        <a name="M000078"></a>
 
         <div class="method-heading">
-          <a href="#M000070" class="method-signature">
+          <a href="#M000078" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(conn)</span>
           </a>
         </div>
@@ -160,16 +160,16 @@ login for player and gets them connected.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000070-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000070-source">
+            onclick="toggleCode('M000078-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000078-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 388</span>
-388:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">conn</span>)
-389:     <span class="ruby-ivar">@conn</span> = <span class="ruby-identifier">conn</span>
-390:     <span class="ruby-ivar">@state</span> = <span class="ruby-identifier">:name</span>
-391:     <span class="ruby-ivar">@checked</span> = <span class="ruby-value">0</span>
-392:     <span class="ruby-ivar">@player</span> = <span class="ruby-keyword kw">nil</span>
-393:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 467</span>
+467:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">conn</span>)
+468:     <span class="ruby-ivar">@conn</span> = <span class="ruby-identifier">conn</span>
+469:     <span class="ruby-ivar">@state</span> = <span class="ruby-identifier">:name</span>
+470:     <span class="ruby-ivar">@checked</span> = <span class="ruby-value">0</span>
+471:     <span class="ruby-ivar">@player</span> = <span class="ruby-keyword kw">nil</span>
+472:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -177,35 +177,35 @@ login for player and gets them connected.
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000072" class="method-detail">
-        <a name="M000072"></a>
+      <div id="method-M000080" class="method-detail">
+        <a name="M000080"></a>
 
         <div class="method-heading">
-          <a href="#M000072" class="method-signature">
+          <a href="#M000080" class="method-signature">
           <span class="method-name">sendmsg</span><span class="method-args">(msg)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000072-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000072-source">
+            onclick="toggleCode('M000080-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000080-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 435</span>
-435:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">msg</span>)
-436:     <span class="ruby-identifier">changed</span>
-437:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">msg</span>)
-438:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 514</span>
+514:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">msg</span>)
+515:     <span class="ruby-identifier">changed</span>
+516:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">msg</span>)
+517:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000071" class="method-detail">
-        <a name="M000071"></a>
+      <div id="method-M000079" class="method-detail">
+        <a name="M000079"></a>
 
         <div class="method-heading">
-          <a href="#M000071" class="method-signature">
+          <a href="#M000079" class="method-signature">
           <span class="method-name">update</span><span class="method-args">(msg)</span>
           </a>
         </div>
@@ -221,45 +221,45 @@ login the observer status will be transferred to the player object.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000071-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000071-source">
+            onclick="toggleCode('M000079-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000079-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 399</span>
-399:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)
-400:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>
-401:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:logged_out</span>, <span class="ruby-identifier">:disconnected</span>
-402:       <span class="ruby-identifier">delete_observers</span>
-403:     <span class="ruby-keyword kw">else</span>
-404:       <span class="ruby-keyword kw">if</span> (<span class="ruby-ivar">@checked</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">3</span>
-405:         <span class="ruby-identifier">sendmsg</span>(<span class="ruby-value str">&quot;Bye!&quot;</span>)
-406:         <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">:logged_out</span>)
-407:         <span class="ruby-identifier">delete_observers</span>
-408:       <span class="ruby-keyword kw">end</span>
-409:       <span class="ruby-keyword kw">case</span> <span class="ruby-ivar">@state</span>
-410:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:name</span>
-411:         <span class="ruby-ivar">@login_name</span> = <span class="ruby-identifier">msg</span>
-412:         <span class="ruby-ivar">@player</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">find_player_by_name</span>(<span class="ruby-ivar">@login_name</span>)
-413:         <span class="ruby-identifier">sendmsg</span>(<span class="ruby-value str">&quot;password&gt; &quot;</span>)
-414:         <span class="ruby-ivar">@state</span> = <span class="ruby-identifier">:password</span>
-415:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:password</span>
-416:         <span class="ruby-ivar">@login_passwd</span> = <span class="ruby-identifier">msg</span>
-417:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@player</span>
-418:           <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@player</span>.<span class="ruby-identifier">check_passwd</span>(<span class="ruby-ivar">@login_passwd</span>)  <span class="ruby-comment cmt"># good login</span>
-419:             <span class="ruby-ivar">@player</span>.<span class="ruby-identifier">session</span> = <span class="ruby-ivar">@conn</span>
-420:             <span class="ruby-identifier">login</span>
-421:           <span class="ruby-keyword kw">else</span>  <span class="ruby-comment cmt"># bad login</span>
-422:             <span class="ruby-identifier">sendmsg</span>(<span class="ruby-value str">&quot;Sorry wrong password&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">EOL</span>)
-423:             <span class="ruby-ivar">@state</span> = <span class="ruby-identifier">:name</span>
-424:             <span class="ruby-identifier">sendmsg</span>(<span class="ruby-value str">&quot;login&gt; &quot;</span>)
-425:           <span class="ruby-keyword kw">end</span>
-426:         <span class="ruby-keyword kw">else</span>  <span class="ruby-comment cmt"># new player</span>
-427:           <span class="ruby-ivar">@player</span> = <span class="ruby-constant">Player</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@login_name</span>,<span class="ruby-ivar">@login_passwd</span>,<span class="ruby-ivar">@conn</span>)
-428:           <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">put</span>(<span class="ruby-ivar">@player</span>)
-429:           <span class="ruby-identifier">login</span>
-430:         <span class="ruby-keyword kw">end</span>
-431:       <span class="ruby-keyword kw">end</span>
-432:     <span class="ruby-keyword kw">end</span>
-433:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 478</span>
+478:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)
+479:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>
+480:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:logged_out</span>, <span class="ruby-identifier">:disconnected</span>
+481:       <span class="ruby-identifier">delete_observers</span>
+482:     <span class="ruby-keyword kw">else</span>
+483:       <span class="ruby-keyword kw">if</span> (<span class="ruby-ivar">@checked</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">3</span>
+484:         <span class="ruby-identifier">sendmsg</span>(<span class="ruby-value str">&quot;Bye!&quot;</span>)
+485:         <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">:logged_out</span>)
+486:         <span class="ruby-identifier">delete_observers</span>
+487:       <span class="ruby-keyword kw">end</span>
+488:       <span class="ruby-keyword kw">case</span> <span class="ruby-ivar">@state</span>
+489:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:name</span>
+490:         <span class="ruby-ivar">@login_name</span> = <span class="ruby-identifier">msg</span>
+491:         <span class="ruby-ivar">@player</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">find_player_by_name</span>(<span class="ruby-ivar">@login_name</span>)
+492:         <span class="ruby-identifier">sendmsg</span>(<span class="ruby-value str">&quot;password&gt; &quot;</span>)
+493:         <span class="ruby-ivar">@state</span> = <span class="ruby-identifier">:password</span>
+494:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:password</span>
+495:         <span class="ruby-ivar">@login_passwd</span> = <span class="ruby-identifier">msg</span>
+496:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@player</span>
+497:           <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@player</span>.<span class="ruby-identifier">check_passwd</span>(<span class="ruby-ivar">@login_passwd</span>)  <span class="ruby-comment cmt"># good login</span>
+498:             <span class="ruby-ivar">@player</span>.<span class="ruby-identifier">session</span> = <span class="ruby-ivar">@conn</span>
+499:             <span class="ruby-identifier">login</span>
+500:           <span class="ruby-keyword kw">else</span>  <span class="ruby-comment cmt"># bad login</span>
+501:             <span class="ruby-identifier">sendmsg</span>(<span class="ruby-value str">&quot;Sorry wrong password&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">EOL</span>)
+502:             <span class="ruby-ivar">@state</span> = <span class="ruby-identifier">:name</span>
+503:             <span class="ruby-identifier">sendmsg</span>(<span class="ruby-value str">&quot;login&gt; &quot;</span>)
+504:           <span class="ruby-keyword kw">end</span>
+505:         <span class="ruby-keyword kw">else</span>  <span class="ruby-comment cmt"># new player</span>
+506:           <span class="ruby-ivar">@player</span> = <span class="ruby-constant">Player</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@login_name</span>,<span class="ruby-ivar">@login_passwd</span>,<span class="ruby-ivar">@conn</span>)
+507:           <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">put</span>(<span class="ruby-ivar">@player</span>)
+508:           <span class="ruby-identifier">login</span>
+509:         <span class="ruby-keyword kw">end</span>
+510:       <span class="ruby-keyword kw">end</span>
+511:     <span class="ruby-keyword kw">end</span>
+512:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

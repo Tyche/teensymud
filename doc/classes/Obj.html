@@ -88,7 +88,7 @@
   <area shape="RECT" coords="198,113,270,161"      href="Incoming.html" alt="Incoming">
   <area shape="RECT" coords="173,17,248,65"      href="Observable.html" alt="Observable">
 </map>
-<img src="../dot/f_1.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_2.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -106,12 +106,18 @@ The <a href="Obj.html">Obj</a> class is the mother of all objects.
 
       <div class="name-list">
       <a href="#M000016">add_contents</a>&nbsp;&nbsp;
-      <a href="#M000021">ass</a>&nbsp;&nbsp;
+      <a href="#M000019">add_trigger</a>&nbsp;&nbsp;
+      <a href="#M000027">ass</a>&nbsp;&nbsp;
       <a href="#M000017">delete_contents</a>&nbsp;&nbsp;
+      <a href="#M000020">delete_trigger</a>&nbsp;&nbsp;
+      <a href="#M000023">fart</a>&nbsp;&nbsp;
       <a href="#M000018">get_contents</a>&nbsp;&nbsp;
+      <a href="#M000021">get_trigger</a>&nbsp;&nbsp;
+      <a href="#M000022">get_triggers</a>&nbsp;&nbsp;
       <a href="#M000015">new</a>&nbsp;&nbsp;
-      <a href="#M000019">objects</a>&nbsp;&nbsp;
-      <a href="#M000020">players</a>&nbsp;&nbsp;
+      <a href="#M000024">objects</a>&nbsp;&nbsp;
+      <a href="#M000026">parse</a>&nbsp;&nbsp;
+      <a href="#M000025">players</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -201,13 +207,14 @@ Create a new Object
             onclick="toggleCode('M000015-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000015-source">
 <pre>
-    <span class="ruby-comment cmt"># File tmud.rb, line 59</span>
-59:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>=<span class="ruby-keyword kw">nil</span>)
-60:     <span class="ruby-ivar">@name</span>,<span class="ruby-ivar">@location</span>,<span class="ruby-ivar">@oid</span>=<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>,<span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">getid</span>
-61:     <span class="ruby-ivar">@contents</span> = []
-62:     <span class="ruby-ivar">@desc</span> = <span class="ruby-value str">&quot;&quot;</span>
-63:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@location</span>
-64:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tmud.rb, line 61</span>
+61:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>=<span class="ruby-keyword kw">nil</span>)
+62:     <span class="ruby-ivar">@name</span>,<span class="ruby-ivar">@location</span>,<span class="ruby-ivar">@oid</span>=<span class="ruby-identifier">name</span>,<span class="ruby-identifier">location</span>,<span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">getid</span>
+63:     <span class="ruby-ivar">@contents</span> = []
+64:     <span class="ruby-ivar">@farts</span> = {}
+65:     <span class="ruby-ivar">@desc</span> = <span class="ruby-value str">&quot;&quot;</span>
+66:     <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@location</span>
+67:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -237,20 +244,51 @@ Add an object to the contents of this object
             onclick="toggleCode('M000016-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000016-source">
 <pre>
-    <span class="ruby-comment cmt"># File tmud.rb, line 68</span>
-68:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_contents</span>(<span class="ruby-identifier">oid</span>)
-69:     <span class="ruby-ivar">@contents</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">oid</span>
-70:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tmud.rb, line 71</span>
+71:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_contents</span>(<span class="ruby-identifier">oid</span>)
+72:     <span class="ruby-ivar">@contents</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">oid</span>
+73:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000021" class="method-detail">
-        <a name="M000021"></a>
+      <div id="method-M000019" class="method-detail">
+        <a name="M000019"></a>
 
         <div class="method-heading">
-          <a href="#M000021" class="method-signature">
+          <a href="#M000019" class="method-signature">
+          <span class="method-name">add_trigger</span><span class="method-args">(t)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Add a trigger to this object
+</p>
+<dl>
+<dt><tt>oid</tt></dt><dd>The object id to add
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000019-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000019-source">
+<pre>
+    <span class="ruby-comment cmt"># File tmud.rb, line 89</span>
+89:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_trigger</span>(<span class="ruby-identifier">t</span>)
+90:     <span class="ruby-ivar">@farts</span>[<span class="ruby-identifier">t</span>.<span class="ruby-identifier">event</span>] = <span class="ruby-identifier">t</span>
+91:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000027" class="method-detail">
+        <a name="M000027"></a>
+
+        <div class="method-heading">
+          <a href="#M000027" class="method-signature">
           <span class="method-name">ass</span><span class="method-args">(e)</span>
           </a>
         </div>
@@ -268,36 +306,36 @@ Add an object to the contents of this object
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000021-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000021-source">
+            onclick="toggleCode('M000027-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000027-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 108</span>
-108:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ass</span>(<span class="ruby-identifier">e</span>)
-109:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">kind</span>
-110:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:describe</span>
-111:       <span class="ruby-identifier">msg</span> = <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:yellow</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;A &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@name</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; is here&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>]
-112:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-identifier">msg</span>)
-113:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:get</span>
-114:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
-115:       <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>)
-116:       <span class="ruby-comment cmt"># remove it</span>
-117:       <span class="ruby-identifier">place</span>.<span class="ruby-identifier">delete_contents</span>(<span class="ruby-ivar">@oid</span>)
-118:       <span class="ruby-comment cmt"># add it</span>
-119:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>)
-120:       <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">oid</span>
-121: 
-122:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;You get the #{@name}&quot;</span>)
-123:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:drop</span>
-124:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
-125:       <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">location</span>)
-126:       <span class="ruby-comment cmt"># remove it</span>
-127:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">delete_contents</span>(<span class="ruby-ivar">@oid</span>)
-128:       <span class="ruby-comment cmt"># add it</span>
-129:       <span class="ruby-identifier">place</span>.<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>)
-130:       <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">oid</span>
-131:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;You drop the #{@name}&quot;</span>)
-132:     <span class="ruby-keyword kw">end</span>
-133:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 169</span>
+169:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ass</span>(<span class="ruby-identifier">e</span>)
+170:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">kind</span>
+171:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:describe</span>
+172:       <span class="ruby-identifier">msg</span> = <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:yellow</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;A &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@name</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; is here&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>]
+173:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-identifier">msg</span>)
+174:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:get</span>
+175:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
+176:       <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>)
+177:       <span class="ruby-comment cmt"># remove it</span>
+178:       <span class="ruby-identifier">place</span>.<span class="ruby-identifier">delete_contents</span>(<span class="ruby-ivar">@oid</span>)
+179:       <span class="ruby-comment cmt"># add it</span>
+180:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>)
+181:       <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">oid</span>
+182: 
+183:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;You get the #{@name}&quot;</span>)
+184:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:drop</span>
+185:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
+186:       <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">location</span>)
+187:       <span class="ruby-comment cmt"># remove it</span>
+188:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">delete_contents</span>(<span class="ruby-ivar">@oid</span>)
+189:       <span class="ruby-comment cmt"># add it</span>
+190:       <span class="ruby-identifier">place</span>.<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>)
+191:       <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">oid</span>
+192:       <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;You drop the #{@name}&quot;</span>)
+193:     <span class="ruby-keyword kw">end</span>
+194:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -325,10 +363,77 @@ Deletes an object from the contents of this object
             onclick="toggleCode('M000017-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000017-source">
 <pre>
-    <span class="ruby-comment cmt"># File tmud.rb, line 74</span>
-74:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_contents</span>(<span class="ruby-identifier">oid</span>)
-75:     <span class="ruby-ivar">@contents</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">oid</span>)
-76:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tmud.rb, line 77</span>
+77:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_contents</span>(<span class="ruby-identifier">oid</span>)
+78:     <span class="ruby-ivar">@contents</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">oid</span>)
+79:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000020" class="method-detail">
+        <a name="M000020"></a>
+
+        <div class="method-heading">
+          <a href="#M000020" class="method-signature">
+          <span class="method-name">delete_trigger</span><span class="method-args">(event)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Deletes a trigger from this object
+</p>
+<dl>
+<dt><tt>oid</tt></dt><dd>The object id to delete
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000020-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000020-source">
+<pre>
+    <span class="ruby-comment cmt"># File tmud.rb, line 95</span>
+95:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_trigger</span>(<span class="ruby-identifier">event</span>)
+96:     <span class="ruby-identifier">event</span> = <span class="ruby-identifier">event</span>.<span class="ruby-identifier">intern</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">event</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:to_str</span>)
+97:     <span class="ruby-ivar">@farts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">event</span>)
+98:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000023" class="method-detail">
+        <a name="M000023"></a>
+
+        <div class="method-heading">
+          <a href="#M000023" class="method-signature">
+          <span class="method-name">fart</span><span class="method-args">(ev)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Fart handler
+</p>
+<dl>
+<dt><tt>e</tt></dt><dd>The event
+
+</dd>
+<dt><tt>return</tt></dt><dd>true or false
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000023-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000023-source">
+<pre>
+     <span class="ruby-comment cmt"># File tmud.rb, line 116</span>
+116:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">ev</span>)
+117:     <span class="ruby-identifier">t</span> = <span class="ruby-identifier">get_trigger</span>(<span class="ruby-identifier">ev</span>.<span class="ruby-identifier">kind</span>)
+118:     <span class="ruby-identifier">t</span>.<span class="ruby-identifier">execute</span>(<span class="ruby-identifier">ev</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">t</span>
+119:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -356,20 +461,83 @@ Returns the contents of the object
             onclick="toggleCode('M000018-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000018-source">
 <pre>
-    <span class="ruby-comment cmt"># File tmud.rb, line 80</span>
-80:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_contents</span>
-81:     <span class="ruby-ivar">@contents</span>
-82:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tmud.rb, line 83</span>
+83:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_contents</span>
+84:     <span class="ruby-ivar">@contents</span>
+85:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000019" class="method-detail">
-        <a name="M000019"></a>
+      <div id="method-M000021" class="method-detail">
+        <a name="M000021"></a>
 
         <div class="method-heading">
-          <a href="#M000019" class="method-signature">
+          <a href="#M000021" class="method-signature">
+          <span class="method-name">get_trigger</span><span class="method-args">(event)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns a specific trigger from the object
+</p>
+<dl>
+<dt><tt>return</tt></dt><dd>A trigger or nil
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000021-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000021-source">
+<pre>
+     <span class="ruby-comment cmt"># File tmud.rb, line 102</span>
+102:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_trigger</span>(<span class="ruby-identifier">event</span>)
+103:     <span class="ruby-identifier">event</span> = <span class="ruby-identifier">event</span>.<span class="ruby-identifier">intern</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">event</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:to_str</span>)
+104:     <span class="ruby-ivar">@farts</span>[<span class="ruby-identifier">event</span>]
+105:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000022" class="method-detail">
+        <a name="M000022"></a>
+
+        <div class="method-heading">
+          <a href="#M000022" class="method-signature">
+          <span class="method-name">get_triggers</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the triggers on the object
+</p>
+<dl>
+<dt><tt>return</tt></dt><dd>An array of triggers
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000022-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000022-source">
+<pre>
+     <span class="ruby-comment cmt"># File tmud.rb, line 109</span>
+109:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_triggers</span>
+110:     <span class="ruby-ivar">@farts</span>.<span class="ruby-identifier">values</span>
+111:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000024" class="method-detail">
+        <a name="M000024"></a>
+
+        <div class="method-heading">
+          <a href="#M000024" class="method-signature">
           <span class="method-name">objects</span><span class="method-args">()</span>
           </a>
         </div>
@@ -384,27 +552,78 @@ Finds all objects contained in this object
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000019-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000019-source">
+            onclick="toggleCode('M000024-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000024-source">
 <pre>
-    <span class="ruby-comment cmt"># File tmud.rb, line 86</span>
-86:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">objects</span>
-87:     <span class="ruby-identifier">ary</span> = <span class="ruby-ivar">@contents</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">oid</span><span class="ruby-operator">|</span>
-88:       <span class="ruby-identifier">o</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">oid</span>)
-89:       <span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Obj</span> <span class="ruby-value">? </span><span class="ruby-identifier">o</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
-90:     <span class="ruby-keyword kw">end</span>
-91:     <span class="ruby-identifier">ary</span>.<span class="ruby-identifier">compact</span>
-92:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 123</span>
+123:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">objects</span>
+124:     <span class="ruby-identifier">ary</span> = <span class="ruby-ivar">@contents</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">oid</span><span class="ruby-operator">|</span>
+125:       <span class="ruby-identifier">o</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">oid</span>)
+126:       <span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Obj</span> <span class="ruby-value">? </span><span class="ruby-identifier">o</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
+127:     <span class="ruby-keyword kw">end</span>
+128:     <span class="ruby-identifier">ary</span>.<span class="ruby-identifier">compact</span>
+129:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000020" class="method-detail">
-        <a name="M000020"></a>
+      <div id="method-M000026" class="method-detail">
+        <a name="M000026"></a>
 
         <div class="method-heading">
-          <a href="#M000020" class="method-signature">
+          <a href="#M000026" class="method-signature">
+          <span class="method-name">parse</span><span class="method-args">(m)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+All command input routed through here and parsed.
+</p>
+<dl>
+<dt><tt>m</tt></dt><dd>The input message to be parsed
+
+</dd>
+<dt><tt>return</tt></dt><dd>false or true depending on whether command succeeded.
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000026-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000026-source">
+<pre>
+     <span class="ruby-comment cmt"># File tmud.rb, line 145</span>
+145:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">m</span>)
+146:     <span class="ruby-comment cmt"># match legal command</span>
+147:     <span class="ruby-identifier">m</span><span class="ruby-operator">=~</span><span class="ruby-regexp re">/([A-Za-z@?&quot;'#!]+)(.*)/</span>
+148:     <span class="ruby-identifier">cmd</span>=<span class="ruby-identifier">$1</span>
+149:     <span class="ruby-identifier">arg</span>=<span class="ruby-identifier">$2</span>
+150:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">strip!</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">arg</span>
+151: 
+152:     <span class="ruby-comment cmt"># look for a command from our table for objects</span>
+153:     <span class="ruby-identifier">c</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">ocmds</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">cmd</span>)
+154: 
+155:     <span class="ruby-comment cmt"># there are three possibilities here</span>
+156:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">size</span>
+157:     <span class="ruby-keyword kw">when</span> <span class="ruby-value">0</span>   <span class="ruby-comment cmt"># no commands found</span>
+158:       <span class="ruby-keyword kw">false</span>
+159:     <span class="ruby-keyword kw">when</span> <span class="ruby-value">1</span>   <span class="ruby-comment cmt"># command found</span>
+160:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">c</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">cmd</span>, <span class="ruby-identifier">arg</span>)
+161:     <span class="ruby-keyword kw">else</span>     <span class="ruby-comment cmt"># ambiguous command - tell luser about them.</span>
+162:       <span class="ruby-keyword kw">false</span>
+163:     <span class="ruby-keyword kw">end</span>
+164:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000025" class="method-detail">
+        <a name="M000025"></a>
+
+        <div class="method-heading">
+          <a href="#M000025" class="method-signature">
           <span class="method-name">players</span><span class="method-args">(exempt=nil)</span>
           </a>
         </div>
@@ -422,17 +641,17 @@ Finds all the players contained in this object except the passed player.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000020-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000020-source">
+            onclick="toggleCode('M000025-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000025-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 97</span>
- 97:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">players</span>(<span class="ruby-identifier">exempt</span>=<span class="ruby-keyword kw">nil</span>)
- 98:     <span class="ruby-identifier">ary</span> = <span class="ruby-ivar">@contents</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">oid</span><span class="ruby-operator">|</span>
- 99:       <span class="ruby-identifier">o</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">oid</span>)
-100:       (<span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Player</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">oid</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">exempt</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">session</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">o</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
-101:     <span class="ruby-keyword kw">end</span>
-102:     <span class="ruby-identifier">ary</span>.<span class="ruby-identifier">compact</span>
-103:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 134</span>
+134:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">players</span>(<span class="ruby-identifier">exempt</span>=<span class="ruby-keyword kw">nil</span>)
+135:     <span class="ruby-identifier">ary</span> = <span class="ruby-ivar">@contents</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">oid</span><span class="ruby-operator">|</span>
+136:       <span class="ruby-identifier">o</span> = <span class="ruby-identifier">$world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">oid</span>)
+137:       (<span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Player</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">oid</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">exempt</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">session</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">o</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
+138:     <span class="ruby-keyword kw">end</span>
+139:     <span class="ruby-identifier">ary</span>.<span class="ruby-identifier">compact</span>
+140:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
