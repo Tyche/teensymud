@@ -627,7 +627,7 @@ class Engine
   # main loop to run engine.
   # note:: @shutdown never set by anyone yet
   def run
-    @server.start(self)
+    raise "Unable to start server" unless @server.start(self)
     $stdout.puts "TMUD is ready"
     until @shutdown
       @server.poll(0.2)

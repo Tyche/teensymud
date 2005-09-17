@@ -17,7 +17,8 @@
 # for an idea of how all these classes are supposed to interelate.
 
 require 'socket'
-#require 'fcntl'
+require 'logger'
+require 'fcntl'
 require 'observer'
 
 # The lineio class implements a line-orient interface for TCP sockets.
@@ -92,9 +93,9 @@ class Session
   # [+sock+]    Nil for acceptors or the socket for connections.
   # [+returns+] A session object.
   def initialize(server, sock=nil)
-    @server = server  # Reactor or connector associated with this session.
-    @sock = sock      # File descriptor handle for this session.
-    @addr = nil       # Network address of this socket.
+    @server = server   # Reactor or connector associated with this session.
+    @sock = sock       # File descriptor handle for this session.
+    @addr = ""         # Network address of this socket.
     @accepting=@connected=@closing=@write_blocked=false
   end
 
@@ -155,13 +156,14 @@ class Connection < Session
   # init is called before using the connection.
   # [+returns+] true is connection is properly initialized
   def init
-    @addr = @sock.getpeername
+    @addr = @sock.addr[2]
     @connected = true
     @server.register(self)
+    @server.log.info "New Connection on '#{@addr}'"
     true
   rescue Exception
-    $stderr.puts "Error-Connection(init): " + $!
-    $stderr.puts $@
+    @server.log.error "Error-Connection(init)"
+    @server.log.error $!
     false
   end
 
@@ -202,13 +204,14 @@ class Connection < Session
     changed
     notify_observers(:logged_out)
     delete_observers
+    @server.log.info "Connection '#{@addr}' EOF, disconnecting"
   rescue Exception
     @closing = true
     changed
     notify_observers(:disconnected)
     delete_observers
-    $stderr.puts "Error-Connection(handle_input): " + $!
-    $stderr.puts $@
+    @server.log.error "Error-Connection(handle_input)"
+    @server.log.error $!
   end
 
   # handle_output is called to order a connection to process any output
@@ -226,12 +229,14 @@ class Connection < Session
     changed
     notify_observers(:logged_out)
     delete_observers
+    @server.log.info "Connection '#{@addr}' EOF, disconnecting"
   rescue Exception
     @closing = true
     changed
     notify_observers(:disconnected)
     delete_observers
-    $stderr.puts "Error-Connection(handle_output): " + $!
+    @server.log.error "Error-Connection(handle_output)"
+    @server.log.error $!
   end
 
   # handle_close is called to when an close event occurs for this session.
@@ -240,11 +245,13 @@ class Connection < Session
     changed
     notify_observers(:logged_out)
     delete_observers
+    @server.log.info "Connection '#{@addr}' closing"
     @server.unregister(self)
 #    @sock.shutdown   # odd errors thrown with this
     @sock.close
   rescue Exception
-    $stderr.puts "Error-Connection(handle_close): " + $!
+    @server.log.error "Error-Connection(handle_close)"
+    @server.log.error $!
   end
 
   # sendmsg places a message on the Connection's output buffer.
@@ -276,12 +283,14 @@ class Acceptor < Session
     @sock = TCPServer.new('0.0.0.0', @port)
     #@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
     #@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_LINGER, 0)
-    #@sock.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK)
+    unless RUBY_PLATFORM =~ /win32/
+      @sock.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK)
+    end
     @accepting = true
     @server.register(self)
   rescue Exception
-    $stderr.puts "Error-Acceptor(init): " + $!
-    $stderr.puts $@
+    @server.log.error "Error-Acceptor(init)"
+    @server.log.error $!
   end
 
   # handle_input is called when an pending connection occurs on the
@@ -290,21 +299,21 @@ class Acceptor < Session
   def handle_input
     sckt = @sock.accept
     if sckt
-      #sckt.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK)
+      unless RUBY_PLATFORM =~ /win32/
+        sckt.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK)
+      end
       c = Connection.new(@server, sckt)
       if c.init
-        $stdout.puts "Connection #{sckt.inspect} accepted."
+        @server.log.info "Connection accepted."
         changed
         notify_observers(c)
-      else
-        raise "Error initializing connection on #{sckt.inspect}."
       end
     else
       raise "Error in accepting connection."
     end
   rescue Exception
-    $stderr.puts "Error-Acceptor(handle_input): " + $!
-    $stderr.puts $@
+    @server.log.error "Error-Acceptor(handle_input)"
+    @server.log.error $!
   end
 
   # handle_close is called when a close event occurs for this acceptor.
@@ -313,8 +322,8 @@ class Acceptor < Session
     @server.unregister(self)
     @sock.close
   rescue Exception
-    $stderr.puts "Error-Acceptor(handle_close): " + $!
-    $stderr.puts $@
+    @server.log.error "Error-Acceptor(handle_close)"
+    @server.log.error $!
   end
 
 end
@@ -323,6 +332,7 @@ end
 # The Reactor class defines a representation of a multiplexer.
 # It defines the traditional non-blocking select() server.
 class Reactor
+  attr :log
 
   # Constructor for Reactor
   # [+port+] The port the server will listen on.
@@ -338,11 +348,17 @@ class Reactor
   # [+engine+] The client engine that will be observing the acceptor.
   # [+return+'] true if server boots correctly, false if an error occurs.
   def start(engine)
+    @log = Logger.new('logs/net_log', 'daily')
+    @log.datetime_format = "%Y-%m-%d %H:%M:%S"
     # Create an acceptor to listen for this server.
     @acceptor = Acceptor.new(self, @port)
     return false if !@acceptor.init
     @acceptor.add_observer(engine)
     true
+  rescue
+    @log.error "ERROR-Reactor(start)"
+    @log.error $!
+    false
   end
 
   # stop requests each of the connections to disconnect in the
@@ -350,8 +366,9 @@ class Reactor
   # the user list.  It then closes its own listening port.
   def stop
     @registry.each {|s| s.closing = true}
-    @acceptor.delete_observers
-    $stdout.puts "INFO-Reactor(shutdown): Reactor shutting down"
+    @acceptor.delete_observers if @acceptor
+    @log.info "INFO-Reactor(shutdown): Reactor shutting down"
+    @log.close
   end
 
   # poll starts the Reactor running to process incoming connection, input and
@@ -381,8 +398,9 @@ class Reactor
       s.handle_close if s.closing
     end
   rescue
-    $stderr.puts "ERROR-Reactor(select): " + $!
-    $stderr.puts $@
+    @log.error "ERROR-Reactor(poll)"
+    @log.error $!
+    stop
     raise
   end
 
