@@ -31,7 +31,7 @@ module Farts
 
   class Parser < Racc::Parser
 
-module_eval <<'..end lib/farts_parser.y modeval..idac698d2116', 'lib/farts_parser.y', 106
+module_eval <<'..end lib/farts_parser.y modeval..id810a67d1ca', 'lib/farts_parser.y', 106
 
   def initialize
     @scope = {}
@@ -51,7 +51,7 @@ module_eval <<'..end lib/farts_parser.y modeval..idac698d2116', 'lib/farts_parse
     raise Racc::ParseError, "Error: #{@sc.lineno}:#{@sc.tokenpos} syntax error at '#{val}'"
   end
 
-..end lib/farts_parser.y modeval..idac698d2116
+..end lib/farts_parser.y modeval..id810a67d1ca
 
 ##### racc 1.4.4 generates ###
 
