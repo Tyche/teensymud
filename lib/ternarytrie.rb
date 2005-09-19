@@ -44,7 +44,7 @@ public
   # [+key+]    A string
   # [+return+] An array of values or nil if nothing found
   def find(key)
-    return nil if !key.respond_to? :to_str
+    return [] if !key.respond_to? :to_str
     key = key.to_str
     match = []
     find_r(@root, key, match, 0)
