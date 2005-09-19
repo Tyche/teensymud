@@ -18,9 +18,9 @@ module Cmd
     when nil, ""
       sendto("What are you trying to emote?")
     else
-      sendto("You #{args}."+EOL)
-      $world.db.get(@location).players(@oid).each do |p|
-        $world.add_event(@oid,p.oid,:show,"#{@name} #{args}.")
+      sendto("You #{args}.")
+      $engine.world.db.get(@location).players(@oid).each do |p|
+        $engine.world.add_event(@oid,p.oid,:show,"#{@name} #{args}.")
       end
     end
   end

@@ -18,7 +18,7 @@ module Cmd
     when nil, ""
       sendto("Where do you want to go?")
     else
-      ex = $world.db.get(@location).exits.keys.grep(/^#{args}/)
+      ex = $engine.world.db.get(@location).exits.keys.grep(/^#{args}/)
       if ex.empty?
         sendto("Can't find that place")
       elsif ex.size > 1
@@ -27,7 +27,7 @@ module Cmd
         ln += "?"
         sendto(ln)
       else
-        $world.add_event(@oid,@location,:leave,ex[0])
+        $engine.world.add_event(@oid,@location,:leave,ex[0])
       end
     end
   end

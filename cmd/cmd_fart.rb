@@ -23,34 +23,34 @@ module Cmd
     when nil, ""
       sendto("What??")
     when /del\s+#(\d+)\s+(\w+)/
-      o = $world.db.get($1.to_i)
+      o = $engine.world.db.get($1.to_i)
       case o
       when nil, 0
-        sendto("No object."+EOL)
+        sendto("No object.")
       else
         t = o.get_trigger($2)
         if t
           o.delete_trigger($2)
-          sendto("Object #" + $1 + " fart trigger deleted." + EOL)
+          sendto("Object #" + $1 + " fart trigger deleted.")
         else
           sendto("Trigger #{$2} not found on object.")
         end
       end
     when /add\s+#(\d+)\s+(\w+)\s+(\w+)/
-      o = $world.db.get($1.to_i)
+      o = $engine.world.db.get($1.to_i)
       case o
       when nil, 0
-        sendto("No object."+EOL)
+        sendto("No object.")
       else
         t = Farts::FartTrigger.new($2,$3)
         o.add_trigger(t)
-        sendto("Object #" + $1 + " fart trigger added." + EOL)
+        sendto("Object #" + $1 + " fart trigger added.")
       end
     when /show\s+#(\d+)/
-      o = $world.db.get($1.to_i)
+      o = $engine.world.db.get($1.to_i)
       case o
       when nil, 0
-        sendto("No object."+EOL)
+        sendto("No object.")
       else
         sendto("====================TRIGGERS=====================")
         sendto("Program                  Event          Compiled?")

@@ -14,7 +14,7 @@ module Cmd
 
   # The inventory command
   def cmd_stats(args)
-    sendto($world.db.stats)
+    sendto($engine.world.db.stats)
   end
 
 end

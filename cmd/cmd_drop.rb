@@ -15,7 +15,7 @@ module Cmd
   # drops all objects in your inventory into the room
   def cmd_drop(args)
     objects.each do |q|
-      $world.add_event(@oid,q.oid,:drop)
+      $engine.world.add_event(@oid,q.oid,:drop)
     end
   end
 

@@ -18,9 +18,9 @@ module Cmd
     when nil, ""
       sendto("What are you trying to say?")
     else
-      sendto("You say, \"#{args}\"."+EOL)
-      $world.db.get(@location).players(@oid).each do |p|
-        $world.add_event(@oid,p.oid,:show,"#{@name} says, \"#{args}\".")
+      sendto("You say, \"#{args}\".")
+      $engine.world.db.get(@location).players(@oid).each do |p|
+        $engine.world.add_event(@oid,p.oid,:show,"#{@name} says, \"#{args}\".")
       end
     end
   end

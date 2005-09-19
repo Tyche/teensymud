@@ -18,10 +18,10 @@ module Cmd
     case args
     when /(.*) (.*) (.*)/
       d=Room.new($1)
-      $world.db.put(d)
-      $world.db.get(@location).exits[$2]=d.oid
-      d.exits[$3]=$world.db.get(@location).oid
-      sendto("Ok." + EOL)
+      $engine.world.db.put(d)
+      $engine.world.db.get(@location).exits[$2]=d.oid
+      d.exits[$3]=$engine.world.db.get(@location).oid
+      sendto("Ok.")
     else
       sendto("say what??")
     end

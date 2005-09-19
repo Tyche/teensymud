@@ -22,27 +22,27 @@ module Cmd
     when nil, ""
       sendto("What??")
     when /desc\s+#(\d+)\s+(.*)/
-      o = $world.db.get($1.to_i)
+      o = $engine.world.db.get($1.to_i)
       case o
       when nil, 0
-        sendto("No object."+EOL)
+        sendto("No object.")
       else
         o.desc = $2
         sendto("Object #" + $1 + " description set.")
       end
     when /timer\s+#(\d+)\s+(on|off)/
-      o = $world.db.get($1.to_i)
+      o = $engine.world.db.get($1.to_i)
       case o
       when nil, 0
-        sendto("No object."+EOL)
+        sendto("No object.")
       else
         if $2 == 'on'
           o.powered = true
-          $world.hamster.register(o)
+          $engine.world.hamster.register(o)
           sendto("Object #" + $1 + " registered with timer.")
         else
           o.powered = false
-          $world.hamster.unregister(o)
+          $engine.world.hamster.unregister(o)
           sendto("Object #" + $1 + " unregistered with timer.")
         end
       end

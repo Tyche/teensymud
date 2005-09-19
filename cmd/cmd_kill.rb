@@ -18,22 +18,22 @@ module Cmd
     when nil, ""
       sendto("Who do you want to kill?")
     else
-      d = $world.db.find_player_by_name(args)
+      d = $engine.world.db.find_player_by_name(args)
       if !d
         sendto("Can't find them.")
         return
       end
       if rand < 0.3
         sendto("You kill #{d.name}.")
-        $world.db.players_connected(@oid).each {|p|
-          $world.add_event(@oid,p.oid,:show,"#{@name} kills #{d.name}.")
+        $engine.world.db.players_connected(@oid).each {|p|
+          $engine.world.add_event(@oid,p.oid,:show,"#{@name} kills #{d.name}.")
         }
         d.disconnect
-        # $world.db.delete(d)  Dont delete player, it's annoying
+        # $engine.world.db.delete(d)  Dont delete player, it's annoying
       else
         sendto("You attacks and misses #{d.name}.")
-        $world.db.players_connected(@oid).each {|p|
-          $world.add_event(@oid,p.oid,:show,"#{@name} attacks and misses #{d.name}.")
+        $engine.world.db.players_connected(@oid).each {|p|
+          $engine.world.add_event(@oid,p.oid,:show,"#{@name} attacks and misses #{d.name}.")
         }
       end
     end
