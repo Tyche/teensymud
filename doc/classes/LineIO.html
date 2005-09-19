@@ -65,7 +65,9 @@
         <tr class="top-aligned-row">
             <td><strong>Parent:</strong></td>
             <td>
-                Object
+                <a href="SockIO.html">
+                SockIO
+               </a>
             </td>
         </tr>
         </table>
@@ -81,19 +83,20 @@
       <map id="map" name="map">
   <area shape="RECT" coords="6,209,81,257"      href="Acceptor.html" alt="Acceptor">
   <area shape="RECT" coords="156,17,228,65"      href="Reactor.html" alt="Reactor">
+  <area shape="RECT" coords="252,17,324,65"      href="SockIO.html" alt="SockIO">
+  <area shape="RECT" coords="252,113,324,161"      href="LineIO.html" alt="LineIO">
   <area shape="RECT" coords="58,113,130,161"      href="Session.html" alt="Session">
   <area shape="RECT" coords="105,209,188,257"      href="Connection.html" alt="Connection">
-  <area shape="RECT" coords="252,17,324,65"      href="LineIO.html" alt="LineIO">
   <area shape="RECT" coords="57,17,132,65"      href="Observable.html" alt="Observable">
 </map>
-<img src="../dot/f_8.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_9.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
       <p>
-The lineio class implements a line-orient interface for TCP sockets.
-It&#8217;s a specialization of sockio. This class is intended for
-line-oriented protocols.
+The <a href="LineIO.html">LineIO</a> class implements a line-orient
+interface for TCP sockets. It&#8217;s a specialization of sockio. This
+class is intended for line-oriented protocols.
 </p>
 
     </div>
@@ -105,9 +108,8 @@ line-oriented protocols.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000073">new</a>&nbsp;&nbsp;
-      <a href="#M000074">read</a>&nbsp;&nbsp;
-      <a href="#M000075">write</a>&nbsp;&nbsp;
+      <a href="#M000088">new</a>&nbsp;&nbsp;
+      <a href="#M000089">read</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -129,18 +131,18 @@ line-oriented protocols.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000073" class="method-detail">
-        <a name="M000073"></a>
+      <div id="method-M000088" class="method-detail">
+        <a name="M000088"></a>
 
         <div class="method-heading">
-          <a href="#M000073" class="method-signature">
+          <a href="#M000088" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(sock, bufsize=8192)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Creates a new lineio object
+Creates a new <a href="LineIO.html">LineIO</a> object
 </p>
 <dl>
 <dt><tt>sock</tt></dt><dd>The socket which will be used
@@ -151,15 +153,13 @@ Creates a new lineio object
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000073-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000073-source">
+            onclick="toggleCode('M000088-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000088-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net.rb, line 32</span>
-32:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">sock</span>, <span class="ruby-identifier">bufsize</span>=<span class="ruby-value">8192</span>)
-33:     <span class="ruby-ivar">@sock</span>,<span class="ruby-ivar">@bufsize</span>=<span class="ruby-identifier">sock</span>,<span class="ruby-identifier">bufsize</span>
-34:     <span class="ruby-ivar">@inbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
-35:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
-36:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net.rb, line 80</span>
+80:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">sock</span>, <span class="ruby-identifier">bufsize</span>=<span class="ruby-value">8192</span>)
+81:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">sock</span>,<span class="ruby-identifier">bufsize</span>)
+82:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -167,22 +167,23 @@ Creates a new lineio object
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000074" class="method-detail">
-        <a name="M000074"></a>
+      <div id="method-M000089" class="method-detail">
+        <a name="M000089"></a>
 
         <div class="method-heading">
-          <a href="#M000074" class="method-signature">
+          <a href="#M000089" class="method-signature">
           <span class="method-name">read</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-read will receive a line from the socket. A line may be terminated by LF,
-CR, CRNUL, LFNUL, CRLF or LFCR.
+read will receive a set of lines from the socket. A line may be terminated
+by CRLF, CRNUL, LFCR, CR, or LF. Not yet terminated lines are left in the
+@inbuffer.
 </p>
 <dl>
-<dt><tt>return</tt></dt><dd>The number of bytes received.
+<dt><tt>return</tt></dt><dd>One or more complete lines or nil.
 
 </dd>
 <dt><tt>IOError</tt></dt><dd>A sockets error occurred.
@@ -193,73 +194,22 @@ CR, CRNUL, LFNUL, CRLF or LFCR.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000074-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000074-source">
+            onclick="toggleCode('M000089-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000089-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net.rb, line 44</span>
-44:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read</span>
-45:     <span class="ruby-comment cmt">#@inbuffer &lt;&lt; @sock.sysread(@bufsize)</span>
-46:     <span class="ruby-ivar">@inbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">recv</span>(<span class="ruby-ivar">@bufsize</span>)
-47:     <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\r\n|\r\x00|\n\r|\r/</span>,<span class="ruby-value str">&quot;\n&quot;</span>) <span class="ruby-comment cmt"># hack</span>
-48:     <span class="ruby-identifier">pos</span> = <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
-49:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pos</span>
-50:       <span class="ruby-identifier">msg</span> = <span class="ruby-ivar">@inbuffer</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">pos</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>]
-51:       <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">pos</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>)
-52:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">msg</span>
-53:     <span class="ruby-keyword kw">end</span>
-54:     <span class="ruby-keyword kw">nil</span>
-55:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-56:     <span class="ruby-identifier">raise</span>
-57:   <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000075" class="method-detail">
-        <a name="M000075"></a>
-
-        <div class="method-heading">
-          <a href="#M000075" class="method-signature">
-          <span class="method-name">write</span><span class="method-args">(msg)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-write will transmit a message to the socket
-</p>
-<dl>
-<dt><tt>msg</tt></dt><dd>The message string to be sent.
-
-</dd>
-<dt><tt>return</tt></dt><dd>false if more data to be written, true if all data written
-
-</dd>
-<dt><tt>IOError</tt></dt><dd>A sockets error occurred.
-
-</dd>
-<dt><tt>EOFError</tt></dt><dd>The connection has closed normally.
-
-</dd>
-</dl>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000075-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000075-source">
-<pre>
-    <span class="ruby-comment cmt"># File lib/net.rb, line 65</span>
-65:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write</span>(<span class="ruby-identifier">msg</span>)
-66:     <span class="ruby-identifier">tmp</span> = <span class="ruby-ivar">@outbuffer</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">msg</span>
-67:     <span class="ruby-comment cmt">#n = @sock.syswrite(tmp)</span>
-68:     <span class="ruby-identifier">n</span> = <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">tmp</span>, <span class="ruby-value">0</span>)
-69:     <span class="ruby-comment cmt"># save unsent data</span>
-70:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-identifier">tmp</span>[<span class="ruby-identifier">n</span><span class="ruby-operator">..</span><span class="ruby-identifier">tmp</span>.<span class="ruby-identifier">size</span>]
-71:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@outbuffer</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
-72:     <span class="ruby-keyword kw">true</span>
-73:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-74:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
-75:     <span class="ruby-identifier">raise</span>
-76:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 91</span>
+ 91:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read</span>
+ 92:     <span class="ruby-comment cmt">#@inbuffer &lt;&lt; @sock.sysread(@bufsize)</span>
+ 93:     <span class="ruby-ivar">@inbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">recv</span>(<span class="ruby-ivar">@bufsize</span>)
+ 94:     <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\r\n|\r\x00|\n\r|\r|\n/</span>,<span class="ruby-value str">&quot;\n&quot;</span>)
+ 95:     <span class="ruby-identifier">pos</span> = <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+ 96:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pos</span>
+ 97:       <span class="ruby-identifier">msg</span> = <span class="ruby-ivar">@inbuffer</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">pos</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>]
+ 98:       <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">pos</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>)
+ 99:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">msg</span>
+100:     <span class="ruby-keyword kw">end</span>
+101:     <span class="ruby-keyword kw">nil</span>
+102:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

@@ -1,5 +1,5 @@
 = TeensyMUD Server
-= v2.4.0
+= v2.5.0
 
 ---
 == Introduction
@@ -44,6 +44,8 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 * Completely event-driven system.  All first class game objects communicate with each other via TITS (Tyche's Immediate Temporality System).
 * Object level event programming using FARTS (Functional Automated Response Trigger System). See link:files/farts_grammar.html
 * Hamster powered servo timer issues events to interested objects at predefined intervals.
+* Implements TELNET protocol
+* NOSY logging. 
 
 ---
 == Installation

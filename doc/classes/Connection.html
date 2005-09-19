@@ -83,12 +83,13 @@
       <map id="map" name="map">
   <area shape="RECT" coords="6,209,81,257"      href="Acceptor.html" alt="Acceptor">
   <area shape="RECT" coords="156,17,228,65"      href="Reactor.html" alt="Reactor">
+  <area shape="RECT" coords="252,17,324,65"      href="SockIO.html" alt="SockIO">
+  <area shape="RECT" coords="252,113,324,161"      href="LineIO.html" alt="LineIO">
   <area shape="RECT" coords="58,113,130,161"      href="Session.html" alt="Session">
   <area shape="RECT" coords="105,209,188,257"      href="Connection.html" alt="Connection">
-  <area shape="RECT" coords="252,17,324,65"      href="LineIO.html" alt="LineIO">
   <area shape="RECT" coords="57,17,132,65"      href="Observable.html" alt="Observable">
 </map>
-<img src="../dot/f_8.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_9.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -106,13 +107,13 @@ handles all events dispatched by the reactor.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000071">handle_close</a>&nbsp;&nbsp;
-      <a href="#M000069">handle_input</a>&nbsp;&nbsp;
-      <a href="#M000070">handle_output</a>&nbsp;&nbsp;
-      <a href="#M000067">init</a>&nbsp;&nbsp;
-      <a href="#M000066">new</a>&nbsp;&nbsp;
-      <a href="#M000072">sendmsg</a>&nbsp;&nbsp;
-      <a href="#M000068">update</a>&nbsp;&nbsp;
+      <a href="#M000086">handle_close</a>&nbsp;&nbsp;
+      <a href="#M000084">handle_input</a>&nbsp;&nbsp;
+      <a href="#M000085">handle_output</a>&nbsp;&nbsp;
+      <a href="#M000082">init</a>&nbsp;&nbsp;
+      <a href="#M000081">new</a>&nbsp;&nbsp;
+      <a href="#M000087">sendmsg</a>&nbsp;&nbsp;
+      <a href="#M000083">update</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -127,6 +128,19 @@ handles all events dispatched by the reactor.
 
 
 
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">server</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        </table>
+      </div>
+    </div>
       
 
 
@@ -134,11 +148,11 @@ handles all events dispatched by the reactor.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000066" class="method-detail">
-        <a name="M000066"></a>
+      <div id="method-M000081" class="method-detail">
+        <a name="M000081"></a>
 
         <div class="method-heading">
-          <a href="#M000066" class="method-signature">
+          <a href="#M000081" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(server, sock)</span>
           </a>
         </div>
@@ -159,17 +173,24 @@ Create a new connection object
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000066-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000066-source">
+            onclick="toggleCode('M000081-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000081-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 147</span>
-147:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">sock</span>)
-148:     <span class="ruby-ivar">@sockio</span> = <span class="ruby-constant">LineIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">sock</span>)  <span class="ruby-comment cmt"># Object that handles low level Socket I/O</span>
-149:                                 <span class="ruby-comment cmt"># Should be configurable</span>
-150:     <span class="ruby-ivar">@inbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>              <span class="ruby-comment cmt"># buffer lines waiting to be processed</span>
-151:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>             <span class="ruby-comment cmt"># buffer lines waiting to be output</span>
-152:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">sock</span>)
-153:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 174</span>
+174:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">sock</span>)
+175:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">sock</span>)
+176:     <span class="ruby-ivar">@sockio</span> = <span class="ruby-constant">SockIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@sock</span>) <span class="ruby-comment cmt"># Object that handles low level Socket I/O</span>
+177:                                 <span class="ruby-comment cmt"># Should be configurable</span>
+178:     <span class="ruby-ivar">@filters</span> = {}
+179:     <span class="ruby-ivar">@filters</span>[<span class="ruby-identifier">:telnet</span>] = <span class="ruby-constant">TelnetFilter</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>,
+180:        {
+181:          <span class="ruby-constant">TelnetCodes</span><span class="ruby-operator">::</span><span class="ruby-constant">SGA</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>,
+182:          <span class="ruby-constant">TelnetCodes</span><span class="ruby-operator">::</span><span class="ruby-constant">NAWS</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>,
+183:          <span class="ruby-constant">TelnetCodes</span><span class="ruby-operator">::</span><span class="ruby-constant">TTYPE</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>
+184:        })
+185:     <span class="ruby-ivar">@inbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>              <span class="ruby-comment cmt"># buffer lines waiting to be processed</span>
+186:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>             <span class="ruby-comment cmt"># buffer lines waiting to be output</span>
+187:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -177,53 +198,55 @@ Create a new connection object
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000071" class="method-detail">
-        <a name="M000071"></a>
+      <div id="method-M000086" class="method-detail">
+        <a name="M000086"></a>
 
         <div class="method-heading">
-          <a href="#M000071" class="method-signature">
+          <a href="#M000086" class="method-signature">
           <span class="method-name">handle_close</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Connection.html#M000071">handle_close</a> is called to when an
+<a href="Connection.html#M000086">handle_close</a> is called to when an
 close event occurs for this session.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000071-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000071-source">
+            onclick="toggleCode('M000086-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000086-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 238</span>
-238:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
-239:     <span class="ruby-ivar">@connected</span> = <span class="ruby-keyword kw">false</span>
-240:     <span class="ruby-identifier">changed</span>
-241:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">:logged_out</span>)
-242:     <span class="ruby-identifier">delete_observers</span>
-243:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">unregister</span>(<span class="ruby-keyword kw">self</span>)
-244: <span class="ruby-comment cmt">#    @sock.shutdown   # odd errors thrown with this</span>
-245:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">close</span>
-246:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-247:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Error-Connection(handle_close): &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$!</span>
-248:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 288</span>
+288:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
+289:     <span class="ruby-ivar">@connected</span> = <span class="ruby-keyword kw">false</span>
+290:     <span class="ruby-identifier">changed</span>
+291:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">:logged_out</span>)
+292:     <span class="ruby-identifier">delete_observers</span>
+293:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection '#{@addr}' closing&quot;</span>
+294:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">unregister</span>(<span class="ruby-keyword kw">self</span>)
+295: <span class="ruby-comment cmt">#    @sock.shutdown   # odd errors thrown with this</span>
+296:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">close</span>
+297:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+298:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#handle_close&quot;</span>
+299:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+300:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000069" class="method-detail">
-        <a name="M000069"></a>
+      <div id="method-M000084" class="method-detail">
+        <a name="M000084"></a>
 
         <div class="method-heading">
-          <a href="#M000069" class="method-signature">
+          <a href="#M000084" class="method-signature">
           <span class="method-name">handle_input</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Connection.html#M000069">handle_input</a> is called to order a
+<a href="Connection.html#M000084">handle_input</a> is called to order a
 connection to process any input waiting on its socket. Input is parsed into
 lines based on the occurance of the CRLF terminator and pushed into a
 buffer which is a list of lines. The buffer expands dynamically as input is
@@ -231,86 +254,93 @@ processed. Input that has yet to see a CRLF terminator is left in the
 connection&#8217;s inbuffer.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000069-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000069-source">
+            onclick="toggleCode('M000084-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000084-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 191</span>
-191:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_input</span>
-192:     <span class="ruby-identifier">buf</span> = <span class="ruby-ivar">@sockio</span>.<span class="ruby-identifier">read</span>
-193:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">buf</span>
-194:     <span class="ruby-ivar">@inbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">buf</span>
-195:     <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\n/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ln</span><span class="ruby-operator">|</span>
-196:       <span class="ruby-identifier">changed</span>
-197:       <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">ln</span>)
-198:     <span class="ruby-keyword kw">end</span>
-199:     <span class="ruby-ivar">@inbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
-200:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">EOFError</span>
-201:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
-202:     <span class="ruby-identifier">changed</span>
-203:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">:logged_out</span>)
-204:     <span class="ruby-identifier">delete_observers</span>
-205:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-206:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
-207:     <span class="ruby-identifier">changed</span>
-208:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">:disconnected</span>)
-209:     <span class="ruby-identifier">delete_observers</span>
-210:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Error-Connection(handle_input): &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$!</span>
-211:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">$@</span>
-212:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 234</span>
+234:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_input</span>
+235:     <span class="ruby-identifier">buf</span> = <span class="ruby-ivar">@sockio</span>.<span class="ruby-identifier">read</span>
+236:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">nil?</span>
+237:     <span class="ruby-ivar">@inbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">buf</span>
+238:     <span class="ruby-ivar">@filters</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@inbuffer</span> = <span class="ruby-identifier">v</span>.<span class="ruby-identifier">filter_in</span>(<span class="ruby-ivar">@inbuffer</span>)}
+239:     <span class="ruby-identifier">p</span> = <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+240:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">nil?</span>
+241:     <span class="ruby-identifier">buf</span> = <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">p</span>)
+242:     <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\n/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ln</span><span class="ruby-operator">|</span>
+243:       <span class="ruby-identifier">changed</span>
+244:       <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">ln</span>)
+245:     <span class="ruby-keyword kw">end</span>
+246:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">EOFError</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ECONNABORTED</span>
+247:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
+248:     <span class="ruby-identifier">changed</span>
+249:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">:logged_out</span>)
+250:     <span class="ruby-identifier">delete_observers</span>
+251:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection '#{@addr}' disconnecting&quot;</span>
+252:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+253:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
+254:     <span class="ruby-identifier">changed</span>
+255:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">:disconnected</span>)
+256:     <span class="ruby-identifier">delete_observers</span>
+257:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#handle_input&quot;</span>
+258:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+259:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000070" class="method-detail">
-        <a name="M000070"></a>
+      <div id="method-M000085" class="method-detail">
+        <a name="M000085"></a>
 
         <div class="method-heading">
-          <a href="#M000070" class="method-signature">
+          <a href="#M000085" class="method-signature">
           <span class="method-name">handle_output</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Connection.html#M000070">handle_output</a> is called to order a
+<a href="Connection.html#M000085">handle_output</a> is called to order a
 connection to process any output waiting on its socket.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000070-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000070-source">
+            onclick="toggleCode('M000085-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000085-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 216</span>
-216:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_output</span>
-217:     <span class="ruby-identifier">done</span> = <span class="ruby-ivar">@sockio</span>.<span class="ruby-identifier">write</span>(<span class="ruby-ivar">@outbuffer</span>)
-218:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
-219:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">done</span>
-220:       <span class="ruby-ivar">@write_blocked</span> = <span class="ruby-keyword kw">false</span>
-221:     <span class="ruby-keyword kw">else</span>
-222:       <span class="ruby-ivar">@write_blocked</span> = <span class="ruby-keyword kw">true</span>
-223:     <span class="ruby-keyword kw">end</span>
-224:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">EOFError</span>
-225:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
-226:     <span class="ruby-identifier">changed</span>
-227:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">:logged_out</span>)
-228:     <span class="ruby-identifier">delete_observers</span>
-229:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-230:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
-231:     <span class="ruby-identifier">changed</span>
-232:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">:disconnected</span>)
-233:     <span class="ruby-identifier">delete_observers</span>
-234:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Error-Connection(handle_output): &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$!</span>
-235:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 263</span>
+263:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_output</span>
+264:     <span class="ruby-ivar">@filters</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-identifier">v</span>.<span class="ruby-identifier">filter_out</span>(<span class="ruby-ivar">@outbuffer</span>)}
+265:     <span class="ruby-identifier">done</span> = <span class="ruby-ivar">@sockio</span>.<span class="ruby-identifier">write</span>(<span class="ruby-ivar">@outbuffer</span>)
+266:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
+267:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">done</span>
+268:       <span class="ruby-ivar">@write_blocked</span> = <span class="ruby-keyword kw">false</span>
+269:     <span class="ruby-keyword kw">else</span>
+270:       <span class="ruby-ivar">@write_blocked</span> = <span class="ruby-keyword kw">true</span>
+271:     <span class="ruby-keyword kw">end</span>
+272:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">EOFError</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ECONNABORTED</span>
+273:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
+274:     <span class="ruby-identifier">changed</span>
+275:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">:logged_out</span>)
+276:     <span class="ruby-identifier">delete_observers</span>
+277:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection '#{@addr}' disconnecting&quot;</span>
+278:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+279:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
+280:     <span class="ruby-identifier">changed</span>
+281:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">:disconnected</span>)
+282:     <span class="ruby-identifier">delete_observers</span>
+283:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#handle_output&quot;</span>
+284:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+285:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000067" class="method-detail">
-        <a name="M000067"></a>
+      <div id="method-M000082" class="method-detail">
+        <a name="M000082"></a>
 
         <div class="method-heading">
-          <a href="#M000067" class="method-signature">
+          <a href="#M000082" class="method-signature">
           <span class="method-name">init</span><span class="method-args">()</span>
           </a>
         </div>
@@ -325,30 +355,32 @@ init is called before using the connection.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000067-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000067-source">
+            onclick="toggleCode('M000082-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000082-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 157</span>
-157:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>
-158:     <span class="ruby-ivar">@addr</span> = <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">getpeername</span>
-159:     <span class="ruby-ivar">@connected</span> = <span class="ruby-keyword kw">true</span>
-160:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">register</span>(<span class="ruby-keyword kw">self</span>)
-161:     <span class="ruby-keyword kw">true</span>
-162:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-163:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Error-Connection(init): &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$!</span>
-164:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">$@</span>
-165:     <span class="ruby-keyword kw">false</span>
-166:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 191</span>
+191:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>
+192:     <span class="ruby-ivar">@addr</span> = <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">addr</span>[<span class="ruby-value">2</span>]
+193:     <span class="ruby-ivar">@connected</span> = <span class="ruby-keyword kw">true</span>
+194:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">register</span>(<span class="ruby-keyword kw">self</span>)
+195:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) New Connection on '#{@addr}'&quot;</span>
+196:     <span class="ruby-ivar">@filters</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">init</span>}
+197:     <span class="ruby-keyword kw">true</span>
+198:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+199:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Error-Connection#init&quot;</span>
+200:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+201:     <span class="ruby-keyword kw">false</span>
+202:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000072" class="method-detail">
-        <a name="M000072"></a>
+      <div id="method-M000087" class="method-detail">
+        <a name="M000087"></a>
 
         <div class="method-heading">
-          <a href="#M000072" class="method-signature">
+          <a href="#M000087" class="method-signature">
           <span class="method-name">sendmsg</span><span class="method-args">(msg)</span>
           </a>
         </div>
@@ -364,24 +396,24 @@ href="Connection.html">Connection</a>&#8217;s output buffer.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000072-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000072-source">
+            onclick="toggleCode('M000087-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000087-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 252</span>
-252:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">msg</span>)
-253:     <span class="ruby-ivar">@outbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">msg</span>
-254:     <span class="ruby-ivar">@write_blocked</span> = <span class="ruby-keyword kw">true</span>  <span class="ruby-comment cmt"># change status to write_blocked</span>
-255:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 304</span>
+304:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">msg</span>)
+305:     <span class="ruby-ivar">@outbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">msg</span>
+306:     <span class="ruby-ivar">@write_blocked</span> = <span class="ruby-keyword kw">true</span>  <span class="ruby-comment cmt"># change status to write_blocked</span>
+307:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000068" class="method-detail">
-        <a name="M000068"></a>
+      <div id="method-M000083" class="method-detail">
+        <a name="M000083"></a>
 
         <div class="method-heading">
-          <a href="#M000068" class="method-signature">
+          <a href="#M000083" class="method-signature">
           <span class="method-name">update</span><span class="method-args">(msg)</span>
           </a>
         </div>
@@ -398,17 +430,24 @@ entanglements&quot;. We simply support a message to be sent to the socket
 or a token indicating the clent wants to disconnect this connection.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000068-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000068-source">
+            onclick="toggleCode('M000083-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000083-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 177</span>
-177:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)
-178:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>
-179:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:logged_out</span> <span class="ruby-keyword kw">then</span> <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
-180:     <span class="ruby-keyword kw">else</span>
-181:       <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">msg</span>)
-182:     <span class="ruby-keyword kw">end</span>
-183:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 213</span>
+213:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)
+214:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>
+215:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:logged_out</span> <span class="ruby-keyword kw">then</span> <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
+216:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hide</span>
+217:       <span class="ruby-ivar">@filters</span>[<span class="ruby-identifier">:telnet</span>].<span class="ruby-identifier">offer_us</span>(<span class="ruby-constant">TelnetCodes</span><span class="ruby-operator">::</span><span class="ruby-constant">ECHO</span>, <span class="ruby-keyword kw">true</span>)
+218:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:unhide</span>
+219:       <span class="ruby-ivar">@filters</span>[<span class="ruby-identifier">:telnet</span>].<span class="ruby-identifier">offer_us</span>(<span class="ruby-constant">TelnetCodes</span><span class="ruby-operator">::</span><span class="ruby-constant">ECHO</span>, <span class="ruby-keyword kw">false</span>)
+220:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:init</span>
+221:       <span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">TelnetCodes</span><span class="ruby-operator">::</span><span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">TelnetCodes</span><span class="ruby-operator">::</span><span class="ruby-constant">SB</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">TelnetCodes</span><span class="ruby-operator">::</span><span class="ruby-constant">TTYPE</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span>
+222:          <span class="ruby-value">1</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">TelnetCodes</span><span class="ruby-operator">::</span><span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">TelnetCodes</span><span class="ruby-operator">::</span><span class="ruby-constant">SE</span>.<span class="ruby-identifier">chr</span>)
+223:     <span class="ruby-keyword kw">else</span>
+224:       <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">msg</span>)
+225:     <span class="ruby-keyword kw">end</span>
+226:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

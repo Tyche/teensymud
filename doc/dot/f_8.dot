@@ -3,73 +3,42 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/net.rb"
+    label = "lib/filter.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    Acceptor [
+    TelnetFilter [
         fontcolor = black,
-        URL = "classes/Acceptor.html",
+        URL = "classes/TelnetFilter.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Acceptor"
+        label = "TelnetFilter"
     ]
 
-    Reactor [
+    Filter [
         fontcolor = black,
-        URL = "classes/Reactor.html",
+        URL = "classes/Filter.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Reactor"
+        label = "Filter"
     ]
 
-    Session [
-        fontcolor = black,
-        URL = "classes/Session.html",
-        shape = ellipse,
-        color = palegoldenrod,
-        style = filled,
-        label = "Session"
-    ]
-
-    Connection [
-        fontcolor = black,
-        URL = "classes/Connection.html",
-        shape = ellipse,
-        color = palegoldenrod,
-        style = filled,
-        label = "Connection"
-    ]
-
-    LineIO [
-        fontcolor = black,
-        URL = "classes/LineIO.html",
-        shape = ellipse,
-        color = palegoldenrod,
-        style = filled,
-        label = "LineIO"
-    ]
-
-    Session -> Acceptor [
-
-    ]
-
-    Observable [
-        URL = "classes/Observable.html",
+    TelnetCodes [
+        URL = "classes/TelnetCodes.html",
         shape = box,
-        label = "Observable"
+        label = "TelnetCodes"
     ]
 
-    Observable -> Session [
+    TelnetCodes -> TelnetFilter [
 
     ]
 
-    Session -> Connection [
+    Filter -> TelnetFilter [
 
     ]
 
