@@ -55,8 +55,6 @@ end
 # This implements most of basic Telnet as per RFC 854/855/1143 and
 # options in RFC 857/858/1073/1091
 #
-# todo:: DataMark/Sync
-#
 class TelnetFilter < Filter
   include TelnetCodes
   attr_accessor :hide
@@ -77,6 +75,7 @@ class TelnetFilter < Filter
     @theight = 23
     @hide = false     # if true and server echo set, we echo back asterixes
     @init_tries = 0   # Number of tries at negotitating sub options
+    @synch = false
     super(conn, wopts)
   end
 
@@ -110,7 +109,6 @@ class TelnetFilter < Filter
       else
         who = :us
       end
-      @log.debug("(#{@conn.object_id}) init_subneg option-#{opt} desired?-#{desired?(opt)} enabled?-#{enabled?(opt, who)}")
       if desired?(opt) == enabled?(opt, who)
         case opt
         when TTYPE
@@ -120,6 +118,9 @@ class TelnetFilter < Filter
       end
     end
 
+    if @init_tries > 15
+      @log.debug("(#{@conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.")
+    end
     if @sneg_opts.empty? || @init_tries > 15
       @sneg_opts = []
       @conn.set_initdone
@@ -138,12 +139,38 @@ class TelnetFilter < Filter
 
     @sc ? @sc.concat(str) : @sc = StringScanner.new(str)
     while b = @sc.get_byte
+      # OOB sync data
+      if b[0] == DM
+        @log.debug("(#{@conn.object_id}) Sync mode on")
+        @synch ? @synch = false : @synch = true
+        break
+      end
+
       case mode?
+      when :normal
+        case b[0]
+        when CR
+          next if @synch
+          set_mode(:cr)
+        when IAC
+          set_mode(:cmd)
+        when BS
+          next if @synch
+          buf.slice!(-1)
+          echo(BS.chr)
+        when NUL  # ignore NULs in stream
+        else
+          next if @synch
+          buf << b
+          echo(b)
+        end
       when :cr
         # handle CRLF and CRNUL by swallowing what follows CR and
         # insertion of LF
-        buf << LF.chr
-        echo(CR.chr + LF.chr)
+        if !@synch
+          buf << LF.chr
+          echo(CR.chr + LF.chr)
+        end
         set_mode(:normal)
       when :cmd
         case b[0]
@@ -152,17 +179,30 @@ class TelnetFilter < Filter
           buf << IAC.chr
           set_mode(:normal)
         when AYT
-          @log.debug("(#{@conn.object_id}) AYT sent")
-          @conn.sendmsg("TeensyMUD is here.\n")
+          @log.debug("(#{@conn.object_id}) AYT sent - Msg returned")
+          @conn.sock.send("TeensyMUD is here.\n",0)
           set_mode(:normal)
-        when AO, IP, GA, NOP, BRK  # not implemented or ignored
-          @log.debug("(#{@conn.object_id}) AO, IP, GA, NOP or BRK sent")
+        when AO
+          @log.debug("(#{@conn.object_id}) AO sent - Synch returned")
+          @conn.sendmsg(IAC.chr + DM.chr)
+          @conn.sockio.write_urgent(DM.chr)
+        when IP
+          @log.debug("(#{@conn.object_id}) IP sent")
+          set_mode(:normal)
+        when GA, NOP, BRK  # not implemented or ignored
+          @log.debug("(#{@conn.object_id}) GA, NOP or BRK sent")
+          set_mode(:normal)
+        when DM
+          @log.debug("(#{@conn.object_id}) Synch mode off")
+          @synch = false
           set_mode(:normal)
         when EC
+          next if @synch
           @log.debug("(#{@conn.object_id}) EC sent")
           buf.slice!(-1)
           set_mode(:normal)
         when EL
+          next if @synch
           @log.debug("(#{@conn.object_id}) EL sent")
           p = buf.rindex("\n")
           p ? buf.slice!(pos+1..-1) : buf = ""
@@ -194,22 +234,8 @@ class TelnetFilter < Filter
           parse_subneg(opt[0],data)
           set_mode(:normal)
         else
-          @log.debug("(#{@conn.object_id}) Unknown Telnet command - #{b[0].to_s}")
+          @log.debug("(#{@conn.object_id}) Unknown Telnet command - #{b[0]}")
           set_mode(:normal)
-        end
-      when :normal
-        case b[0]
-        when CR
-          set_mode(:cr)
-        when IAC
-          set_mode(:cmd)
-        when BS
-          buf.slice!(-1)
-          echo(BS.chr)
-        when NUL  # ignore NULs in stream
-        else
-          buf << b
-          echo(b)
         end
       end
     end  # while b

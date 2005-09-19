@@ -43,7 +43,7 @@ module TelnetCodes
   EL    = 248  # erase current line
   EC    = 247  # erase current character
 
-  DM    = 242  # data mark/synch - sent as OOB as last byte of data
+  DM    = 242  # data mark - sent to demarcate end of urgent commands
 
   EOR   = 239 # end of record (transparent mode)
   ABORT = 238 # Abort process

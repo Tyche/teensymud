@@ -37,8 +37,7 @@ class SockIO
     @outbuffer = ""
   end
 
-  # read will receive a line from the socket.  A line may be terminated by
-  # LF, CR, CRNUL, LFNUL, CRLF or LFCR.
+  # read will receive a data from the socket.
   # [+return+] The data read
   #
   # [+IOError+]  A sockets error occurred.
@@ -64,6 +63,24 @@ class SockIO
   rescue Exception
     @outbuffer = ""  # Does it really matter?
     raise
+  end
+
+  # read_urgent will receive urgent data from the socket.
+  # [+return+] The data read
+  #
+  # [+IOError+]  A sockets error occurred.
+  # [+EOFError+] The connection has closed normally.
+  def read_urgent
+    @sock.recv(@bufsize, Socket::MSG_OOB)
+  end
+
+  # write_urgent will write urgent data to the socket.
+  # [+msg+]    The message string to be sent.
+  #
+  # [+IOError+]  A sockets error occurred.
+  # [+EOFError+] The connection has closed normally.
+  def write_urgent(msg)
+    @sock.send(msg, Socket::MSG_OOB)
   end
 
 end
@@ -168,6 +185,7 @@ class Connection < Session
   attr :server
   attr :initdone
   attr :filters
+  attr :sockio
 
   # Create a new connection object
   # [+server+]  The reactor this connection is associated with.
@@ -308,6 +326,18 @@ class Connection < Session
     @sock.close
   rescue Exception
     @server.log.error "(#{self.object_id}) Connection#handle_close"
+    @server.log.error $!
+  end
+
+
+  # handle_oob is called when an out of band data event occurs for this
+  # session.
+  def handle_oob
+    buf = @sockio.read_urgent
+    @server.log.debug "(#{self.object_id}) Connection urgent data received - '#{buf[0]}'"
+    @filters.each {|k,v| buf = v.filter_in(buf)}
+  rescue Exception
+    @server.log.error "(#{self.object_id}) Connection#handle_oob"
     @server.log.error $!
   end
 
