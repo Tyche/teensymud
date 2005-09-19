@@ -31,7 +31,7 @@ module Farts
 
   class Parser < Racc::Parser
 
-module_eval <<'..end lib/farts_parser.y modeval..id5e3b0c348d', 'lib/farts_parser.y', 106
+module_eval <<'..end lib/farts_parser.y modeval..id6e62f54d8e', 'lib/farts_parser.y', 106
 
   def initialize
     @scope = {}
@@ -51,7 +51,7 @@ module_eval <<'..end lib/farts_parser.y modeval..id5e3b0c348d', 'lib/farts_parse
     raise Racc::ParseError, "Error: #{@sc.lineno}:#{@sc.tokenpos} syntax error at '#{val}'"
   end
 
-..end lib/farts_parser.y modeval..id5e3b0c348d
+..end lib/farts_parser.y modeval..id6e62f54d8e
 
 ##### racc 1.4.4 generates ###
 
@@ -805,12 +805,11 @@ module Farts
       @prog = Parser.new.parse( str )
       true
     rescue Racc::ParseError
-      $stderr.puts $!
+      $engine.log.error $!
       @prog = nil
       false
     rescue Exception
-      $stderr.puts $!
-      $stderr.puts $@
+      $engine.log.error $!
       @prog = nil
       false
     end
@@ -818,20 +817,19 @@ module Farts
     def execute(ev)
       retval = true
       vars = {}
-      vars['actor'] = $world.db.get(ev.from)
-      vars['this'] = $world.db.get(ev.to)
+      vars['actor'] = $engine.world.db.get(ev.from)
+      vars['this'] = $engine.world.db.get(ev.to)
       if ev.msg.kind_of?(Obj)
-        cars['args'] = $world.db.get(ev.msg)
+        cars['args'] = $engine.world.db.get(ev.msg)
       else
         vars['args'] = ev.msg
       end  
       load if !@prog
       retval = @prog.execute(vars) if @prog
     rescue WetFartsError
-      $stderr.puts $!
+      $engine.log.error $!
     rescue Exception
-      $stderr.puts $!
-      $stderr.puts $@
+      $engine.log.error $!
     ensure
       retval
     end
@@ -857,7 +855,7 @@ if $0 == __FILE__
     fart.execute(vars)
     
   rescue Racc::ParseError, Exception
-    $stderr.puts $!
+    $engine.log.error $!
     exit 
   end
 end

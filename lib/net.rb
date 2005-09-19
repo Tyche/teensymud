@@ -1,8 +1,8 @@
 #
 # file::    net.rb
 # author::  Jon A. Lambert
-# version:: 2.1.0
-# date::    08/26/2005
+# version:: 2.5.0
+# date::    09/16/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -21,13 +21,14 @@ require 'logger'
 require 'fcntl'
 require 'observer'
 
-# The lineio class implements a line-orient interface for TCP sockets.
-# It's a specialization of sockio.  This class is intended for line-oriented
-# protocols.
-#
-class LineIO
+require 'filter'
+require 'telnetcodes'
 
-  # Creates a new lineio object
+# The SockIO class implements the low level interface for TCP sockets.
+#
+class SockIO
+
+  # Creates a new SockIO object
   # [+sock+]    The socket which will be used
   # [+bufsize+] The size of the buffer to use (default is 8192)
   def initialize(sock, bufsize=8192)
@@ -38,23 +39,13 @@ class LineIO
 
   # read will receive a line from the socket.  A line may be terminated by
   # LF, CR, CRNUL, LFNUL, CRLF or LFCR.
-  # [+return+] The number of bytes received.
+  # [+return+] The data read
   #
   # [+IOError+]  A sockets error occurred.
   # [+EOFError+] The connection has closed normally.
   def read
-    #@inbuffer << @sock.sysread(@bufsize)
-    @inbuffer << @sock.recv(@bufsize)
-    @inbuffer.gsub!(/\r\n|\r\x00|\n\r|\r/,"\n") # hack
-    pos = @inbuffer.rindex("\n")
-    if pos
-      msg = @inbuffer[0..pos+1]
-      @inbuffer.slice!(0..pos+1)
-      return msg
-    end
-    nil
-  rescue Exception
-    raise
+    # @sock.sysread(@bufsize)
+    @sock.recv(@bufsize)
   end
 
   # write will transmit a message to the socket
@@ -64,16 +55,50 @@ class LineIO
   # [+IOError+]  A sockets error occurred.
   # [+EOFError+] The connection has closed normally.
   def write(msg)
-    tmp = @outbuffer + msg
+    @outbuffer << msg
     #n = @sock.syswrite(tmp)
-    n = @sock.send(tmp, 0)
-    # save unsent data
-    @outbuffer = tmp[n..tmp.size]
-    return false if @outbuffer.size > 0
-    true
+    n = @sock.send(@outbuffer, 0)
+    # save unsent data for next call
+    @outbuffer.slice!(0...n)
+    @outbuffer.size == 0
   rescue Exception
-    @outbuffer = ""
+    @outbuffer = ""  # Does it really matter?
     raise
+  end
+
+end
+
+# The LineIO class implements a line-orient interface for TCP sockets.
+# It's a specialization of sockio.  This class is intended for line-oriented
+# protocols.
+#
+class LineIO < SockIO
+
+  # Creates a new LineIO object
+  # [+sock+]    The socket which will be used
+  # [+bufsize+] The size of the buffer to use (default is 8192)
+  def initialize(sock, bufsize=8192)
+    super(sock,bufsize)
+  end
+
+  # read will receive a set of lines from the socket.  A line may be
+  # terminated by CRLF, CRNUL, LFCR, CR, or LF.  Not yet terminated lines
+  # are left in the @inbuffer.
+  # [+return+] One or more complete lines or nil.
+  #
+  # [+IOError+]  A sockets error occurred.
+  # [+EOFError+] The connection has closed normally.
+  def read
+    #@inbuffer << @sock.sysread(@bufsize)
+    @inbuffer << @sock.recv(@bufsize)
+    @inbuffer.gsub!(/\r\n|\r\x00|\n\r|\r|\n/,"\n")
+    pos = @inbuffer.rindex("\n")
+    if pos
+      msg = @inbuffer[0..pos+1]
+      @inbuffer.slice!(0..pos+1)
+      return msg
+    end
+    nil
   end
 
 end
@@ -140,17 +165,25 @@ end
 # reactor and handles all events dispatched by the reactor.
 #
 class Connection < Session
+  attr :server
 
   # Create a new connection object
   # [+server+]  The reactor this connection is associated with.
   # [+sock+]    The socket for this connection.
   # [+returns+] A connection object.
   def initialize(server, sock)
-    @sockio = LineIO.new(sock)  # Object that handles low level Socket I/O
+    super(server, sock)
+    @sockio = SockIO.new(@sock) # Object that handles low level Socket I/O
                                 # Should be configurable
+    @filters = {}
+    @filters[:telnet] = TelnetFilter.new(self,
+       {
+         TelnetCodes::SGA => true,
+         TelnetCodes::NAWS => true,
+         TelnetCodes::TTYPE => true
+       })
     @inbuffer = ""              # buffer lines waiting to be processed
     @outbuffer = ""             # buffer lines waiting to be output
-    super(server, sock)
   end
 
   # init is called before using the connection.
@@ -159,10 +192,11 @@ class Connection < Session
     @addr = @sock.addr[2]
     @connected = true
     @server.register(self)
-    @server.log.info "New Connection on '#{@addr}'"
+    @server.log.info "(#{self.object_id}) New Connection on '#{@addr}'"
+    @filters.each {|k,v| v.init}
     true
   rescue Exception
-    @server.log.error "Error-Connection(init)"
+    @server.log.error "(#{self.object_id}) Error-Connection#init"
     @server.log.error $!
     false
   end
@@ -179,6 +213,13 @@ class Connection < Session
   def update(msg)
     case msg
     when :logged_out then @closing = true
+    when :hide
+      @filters[:telnet].offer_us(TelnetCodes::ECHO, true)
+    when :unhide
+      @filters[:telnet].offer_us(TelnetCodes::ECHO, false)
+    when :init
+      sendmsg(TelnetCodes::IAC.chr + TelnetCodes::SB.chr + TelnetCodes::TTYPE.chr +
+         1.chr + TelnetCodes::IAC.chr + TelnetCodes::SE.chr)
     else
       sendmsg(msg)
     end
@@ -192,31 +233,35 @@ class Connection < Session
   # is left in the connection's inbuffer.
   def handle_input
     buf = @sockio.read
-    return if !buf
+    return if buf.nil?
     @inbuffer << buf
-    @inbuffer.split(/\n/).each do |ln|
+    @filters.each {|k,v| @inbuffer = v.filter_in(@inbuffer)}
+    p = @inbuffer.rindex("\n")
+    return if p.nil?
+    buf = @inbuffer.slice!(0..p)
+    buf.split(/\n/).each do |ln|
       changed
       notify_observers(ln)
     end
-    @inbuffer = ""
-  rescue EOFError
+  rescue EOFError, Errno::ECONNABORTED
     @closing = true
     changed
     notify_observers(:logged_out)
     delete_observers
-    @server.log.info "Connection '#{@addr}' EOF, disconnecting"
+    @server.log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
   rescue Exception
     @closing = true
     changed
     notify_observers(:disconnected)
     delete_observers
-    @server.log.error "Error-Connection(handle_input)"
+    @server.log.error "(#{self.object_id}) Connection#handle_input"
     @server.log.error $!
   end
 
   # handle_output is called to order a connection to process any output
   # waiting on its socket.
   def handle_output
+    @filters.each {|k,v| @outbuffer = v.filter_out(@outbuffer)}
     done = @sockio.write(@outbuffer)
     @outbuffer = ""
     if done
@@ -224,18 +269,18 @@ class Connection < Session
     else
       @write_blocked = true
     end
-  rescue EOFError
+  rescue EOFError, Errno::ECONNABORTED
     @closing = true
     changed
     notify_observers(:logged_out)
     delete_observers
-    @server.log.info "Connection '#{@addr}' EOF, disconnecting"
+    @server.log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
   rescue Exception
     @closing = true
     changed
     notify_observers(:disconnected)
     delete_observers
-    @server.log.error "Error-Connection(handle_output)"
+    @server.log.error "(#{self.object_id}) Connection#handle_output"
     @server.log.error $!
   end
 
@@ -245,12 +290,12 @@ class Connection < Session
     changed
     notify_observers(:logged_out)
     delete_observers
-    @server.log.info "Connection '#{@addr}' closing"
+    @server.log.info "(#{self.object_id}) Connection '#{@addr}' closing"
     @server.unregister(self)
 #    @sock.shutdown   # odd errors thrown with this
     @sock.close
   rescue Exception
-    @server.log.error "Error-Connection(handle_close)"
+    @server.log.error "(#{self.object_id}) Connection#handle_close"
     @server.log.error $!
   end
 
@@ -289,7 +334,7 @@ class Acceptor < Session
     @accepting = true
     @server.register(self)
   rescue Exception
-    @server.log.error "Error-Acceptor(init)"
+    @server.log.error "Acceptor#init"
     @server.log.error $!
   end
 
@@ -304,7 +349,7 @@ class Acceptor < Session
       end
       c = Connection.new(@server, sckt)
       if c.init
-        @server.log.info "Connection accepted."
+        @server.log.info "(#{c.object_id}) Connection accepted."
         changed
         notify_observers(c)
       end
@@ -312,7 +357,7 @@ class Acceptor < Session
       raise "Error in accepting connection."
     end
   rescue Exception
-    @server.log.error "Error-Acceptor(handle_input)"
+    @server.log.error "Acceptor#handle_input"
     @server.log.error $!
   end
 
@@ -322,7 +367,7 @@ class Acceptor < Session
     @server.unregister(self)
     @sock.close
   rescue Exception
-    @server.log.error "Error-Acceptor(handle_close)"
+    @server.log.error "Acceptor#handle_close"
     @server.log.error $!
   end
 
@@ -356,7 +401,7 @@ class Reactor
     @acceptor.add_observer(engine)
     true
   rescue
-    @log.error "ERROR-Reactor(start)"
+    @log.error "Reactor#start"
     @log.error $!
     false
   end
@@ -367,7 +412,7 @@ class Reactor
   def stop
     @registry.each {|s| s.closing = true}
     @acceptor.delete_observers if @acceptor
-    @log.info "INFO-Reactor(shutdown): Reactor shutting down"
+    @log.info "INFO-Reactor#shutdown: Reactor shutting down"
     @log.close
   end
 
@@ -398,7 +443,7 @@ class Reactor
       s.handle_close if s.closing
     end
   rescue
-    @log.error "ERROR-Reactor(poll)"
+    @log.error "Reactor#poll"
     @log.error $!
     stop
     raise

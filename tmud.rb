@@ -13,6 +13,7 @@
 require 'observer'
 require 'yaml'
 require 'thread'
+require 'logger'
 require 'pp'
 
 $:.unshift "lib"
@@ -23,11 +24,8 @@ require 'farts_parser'
 
 Version = "2.4.0"
 
-# Telnet end of line
-EOL="\r\n"
-
 # Displayed upon connecting
-BANNER=<<-EOH.gsub!(/\n/,EOL)
+BANNER=<<-EOH
 
 
             This is TeensyMUD version #{Version}
@@ -61,12 +59,12 @@ class Obj
   # [+location+] The object oid containing this object or nil.
   # [+return+]   A handle to the new Object
   def initialize(name,location=nil)
-    @name,@location,@oid=name,location,$world.db.getid
+    @name,@location,@oid=name,location,$engine.world.db.getid
     @contents = []
     @farts = {}
     @desc = ""
     @powered = false
-    $world.db.get(@location).add_contents(@oid) if @location
+    $engine.world.db.get(@location).add_contents(@oid) if @location
   end
 
   # Add an object to the contents of this object
@@ -129,7 +127,7 @@ class Obj
   # [+return+] Handle to a array of the objects.
   def objects
     ary = @contents.collect do |oid|
-      o = $world.db.get(oid)
+      o = $engine.world.db.get(oid)
       o.class == Obj ? o : nil
     end
     ary.compact
@@ -140,7 +138,7 @@ class Obj
   # [+return+] Handle to a list of the Player objects.
   def players(exempt=nil)
     ary = @contents.collect do |oid|
-      o = $world.db.get(oid)
+      o = $engine.world.db.get(oid)
       (o.class == Player && oid != exempt && o.session) ? o : nil
     end
     ary.compact
@@ -151,13 +149,13 @@ class Obj
   # [+return+] false or true depending on whether command succeeded.
   def parse(m)
     # match legal command
-    m=~/([A-Za-z@?"'#!]+)(.*)/
+    m=~/([A-Za-z0-9_@?"'#!]+)(.*)/
     cmd=$1
     arg=$2
     arg.strip! if arg
 
     # look for a command from our table for objects
-    c = $world.ocmds.find(cmd)
+    c = $engine.world.ocmds.find(cmd)
 
     # there are three possibilities here
     case c.size
@@ -178,27 +176,27 @@ class Obj
     when :describe
       return if !fart
       msg = Colors[:yellow] + "A " + @name + " is here" + Colors[:reset]
-      $world.add_event(@oid,e.from,:show,msg)
+      $engine.world.add_event(@oid,e.from,:show,msg)
       fart(e)
     when :get
-      plyr = $world.db.get(e.from)
-      place = $world.db.get(@location)
+      plyr = $engine.world.db.get(e.from)
+      place = $engine.world.db.get(@location)
       # remove it
       place.delete_contents(@oid)
       # add it
       plyr.add_contents(@oid)
       @location = plyr.oid
-      $world.add_event(@oid,e.from,:show,"You get the #{@name}")
+      $engine.world.add_event(@oid,e.from,:show,"You get the #{@name}")
       fart(e)
     when :drop
-      plyr = $world.db.get(e.from)
-      place = $world.db.get(plyr.location)
+      plyr = $engine.world.db.get(e.from)
+      place = $engine.world.db.get(plyr.location)
       # remove it
       plyr.delete_contents(@oid)
       # add it
       place.add_contents(@oid)
       @location = place.oid
-      $world.add_event(@oid,e.from,:show,"You drop the #{@name}")
+      $engine.world.add_event(@oid,e.from,:show,"You drop the #{@name}")
       fart(e)
     when :timer
       fart(e)
@@ -228,11 +226,11 @@ class Room < Obj
     case e.kind
     when :describe
       msg = Colors[:green] + "(" + @oid.to_s + ") " + name +
-        Colors[:reset] + EOL + desc + EOL
-      $world.add_event(@oid,e.from,:show,msg)
+        Colors[:reset] + "\n" + desc + "\n"
+      $engine.world.add_event(@oid,e.from,:show,msg)
       fart(e)
     when :describe_exits
-      msg = Colors[:red] + "Exits:" + EOL
+      msg = Colors[:red] + "Exits:\n"
       s = @exits.size
       if s == 0
         msg << "None." + Colors[:reset]
@@ -250,25 +248,25 @@ class Room < Obj
         end
         msg << Colors[:reset]
       end
-      $world.add_event(@oid,e.from,:show,msg)
+      $engine.world.add_event(@oid,e.from,:show,msg)
       fart(e)
     when :leave
-      plyr = $world.db.get(e.from)
+      plyr = $engine.world.db.get(e.from)
       players(e.from).each do |x|
-        $world.add_event(@oid,x.oid,:show, plyr.name + " has left #{e.msg}.") if x.session
+        $engine.world.add_event(@oid,x.oid,:show, plyr.name + " has left #{e.msg}.") if x.session
       end
       # remove player
       delete_contents(plyr.oid)
       plyr.location = nil
-      $world.add_event(@oid,@exits[e.msg],:arrive,plyr.oid)
+      $engine.world.add_event(@oid,@exits[e.msg],:arrive,plyr.oid)
       fart(e)
     when :arrive
-      plyr = $world.db.get(e.msg)
+      plyr = $engine.world.db.get(e.msg)
       # add player
       add_contents(plyr.oid)
       plyr.location = @oid
       players(e.msg).each do |x|
-        $world.add_event(@oid,x.oid,:show, plyr.name+" has arrived.") if x.session
+        $engine.world.add_event(@oid,x.oid,:show, plyr.name+" has arrived.") if x.session
       end
       plyr.parse('look')
       fart(e)
@@ -296,7 +294,7 @@ class Player < Obj
   def initialize(name,passwd,session)
     @session = session
     @passwd = encrypt(passwd)
-    super(name,$world.options.home)
+    super(name,$engine.world.options.home)
     @powered = true
   end
 
@@ -304,7 +302,7 @@ class Player < Obj
   # [+s+]      The message string
   # [+return+] Undefined.
   def sendto(s)
-    sendmsg(s+EOL) if @session
+    sendmsg(s+"\n") if @session
   end
 
   # Helper method to notify all observers
@@ -321,14 +319,14 @@ class Player < Obj
     when :logged_out
       @session = nil
       delete_observers
-      $world.db.players_connected(@oid).each {|p|
-        $world.add_event(@oid,p.oid,:show,"#{@name} has quit.")
+      $engine.world.db.players_connected(@oid).each {|p|
+        $engine.world.add_event(@oid,p.oid,:show,"#{@name} has quit.")
       }
     when :disconnected
       @session = nil
       delete_observers
-      $world.db.players_connected(@oid).each {|p|
-        $world.add_event(@oid,p.oid,:show,"#{@name} has disconnected.")
+      $engine.world.db.players_connected(@oid).each {|p|
+        $engine.world.add_event(@oid,p.oid,:show,"#{@name} has disconnected.")
       }
     else
       parse(msg)
@@ -354,15 +352,19 @@ class Player < Obj
   # [+return+] Undefined.
   def parse(m)
     # match legal command
-    m=~/([A-Za-z@?"'#!]+)(.*)/
+    m=~/([A-Za-z0-9_@?"'#!]+)(.*)/
     cmd=$1
     arg=$2
     arg.strip! if arg
 
     # look for a command in our spanking new table
-    c = $world.cmds.find(cmd)
+    c = $engine.world.cmds.find(cmd)
+
     # add any exits to our command list
-    $world.db.get(@location).exits.keys.grep(/^#{cmd}/).each do |ex|
+    # escape certain characters in cmd
+    check = cmd.gsub(/\?/,"\\?")
+    check.gsub!(/\#/,"\\#")
+    $engine.world.db.get(@location).exits.keys.grep(/^#{check}/).each do |ex|
       c << Command.new(:cmd_go,"go #{ex}",nil)
       arg = ex
     end
@@ -390,7 +392,7 @@ class Player < Obj
     case e.kind
     when :describe
       msg = Colors[:cyan] + @name + " is here." + Colors[:reset]
-      $world.add_event(@oid,e.from,:show,msg)
+      $engine.world.add_event(@oid,e.from,:show,msg)
       fart(e)
     when :show
       sendto(e.msg)
@@ -451,7 +453,7 @@ class Hamster < Thread
       sleep @time
       @mutex.synchronize do
         @interested.each do |o|
-          $world.add_event(nil, o.oid, @eventtype, nil)
+          $engine.world.add_event(nil, o.oid, @eventtype, nil)
         end
       end
     end
@@ -496,16 +498,16 @@ class World
   def initialize(options)
     @options=options
     @db = Database.new(@options)
-    $stdout.puts "Loading commands..."
+    $engine.log.info "Loading commands..."
     @cmds = Command.load("commands.yaml", Player, :Cmd)
     @ocmds = Command.load("obj_cmds.yaml", Obj, :ObjCmd)
-    $stdout.puts "Done."
+    $engine.log.info "Done."
     @tits = []
     @bra = Mutex.new
-    $stdout.puts "Releasing Hamster..."
+    $engine.log.info "Releasing Hamster..."
     @hamster = Hamster.new(2.0, :timer)
     @db.objects {|obj| @hamster.register(obj) if obj.powered}
-    $stdout.puts "World initialized."
+    $engine.log.info "World initialized."
   end
 
   # Add an Event to the TITS queue.
@@ -541,6 +543,7 @@ class Incoming
     @state = :name
     @checked = 0
     @player = nil
+    @initted = false
   end
 
   # Receives messages from connection and handles login state.  On
@@ -552,31 +555,37 @@ class Incoming
     when :logged_out, :disconnected
       delete_observers
     else
+      if !@initted
+        sendmsg(:init)
+        initted = true
+      end
       if (@checked += 1) > 3
-        sendmsg("Bye!")
+        sendmsg("\nBye!\n")
         sendmsg(:logged_out)
         delete_observers
       end
       case @state
       when :name
         @login_name = msg
-        @player = $world.db.find_player_by_name(@login_name)
-        sendmsg("password> ")
+        @player = $engine.world.db.find_player_by_name(@login_name)
+        sendmsg("\npassword> ")
+        sendmsg(:hide)
         @state = :password
       when :password
         @login_passwd = msg
+        sendmsg(:unhide)
         if @player
           if @player.check_passwd(@login_passwd)  # good login
             @player.session = @conn
             login
           else  # bad login
-            sendmsg("Sorry wrong password" + EOL)
+            sendmsg("\nSorry wrong password.\n")
             @state = :name
-            sendmsg("login> ")
+            sendmsg("\nlogin> ")
           end
         else  # new player
           @player = Player.new(@login_name,@login_passwd,@conn)
-          $world.db.put(@player)
+          $engine.world.db.put(@player)
           login
         end
       end
@@ -599,9 +608,9 @@ private
     @conn.add_observer(@player)
     @player.add_observer(@conn)
 
-    @player.sendto("Welcome " + @login_name + "@" + @conn.sock.peeraddr[2] + "!")
-    $world.db.players_connected(@player.oid).each {|p|
-      $world.add_event(@oid,p.oid,:show,"#{@player.name} has connected.")
+    @player.sendto("\nWelcome " + @login_name + "@" + @conn.sock.peeraddr[2] + "!")
+    $engine.world.db.players_connected(@player.oid).each {|p|
+      $engine.world.add_event(@oid,p.oid,:show,"#{@player.name} has connected.")
     }
     @player.parse('look')
   end
@@ -613,13 +622,18 @@ end
 # acceptor for incoming connections.
 class Engine
   attr_accessor :shutdown
+  attr :log, :world
 
   # Create the an engine.
   # [+port+]   The port passed to create a reactor.
   # [+return+] A handle to the engine.
-  def initialize(port)
-    $stdout.puts "Booting server on port #{port}"
-    @server = Reactor.new(port)
+  def initialize(options)
+    @log = Logger.new('logs/engine_log', 'daily')
+    @log.datetime_format = "%Y-%m-%d %H:%M:%S"
+    # Create the world an object containing most everything.
+    @world = World.new(options)
+    @log.info "Booting server on port #{options.port}"
+    @server = Reactor.new(options.port)
     @incoming = []
     @shutdown = false
   end
@@ -628,11 +642,11 @@ class Engine
   # note:: @shutdown never set by anyone yet
   def run
     raise "Unable to start server" unless @server.start(self)
-    $stdout.puts "TMUD is ready"
+    @log.info "TMUD is ready"
     until @shutdown
       @server.poll(0.2)
-      while e = $world.get_event
-        $world.db.get(e.to).ass(e)
+      while e = $engine.world.get_event
+        @world.db.get(e.to).ass(e)
       end
     end # until
     @server.stop
@@ -687,11 +701,11 @@ def get_options
         "  (defaults to 1)") {|myopts.home|}
       opts.on("-v", "--[no-]verbose", "Run verbosely") {|myopts.verbose|}
       opts.on_tail("-h", "--help", "Show this message") do
-        puts opts.help
+        $stdout.puts opts.help
         exit
       end
       opts.on_tail("--version", "Show version") do
-        puts "TeensyMud #{Version}"
+        $stdout.puts "TeensyMud #{Version}"
         exit
       end
     end
@@ -700,9 +714,9 @@ def get_options
 
     return myopts
   rescue OptionParser::ParseError
-    puts "ERROR - #{$!}"
-    puts "For help..."
-    puts " ruby #{$0} --help"
+    $stderr.puts "ERROR - #{$!}"
+    $stderr.puts "For help..."
+    $stderr.puts " ruby #{$0} --help"
     exit
   end
 end
@@ -710,12 +724,12 @@ end
 
 # Setup traps - invoke one of these signals to shut down the mud
 def handle_signal(sig)
-  $stdout.puts "Signal caught request to shutdown."
-  $stdout.puts "Saving world..."
-  $world.db.players_connected.each{|plr|plr.disconnect if plr.session}
+  $engine.log.warn "Signal caught request to shutdown."
+  $engine.log.info "Saving world..."
+  $engine.world.db.players_connected.each{|plr|plr.disconnect if plr.session}
   # clear compiled progs out before saving
-  $world.db.objects {|o| o.get_triggers.each {|t| t.prog = nil }}
-  $world.db.save
+  $engine.world.db.objects {|o| o.get_triggers.each {|t| t.prog = nil }}
+  $engine.world.db.save
   exit
 end
 
@@ -725,13 +739,15 @@ if $0 == __FILE__
   Signal.trap("KILL", method(:handle_signal))
 
   begin
-    # Create the $world a global object containing everything.
-    $world=World.new(get_options)
-    $engine = Engine.new($world.options.port)
+    $engine = Engine.new(get_options)
     $engine.run
   rescue => e
-    $stderr.puts "Exception caught error in server: " + $!
-    $stderr.puts $@
+    if $engine
+      $engine.log.error $!
+    else
+      $stderr.puts "Exception caught error in server: " + $!
+      $stderr.puts $@
+    end
     exit
   end
 end

@@ -35,13 +35,13 @@ EOH
   def initialize(opts)
     @dbname = opts.dbname
     if !test(?e,@dbname)
-      $stdout.puts "Building minimal world database..."
+      $engine.log.info "Building minimal world database..."
       File.open(@dbname,'w') do |f|
         f.write(MINIMAL_DB)
       end
-      $stdout.puts "Done."
+      $engine.log.info "Done."
     end
-    $stdout.puts "Loading world..."
+    $engine.log.info "Loading world..."
     @dbtop = 0
     @db = {}
     tmp = YAML::load_file(@dbname)
@@ -50,7 +50,7 @@ EOH
       @dbtop = o.oid if o.oid > @dbtop
       @db[o.oid]=o
     end
-    $stdout.puts "Done database loaded...top oid=#{@dbtop}."
+    $engine.log.info "Done database loaded...top oid=#{@dbtop}."
   end
 
   # Fetch the next available oid.

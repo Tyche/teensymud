@@ -17,6 +17,8 @@ PKG_FILES = FileList[
   'farts/**/*',
   'test',
   'test/README',
+  'logs',
+  'logs/README',
 #  'test/**/*',
   'lib/**/*',
   'cmd/**/*',
