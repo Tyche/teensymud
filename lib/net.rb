@@ -166,6 +166,8 @@ end
 #
 class Connection < Session
   attr :server
+  attr :initdone
+  attr :filters
 
   # Create a new connection object
   # [+server+]  The reactor this connection is associated with.
@@ -179,11 +181,13 @@ class Connection < Session
     @filters[:telnet] = TelnetFilter.new(self,
        {
          TelnetCodes::SGA => true,
+         TelnetCodes::ECHO => true,
          TelnetCodes::NAWS => true,
          TelnetCodes::TTYPE => true
        })
     @inbuffer = ""              # buffer lines waiting to be processed
     @outbuffer = ""             # buffer lines waiting to be output
+    @initdone = false           # keeps silent until we're done with negotiations
   end
 
   # init is called before using the connection.
@@ -201,6 +205,14 @@ class Connection < Session
     false
   end
 
+  # This is called from TelnetFilter when we are done with negotiations.
+  # The event :initdone wakens observer to begin user activity
+  def set_initdone
+    @initdone = true
+    changed
+    notify_observers(:initdone)
+  end
+
   # Update will be called when the object the connection is observing
   # has notified us of a change in state or new message.
   # When a new connection is accepted in acceptor that connection
@@ -214,12 +226,9 @@ class Connection < Session
     case msg
     when :logged_out then @closing = true
     when :hide
-      @filters[:telnet].offer_us(TelnetCodes::ECHO, true)
+      @filters[:telnet].hide = true
     when :unhide
-      @filters[:telnet].offer_us(TelnetCodes::ECHO, false)
-    when :init
-      sendmsg(TelnetCodes::IAC.chr + TelnetCodes::SB.chr + TelnetCodes::TTYPE.chr +
-         1.chr + TelnetCodes::IAC.chr + TelnetCodes::SE.chr)
+      @filters[:telnet].hide = false
     else
       sendmsg(msg)
     end
@@ -234,14 +243,17 @@ class Connection < Session
   def handle_input
     buf = @sockio.read
     return if buf.nil?
+    @filters.each {|k,v| buf = v.filter_in(buf)}
     @inbuffer << buf
-    @filters.each {|k,v| @inbuffer = v.filter_in(@inbuffer)}
-    p = @inbuffer.rindex("\n")
-    return if p.nil?
-    buf = @inbuffer.slice!(0..p)
-    buf.split(/\n/).each do |ln|
-      changed
-      notify_observers(ln)
+    if @initdone  # Just let buffer fill until we indicate we're done
+                  # negotiating.  Set by calling initdone from TelnetFilter
+      p = @inbuffer.rindex("\n")
+      return if p.nil?
+      buf = @inbuffer.slice!(0..p)
+      buf.split(/\n/).each do |ln|
+        changed
+        notify_observers(ln)
+      end
     end
   rescue EOFError, Errno::ECONNABORTED
     @closing = true
@@ -441,6 +453,10 @@ class Reactor
       s.handle_oob if oobfds && oobfds.include?(s.sock)
       s.handle_input if infds && infds.include?(s.sock)
       s.handle_close if s.closing
+      # special handling for Telnet initialization
+      if s.respond_to?(:initdone) && !s.initdone
+        s.filters[:telnet].init_subneg
+      end
     end
   rescue
     @log.error "Reactor#poll"

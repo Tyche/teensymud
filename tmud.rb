@@ -356,6 +356,10 @@ class Player < Obj
     cmd=$1
     arg=$2
     arg.strip! if arg
+    if !cmd
+      sendto("Huh?")
+      return
+    end
 
     # look for a command in our spanking new table
     c = $engine.world.cmds.find(cmd)
@@ -543,7 +547,7 @@ class Incoming
     @state = :name
     @checked = 0
     @player = nil
-    @initted = false
+    @initdone = false # keep silent until we're done negotiating
   end
 
   # Receives messages from connection and handles login state.  On
@@ -554,39 +558,41 @@ class Incoming
     case msg
     when :logged_out, :disconnected
       delete_observers
+    when :initdone
+      @initdone = true
+      sendmsg(BANNER)
+      sendmsg("login> ")
     else
-      if !@initted
-        sendmsg(:init)
-        initted = true
-      end
-      if (@checked += 1) > 3
-        sendmsg("\nBye!\n")
-        sendmsg(:logged_out)
-        delete_observers
-      end
-      case @state
-      when :name
-        @login_name = msg
-        @player = $engine.world.db.find_player_by_name(@login_name)
-        sendmsg("\npassword> ")
-        sendmsg(:hide)
-        @state = :password
-      when :password
-        @login_passwd = msg
-        sendmsg(:unhide)
-        if @player
-          if @player.check_passwd(@login_passwd)  # good login
-            @player.session = @conn
+      if @initdone
+        if (@checked += 1) > 3
+          sendmsg("\nBye!\n")
+          sendmsg(:logged_out)
+          delete_observers
+        end
+        case @state
+        when :name
+          @login_name = msg
+          @player = $engine.world.db.find_player_by_name(@login_name)
+          sendmsg("\npassword> ")
+          sendmsg(:hide)
+          @state = :password
+        when :password
+          @login_passwd = msg
+          sendmsg(:unhide)
+          if @player
+            if @player.check_passwd(@login_passwd)  # good login
+              @player.session = @conn
+              login
+            else  # bad login
+              sendmsg("\nSorry wrong password.\n")
+              @state = :name
+              sendmsg("\nlogin> ")
+            end
+          else  # new player
+            @player = Player.new(@login_name,@login_passwd,@conn)
+            $engine.world.db.put(@player)
             login
-          else  # bad login
-            sendmsg("\nSorry wrong password.\n")
-            @state = :name
-            sendmsg("\nlogin> ")
           end
-        else  # new player
-          @player = Player.new(@login_name,@login_passwd,@conn)
-          $engine.world.db.put(@player)
-          login
         end
       end
     end
@@ -660,8 +666,6 @@ class Engine
     # Observe each other
     newconn.add_observer(inc)
     inc.add_observer(newconn)
-    inc.sendmsg(BANNER)
-    inc.sendmsg("login> ")
   end
 end
 

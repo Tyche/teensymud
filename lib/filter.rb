@@ -10,9 +10,10 @@
 # Released under the terms of the TeensyMUD Public License
 # See LICENSE file for additional information.
 #
+require 'ostruct'
+require 'pp'
 
 require 'telnetcodes'
-require 'ostruct'
 
 # The Filter class is an abstract class defining the minimal methods
 # needed to filter data.
@@ -20,12 +21,17 @@ require 'ostruct'
 # A Filter can keep state and partial data
 class Filter
 
-  # Initialize state of filter
+  # Construct filter
   #
   # [+conn+] The connection associated with this filter
-  # [+opts+] An optional hash of options
+  # [+opts+] An optional hash of desired initial options
   def initialize(conn, wopts={})
     @conn, @wopts = conn, wopts
+  end
+
+  # Run any post-contruction initialization
+  def init
+    true
   end
 
   # The filter_in method filters input data
@@ -53,27 +59,31 @@ end
 #
 class TelnetFilter < Filter
   include TelnetCodes
-
+  attr_accessor :hide
 
   # Initialize state of filter
   #
   # [+conn+] The connection associated with this filter
-  # [+opts+] An optional hash of options
+  # [+opts+] An optional hash of desired initial options
   def initialize(conn, wopts={})
     @mode = :normal #  Parse mode :normal, :cmd, :cr
     @state = {}
     @sc = nil
-    @supp_opts = [ ECHO, SGA, TTYPE, NAWS ]
+    @supp_opts = [ TTYPE, ECHO, SGA, NAWS ] # supported options
+    @sneg_opts = [ TTYPE ]  # supported options which imply an initial
     @log = conn.server.log
     @ttype = "unknown"
     @twidth = 80
     @theight = 23
+    @hide = false     # if true and server echo set, we echo back asterixes
+    @init_tries = 0   # Number of tries at negotitating sub options
     super(conn, wopts)
   end
 
-  # negotiate starting options
+  # Negotiate starting wanted options
   #
   def init
+    # two sorts of options here - server offer and ask client
     @wopts.each do |key,val|
       case key
       when SGA, ECHO
@@ -82,21 +92,58 @@ class TelnetFilter < Filter
         ask_him(key,val)
       end
     end
+    true
+  end
+
+  # Negotiate starting wanted options that imply subnegotation
+  # So far only terminal type
+  def init_subneg
+    return if @sneg_opts.empty?
+
+    @init_tries += 1
+
+    @wopts.each_key do |opt|
+      next if !@sneg_opts.include?(opt)
+      case opt
+      when TTYPE
+        who = :him
+      else
+        who = :us
+      end
+      @log.debug("(#{@conn.object_id}) init_subneg option-#{opt} desired?-#{desired?(opt)} enabled?-#{enabled?(opt, who)}")
+      if desired?(opt) == enabled?(opt, who)
+        case opt
+        when TTYPE
+          @conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
+        end
+        @sneg_opts.delete(opt)
+      end
+    end
+
+    if @sneg_opts.empty? || @init_tries > 15
+      @sneg_opts = []
+      @conn.set_initdone
+    else
+
+    end
   end
 
   # The filter_in method filters input data
   # [+str+]    The string to be processed
   # [+return+] The filtered data
   def filter_in(str)
+    init_subneg
     buf = ""
     return buf if str.nil? || str.empty?
+
     @sc ? @sc.concat(str) : @sc = StringScanner.new(str)
-    while b = @sc.getbyte
+    while b = @sc.get_byte
       case mode?
       when :cr
         # handle CRLF and CRNUL by swallowing what follows CR and
         # insertion of LF
         buf << LF.chr
+        echo(CR.chr + LF.chr)
         set_mode(:normal)
       when :cmd
         case b[0]
@@ -144,7 +191,7 @@ class TelnetFilter < Filter
             break
           end
           data = @sc.scan_until(/#{IAC.chr}#{SE.chr}/).chop.chop
-          sub_neg(opt[0],data)
+          parse_subneg(opt[0],data)
           set_mode(:normal)
         else
           @log.debug("(#{@conn.object_id}) Unknown Telnet command - #{b[0].to_s}")
@@ -158,11 +205,15 @@ class TelnetFilter < Filter
           set_mode(:cmd)
         when BS
           buf.slice!(-1)
+          echo(BS.chr)
+        when NUL  # ignore NULs in stream
         else
           buf << b
+          echo(b)
         end
       end
     end  # while b
+
     @sc = nil if @sc.eos?
     buf
   end
@@ -180,7 +231,8 @@ class TelnetFilter < Filter
 
   def enabled?(opt, who)
     option(opt)
-    @state[opt].send(who)
+    e = @state[opt].send(who)
+    e == :yes ? true : false
   end
 
   def supports?(opt)
@@ -188,30 +240,27 @@ class TelnetFilter < Filter
   end
 
   def desired?(opt)
-    @wopts.include?(opt)
+    st = @wopts[opt]
+    st = false if st.nil?
+    st
   end
 
-  # Ask the client to enable or disable an option.
-  #
-  # [+opt+]   The option code
-  # [+enable+] true for enable, false for disable
-  def ask_him(opt, enable)
-    @log.debug("(#{@conn.object_id}) Requested Telnet option #{opt.to_s} set to #{enable.to_s}")
-    initiate(opt, enable, :him)
-  end
-
-  # Offer the server to enable or disable an option
-  #
-  # [+opt+]   The option code
-  # [+enable+] true for enable, false for disable
-  def offer_us(opt, enable)
-    @log.debug("(#{@conn.object_id}) Offered Telnet option #{opt.to_s} set to #{enable.to_s}")
-    initiate(opt, enable, :us)
+  # Handle server-side echo
+  def echo(ch)
+    if enabled?(ECHO, :us)
+      if @hide
+        @conn.sock.send('*',0)
+#        @conn.sendmsg('*')
+      else
+        @conn.sock.send(ch,0)
+#        @conn.sendmsg(ch)
+      end
+    end
   end
 
 private
 
-  def sub_neg(opt,data)
+  def parse_subneg(opt,data)
     case opt
     when NAWS
       data.gsub!(/#{IAC}#{IAC}/, IAC.chr) # 255 needs to be undoubled from data
@@ -244,6 +293,24 @@ private
     @state[opt] = o
   end
 
+  # Ask the client to enable or disable an option.
+  #
+  # [+opt+]   The option code
+  # [+enable+] true for enable, false for disable
+  def ask_him(opt, enable)
+    @log.debug("(#{@conn.object_id}) Requested Telnet option #{opt.to_s} set to #{enable.to_s}")
+    initiate(opt, enable, :him)
+  end
+
+  # Offer the server to enable or disable an option
+  #
+  # [+opt+]   The option code
+  # [+enable+] true for enable, false for disable
+  def offer_us(opt, enable)
+    @log.debug("(#{@conn.object_id}) Offered Telnet option #{opt.to_s} set to #{enable.to_s}")
+    initiate(opt, enable, :us)
+  end
+
   # Initiate a request to client.  Called by ask_him or offer_us.
   #
   # [+opt+]   The option code
@@ -268,7 +335,7 @@ private
     case @state[opt].send(who)
     when :no
       if enable
-        @state[opt].send(who.to_s + "=", :wantyes)
+        @state[opt].send("#{who}=", :wantyes)
         @conn.sendmsg(IAC.chr + willdo + opt.chr)
       else
         # Error already disabled
@@ -279,14 +346,14 @@ private
         # Error already enabled
         @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} already enabled")
       else
-        @state[opt].send(who.to_s + "=", :wantno)
+        @state[opt].send("#{who}=", :wantno)
         @conn.sendmsg(IAC.chr + wontdont + opt.chr)
       end
     when :wantno
       if enable
         case @state[opt].send(whoq)
         when :empty
-          @state[opt].send(whoq.to_s + "=", :opposite)
+          @state[opt].send("#{whoq}=", :opposite)
         when :opposite
           # Error already queued enable request
           @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} already queued enable request")
@@ -297,7 +364,7 @@ private
           # Error already negotiating for disable
           @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} already negotiating for disable")
         when :opposite
-          @state[opt].send(whoq.to_s + "=", :empty)
+          @state[opt].send("#{whoq}=", :empty)
         end
       end
     when :wantyes
@@ -307,12 +374,12 @@ private
           #Error already negotiating for enable
           @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} already negotiating for enable")
         when :opposite
-          @state[opt].send(whoq.to_s + "=", :empty)
+          @state[opt].send("#{whoq}=", :empty)
         end
       else
         case @state[opt].send(whoq)
         when :empty
-          @state[opt].send(whoq.to_s + "=", :opposite)
+          @state[opt].send("#{whoq}=", :opposite)
         when :opposite
           #Error already queued for disable request
           @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} already queued for disable request")
@@ -363,9 +430,9 @@ private
     case @state[opt].send(who)
     when :no
       if enable
-        if supports?(opt)
+        if desired?(opt)
         # If we agree
-          @state[opt].send(who.to_s + "=", :yes)
+          @state[opt].send("#{who}=", :yes)
           @conn.sendmsg(IAC.chr + willdo + opt.chr)
           @log.debug("(#{@conn.object_id}) Telnet negotiation: agreed to enable option #{opt.to_s}")
         else
@@ -380,7 +447,7 @@ private
       if enable
         # Ignore
       else
-        @state[opt].send(who.to_s + "=", :no)
+        @state[opt].send("#{who}=", :no)
         @conn.sendmsg(IAC.chr + wontdont + opt.chr)
       end
     when :wantno
@@ -388,20 +455,20 @@ private
         case @state[opt].send(whoq)
         when :empty
           #Error DONT/WONT answered by WILL/DO
-          @state[opt].send(who.to_s + "=", :no)
+          @state[opt].send("#{who}=", :no)
         when :opposite
           #Error DONT/WONT answered by WILL/DO
-          @state[opt].send(who.to_s + "=", :yes)
-          @state[opt].send(whoq.to_s + "=", :empty)
+          @state[opt].send("#{who}=", :yes)
+          @state[opt].send("#{whoq}=", :empty)
         end
         @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} DONT/WONT answered by WILL/DO")
       else
         case @state[opt].send(whoq)
         when :empty
-          @state[opt].send(who.to_s + "=", :no)
+          @state[opt].send("#{who}=", :no)
         when :opposite
-          @state[opt].send(who.to_s + "=", :wantyes)
-          @state[opt].send(whoq.to_s + "=", :empty)
+          @state[opt].send("#{who}=", :wantyes)
+          @state[opt].send("#{whoq}=", :empty)
           @conn.sendmsg(IAC.chr + willdo + opt.chr)
         end
       end
@@ -409,19 +476,19 @@ private
       if enable
         case @state[opt].send(whoq)
         when :empty
-          @state[opt].send(who.to_s + "=", :yes)
+          @state[opt].send("#{who}=", :yes)
         when :opposite
-          @state[opt].send(who.to_s + "=", :wantno)
-          @state[opt].send(whoq.to_s + "=", :empty)
+          @state[opt].send("#{who}=", :wantno)
+          @state[opt].send("#{whoq}=", :empty)
           @conn.sendmsg(IAC.chr + wontdont + opt.chr)
         end
       else
         case @state[opt].send(whoq)
         when :empty
-          @state[opt].send(who.to_s + "=", :no)
+          @state[opt].send("#{who}=", :no)
         when :opposite
-          @state[opt].send(who.to_s + "=", :no)
-          @state[opt].send(whoq.to_s + "=", :empty)
+          @state[opt].send("#{who}=", :no)
+          @state[opt].send("#{whoq}=", :empty)
         end
       end
     end
