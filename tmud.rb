@@ -622,7 +622,7 @@ end
 # acceptor for incoming connections.
 class Engine
   attr_accessor :shutdown
-  attr :log, :world
+  attr_reader :log, :world
 
   # Create the an engine.
   # [+port+]   The port passed to create a reactor.
@@ -631,6 +631,7 @@ class Engine
     @log = Logger.new('logs/engine_log', 'daily')
     @log.datetime_format = "%Y-%m-%d %H:%M:%S"
     # Create the world an object containing most everything.
+    $engine = self # Hack for now
     @world = World.new(options)
     @log.info "Booting server on port #{options.port}"
     @server = Reactor.new(options.port)
@@ -645,7 +646,7 @@ class Engine
     @log.info "TMUD is ready"
     until @shutdown
       @server.poll(0.2)
-      while e = $engine.world.get_event
+      while e = @world.get_event
         @world.db.get(e.to).ass(e)
       end
     end # until
