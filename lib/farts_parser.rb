@@ -31,7 +31,7 @@ module Farts
 
   class Parser < Racc::Parser
 
-module_eval <<'..end lib/farts_parser.y modeval..ide3b70dc60d', 'lib/farts_parser.y', 106
+module_eval <<'..end lib/farts_parser.y modeval..id593da55d3f', 'lib/farts_parser.y', 106
 
   def initialize
     @scope = {}
@@ -51,7 +51,7 @@ module_eval <<'..end lib/farts_parser.y modeval..ide3b70dc60d', 'lib/farts_parse
     raise Racc::ParseError, "Error: #{@sc.lineno}:#{@sc.tokenpos} syntax error at '#{val}'"
   end
 
-..end lib/farts_parser.y modeval..ide3b70dc60d
+..end lib/farts_parser.y modeval..id593da55d3f
 
 ##### racc 1.4.4 generates ###
 
@@ -685,7 +685,7 @@ module Farts
     def execute(intp)
       begin
         if @args
-          intp.vars["this"].parse(@cmd + @args)
+          intp.vars["this"].parse(@cmd + " " + @args)
         else
           intp.vars["this"].parse(@cmd)
         end
@@ -802,6 +802,7 @@ module Farts
       File.open("farts/#{@fname}.fart") {|f|
         str = f.read
       }
+      $engine.log.info "Load of FART program - #{@fname}"
       @prog = Parser.new.parse( str )
       true
     rescue Racc::ParseError
@@ -820,7 +821,7 @@ module Farts
       vars['actor'] = $engine.world.db.get(ev.from)
       vars['this'] = $engine.world.db.get(ev.to)
       if ev.msg.kind_of?(Obj)
-        cars['args'] = $engine.world.db.get(ev.msg)
+        vars['args'] = $engine.world.db.get(ev.msg)
       else
         vars['args'] = ev.msg
       end  

@@ -138,7 +138,7 @@ issues timing events
 
         <div class="method-heading">
           <a href="#M000077" class="method-signature">
-          <span class="method-name">new</span><span class="method-args">(time, eventtype)</span>
+          <span class="method-name">new</span><span class="method-args">(world, time, eventtype)</span>
           </a>
         </div>
       
@@ -161,8 +161,9 @@ Constructor for a <a href="Hamster.html">Hamster</a>.
             onclick="toggleCode('M000077-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000077-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 431</span>
-431:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">time</span>, <span class="ruby-identifier">eventtype</span>)
+     <span class="ruby-comment cmt"># File tmud.rb, line 430</span>
+430:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">world</span>, <span class="ruby-identifier">time</span>, <span class="ruby-identifier">eventtype</span>)
+431:     <span class="ruby-ivar">@world</span> = <span class="ruby-identifier">world</span>
 432:     <span class="ruby-ivar">@time</span> = <span class="ruby-identifier">time</span>
 433:     <span class="ruby-ivar">@eventtype</span> = <span class="ruby-identifier">eventtype</span>
 434:     <span class="ruby-ivar">@interested</span> = []
@@ -233,7 +234,7 @@ The timing thread loop
 458:       <span class="ruby-identifier">sleep</span> <span class="ruby-ivar">@time</span>
 459:       <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
 460:         <span class="ruby-ivar">@interested</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>
-461:           <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span>, <span class="ruby-ivar">@eventtype</span>, <span class="ruby-keyword kw">nil</span>)
+461:           <span class="ruby-ivar">@world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span>, <span class="ruby-ivar">@eventtype</span>, <span class="ruby-keyword kw">nil</span>)
 462:         <span class="ruby-keyword kw">end</span>
 463:       <span class="ruby-keyword kw">end</span>
 464:     <span class="ruby-keyword kw">end</span>

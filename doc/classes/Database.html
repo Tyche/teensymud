@@ -163,7 +163,7 @@ The minimal database will be used in the absence of detecting one.
 
         <div class="method-heading">
           <a href="#M000061" class="method-signature">
-          <span class="method-name">new</span><span class="method-args">(opts)</span>
+          <span class="method-name">new</span><span class="method-args">(log, opts)</span>
           </a>
         </div>
       
@@ -173,16 +173,16 @@ The minimal database will be used in the absence of detecting one.
           <div class="method-source-code" id="M000061-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/database.rb, line 36</span>
-36:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>)
-37:     <span class="ruby-ivar">@dbname</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dbname</span>
+36:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">log</span>, <span class="ruby-identifier">opts</span>)
+37:     <span class="ruby-ivar">@log</span>, <span class="ruby-ivar">@dbname</span> = <span class="ruby-identifier">log</span>, <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dbname</span>
 38:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">test</span>(<span class="ruby-value">?e</span>,<span class="ruby-ivar">@dbname</span>)
-39:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Building minimal world database...&quot;</span>
+39:       <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Building minimal world database...&quot;</span>
 40:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-ivar">@dbname</span>,<span class="ruby-value str">'w'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
 41:         <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-constant">MINIMAL_DB</span>)
 42:       <span class="ruby-keyword kw">end</span>
-43:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Done.&quot;</span>
+43:       <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Done.&quot;</span>
 44:     <span class="ruby-keyword kw">end</span>
-45:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Loading world...&quot;</span>
+45:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Loading world...&quot;</span>
 46:     <span class="ruby-ivar">@dbtop</span> = <span class="ruby-value">0</span>
 47:     <span class="ruby-ivar">@db</span> = {}
 48:     <span class="ruby-identifier">tmp</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load_file</span>(<span class="ruby-ivar">@dbname</span>)
@@ -191,7 +191,7 @@ The minimal database will be used in the absence of detecting one.
 51:       <span class="ruby-ivar">@dbtop</span> = <span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span> <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@dbtop</span>
 52:       <span class="ruby-ivar">@db</span>[<span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span>]=<span class="ruby-identifier">o</span>
 53:     <span class="ruby-keyword kw">end</span>
-54:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;Done database loaded...top oid=#{@dbtop}.&quot;</span>
+54:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;Done database loaded...top oid=#{@dbtop}.&quot;</span>
 55:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>

@@ -237,7 +237,7 @@ module Farts
     def execute(intp)
       begin
         if @args
-          intp.vars["this"].parse(@cmd + @args)
+          intp.vars["this"].parse(@cmd + " " + @args)
         else
           intp.vars["this"].parse(@cmd)
         end
@@ -354,6 +354,7 @@ module Farts
       File.open("farts/#{@fname}.fart") {|f|
         str = f.read
       }
+      $engine.log.info "Load of FART program - #{@fname}"
       @prog = Parser.new.parse( str )
       true
     rescue Racc::ParseError
@@ -372,7 +373,7 @@ module Farts
       vars['actor'] = $engine.world.db.get(ev.from)
       vars['this'] = $engine.world.db.get(ev.to)
       if ev.msg.kind_of?(Obj)
-        cars['args'] = $engine.world.db.get(ev.msg)
+        vars['args'] = $engine.world.db.get(ev.msg)
       else
         vars['args'] = ev.msg
       end  

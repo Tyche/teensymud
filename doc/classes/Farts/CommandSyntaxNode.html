@@ -181,7 +181,7 @@
 719:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">intp</span>)
 720:       <span class="ruby-keyword kw">begin</span>
 721:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@args</span>
-722:           <span class="ruby-identifier">intp</span>.<span class="ruby-identifier">vars</span>[<span class="ruby-value str">&quot;this&quot;</span>].<span class="ruby-identifier">parse</span>(<span class="ruby-ivar">@cmd</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@args</span>)
+722:           <span class="ruby-identifier">intp</span>.<span class="ruby-identifier">vars</span>[<span class="ruby-value str">&quot;this&quot;</span>].<span class="ruby-identifier">parse</span>(<span class="ruby-ivar">@cmd</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@args</span>)
 723:         <span class="ruby-keyword kw">else</span>
 724:           <span class="ruby-identifier">intp</span>.<span class="ruby-identifier">vars</span>[<span class="ruby-value str">&quot;this&quot;</span>].<span class="ruby-identifier">parse</span>(<span class="ruby-ivar">@cmd</span>)
 725:         <span class="ruby-keyword kw">end</span>

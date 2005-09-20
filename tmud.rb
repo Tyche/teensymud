@@ -1,7 +1,7 @@
 #
 # file::    tmud.rb
 # author::  Jon A. Lambert
-# version:: 2.5.1
+# version:: 2.5.2
 # date::    09/18/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
@@ -22,7 +22,7 @@ require 'command'
 require 'database'
 require 'farts_parser'
 
-Version = "2.5.1"
+Version = "2.5.2"
 
 # Displayed upon connecting
 BANNER=<<-EOH
@@ -174,7 +174,6 @@ class Obj
   def ass(e)
     case e.kind
     when :describe
-      return if !fart
       msg = Colors[:yellow] + "A " + @name + " is here" + Colors[:reset]
       $engine.world.add_event(@oid,e.from,:show,msg)
       fart(e)
@@ -427,7 +426,8 @@ class Hamster < Thread
   # [+time+]      The interval time for events in flaoting point seconds.
   # [+eventtype+] The symbol that defines the kind of event to be issued.
   # [+return+] A reference to the Hamster.
-  def initialize(time, eventtype)
+  def initialize(world, time, eventtype)
+    @world = world
     @time = time
     @eventtype = eventtype
     @interested = []
@@ -457,7 +457,7 @@ class Hamster < Thread
       sleep @time
       @mutex.synchronize do
         @interested.each do |o|
-          $engine.world.add_event(nil, o.oid, @eventtype, nil)
+          @world.add_event(nil, o.oid, @eventtype, nil)
         end
       end
     end
@@ -499,19 +499,19 @@ class World
   # Create the World.  This loads or creates the database depending on
   # whether it finds it.
   # [+return+] A handle to the World object.
-  def initialize(options)
-    @options=options
-    @db = Database.new(@options)
-    $engine.log.info "Loading commands..."
+  def initialize(log, options)
+    @log, @options = log, options
+    @db = Database.new(@log, @options)
+    @log.info "Loading commands..."
     @cmds = Command.load("commands.yaml", Player, :Cmd)
     @ocmds = Command.load("obj_cmds.yaml", Obj, :ObjCmd)
-    $engine.log.info "Done."
+    @log.info "Done."
     @tits = []
     @bra = Mutex.new
-    $engine.log.info "Releasing Hamster..."
-    @hamster = Hamster.new(2.0, :timer)
+    @log.info "Releasing Hamster..."
+    @hamster = Hamster.new(self, 2.0, :timer)
     @db.objects {|obj| @hamster.register(obj) if obj.powered}
-    $engine.log.info "World initialized."
+    @log.info "World initialized."
   end
 
   # Add an Event to the TITS queue.
@@ -637,8 +637,7 @@ class Engine
     @log = Logger.new('logs/engine_log', 'daily')
     @log.datetime_format = "%Y-%m-%d %H:%M:%S"
     # Create the world an object containing most everything.
-    $engine = self # Hack for now
-    @world = World.new(options)
+    @world = World.new(@log, options)
     @log.info "Booting server on port #{options.port}"
     @server = Reactor.new(options.port)
     @incoming = []
@@ -729,12 +728,17 @@ end
 
 # Setup traps - invoke one of these signals to shut down the mud
 def handle_signal(sig)
-  $engine.log.warn "Signal caught request to shutdown."
-  $engine.log.info "Saving world..."
-  $engine.world.db.players_connected.each{|plr|plr.disconnect if plr.session}
-  # clear compiled progs out before saving
-  $engine.world.db.objects {|o| o.get_triggers.each {|t| t.prog = nil }}
-  $engine.world.db.save
+  if $engine
+    $engine.log.warn "Signal caught request to shutdown."
+    $engine.log.info "Saving world..."
+    $engine.world.db.players_connected.each{|plr|plr.disconnect if plr.session}
+    # clear compiled progs out before saving
+    $engine.world.db.objects {|o| o.get_triggers.each {|t| t.prog = nil }}
+    $engine.world.db.save
+  else
+    $stderr.log.warn "Signal caught request to shutdown."
+    $stderr.log.info "Saving world..."
+  end
   exit
 end
 

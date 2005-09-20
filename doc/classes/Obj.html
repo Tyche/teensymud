@@ -324,34 +324,33 @@ Add a trigger to this object
 175:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ass</span>(<span class="ruby-identifier">e</span>)
 176:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">kind</span>
 177:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:describe</span>
-178:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">fart</span>
-179:       <span class="ruby-identifier">msg</span> = <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:yellow</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;A &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@name</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; is here&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>]
-180:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-identifier">msg</span>)
-181:       <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
-182:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:get</span>
-183:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
-184:       <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>)
-185:       <span class="ruby-comment cmt"># remove it</span>
-186:       <span class="ruby-identifier">place</span>.<span class="ruby-identifier">delete_contents</span>(<span class="ruby-ivar">@oid</span>)
-187:       <span class="ruby-comment cmt"># add it</span>
-188:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>)
-189:       <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">oid</span>
-190:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;You get the #{@name}&quot;</span>)
-191:       <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
-192:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:drop</span>
-193:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
-194:       <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">location</span>)
-195:       <span class="ruby-comment cmt"># remove it</span>
-196:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">delete_contents</span>(<span class="ruby-ivar">@oid</span>)
-197:       <span class="ruby-comment cmt"># add it</span>
-198:       <span class="ruby-identifier">place</span>.<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>)
-199:       <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">oid</span>
-200:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;You drop the #{@name}&quot;</span>)
-201:       <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
-202:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:timer</span>
-203:       <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
-204:     <span class="ruby-keyword kw">end</span>
-205:   <span class="ruby-keyword kw">end</span>
+178:       <span class="ruby-identifier">msg</span> = <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:yellow</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;A &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@name</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; is here&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>]
+179:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-identifier">msg</span>)
+180:       <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
+181:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:get</span>
+182:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
+183:       <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>)
+184:       <span class="ruby-comment cmt"># remove it</span>
+185:       <span class="ruby-identifier">place</span>.<span class="ruby-identifier">delete_contents</span>(<span class="ruby-ivar">@oid</span>)
+186:       <span class="ruby-comment cmt"># add it</span>
+187:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>)
+188:       <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">oid</span>
+189:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;You get the #{@name}&quot;</span>)
+190:       <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
+191:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:drop</span>
+192:       <span class="ruby-identifier">plyr</span> = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>)
+193:       <span class="ruby-identifier">place</span> = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">location</span>)
+194:       <span class="ruby-comment cmt"># remove it</span>
+195:       <span class="ruby-identifier">plyr</span>.<span class="ruby-identifier">delete_contents</span>(<span class="ruby-ivar">@oid</span>)
+196:       <span class="ruby-comment cmt"># add it</span>
+197:       <span class="ruby-identifier">place</span>.<span class="ruby-identifier">add_contents</span>(<span class="ruby-ivar">@oid</span>)
+198:       <span class="ruby-ivar">@location</span> = <span class="ruby-identifier">place</span>.<span class="ruby-identifier">oid</span>
+199:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;You drop the #{@name}&quot;</span>)
+200:       <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
+201:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:timer</span>
+202:       <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
+203:     <span class="ruby-keyword kw">end</span>
+204:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
