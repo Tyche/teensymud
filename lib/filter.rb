@@ -70,7 +70,8 @@ class TelnetFilter < Filter
     @supp_opts = [ TTYPE, ECHO, SGA, NAWS ] # supported options
     @sneg_opts = [ TTYPE ]  # supported options which imply an initial
     @log = conn.server.log
-    @ttype = "unknown"
+    @ttype = []
+    @terminal = nil
     @twidth = 80
     @theight = 23
     @hide = false     # if true and server echo set, we echo back asterixes
@@ -255,16 +256,24 @@ class TelnetFilter < Filter
     buf
   end
 
+  # Test to see if option is enabled
+  # [+opt+] The Telnet option code
+  # [+who+] The side to check :us or :him
   def enabled?(opt, who)
     option(opt)
     e = @state[opt].send(who)
     e == :yes ? true : false
   end
 
+  # Test to see if option is supported
+  # [+opt+] The Telnet option code
+  # [+who+] The side to check :us or :him
   def supports?(opt)
     @supp_opts.include?(opt)
   end
 
+  # Test to see which state we prefer this option to be in
+  # [+opt+] The Telnet option code
   def desired?(opt)
     st = @wopts[opt]
     st = false if st.nil?
@@ -286,6 +295,9 @@ class TelnetFilter < Filter
 
 private
 
+  # parse the subnegotiation data and save it
+  # [+opt+] The Telnet option found
+  # [+data+] The data found between SB OPTION and IAC SE
   def parse_subneg(opt,data)
     case opt
     when NAWS
@@ -295,20 +307,64 @@ private
       @log.debug("(#{@conn.object_id}) Terminal width #{@twidth} / height #{@theight}")
     when TTYPE
       if data[0] = 0
-        @ttype = data[1..-1]
-        @log.debug("(#{@conn.object_id}) Terminal type - #{@ttype}")
+        if !@ttype.include?(data[1..-1])
+          @log.debug("(#{@conn.object_id}) Terminal type - #{data[1..-1]}")
+          # short-circuit choice because of Windows telnet client
+          if data[1..-1].downcase == 'vt100'
+            @ttype << data[1..-1]
+            @terminal = 'vt100'
+            @log.debug("(#{@conn.object_id}) Terminal choice - #{@terminal} in list #{@ttype.inspect}")
+          end
+          return if @terminal
+          @ttype << data[1..-1]
+          @conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
+        else
+          return if @terminal
+          choose_terminal
+        end
       end
     end
   end
 
+  # Pick a preferred terminal
+  # Order is vt100, vt999, ansi, xterm, or a recognized custom client
+  # Should not pick vtnt as we dont handle it
+  def choose_terminal
+    if @ttype.empty?
+      @terminal = "dumb"
+    end
+
+    @terminal = @ttype.find {|t| t =~  /(vt|VT)[-]?100/ } if !@terminal
+    @terminal = @ttype.find {|t| t =~ /(vt|VT)[-]?\d+/ } if !@terminal
+    @terminal = @ttype.find {|t| t =~ /(ansi|ANSI).*/ } if !@terminal
+    @terminal = @ttype.find {|t| t =~ /(xterm|XTERM).*/ } if !@terminal
+    @terminal = @ttype.find {|t| t =~ /mushclient/ } if !@terminal
+
+    if @terminal && @ttype.last != @terminal # short circuit retraversal of options
+      @ttype.each do |t|
+        @conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
+        break if t == @terminal
+      end
+    elsif @ttype.last != @terminal
+      @terminal = 'dumb'
+    end
+
+    @log.debug("(#{@conn.object_id}) Terminal choice - #{@terminal} in list #{@ttype.inspect}")
+  end
+
+  # Get current parse mode
+  # [+return+] The current parse mode
   def mode?
     return @mode
   end
 
+  # set current parse mode
+  # [+m+] Mode to set it to
   def set_mode(m)
     @mode = m
   end
 
+  # Creates an option entry in our state table and sets its initial state
   def option(opt)
     return if @state.key?(opt)
     o = OpenStruct.new

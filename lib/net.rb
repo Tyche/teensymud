@@ -273,7 +273,7 @@ class Connection < Session
         notify_observers(ln)
       end
     end
-  rescue EOFError, Errno::ECONNABORTED
+  rescue EOFError, Errno::ECONNABORTED, Errno::ECONNRESET
     @closing = true
     changed
     notify_observers(:logged_out)
@@ -299,7 +299,7 @@ class Connection < Session
     else
       @write_blocked = true
     end
-  rescue EOFError, Errno::ECONNABORTED
+  rescue EOFError, Errno::ECONNABORTED, Errno::ECONNRESET
     @closing = true
     changed
     notify_observers(:logged_out)
