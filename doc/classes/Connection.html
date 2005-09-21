@@ -327,9 +327,9 @@ connection&#8217;s inbuffer.
 251:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_input</span>
 252:     <span class="ruby-identifier">buf</span> = <span class="ruby-ivar">@sockio</span>.<span class="ruby-identifier">read</span>
 253:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">nil?</span>
-254:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;before filter #{buf.inspect}&quot;</span>
+254: <span class="ruby-comment cmt">#    @server.log.debug &quot;before filter #{buf.inspect}&quot;</span>
 255:     <span class="ruby-identifier">buf</span> = <span class="ruby-identifier">filter_call</span>(<span class="ruby-identifier">:filter_in</span>,<span class="ruby-identifier">buf</span>)
-256:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;after filter #{buf.inspect}&quot;</span>
+256: <span class="ruby-comment cmt">#    @server.log.debug &quot;after filter #{buf.inspect}&quot;</span>
 257:     <span class="ruby-ivar">@inbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">buf</span>
 258:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@initdone</span>  <span class="ruby-comment cmt"># Just let buffer fill until we indicate we're done</span>
 259:                   <span class="ruby-comment cmt"># negotiating.  Set by calling initdone from TelnetFilter</span>
