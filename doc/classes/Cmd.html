@@ -59,6 +59,10 @@
                 cmd/cmd_chat.rb
                 </a>
         <br />
+                <a href="../files/cmd/cmd_color_rb.html">
+                cmd/cmd_color.rb
+                </a>
+        <br />
                 <a href="../files/cmd/cmd_drop_rb.html">
                 cmd/cmd_drop.rb
                 </a>
@@ -127,6 +131,10 @@
                 cmd/cmd_stats.rb
                 </a>
         <br />
+                <a href="../files/cmd/cmd_status_rb.html">
+                cmd/cmd_status.rb
+                </a>
+        <br />
                 <a href="../files/cmd/cmd_who_rb.html">
                 cmd/cmd_who.rb
                 </a>
@@ -147,7 +155,7 @@
       <map id="map" name="map">
   <area shape="RECT" coords="17,17,111,61"      href="Cmd.html" alt="Cmd">
 </map>
-<img src="../dot/m_30_0.gif" usemap="#map" border=0 alt="Module: Cmd">
+<img src="../dot/m_32_0.gif" usemap="#map" border=0 alt="Module: Cmd">
     </div>
 
     <div id="description">
@@ -182,25 +190,27 @@ for additional information.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000143">cmd_chat</a>&nbsp;&nbsp;
-      <a href="#M000144">cmd_drop</a>&nbsp;&nbsp;
-      <a href="#M000145">cmd_emote</a>&nbsp;&nbsp;
-      <a href="#M000146">cmd_fart</a>&nbsp;&nbsp;
-      <a href="#M000147">cmd_get</a>&nbsp;&nbsp;
-      <a href="#M000148">cmd_go</a>&nbsp;&nbsp;
-      <a href="#M000149">cmd_hello</a>&nbsp;&nbsp;
-      <a href="#M000150">cmd_help</a>&nbsp;&nbsp;
-      <a href="#M000151">cmd_inv</a>&nbsp;&nbsp;
-      <a href="#M000152">cmd_kill</a>&nbsp;&nbsp;
-      <a href="#M000153">cmd_look</a>&nbsp;&nbsp;
-      <a href="#M000154">cmd_object</a>&nbsp;&nbsp;
-      <a href="#M000155">cmd_quit</a>&nbsp;&nbsp;
-      <a href="#M000156">cmd_reload</a>&nbsp;&nbsp;
-      <a href="#M000157">cmd_room</a>&nbsp;&nbsp;
-      <a href="#M000158">cmd_say</a>&nbsp;&nbsp;
-      <a href="#M000159">cmd_set</a>&nbsp;&nbsp;
-      <a href="#M000160">cmd_stats</a>&nbsp;&nbsp;
-      <a href="#M000161">cmd_who</a>&nbsp;&nbsp;
+      <a href="#M000155">cmd_chat</a>&nbsp;&nbsp;
+      <a href="#M000156">cmd_color</a>&nbsp;&nbsp;
+      <a href="#M000157">cmd_drop</a>&nbsp;&nbsp;
+      <a href="#M000158">cmd_emote</a>&nbsp;&nbsp;
+      <a href="#M000159">cmd_fart</a>&nbsp;&nbsp;
+      <a href="#M000160">cmd_get</a>&nbsp;&nbsp;
+      <a href="#M000161">cmd_go</a>&nbsp;&nbsp;
+      <a href="#M000162">cmd_hello</a>&nbsp;&nbsp;
+      <a href="#M000163">cmd_help</a>&nbsp;&nbsp;
+      <a href="#M000164">cmd_inv</a>&nbsp;&nbsp;
+      <a href="#M000165">cmd_kill</a>&nbsp;&nbsp;
+      <a href="#M000166">cmd_look</a>&nbsp;&nbsp;
+      <a href="#M000167">cmd_object</a>&nbsp;&nbsp;
+      <a href="#M000168">cmd_quit</a>&nbsp;&nbsp;
+      <a href="#M000169">cmd_reload</a>&nbsp;&nbsp;
+      <a href="#M000170">cmd_room</a>&nbsp;&nbsp;
+      <a href="#M000171">cmd_say</a>&nbsp;&nbsp;
+      <a href="#M000172">cmd_set</a>&nbsp;&nbsp;
+      <a href="#M000173">cmd_stats</a>&nbsp;&nbsp;
+      <a href="#M000174">cmd_status</a>&nbsp;&nbsp;
+      <a href="#M000175">cmd_who</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -222,11 +232,11 @@ for additional information.
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000143" class="method-detail">
-        <a name="M000143"></a>
+      <div id="method-M000155" class="method-detail">
+        <a name="M000155"></a>
 
         <div class="method-heading">
-          <a href="#M000143" class="method-signature">
+          <a href="#M000155" class="method-signature">
           <span class="method-name">cmd_chat</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -236,8 +246,8 @@ for additional information.
 sends &lt;message&gt; to all players in the game
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000143-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000143-source">
+            onclick="toggleCode('M000155-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000155-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_chat.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_chat</span>(<span class="ruby-identifier">args</span>)
@@ -245,10 +255,10 @@ sends &lt;message&gt; to all players in the game
 18:     <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>, <span class="ruby-value str">&quot;&quot;</span>
 19:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;What are you trying to tell everyone?&quot;</span>)
 20:     <span class="ruby-keyword kw">else</span>
-21:       <span class="ruby-identifier">sendto</span>(<span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:magenta</span>] <span class="ruby-operator">+</span> <span class="ruby-node">&quot;You chat, \&quot;#{args}\&quot;.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>])
+21:       <span class="ruby-identifier">sendto</span>(<span class="ruby-node">&quot;[COLOR=magenta]You chat, \&quot;#{args}\&quot;.[/COLOR]&quot;</span>)
 22:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">players_connected</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
 23:         <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>,
-24:           <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:magenta</span>] <span class="ruby-operator">+</span> <span class="ruby-node">&quot;#{@name} chats, \&quot;#{args}\&quot;.&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Colors</span>[<span class="ruby-identifier">:reset</span>])
+24:           <span class="ruby-node">&quot;[COLOR=magenta]#{@name} chats, \&quot;#{args}\&quot;.[/COLOR]&quot;</span>)
 25:       <span class="ruby-keyword kw">end</span>
 26:     <span class="ruby-keyword kw">end</span>
 27:   <span class="ruby-keyword kw">end</span>
@@ -257,11 +267,39 @@ sends &lt;message&gt; to all players in the game
         </div>
       </div>
 
-      <div id="method-M000144" class="method-detail">
-        <a name="M000144"></a>
+      <div id="method-M000156" class="method-detail">
+        <a name="M000156"></a>
 
         <div class="method-heading">
-          <a href="#M000144" class="method-signature">
+          <a href="#M000156" class="method-signature">
+          <span class="method-name">cmd_color</span><span class="method-args">(args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+toggles colors on or off
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000156-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000156-source">
+<pre>
+    <span class="ruby-comment cmt"># File cmd/cmd_color.rb, line 16</span>
+16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_color</span>(<span class="ruby-identifier">args</span>)
+17:     <span class="ruby-ivar">@color</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@color</span> = <span class="ruby-keyword kw">false</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@color</span> = <span class="ruby-keyword kw">true</span>
+18:     <span class="ruby-identifier">message</span>([<span class="ruby-identifier">:color</span>,<span class="ruby-ivar">@color</span>])
+19:     <span class="ruby-identifier">message</span>(<span class="ruby-identifier">:color</span>)
+20:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000157" class="method-detail">
+        <a name="M000157"></a>
+
+        <div class="method-heading">
+          <a href="#M000157" class="method-signature">
           <span class="method-name">cmd_drop</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -271,8 +309,8 @@ sends &lt;message&gt; to all players in the game
 drops all objects in your inventory into the room
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000144-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000144-source">
+            onclick="toggleCode('M000157-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000157-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_drop.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_drop</span>(<span class="ruby-identifier">args</span>)
@@ -285,11 +323,11 @@ drops all objects in your inventory into the room
         </div>
       </div>
 
-      <div id="method-M000145" class="method-detail">
-        <a name="M000145"></a>
+      <div id="method-M000158" class="method-detail">
+        <a name="M000158"></a>
 
         <div class="method-heading">
-          <a href="#M000145" class="method-signature">
+          <a href="#M000158" class="method-signature">
           <span class="method-name">cmd_emote</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -299,8 +337,8 @@ drops all objects in your inventory into the room
 sends &lt;message&gt; to all players in the room
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000145-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000145-source">
+            onclick="toggleCode('M000158-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000158-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_emote.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_emote</span>(<span class="ruby-identifier">args</span>)
@@ -319,11 +357,11 @@ sends &lt;message&gt; to all players in the room
         </div>
       </div>
 
-      <div id="method-M000146" class="method-detail">
-        <a name="M000146"></a>
+      <div id="method-M000159" class="method-detail">
+        <a name="M000159"></a>
 
         <div class="method-heading">
-          <a href="#M000146" class="method-signature">
+          <a href="#M000159" class="method-signature">
           <span class="method-name">cmd_fart</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -341,8 +379,8 @@ adds or deletes a farts trigger to an object Syntax:
 (ex. @fart add 1 myprog arrive)
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000146-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000146-source">
+            onclick="toggleCode('M000159-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000159-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_fart.rb, line 21</span>
 21:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_fart</span>(<span class="ruby-identifier">args</span>)
@@ -394,11 +432,11 @@ adds or deletes a farts trigger to an object Syntax:
         </div>
       </div>
 
-      <div id="method-M000147" class="method-detail">
-        <a name="M000147"></a>
+      <div id="method-M000160" class="method-detail">
+        <a name="M000160"></a>
 
         <div class="method-heading">
-          <a href="#M000147" class="method-signature">
+          <a href="#M000160" class="method-signature">
           <span class="method-name">cmd_get</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -408,8 +446,8 @@ adds or deletes a farts trigger to an object Syntax:
 gets all objects in the room into your inventory
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000147-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000147-source">
+            onclick="toggleCode('M000160-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000160-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_get.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_get</span>(<span class="ruby-identifier">args</span>)
@@ -422,11 +460,11 @@ gets all objects in the room into your inventory
         </div>
       </div>
 
-      <div id="method-M000148" class="method-detail">
-        <a name="M000148"></a>
+      <div id="method-M000161" class="method-detail">
+        <a name="M000161"></a>
 
         <div class="method-heading">
-          <a href="#M000148" class="method-signature">
+          <a href="#M000161" class="method-signature">
           <span class="method-name">cmd_go</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -436,8 +474,8 @@ gets all objects in the room into your inventory
 sends &lt;message&gt; to all players in the room
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000148-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000148-source">
+            onclick="toggleCode('M000161-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000161-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_go.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_go</span>(<span class="ruby-identifier">args</span>)
@@ -463,11 +501,11 @@ sends &lt;message&gt; to all players in the room
         </div>
       </div>
 
-      <div id="method-M000149" class="method-detail">
-        <a name="M000149"></a>
+      <div id="method-M000162" class="method-detail">
+        <a name="M000162"></a>
 
         <div class="method-heading">
-          <a href="#M000149" class="method-signature">
+          <a href="#M000162" class="method-signature">
           <span class="method-name">cmd_hello</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -477,8 +515,8 @@ sends &lt;message&gt; to all players in the room
 The hello social command
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000149-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000149-source">
+            onclick="toggleCode('M000162-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000162-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_hello.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_hello</span>(<span class="ruby-identifier">args</span>)
@@ -489,11 +527,11 @@ The hello social command
         </div>
       </div>
 
-      <div id="method-M000150" class="method-detail">
-        <a name="M000150"></a>
+      <div id="method-M000163" class="method-detail">
+        <a name="M000163"></a>
 
         <div class="method-heading">
-          <a href="#M000150" class="method-signature">
+          <a href="#M000163" class="method-signature">
           <span class="method-name">cmd_help</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -503,8 +541,8 @@ The hello social command
 The help command
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000150-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000150-source">
+            onclick="toggleCode('M000163-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000163-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_help.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_help</span>(<span class="ruby-identifier">args</span>)
@@ -531,11 +569,11 @@ The help command
         </div>
       </div>
 
-      <div id="method-M000151" class="method-detail">
-        <a name="M000151"></a>
+      <div id="method-M000164" class="method-detail">
+        <a name="M000164"></a>
 
         <div class="method-heading">
-          <a href="#M000151" class="method-signature">
+          <a href="#M000164" class="method-signature">
           <span class="method-name">cmd_inv</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -545,8 +583,8 @@ The help command
 The inventory command
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000151-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000151-source">
+            onclick="toggleCode('M000164-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000164-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_inv.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_inv</span>(<span class="ruby-identifier">args</span>)
@@ -559,11 +597,11 @@ The inventory command
         </div>
       </div>
 
-      <div id="method-M000152" class="method-detail">
-        <a name="M000152"></a>
+      <div id="method-M000165" class="method-detail">
+        <a name="M000165"></a>
 
         <div class="method-heading">
-          <a href="#M000152" class="method-signature">
+          <a href="#M000165" class="method-signature">
           <span class="method-name">cmd_kill</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -573,8 +611,8 @@ The inventory command
 This kills a player anywhere - it&#8217;s link death (30% chance)
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000152-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000152-source">
+            onclick="toggleCode('M000165-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000165-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_kill.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_kill</span>(<span class="ruby-identifier">args</span>)
@@ -607,11 +645,11 @@ This kills a player anywhere - it&#8217;s link death (30% chance)
         </div>
       </div>
 
-      <div id="method-M000153" class="method-detail">
-        <a name="M000153"></a>
+      <div id="method-M000166" class="method-detail">
+        <a name="M000166"></a>
 
         <div class="method-heading">
-          <a href="#M000153" class="method-signature">
+          <a href="#M000166" class="method-signature">
           <span class="method-name">cmd_look</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -621,8 +659,8 @@ This kills a player anywhere - it&#8217;s link death (30% chance)
 Look command displays the contents of a room
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000153-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000153-source">
+            onclick="toggleCode('M000166-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000166-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_look.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_look</span>(<span class="ruby-identifier">args</span>)
@@ -641,11 +679,11 @@ Look command displays the contents of a room
         </div>
       </div>
 
-      <div id="method-M000154" class="method-detail">
-        <a name="M000154"></a>
+      <div id="method-M000167" class="method-detail">
+        <a name="M000167"></a>
 
         <div class="method-heading">
-          <a href="#M000154" class="method-signature">
+          <a href="#M000167" class="method-signature">
           <span class="method-name">cmd_object</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -655,8 +693,8 @@ Look command displays the contents of a room
 sets the description for an object (ex. @set 1 A beautiful rose.)
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000154-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000154-source">
+            onclick="toggleCode('M000167-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000167-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_object.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_object</span>(<span class="ruby-identifier">args</span>)
@@ -673,11 +711,11 @@ sets the description for an object (ex. @set 1 A beautiful rose.)
         </div>
       </div>
 
-      <div id="method-M000155" class="method-detail">
-        <a name="M000155"></a>
+      <div id="method-M000168" class="method-detail">
+        <a name="M000168"></a>
 
         <div class="method-heading">
-          <a href="#M000155" class="method-signature">
+          <a href="#M000168" class="method-signature">
           <span class="method-name">cmd_quit</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -687,8 +725,8 @@ sets the description for an object (ex. @set 1 A beautiful rose.)
 The quit command
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000155-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000155-source">
+            onclick="toggleCode('M000168-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000168-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_quit.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_quit</span>(<span class="ruby-identifier">args</span>)
@@ -699,11 +737,11 @@ The quit command
         </div>
       </div>
 
-      <div id="method-M000156" class="method-detail">
-        <a name="M000156"></a>
+      <div id="method-M000169" class="method-detail">
+        <a name="M000169"></a>
 
         <div class="method-heading">
-          <a href="#M000156" class="method-signature">
+          <a href="#M000169" class="method-signature">
           <span class="method-name">cmd_reload</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -713,8 +751,8 @@ The quit command
 This reloads the commands
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000156-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000156-source">
+            onclick="toggleCode('M000169-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000169-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_reload.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_reload</span>(<span class="ruby-identifier">args</span>)
@@ -727,11 +765,11 @@ This reloads the commands
         </div>
       </div>
 
-      <div id="method-M000157" class="method-detail">
-        <a name="M000157"></a>
+      <div id="method-M000170" class="method-detail">
+        <a name="M000170"></a>
 
         <div class="method-heading">
-          <a href="#M000157" class="method-signature">
+          <a href="#M000170" class="method-signature">
           <span class="method-name">cmd_room</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -742,8 +780,8 @@ creates a new room and autolinks the exits using the exit names provided.
 (ex. @room My <a href="Room.html">Room</a> north south)
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000157-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000157-source">
+            onclick="toggleCode('M000170-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000170-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_room.rb, line 17</span>
 17:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_room</span>(<span class="ruby-identifier">args</span>)
@@ -763,11 +801,11 @@ creates a new room and autolinks the exits using the exit names provided.
         </div>
       </div>
 
-      <div id="method-M000158" class="method-detail">
-        <a name="M000158"></a>
+      <div id="method-M000171" class="method-detail">
+        <a name="M000171"></a>
 
         <div class="method-heading">
-          <a href="#M000158" class="method-signature">
+          <a href="#M000171" class="method-signature">
           <span class="method-name">cmd_say</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -777,8 +815,8 @@ creates a new room and autolinks the exits using the exit names provided.
 sends &lt;message&gt; to all players in the room
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000158-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000158-source">
+            onclick="toggleCode('M000171-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000171-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_say.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_say</span>(<span class="ruby-identifier">args</span>)
@@ -797,11 +835,11 @@ sends &lt;message&gt; to all players in the room
         </div>
       </div>
 
-      <div id="method-M000159" class="method-detail">
-        <a name="M000159"></a>
+      <div id="method-M000172" class="method-detail">
+        <a name="M000172"></a>
 
         <div class="method-heading">
-          <a href="#M000159" class="method-signature">
+          <a href="#M000172" class="method-signature">
           <span class="method-name">cmd_set</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -818,8 +856,8 @@ sets the description or timer for an object Syntax:
 (ex. @set desc 1 A beautiful rose.)
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000159-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000159-source">
+            onclick="toggleCode('M000172-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000172-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_set.rb, line 20</span>
 20:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_set</span>(<span class="ruby-identifier">args</span>)
@@ -860,11 +898,11 @@ sets the description or timer for an object Syntax:
         </div>
       </div>
 
-      <div id="method-M000160" class="method-detail">
-        <a name="M000160"></a>
+      <div id="method-M000173" class="method-detail">
+        <a name="M000173"></a>
 
         <div class="method-heading">
-          <a href="#M000160" class="method-signature">
+          <a href="#M000173" class="method-signature">
           <span class="method-name">cmd_stats</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -874,8 +912,8 @@ sets the description or timer for an object Syntax:
 The inventory command
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000160-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000160-source">
+            onclick="toggleCode('M000173-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000173-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_stats.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_stats</span>(<span class="ruby-identifier">args</span>)
@@ -886,11 +924,39 @@ The inventory command
         </div>
       </div>
 
-      <div id="method-M000161" class="method-detail">
-        <a name="M000161"></a>
+      <div id="method-M000174" class="method-detail">
+        <a name="M000174"></a>
 
         <div class="method-heading">
-          <a href="#M000161" class="method-signature">
+          <a href="#M000174" class="method-signature">
+          <span class="method-name">cmd_status</span><span class="method-args">(args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+displays session information
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000174-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000174-source">
+<pre>
+    <span class="ruby-comment cmt"># File cmd/cmd_status.rb, line 16</span>
+16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_status</span>(<span class="ruby-identifier">args</span>)
+17:     <span class="ruby-identifier">message</span>(<span class="ruby-identifier">:terminal</span>)
+18:     <span class="ruby-identifier">message</span>(<span class="ruby-identifier">:termsize</span>)
+19:     <span class="ruby-identifier">message</span>(<span class="ruby-identifier">:color</span>)
+20:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000175" class="method-detail">
+        <a name="M000175"></a>
+
+        <div class="method-heading">
+          <a href="#M000175" class="method-signature">
           <span class="method-name">cmd_who</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -900,8 +966,8 @@ The inventory command
 shows a list of all connected players
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000161-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000161-source">
+            onclick="toggleCode('M000175-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000175-source">
 <pre>
     <span class="ruby-comment cmt"># File cmd/cmd_who.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_who</span>(<span class="ruby-identifier">args</span>)

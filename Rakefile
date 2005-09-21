@@ -7,6 +7,7 @@ PKG_FILES = FileList[
   'tmud.rb',
   'LICENSE',
   'CONTRIBUTORS', 
+  'CHANGELOG', 
   'README',
   'farts.grammar',
   'Rakefile', 

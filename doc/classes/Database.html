@@ -109,16 +109,16 @@ The <a href="Database.html">Database</a> class manages all object storage.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000065">delete</a>&nbsp;&nbsp;
-      <a href="#M000067">find_player_by_name</a>&nbsp;&nbsp;
-      <a href="#M000066">get</a>&nbsp;&nbsp;
-      <a href="#M000062">getid</a>&nbsp;&nbsp;
-      <a href="#M000061">new</a>&nbsp;&nbsp;
-      <a href="#M000069">objects</a>&nbsp;&nbsp;
-      <a href="#M000068">players_connected</a>&nbsp;&nbsp;
-      <a href="#M000064">put</a>&nbsp;&nbsp;
-      <a href="#M000063">save</a>&nbsp;&nbsp;
-      <a href="#M000070">stats</a>&nbsp;&nbsp;
+      <a href="#M000070">delete</a>&nbsp;&nbsp;
+      <a href="#M000072">find_player_by_name</a>&nbsp;&nbsp;
+      <a href="#M000071">get</a>&nbsp;&nbsp;
+      <a href="#M000067">getid</a>&nbsp;&nbsp;
+      <a href="#M000066">new</a>&nbsp;&nbsp;
+      <a href="#M000074">objects</a>&nbsp;&nbsp;
+      <a href="#M000073">players_connected</a>&nbsp;&nbsp;
+      <a href="#M000069">put</a>&nbsp;&nbsp;
+      <a href="#M000068">save</a>&nbsp;&nbsp;
+      <a href="#M000075">stats</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -158,19 +158,19 @@ The minimal database will be used in the absence of detecting one.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000061" class="method-detail">
-        <a name="M000061"></a>
+      <div id="method-M000066" class="method-detail">
+        <a name="M000066"></a>
 
         <div class="method-heading">
-          <a href="#M000061" class="method-signature">
+          <a href="#M000066" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(log, opts)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000061-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000061-source">
+            onclick="toggleCode('M000066-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000066-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/database.rb, line 36</span>
 36:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">log</span>, <span class="ruby-identifier">opts</span>)
@@ -200,11 +200,11 @@ The minimal database will be used in the absence of detecting one.
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000065" class="method-detail">
-        <a name="M000065"></a>
+      <div id="method-M000070" class="method-detail">
+        <a name="M000070"></a>
 
         <div class="method-heading">
-          <a href="#M000065" class="method-signature">
+          <a href="#M000070" class="method-signature">
           <span class="method-name">delete</span><span class="method-args">(obj)</span>
           </a>
         </div>
@@ -222,8 +222,8 @@ Deletes an object from the database.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000065-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000065-source">
+            onclick="toggleCode('M000070-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000070-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/database.rb, line 79</span>
 79:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">obj</span>)
@@ -234,11 +234,11 @@ Deletes an object from the database.
         </div>
       </div>
 
-      <div id="method-M000067" class="method-detail">
-        <a name="M000067"></a>
+      <div id="method-M000072" class="method-detail">
+        <a name="M000072"></a>
 
         <div class="method-heading">
-          <a href="#M000067" class="method-signature">
+          <a href="#M000072" class="method-signature">
           <span class="method-name">find_player_by_name</span><span class="method-args">(nm)</span>
           </a>
         </div>
@@ -256,8 +256,8 @@ Finds a <a href="Player.html">Player</a> object in the database by name.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000067-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000067-source">
+            onclick="toggleCode('M000072-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000072-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/database.rb, line 93</span>
 93:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_player_by_name</span>(<span class="ruby-identifier">nm</span>)
@@ -268,11 +268,11 @@ Finds a <a href="Player.html">Player</a> object in the database by name.
         </div>
       </div>
 
-      <div id="method-M000066" class="method-detail">
-        <a name="M000066"></a>
+      <div id="method-M000071" class="method-detail">
+        <a name="M000071"></a>
 
         <div class="method-heading">
-          <a href="#M000066" class="method-signature">
+          <a href="#M000071" class="method-signature">
           <span class="method-name">get</span><span class="method-args">(oid)</span>
           </a>
         </div>
@@ -290,8 +290,8 @@ Finds an object in the database by its oid.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000066-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000066-source">
+            onclick="toggleCode('M000071-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000071-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/database.rb, line 86</span>
 86:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">oid</span>)
@@ -302,11 +302,11 @@ Finds an object in the database by its oid.
         </div>
       </div>
 
-      <div id="method-M000062" class="method-detail">
-        <a name="M000062"></a>
+      <div id="method-M000067" class="method-detail">
+        <a name="M000067"></a>
 
         <div class="method-heading">
-          <a href="#M000062" class="method-signature">
+          <a href="#M000067" class="method-signature">
           <span class="method-name">getid</span><span class="method-args">()</span>
           </a>
         </div>
@@ -321,8 +321,8 @@ Fetch the next available oid.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000062-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000062-source">
+            onclick="toggleCode('M000067-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000067-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/database.rb, line 59</span>
 59:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">getid</span>
@@ -333,11 +333,11 @@ Fetch the next available oid.
         </div>
       </div>
 
-      <div id="method-M000069" class="method-detail">
-        <a name="M000069"></a>
+      <div id="method-M000074" class="method-detail">
+        <a name="M000074"></a>
 
         <div class="method-heading">
-          <a href="#M000069" class="method-signature">
+          <a href="#M000074" class="method-signature">
           <span class="method-name">objects</span><span class="method-args">() {|obj| ...}</span>
           </a>
         </div>
@@ -352,8 +352,8 @@ Iterate through all objects
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000069-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000069-source">
+            onclick="toggleCode('M000074-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000074-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/database.rb, line 106</span>
 106:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">objects</span>
@@ -364,11 +364,11 @@ Iterate through all objects
         </div>
       </div>
 
-      <div id="method-M000068" class="method-detail">
-        <a name="M000068"></a>
+      <div id="method-M000073" class="method-detail">
+        <a name="M000073"></a>
 
         <div class="method-heading">
-          <a href="#M000068" class="method-signature">
+          <a href="#M000073" class="method-signature">
           <span class="method-name">players_connected</span><span class="method-args">(exempt=nil)</span>
           </a>
         </div>
@@ -386,8 +386,8 @@ Finds all connected players
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000068-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000068-source">
+            onclick="toggleCode('M000073-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000073-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/database.rb, line 100</span>
 100:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">players_connected</span>(<span class="ruby-identifier">exempt</span>=<span class="ruby-keyword kw">nil</span>)
@@ -398,11 +398,11 @@ Finds all connected players
         </div>
       </div>
 
-      <div id="method-M000064" class="method-detail">
-        <a name="M000064"></a>
+      <div id="method-M000069" class="method-detail">
+        <a name="M000069"></a>
 
         <div class="method-heading">
-          <a href="#M000064" class="method-signature">
+          <a href="#M000069" class="method-signature">
           <span class="method-name">put</span><span class="method-args">(obj)</span>
           </a>
         </div>
@@ -420,8 +420,8 @@ Adds a new object to the database.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000064-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000064-source">
+            onclick="toggleCode('M000069-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000069-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/database.rb, line 72</span>
 72:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">put</span>(<span class="ruby-identifier">obj</span>)
@@ -432,11 +432,11 @@ Adds a new object to the database.
         </div>
       </div>
 
-      <div id="method-M000063" class="method-detail">
-        <a name="M000063"></a>
+      <div id="method-M000068" class="method-detail">
+        <a name="M000068"></a>
 
         <div class="method-heading">
-          <a href="#M000063" class="method-signature">
+          <a href="#M000068" class="method-signature">
           <span class="method-name">save</span><span class="method-args">()</span>
           </a>
         </div>
@@ -451,8 +451,8 @@ Save the world
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000063-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000063-source">
+            onclick="toggleCode('M000068-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000068-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/database.rb, line 65</span>
 65:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save</span>
@@ -463,11 +463,11 @@ Save the world
         </div>
       </div>
 
-      <div id="method-M000070" class="method-detail">
-        <a name="M000070"></a>
+      <div id="method-M000075" class="method-detail">
+        <a name="M000075"></a>
 
         <div class="method-heading">
-          <a href="#M000070" class="method-signature">
+          <a href="#M000075" class="method-signature">
           <span class="method-name">stats</span><span class="method-args">()</span>
           </a>
         </div>
@@ -482,8 +482,8 @@ produces a statistical report of the database
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000070-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000070-source">
+            onclick="toggleCode('M000075-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000075-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/database.rb, line 112</span>
 112:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stats</span>
@@ -498,7 +498,7 @@ produces a statistical report of the database
 121:         <span class="ruby-identifier">objs</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
 122:       <span class="ruby-keyword kw">end</span>
 123:     <span class="ruby-keyword kw">end</span>
-124:     <span class="ruby-identifier">stats</span>=<span class="ruby-value str">&quot;\#{Colors[:cyan]}\n---* Database Statistics *---\n  Rooms   - \#{rooms}\n  Players - \#{players}\n  Objects - \#{objs}\n  Total Objects - \#{rooms+objs+players}\n  Highest OID in use - \#{@dbtop}\n---*                     *---\n\#{Colors[:reset]}\n&quot;</span>
+124:     <span class="ruby-identifier">stats</span>=<span class="ruby-value str">&quot;[COLOR=cyan]\n---* Database Statistics *---\n  Rooms   - \#{rooms}\n  Players - \#{players}\n  Objects - \#{objs}\n  Total Objects - \#{rooms+objs+players}\n  Highest OID in use - \#{@dbtop}\n---*                     *---\n[/COLOR]\n&quot;</span>
 125:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">stats</span>
 126:   <span class="ruby-keyword kw">end</span>
 </pre>

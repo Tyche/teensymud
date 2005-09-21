@@ -107,9 +107,11 @@ interface for TCP sockets.
       <div class="name-list">
       <a href="#M000037">new</a>&nbsp;&nbsp;
       <a href="#M000038">read</a>&nbsp;&nbsp;
-      <a href="#M000040">read_urgent</a>&nbsp;&nbsp;
+      <a href="#M000041">read_flush</a>&nbsp;&nbsp;
+      <a href="#M000042">read_urgent</a>&nbsp;&nbsp;
       <a href="#M000039">write</a>&nbsp;&nbsp;
-      <a href="#M000041">write_urgent</a>&nbsp;&nbsp;
+      <a href="#M000040">write_flush</a>&nbsp;&nbsp;
+      <a href="#M000043">write_urgent</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -207,18 +209,44 @@ read will receive a data from the socket.
         </div>
       </div>
 
-      <div id="method-M000040" class="method-detail">
-        <a name="M000040"></a>
+      <div id="method-M000041" class="method-detail">
+        <a name="M000041"></a>
 
         <div class="method-heading">
-          <a href="#M000040" class="method-signature">
+          <a href="#M000041" class="method-signature">
+          <span class="method-name">read_flush</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="SockIO.html#M000041">read_flush</a> will kill the input buffer
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000041-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000041-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/net.rb, line 74</span>
+74:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_flush</span>
+75:     <span class="ruby-ivar">@inbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
+76:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000042" class="method-detail">
+        <a name="M000042"></a>
+
+        <div class="method-heading">
+          <a href="#M000042" class="method-signature">
           <span class="method-name">read_urgent</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="SockIO.html#M000040">read_urgent</a> will receive urgent data from
+<a href="SockIO.html#M000042">read_urgent</a> will receive urgent data from
 the socket.
 </p>
 <dl>
@@ -233,13 +261,13 @@ the socket.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000040-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000040-source">
+            onclick="toggleCode('M000042-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000042-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net.rb, line 73</span>
-73:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_urgent</span>
-74:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">recv</span>(<span class="ruby-ivar">@bufsize</span>, <span class="ruby-constant">Socket</span><span class="ruby-operator">::</span><span class="ruby-constant">MSG_OOB</span>)
-75:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net.rb, line 83</span>
+83:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_urgent</span>
+84:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">recv</span>(<span class="ruby-ivar">@bufsize</span>, <span class="ruby-constant">Socket</span><span class="ruby-operator">::</span><span class="ruby-constant">MSG_OOB</span>)
+85:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -293,18 +321,44 @@ write will transmit a message to the socket
         </div>
       </div>
 
-      <div id="method-M000041" class="method-detail">
-        <a name="M000041"></a>
+      <div id="method-M000040" class="method-detail">
+        <a name="M000040"></a>
 
         <div class="method-heading">
-          <a href="#M000041" class="method-signature">
+          <a href="#M000040" class="method-signature">
+          <span class="method-name">write_flush</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="SockIO.html#M000040">write_flush</a> will kill the output buffer
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000040-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000040-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/net.rb, line 69</span>
+69:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_flush</span>
+70:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
+71:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000043" class="method-detail">
+        <a name="M000043"></a>
+
+        <div class="method-heading">
+          <a href="#M000043" class="method-signature">
           <span class="method-name">write_urgent</span><span class="method-args">(msg)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="SockIO.html#M000041">write_urgent</a> will write urgent data to
+<a href="SockIO.html#M000043">write_urgent</a> will write urgent data to
 the socket.
 </p>
 <dl>
@@ -319,13 +373,13 @@ the socket.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000041-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000041-source">
+            onclick="toggleCode('M000043-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000043-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net.rb, line 82</span>
-82:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_urgent</span>(<span class="ruby-identifier">msg</span>)
-83:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-constant">Socket</span><span class="ruby-operator">::</span><span class="ruby-constant">MSG_OOB</span>)
-84:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net.rb, line 92</span>
+92:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_urgent</span>(<span class="ruby-identifier">msg</span>)
+93:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-constant">Socket</span><span class="ruby-operator">::</span><span class="ruby-constant">MSG_OOB</span>)
+94:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

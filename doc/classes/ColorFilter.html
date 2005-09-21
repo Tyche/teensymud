@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: ColorFilter</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">ColorFilter</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/lib/filter_rb.html">
+                lib/filter.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="Filter.html">
+                Filter
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+    <div id="diagram">
+      <map id="map" name="map">
+  <area shape="RECT" coords="6,113,86,161"      href="TelnetFilter.html" alt="TelnetFilter">
+  <area shape="RECT" coords="110,17,182,65"      href="Filter.html" alt="Filter">
+  <area shape="RECT" coords="110,113,188,161"      href="ColorFilter.html" alt="ColorFilter">
+  <area shape="RECT" coords="8,17,85,65"      href="TelnetCodes.html" alt="TelnetCodes">
+</map>
+<img src="../dot/f_8.gif" usemap="#map" border=0 alt="TopLevel">
+    </div>
+
+    <div id="description">
+      <p>
+The <a href="ColorFilter.html">ColorFilter</a> class implements ANSI color
+(SGR) support.
+</p>
+<p>
+A <a href="Filter.html">Filter</a> can keep state and partial data
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000105">filter_out</a>&nbsp;&nbsp;
+      <a href="#M000106">filter_query</a>&nbsp;&nbsp;
+      <a href="#M000107">filter_set</a>&nbsp;&nbsp;
+      <a href="#M000104">new</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000104" class="method-detail">
+        <a name="M000104"></a>
+
+        <div class="method-heading">
+          <a href="#M000104" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(conn)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Construct filter
+</p>
+<dl>
+<dt><tt>conn</tt></dt><dd>The connection associated with this filter
+
+</dd>
+<dt><tt>wopts</tt></dt><dd>An optional hash of desired initial options
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000104-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000104-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/filter.rb, line 657</span>
+657:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">conn</span>)
+658:     <span class="ruby-ivar">@color</span> = <span class="ruby-keyword kw">false</span>
+659:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">conn</span>)
+660:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000105" class="method-detail">
+        <a name="M000105"></a>
+
+        <div class="method-heading">
+          <a href="#M000105" class="method-signature">
+          <span class="method-name">filter_out</span><span class="method-args">(str)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="ColorFilter.html#M000105">filter_out</a> method filters output
+data
+</p>
+<dl>
+<dt><tt>str</tt></dt><dd>The string to be processed
+
+</dd>
+<dt><tt>return</tt></dt><dd>The filtered data
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000105-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000105-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/filter.rb, line 665</span>
+665:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_out</span>(<span class="ruby-identifier">str</span>)
+666:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@color</span>
+667:       <span class="ruby-identifier">s</span> = <span class="ruby-constant">BBCode</span>.<span class="ruby-identifier">bbcode_to_ansi</span>(<span class="ruby-identifier">str</span>)
+668:     <span class="ruby-keyword kw">else</span>
+669:       <span class="ruby-identifier">s</span> = <span class="ruby-constant">BBCode</span>.<span class="ruby-identifier">strip_bbcode</span>(<span class="ruby-identifier">str</span>)
+670:     <span class="ruby-keyword kw">end</span>
+671:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>
+672:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000106" class="method-detail">
+        <a name="M000106"></a>
+
+        <div class="method-heading">
+          <a href="#M000106" class="method-signature">
+          <span class="method-name">filter_query</span><span class="method-args">(attr)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="ColorFilter.html#M000106">filter_query</a> method returns
+state information for the filter.
+</p>
+<dl>
+<dt><tt>attr</tt></dt><dd>A symbol representing the attribute being queried.
+
+</dd>
+<dt><tt>return</tt></dt><dd>An attr/value pair or false if not defined in this filter
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000106-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000106-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/filter.rb, line 677</span>
+677:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_query</span>(<span class="ruby-identifier">attr</span>)
+678:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">attr</span>
+679:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:color</span>
+680:       <span class="ruby-keyword kw">return</span> [<span class="ruby-identifier">:color</span>, <span class="ruby-ivar">@color</span>]
+681:     <span class="ruby-keyword kw">end</span>
+682:     <span class="ruby-keyword kw">false</span>
+683:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000107" class="method-detail">
+        <a name="M000107"></a>
+
+        <div class="method-heading">
+          <a href="#M000107" class="method-signature">
+          <span class="method-name">filter_set</span><span class="method-args">(pair)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="ColorFilter.html#M000107">filter_set</a> method sets state
+information on the filter.
+</p>
+<dl>
+<dt><tt>pair</tt></dt><dd>An attr/value pair [:symbol, value]
+
+</dd>
+<dt><tt>return</tt></dt><dd>true if attr not defined in this filter, false if not
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000107-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000107-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/filter.rb, line 688</span>
+688:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_set</span>(<span class="ruby-identifier">pair</span>)
+689:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">pair</span>[<span class="ruby-value">0</span>]
+690:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:color</span>
+691:       <span class="ruby-ivar">@color</span> = <span class="ruby-identifier">pair</span>[<span class="ruby-value">1</span>]
+692:       <span class="ruby-keyword kw">true</span>
+693:     <span class="ruby-keyword kw">else</span>
+694:       <span class="ruby-keyword kw">false</span>
+695:     <span class="ruby-keyword kw">end</span>
+696:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Mon Sep 19 23:29:52 GMT-5:00 2005</td>
+      <td>Wed Sep 21 01:27:02 GMT-5:00 2005</td>
     </tr>
     </table>
   </div>
@@ -91,10 +91,10 @@
 <tr><td valign="top">author:</td><td>Jon A. Lambert
 
 </td></tr>
-<tr><td valign="top">version:</td><td>2.5.2
+<tr><td valign="top">version:</td><td>2.5.3
 
 </td></tr>
-<tr><td valign="top">date:</td><td>09/18/2005
+<tr><td valign="top">date:</td><td>09/21/2005
 
 </td></tr>
 </table>
@@ -153,7 +153,7 @@ for additional information.
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">Version</td>
           <td>=</td>
-          <td class="context-item-value">&quot;2.5.2&quot;</td>
+          <td class="context-item-value">&quot;2.5.3&quot;</td>
         </tr>
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">BANNER</td>
@@ -164,11 +164,6 @@ for additional information.
 Displayed upon connecting
 
 </td>
-        </tr>
-        <tr class="top-aligned-row context-row">
-          <td class="context-item-name">Colors</td>
-          <td>=</td>
-          <td class="context-item-value">{:black =&gt; &quot;\e[30m&quot;, :red =&gt; &quot;\e[31m&quot;, :green =&gt; &quot;\e[32m&quot;,   :yellow =&gt; &quot;\e[33m&quot;, :blue =&gt; &quot;\e[34m&quot;, :magenta =&gt; &quot;\e[35m&quot;,   :cyan =&gt; &quot;\e[36m&quot;, :white =&gt; &quot;\e[37m&quot;, :reset =&gt; &quot;\e[0m&quot;}</td>
         </tr>
         </table>
       </div>
@@ -197,53 +192,55 @@ Displayed upon connecting
             onclick="toggleCode('M000001-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000001-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 682</span>
-682: <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_options</span>
-683:   <span class="ruby-comment cmt"># parse options</span>
-684:   <span class="ruby-keyword kw">begin</span>
-685:     <span class="ruby-comment cmt"># The myopts specified on the command line will be collected in *myopts*.</span>
-686:     <span class="ruby-comment cmt"># We set default values here.</span>
-687:     <span class="ruby-identifier">myopts</span> = <span class="ruby-constant">OpenStruct</span>.<span class="ruby-identifier">new</span>
-688:     <span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">port</span> = <span class="ruby-value">4000</span>
-689:     <span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">home</span> = <span class="ruby-value">1</span>
-690:     <span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">dbname</span> = <span class="ruby-value str">&quot;db/world.yaml&quot;</span>
-691:     <span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">verbose</span> = <span class="ruby-keyword kw">false</span>
-692: 
-693:     <span class="ruby-identifier">opts</span> = <span class="ruby-constant">OptionParser</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">opts</span><span class="ruby-operator">|</span>
-694:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">banner</span> = <span class="ruby-constant">BANNER</span>
-695:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span> <span class="ruby-value str">&quot;&quot;</span>
-696:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span> <span class="ruby-node">&quot;Usage: ruby #{$0} [options]&quot;</span>
-697:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span> <span class="ruby-value str">&quot;&quot;</span>
-698:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-p&quot;</span>, <span class="ruby-value str">&quot;--port PORT&quot;</span>, <span class="ruby-constant">Integer</span>,
-699:         <span class="ruby-value str">&quot;Select the port the mud will run on&quot;</span>,
-700:         <span class="ruby-value str">&quot;  (defaults to 4000)&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">port</span><span class="ruby-operator">|</span>}
-701:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-d&quot;</span>, <span class="ruby-value str">&quot;--database DBNAME&quot;</span>, <span class="ruby-constant">String</span>,
-702:         <span class="ruby-value str">&quot;Select the name of the database the mud will use&quot;</span>,
-703:         <span class="ruby-value str">&quot;  (defaults to \'db/world.yaml\')&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">dbname</span><span class="ruby-operator">|</span>}
-704:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-h&quot;</span>, <span class="ruby-value str">&quot;--home LOCATIONID&quot;</span>, <span class="ruby-constant">Integer</span>,
-705:         <span class="ruby-value str">&quot;Select the object id where new players will start&quot;</span>,
-706:         <span class="ruby-value str">&quot;  (defaults to 1)&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">home</span><span class="ruby-operator">|</span>}
-707:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-v&quot;</span>, <span class="ruby-value str">&quot;--[no-]verbose&quot;</span>, <span class="ruby-value str">&quot;Run verbosely&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">verbose</span><span class="ruby-operator">|</span>}
-708:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on_tail</span>(<span class="ruby-value str">&quot;-h&quot;</span>, <span class="ruby-value str">&quot;--help&quot;</span>, <span class="ruby-value str">&quot;Show this message&quot;</span>) <span class="ruby-keyword kw">do</span>
-709:         <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">help</span>
-710:         <span class="ruby-identifier">exit</span>
-711:       <span class="ruby-keyword kw">end</span>
-712:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on_tail</span>(<span class="ruby-value str">&quot;--version&quot;</span>, <span class="ruby-value str">&quot;Show version&quot;</span>) <span class="ruby-keyword kw">do</span>
-713:         <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;TeensyMud #{Version}&quot;</span>
-714:         <span class="ruby-identifier">exit</span>
-715:       <span class="ruby-keyword kw">end</span>
-716:     <span class="ruby-keyword kw">end</span>
-717: 
-718:     <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">parse!</span>(<span class="ruby-constant">ARGV</span>)
-719: 
-720:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">myopts</span>
-721:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">OptionParser</span><span class="ruby-operator">::</span><span class="ruby-constant">ParseError</span>
-722:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;ERROR - #{$!}&quot;</span>
-723:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;For help...&quot;</span>
-724:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot; ruby #{$0} --help&quot;</span>
-725:     <span class="ruby-identifier">exit</span>
-726:   <span class="ruby-keyword kw">end</span>
-727: <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 716</span>
+716: <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_options</span>
+717:   <span class="ruby-comment cmt"># parse options</span>
+718:   <span class="ruby-keyword kw">begin</span>
+719:     <span class="ruby-comment cmt"># The myopts specified on the command line will be collected in *myopts*.</span>
+720:     <span class="ruby-comment cmt"># We set default values here.</span>
+721:     <span class="ruby-identifier">myopts</span> = <span class="ruby-constant">OpenStruct</span>.<span class="ruby-identifier">new</span>
+722:     <span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">port</span> = <span class="ruby-value">4000</span>
+723:     <span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">home</span> = <span class="ruby-value">1</span>
+724:     <span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">dbname</span> = <span class="ruby-value str">&quot;db/world.yaml&quot;</span>
+725:     <span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">verbose</span> = <span class="ruby-keyword kw">false</span>
+726:     <span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">trace</span> = <span class="ruby-keyword kw">false</span>
+727: 
+728:     <span class="ruby-identifier">opts</span> = <span class="ruby-constant">OptionParser</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">opts</span><span class="ruby-operator">|</span>
+729:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">banner</span> = <span class="ruby-constant">BANNER</span>
+730:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span> <span class="ruby-value str">&quot;&quot;</span>
+731:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span> <span class="ruby-node">&quot;Usage: ruby #{$0} [options]&quot;</span>
+732:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">separator</span> <span class="ruby-value str">&quot;&quot;</span>
+733:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-p&quot;</span>, <span class="ruby-value str">&quot;--port PORT&quot;</span>, <span class="ruby-constant">Integer</span>,
+734:         <span class="ruby-value str">&quot;Select the port the mud will run on&quot;</span>,
+735:         <span class="ruby-value str">&quot;  (defaults to 4000)&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">port</span><span class="ruby-operator">|</span>}
+736:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-d&quot;</span>, <span class="ruby-value str">&quot;--database DBNAME&quot;</span>, <span class="ruby-constant">String</span>,
+737:         <span class="ruby-value str">&quot;Select the name of the database the mud will use&quot;</span>,
+738:         <span class="ruby-value str">&quot;  (defaults to \'db/world.yaml\')&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">dbname</span><span class="ruby-operator">|</span>}
+739:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-h&quot;</span>, <span class="ruby-value str">&quot;--home LOCATIONID&quot;</span>, <span class="ruby-constant">Integer</span>,
+740:         <span class="ruby-value str">&quot;Select the object id where new players will start&quot;</span>,
+741:         <span class="ruby-value str">&quot;  (defaults to 1)&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">home</span><span class="ruby-operator">|</span>}
+742:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-t&quot;</span>, <span class="ruby-value str">&quot;--[no-]trace&quot;</span>, <span class="ruby-value str">&quot;Trace execution&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">trace</span><span class="ruby-operator">|</span>}
+743:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">&quot;-v&quot;</span>, <span class="ruby-value str">&quot;--[no-]verbose&quot;</span>, <span class="ruby-value str">&quot;Run verbosely&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">myopts</span>.<span class="ruby-identifier">verbose</span><span class="ruby-operator">|</span>}
+744:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on_tail</span>(<span class="ruby-value str">&quot;-h&quot;</span>, <span class="ruby-value str">&quot;--help&quot;</span>, <span class="ruby-value str">&quot;Show this message&quot;</span>) <span class="ruby-keyword kw">do</span>
+745:         <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">help</span>
+746:         <span class="ruby-identifier">exit</span>
+747:       <span class="ruby-keyword kw">end</span>
+748:       <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on_tail</span>(<span class="ruby-value str">&quot;--version&quot;</span>, <span class="ruby-value str">&quot;Show version&quot;</span>) <span class="ruby-keyword kw">do</span>
+749:         <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;TeensyMud #{Version}&quot;</span>
+750:         <span class="ruby-identifier">exit</span>
+751:       <span class="ruby-keyword kw">end</span>
+752:     <span class="ruby-keyword kw">end</span>
+753: 
+754:     <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">parse!</span>(<span class="ruby-constant">ARGV</span>)
+755: 
+756:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">myopts</span>
+757:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">OptionParser</span><span class="ruby-operator">::</span><span class="ruby-constant">ParseError</span>
+758:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;ERROR - #{$!}&quot;</span>
+759:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;For help...&quot;</span>
+760:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot; ruby #{$0} --help&quot;</span>
+761:     <span class="ruby-identifier">exit</span>
+762:   <span class="ruby-keyword kw">end</span>
+763: <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -266,21 +263,21 @@ Setup traps - invoke one of these signals to shut down the mud
             onclick="toggleCode('M000002-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000002-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 731</span>
-731: <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_signal</span>(<span class="ruby-identifier">sig</span>)
-732:   <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$engine</span>
-733:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">warn</span> <span class="ruby-value str">&quot;Signal caught request to shutdown.&quot;</span>
-734:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Saving world...&quot;</span>
-735:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">players_connected</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">plr</span><span class="ruby-operator">|</span><span class="ruby-identifier">plr</span>.<span class="ruby-identifier">disconnect</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">plr</span>.<span class="ruby-identifier">session</span>}
-736:     <span class="ruby-comment cmt"># clear compiled progs out before saving</span>
-737:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">objects</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">get_triggers</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">prog</span> = <span class="ruby-keyword kw">nil</span> }}
-738:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">save</span>
-739:   <span class="ruby-keyword kw">else</span>
-740:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">warn</span> <span class="ruby-value str">&quot;Signal caught request to shutdown.&quot;</span>
-741:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Saving world...&quot;</span>
-742:   <span class="ruby-keyword kw">end</span>
-743:   <span class="ruby-identifier">exit</span>
-744: <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 767</span>
+767: <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_signal</span>(<span class="ruby-identifier">sig</span>)
+768:   <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$engine</span>
+769:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">warn</span> <span class="ruby-value str">&quot;Signal caught request to shutdown.&quot;</span>
+770:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Saving world...&quot;</span>
+771:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">players_connected</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">plr</span><span class="ruby-operator">|</span><span class="ruby-identifier">plr</span>.<span class="ruby-identifier">disconnect</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">plr</span>.<span class="ruby-identifier">session</span>}
+772:     <span class="ruby-comment cmt"># clear compiled progs out before saving</span>
+773:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">objects</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">get_triggers</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">prog</span> = <span class="ruby-keyword kw">nil</span> }}
+774:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">save</span>
+775:   <span class="ruby-keyword kw">else</span>
+776:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">warn</span> <span class="ruby-value str">&quot;Signal caught request to shutdown.&quot;</span>
+777:     <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Saving world...&quot;</span>
+778:   <span class="ruby-keyword kw">end</span>
+779:   <span class="ruby-identifier">exit</span>
+780: <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

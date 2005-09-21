@@ -28,6 +28,15 @@ digraph TopLevel {
         label = "Filter"
     ]
 
+    ColorFilter [
+        fontcolor = black,
+        URL = "classes/ColorFilter.html",
+        shape = ellipse,
+        color = palegoldenrod,
+        style = filled,
+        label = "ColorFilter"
+    ]
+
     TelnetCodes [
         URL = "classes/TelnetCodes.html",
         shape = box,
@@ -39,6 +48,10 @@ digraph TopLevel {
     ]
 
     Filter -> TelnetFilter [
+
+    ]
+
+    Filter -> ColorFilter [
 
     ]
 

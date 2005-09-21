@@ -108,10 +108,10 @@ issues timing events
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000077">new</a>&nbsp;&nbsp;
-      <a href="#M000078">register</a>&nbsp;&nbsp;
-      <a href="#M000080">run</a>&nbsp;&nbsp;
-      <a href="#M000079">unregister</a>&nbsp;&nbsp;
+      <a href="#M000084">new</a>&nbsp;&nbsp;
+      <a href="#M000085">register</a>&nbsp;&nbsp;
+      <a href="#M000087">run</a>&nbsp;&nbsp;
+      <a href="#M000086">unregister</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -133,11 +133,11 @@ issues timing events
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000077" class="method-detail">
-        <a name="M000077"></a>
+      <div id="method-M000084" class="method-detail">
+        <a name="M000084"></a>
 
         <div class="method-heading">
-          <a href="#M000077" class="method-signature">
+          <a href="#M000084" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(world, time, eventtype)</span>
           </a>
         </div>
@@ -158,18 +158,18 @@ Constructor for a <a href="Hamster.html">Hamster</a>.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000077-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000077-source">
+            onclick="toggleCode('M000084-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000084-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 430</span>
-430:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">world</span>, <span class="ruby-identifier">time</span>, <span class="ruby-identifier">eventtype</span>)
-431:     <span class="ruby-ivar">@world</span> = <span class="ruby-identifier">world</span>
-432:     <span class="ruby-ivar">@time</span> = <span class="ruby-identifier">time</span>
-433:     <span class="ruby-ivar">@eventtype</span> = <span class="ruby-identifier">eventtype</span>
-434:     <span class="ruby-ivar">@interested</span> = []
-435:     <span class="ruby-ivar">@mutex</span> = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>
-436:     <span class="ruby-keyword kw">super</span> {<span class="ruby-identifier">run</span>}
-437:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 448</span>
+448:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">world</span>, <span class="ruby-identifier">time</span>, <span class="ruby-identifier">eventtype</span>)
+449:     <span class="ruby-ivar">@world</span> = <span class="ruby-identifier">world</span>
+450:     <span class="ruby-ivar">@time</span> = <span class="ruby-identifier">time</span>
+451:     <span class="ruby-ivar">@eventtype</span> = <span class="ruby-identifier">eventtype</span>
+452:     <span class="ruby-ivar">@interested</span> = []
+453:     <span class="ruby-ivar">@mutex</span> = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>
+454:     <span class="ruby-keyword kw">super</span> {<span class="ruby-identifier">run</span>}
+455:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -177,11 +177,11 @@ Constructor for a <a href="Hamster.html">Hamster</a>.
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000078" class="method-detail">
-        <a name="M000078"></a>
+      <div id="method-M000085" class="method-detail">
+        <a name="M000085"></a>
 
         <div class="method-heading">
-          <a href="#M000078" class="method-signature">
+          <a href="#M000085" class="method-signature">
           <span class="method-name">register</span><span class="method-args">(obj)</span>
           </a>
         </div>
@@ -197,25 +197,25 @@ href="Hamster.html">Hamster</a>.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000078-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000078-source">
+            onclick="toggleCode('M000085-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000085-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 441</span>
-441:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">obj</span>)
-442:     <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
-443:       <span class="ruby-ivar">@interested</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">obj</span>
-444:     <span class="ruby-keyword kw">end</span>
-445:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 459</span>
+459:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">obj</span>)
+460:     <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+461:       <span class="ruby-ivar">@interested</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">obj</span>
+462:     <span class="ruby-keyword kw">end</span>
+463:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000080" class="method-detail">
-        <a name="M000080"></a>
+      <div id="method-M000087" class="method-detail">
+        <a name="M000087"></a>
 
         <div class="method-heading">
-          <a href="#M000080" class="method-signature">
+          <a href="#M000087" class="method-signature">
           <span class="method-name">run</span><span class="method-args">()</span>
           </a>
         </div>
@@ -225,30 +225,30 @@ href="Hamster.html">Hamster</a>.
 The timing thread loop
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000080-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000080-source">
+            onclick="toggleCode('M000087-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000087-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 456</span>
-456:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>
-457:     <span class="ruby-keyword kw">while</span> <span class="ruby-keyword kw">true</span>
-458:       <span class="ruby-identifier">sleep</span> <span class="ruby-ivar">@time</span>
-459:       <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
-460:         <span class="ruby-ivar">@interested</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>
-461:           <span class="ruby-ivar">@world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span>, <span class="ruby-ivar">@eventtype</span>, <span class="ruby-keyword kw">nil</span>)
-462:         <span class="ruby-keyword kw">end</span>
-463:       <span class="ruby-keyword kw">end</span>
-464:     <span class="ruby-keyword kw">end</span>
-465:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 474</span>
+474:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>
+475:     <span class="ruby-keyword kw">while</span> <span class="ruby-keyword kw">true</span>
+476:       <span class="ruby-identifier">sleep</span> <span class="ruby-ivar">@time</span>
+477:       <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+478:         <span class="ruby-ivar">@interested</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>
+479:           <span class="ruby-ivar">@world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span>, <span class="ruby-ivar">@eventtype</span>, <span class="ruby-keyword kw">nil</span>)
+480:         <span class="ruby-keyword kw">end</span>
+481:       <span class="ruby-keyword kw">end</span>
+482:     <span class="ruby-keyword kw">end</span>
+483:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000079" class="method-detail">
-        <a name="M000079"></a>
+      <div id="method-M000086" class="method-detail">
+        <a name="M000086"></a>
 
         <div class="method-heading">
-          <a href="#M000079" class="method-signature">
+          <a href="#M000086" class="method-signature">
           <span class="method-name">unregister</span><span class="method-args">(obj)</span>
           </a>
         </div>
@@ -263,15 +263,15 @@ Unregister from the <a href="Hamster.html">Hamster</a>.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000079-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000079-source">
+            onclick="toggleCode('M000086-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000086-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 449</span>
-449:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unregister</span>(<span class="ruby-identifier">obj</span>)
-450:     <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
-451:       <span class="ruby-ivar">@interested</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">obj</span>)
-452:     <span class="ruby-keyword kw">end</span>
-453:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tmud.rb, line 467</span>
+467:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unregister</span>(<span class="ruby-identifier">obj</span>)
+468:     <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+469:       <span class="ruby-ivar">@interested</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">obj</span>)
+470:     <span class="ruby-keyword kw">end</span>
+471:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
