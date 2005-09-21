@@ -85,8 +85,8 @@ class TelnetFilter < Filter
     @mode = :normal #  Parse mode :normal, :cmd, :cr
     @state = {}
     @sc = nil
-    @supp_opts = [ TTYPE, ECHO, SGA, NAWS, BINARY ] # supported options
-    @sneg_opts = [ TTYPE ]  # supported options which imply an initial
+    @supp_opts = [ TTYPE, ECHO, SGA, NAWS, BINARY, ZMP ] # supported options
+    @sneg_opts = [ TTYPE, ZMP ]  # supported options which imply an initial
     @ttype = []
     @terminal = nil
     @twidth = 80
@@ -105,7 +105,7 @@ class TelnetFilter < Filter
     # severl sorts of options here - server offer, ask client or both
     @wopts.each do |key,val|
       case key
-      when ECHO, SGA, BINARY
+      when ECHO, SGA, BINARY, ZMP
         offer_us(key,val)
       else
         ask_him(key,val)
@@ -343,6 +343,20 @@ class TelnetFilter < Filter
         case opt
         when TTYPE
           @conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
+        when ZMP
+          @log.info("(#{@conn.object_id}) ZMP successfully negotiated." )
+          @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+            "zmp.check#{NUL.chr}color.#{NUL.chr}" +
+            "#{SE.chr}")
+          @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+            "zmp.ident#{NUL.chr}TeensyMUD#{NUL.chr}#{Version}#{NUL.chr}A sexy mud server#{NUL.chr}" +
+            "#{SE.chr}")
+          @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+            "zmp.time#{NUL.chr}#{Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")}#{NUL.chr}" +
+            "#{SE.chr}")
+          @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+            "zmp.input#{NUL.chr}\n     I see you support...\n     ZMP protocol\n{NUL.chr}" +
+            "#{SE.chr}")
         end
         @sneg_opts.delete(opt)
       end
@@ -390,6 +404,11 @@ private
           choose_terminal
         end
       end
+    when ZMP
+      data.gsub!(/#{IAC}#{IAC}/, IAC.chr) # 255 needs to be undoubled from data
+      args = data.split("\0")
+      cmd = args.shift
+      handle_zmp(cmd,args)
     end
   end
 
@@ -640,6 +659,33 @@ private
           @state[opt].send("#{whoq}=", :empty)
         end
       end
+    end
+  end
+
+  def handle_zmp(cmd,args)
+    @log.info("(#{@conn.object_id}) ZMP command recieved - '#{cmd}' args: #{args.inspect}" )
+    case cmd
+    when "zmp.ping"
+      @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+        "zmp.time#{NUL.chr}#{Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")}#{NUL.chr}" +
+        "#{SE.chr}")
+    when "zmp.time"
+    when "zmp.ident"
+      # simply return the favor
+      @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+        "zmp.ident#{NUL.chr}TeensyMUD#{NUL.chr}#{Version}#{NUL.chr}A sexy mud server#{NUL.chr}" +
+        "#{SE.chr}")
+    when "zmp.check"
+      # We support nothing yet so we'll echo back nay on whatever they requested
+      @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+        "zmp.no-support#{NUL.chr}args[0]{NUL.chr}" +
+        "#{SE.chr}")
+    when "zmp.support"
+    when "zmp.no-support"
+    when "zmp.input"
+      # Now we just simply pass this whole load to the Player.parse
+      # WARN: This means there is a possibility of out-of-order processing of @inbuffer
+      @conn.message(args[0])
     end
   end
 

@@ -107,4 +107,5 @@ module TelnetCodes
   PHEARTBEAT     = 140 # Telnat Pragma Heartbeat
   EXOPL          = 255 # Extended-Options-List - RFC 861
 
+  ZMP = 93 # ZMP support
 end

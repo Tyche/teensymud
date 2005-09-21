@@ -219,7 +219,8 @@ class Connection < Session
          TelnetCodes::SGA => true,
          TelnetCodes::ECHO => true,
          TelnetCodes::NAWS => true,
-         TelnetCodes::TTYPE => true
+         TelnetCodes::TTYPE => true,
+         TelnetCodes::ZMP => true
        })
     @filters << ColorFilter.new(self)
     @inbuffer = ""              # buffer lines waiting to be processed
@@ -338,9 +339,14 @@ class Connection < Session
   # [+args+]
   def filter_call(method, args)
     case method
-    when :filter_in, :filter_out, :init
+    when :filter_in, :init
       retval = args
       @filters.each do |v|
+        retval = v.send(method,retval)
+      end
+    when :filter_out
+      retval = args
+      @filters.reverse_each do |v|
         retval = v.send(method,retval)
       end
     else
