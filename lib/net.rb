@@ -251,9 +251,9 @@ class Connection < Session
   def handle_input
     buf = @sockio.read
     return if buf.nil?
-    @server.log.debug "before filter #{buf.inspect}"
+#    @server.log.debug "before filter #{buf.inspect}"
     buf = filter_call(:filter_in,buf)
-    @server.log.debug "after filter #{buf.inspect}"
+#    @server.log.debug "after filter #{buf.inspect}"
     @inbuffer << buf
     if @initdone  # Just let buffer fill until we indicate we're done
                   # negotiating.  Set by calling initdone from TelnetFilter
