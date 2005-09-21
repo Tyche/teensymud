@@ -1,5 +1,5 @@
 = TeensyMUD Server
-= v2.5.2
+= v2.5.3
 
 ---
 == Introduction
@@ -37,14 +37,14 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 * Portable - runs on Unix, OS/X, Windows
 * Documentation - see 'doc/index.html' in distro
 * More extras!!! Comes with mini-distro builder utility (see 'rakefile package')
-* Color
+* Color and highlighting using BBCODE markup.
 * Secure login
 * Turn based combat featuring link death and link suicide. 
 * Runtime extensible commands.  Add new commands with rebooting.
 * Completely event-driven system.  All first class game objects communicate with each other via TITS (Tyche's Immediate Temporality System).
 * Object level event programming using FARTS (Functional Automated Response Trigger System). See link:files/farts_grammar.html
 * Hamster powered servo timer issues events to interested objects at predefined intervals.
-* Implements TELNET protocol
+* Implements TELNET protocol include NAWS, TTYPE, ECHO, SGA, and BINARY options.
 * NOSY logging. 
 
 ---

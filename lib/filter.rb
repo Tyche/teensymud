@@ -13,6 +13,7 @@
 require 'ostruct'
 require 'pp'
 
+require 'bbcode'
 require 'telnetcodes'
 
 # The Filter class is an abstract class defining the minimal methods
@@ -24,13 +25,14 @@ class Filter
   # Construct filter
   #
   # [+conn+] The connection associated with this filter
-  # [+opts+] An optional hash of desired initial options
-  def initialize(conn, wopts={})
-    @conn, @wopts = conn, wopts
+  def initialize(conn)
+    @conn = conn
+    @log = conn.server.log
   end
 
   # Run any post-contruction initialization
-  def init
+  # [+args+] Optional initial options
+  def init(args=nil)
     true
   end
 
@@ -46,6 +48,21 @@ class Filter
   # [+return+] The filtered data
   def filter_out(str)
     return str
+  end
+
+  # The filter_query method returns state information for the filter.
+  # [+attr+]    A symbol representing the attribute being queried.
+  # [+return+] An attr/value pair or false if not defined in this filter
+  def filter_query(attr)
+    false
+  end
+
+
+  # The filter_set method sets state information on the filter.
+  # [+pair+]   An attr/value pair [:symbol, value]
+  # [+return+] true if attr not defined in this filter, false if not
+  def filter_set(pair)
+    false
   end
 
 end
@@ -64,12 +81,12 @@ class TelnetFilter < Filter
   # [+conn+] The connection associated with this filter
   # [+opts+] An optional hash of desired initial options
   def initialize(conn, wopts={})
+    @wopts = wopts
     @mode = :normal #  Parse mode :normal, :cmd, :cr
     @state = {}
     @sc = nil
-    @supp_opts = [ TTYPE, ECHO, SGA, NAWS ] # supported options
+    @supp_opts = [ TTYPE, ECHO, SGA, NAWS, BINARY ] # supported options
     @sneg_opts = [ TTYPE ]  # supported options which imply an initial
-    @log = conn.server.log
     @ttype = []
     @terminal = nil
     @twidth = 80
@@ -77,57 +94,24 @@ class TelnetFilter < Filter
     @hide = false     # if true and server echo set, we echo back asterixes
     @init_tries = 0   # Number of tries at negotitating sub options
     @synch = false
-    super(conn, wopts)
+    @urgent = false
+    super(conn)
   end
 
   # Negotiate starting wanted options
   #
-  def init
-    # two sorts of options here - server offer and ask client
+  # [+args+] Optional initial options
+  def init(args)
+    # severl sorts of options here - server offer, ask client or both
     @wopts.each do |key,val|
       case key
-      when SGA, ECHO
+      when ECHO, SGA, BINARY
         offer_us(key,val)
       else
         ask_him(key,val)
       end
     end
     true
-  end
-
-  # Negotiate starting wanted options that imply subnegotation
-  # So far only terminal type
-  def init_subneg
-    return if @sneg_opts.empty?
-
-    @init_tries += 1
-
-    @wopts.each_key do |opt|
-      next if !@sneg_opts.include?(opt)
-      case opt
-      when TTYPE
-        who = :him
-      else
-        who = :us
-      end
-      if desired?(opt) == enabled?(opt, who)
-        case opt
-        when TTYPE
-          @conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
-        end
-        @sneg_opts.delete(opt)
-      end
-    end
-
-    if @init_tries > 15
-      @log.debug("(#{@conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.")
-    end
-    if @sneg_opts.empty? || @init_tries > 15
-      @sneg_opts = []
-      @conn.set_initdone
-    else
-
-    end
   end
 
   # The filter_in method filters input data
@@ -140,10 +124,12 @@ class TelnetFilter < Filter
 
     @sc ? @sc.concat(str) : @sc = StringScanner.new(str)
     while b = @sc.get_byte
+
       # OOB sync data
-      if b[0] == DM
+      if @urgent || b[0] == DM
         @log.debug("(#{@conn.object_id}) Sync mode on")
-        @synch ? @synch = false : @synch = true
+        @urgent = false
+        @synch = true
         break
       end
 
@@ -152,14 +138,21 @@ class TelnetFilter < Filter
         case b[0]
         when CR
           next if @synch
-          set_mode(:cr)
+          set_mode(:cr) if !enabled?(BINARY, :us)
         when IAC
           set_mode(:cmd)
         when BS
           next if @synch
           buf.slice!(-1)
           echo(BS.chr)
-        when NUL  # ignore NULs in stream
+        when NUL  # ignore NULs in stream when in normal mode
+          next if @synch
+          if enabled?(BINARY, :us)
+            buf << b
+            echo(b)
+          else
+            @log.debug("(#{@conn.object_id}) unhandled NUL found in stream #{@sc.string}")
+          end
         else
           next if @synch
           buf << b
@@ -185,9 +178,13 @@ class TelnetFilter < Filter
           set_mode(:normal)
         when AO
           @log.debug("(#{@conn.object_id}) AO sent - Synch returned")
-          @conn.sendmsg(IAC.chr + DM.chr)
+          @conn.sockio.write_flush
+          @conn.sock.send(IAC.chr + DM.chr, 0)
           @conn.sockio.write_urgent(DM.chr)
+          set_mode(:normal)
         when IP
+          @conn.sockio.read_flush
+          @conn.sockio.write_flush
           @log.debug("(#{@conn.object_id}) IP sent")
           set_mode(:normal)
         when GA, NOP, BRK  # not implemented or ignored
@@ -251,10 +248,46 @@ class TelnetFilter < Filter
   def filter_out(str)
     buf = ""
     return buf if str.nil? || str.empty?
-    # Convert linefeeds to CRLF
-    buf = str.gsub(/\n/, "\r\n")
+
+    if !enabled?(BINARY, :us)
+      buf = str.gsub(/\n/, "\r\n")
+    end
     buf
   end
+
+  # The filter_query method returns state information for the filter.
+  # [+attr+]    A symbol representing the attribute being queried.
+  # [+return+] An attr/value pair or nil if not defined in this filter
+  def filter_query(attr)
+    case attr
+    when :terminal
+      return [:terminal, @terminal]
+    when :termsize
+      return [:termsize, [@twidth, @theight]]
+    end
+    false
+  end
+
+  # The filter_set method sets state information on the filter.
+  # [+pair+]   An attr/value pair [:symbol, value]
+  # [+return+] true or false if attr not defined in this filter
+  def filter_set(pair)
+    case pair[0]
+    when :urgent
+      @urgent = pair[1]
+      true
+    when :hide
+      @hide = pair[1]
+      true
+    when :init_subneg
+      init_subneg
+      true
+    else
+      false
+    end
+  end
+
+  ###### Custom public methods
 
   # Test to see if option is enabled
   # [+opt+] The Telnet option code
@@ -283,17 +316,51 @@ class TelnetFilter < Filter
   # Handle server-side echo
   def echo(ch)
     if enabled?(ECHO, :us)
-      if @hide
+      if @hide && ch[0] != CR
         @conn.sock.send('*',0)
-#        @conn.sendmsg('*')
       else
         @conn.sock.send(ch,0)
-#        @conn.sendmsg(ch)
       end
     end
   end
 
+  # Negotiate starting wanted options that imply subnegotation
+  # So far only terminal type
+  def init_subneg
+    return if @sneg_opts.empty?
+
+    @init_tries += 1
+
+    @wopts.each_key do |opt|
+      next if !@sneg_opts.include?(opt)
+      case opt
+      when TTYPE
+        who = :him
+      else
+        who = :us
+      end
+      if desired?(opt) == enabled?(opt, who)
+        case opt
+        when TTYPE
+          @conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
+        end
+        @sneg_opts.delete(opt)
+      end
+    end
+
+    if @init_tries > 15
+      @log.debug("(#{@conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.")
+    end
+    if @sneg_opts.empty? || @init_tries > 15
+      @sneg_opts = []
+      @conn.set_initdone
+    else
+
+    end
+  end
+
 private
+  ###### Private methods
 
   # parse the subnegotiation data and save it
   # [+opt+] The Telnet option found
@@ -577,3 +644,57 @@ private
   end
 
 end
+
+# The ColorFilter class implements ANSI color (SGR) support.
+#
+# A Filter can keep state and partial data
+class ColorFilter < Filter
+
+  # Construct filter
+  #
+  # [+conn+] The connection associated with this filter
+  # [+wopts+] An optional hash of desired initial options
+  def initialize(conn)
+    @color = false
+    super(conn)
+  end
+
+  # The filter_out method filters output data
+  # [+str+]    The string to be processed
+  # [+return+] The filtered data
+  def filter_out(str)
+    if @color
+      s = BBCode.bbcode_to_ansi(str)
+    else
+      s = BBCode.strip_bbcode(str)
+    end
+    return s
+  end
+
+  # The filter_query method returns state information for the filter.
+  # [+attr+]    A symbol representing the attribute being queried.
+  # [+return+] An attr/value pair or false if not defined in this filter
+  def filter_query(attr)
+    case attr
+    when :color
+      return [:color, @color]
+    end
+    false
+  end
+
+  # The filter_set method sets state information on the filter.
+  # [+pair+]   An attr/value pair [:symbol, value]
+  # [+return+] true if attr not defined in this filter, false if not
+  def filter_set(pair)
+    case pair[0]
+    when :color
+      @color = pair[1]
+      true
+    else
+      false
+    end
+  end
+
+end
+
+

@@ -65,6 +65,16 @@ class SockIO
     raise
   end
 
+  # write_flush will kill the output buffer
+  def write_flush
+    @outbuffer = ""
+  end
+
+  # read_flush will kill the input buffer
+  def read_flush
+    @inbuffer = ""
+  end
+
   # read_urgent will receive urgent data from the socket.
   # [+return+] The data read
   #
@@ -176,6 +186,14 @@ class Session
     @write_blocked
   end
 
+  # Sends a notification message to all the our Observers.
+  # Symbols, Arrays and Strings are understood
+  # [+msg+] The message to send.
+  def message(msg)
+    changed
+    notify_observers(msg)
+  end
+
 end
 
 # The connection class maintains a socket connection with a
@@ -195,14 +213,15 @@ class Connection < Session
     super(server, sock)
     @sockio = SockIO.new(@sock) # Object that handles low level Socket I/O
                                 # Should be configurable
-    @filters = {}
-    @filters[:telnet] = TelnetFilter.new(self,
+    @filters = []  # Filter order is critical as lowest level protocol is first.
+    @filters << TelnetFilter.new(self,
        {
          TelnetCodes::SGA => true,
          TelnetCodes::ECHO => true,
          TelnetCodes::NAWS => true,
          TelnetCodes::TTYPE => true
        })
+    @filters << ColorFilter.new(self)
     @inbuffer = ""              # buffer lines waiting to be processed
     @outbuffer = ""             # buffer lines waiting to be output
     @initdone = false           # keeps silent until we're done with negotiations
@@ -215,7 +234,7 @@ class Connection < Session
     @connected = true
     @server.register(self)
     @server.log.info "(#{self.object_id}) New Connection on '#{@addr}'"
-    @filters.each {|k,v| v.init}
+    filter_call(:init,nil)
     true
   rescue Exception
     @server.log.error "(#{self.object_id}) Error-Connection#init"
@@ -223,13 +242,121 @@ class Connection < Session
     false
   end
 
+  # handle_input is called to order a connection to process any input
+  # waiting on its socket.  Input is parsed into lines based on the
+  # occurance of the CRLF terminator and pushed into a buffer
+  # which is a list of lines.  The buffer expands dynamically as input
+  # is processed.  Input that has yet to see a CRLF terminator
+  # is left in the connection's inbuffer.
+  def handle_input
+    buf = @sockio.read
+    return if buf.nil?
+    @server.log.debug "before filter #{buf.inspect}"
+    buf = filter_call(:filter_in,buf)
+    @server.log.debug "after filter #{buf.inspect}"
+    @inbuffer << buf
+    if @initdone  # Just let buffer fill until we indicate we're done
+                  # negotiating.  Set by calling initdone from TelnetFilter
+      while p = @inbuffer.index("\n")
+        ln = @inbuffer.slice!(0..p).chop
+        message(ln)
+      end
+    end
+  rescue EOFError, Errno::ECONNABORTED, Errno::ECONNRESET
+    @closing = true
+    message(:logged_out)
+    delete_observers
+    @server.log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
+  rescue Exception
+    @closing = true
+    message(:disconnected)
+    delete_observers
+    @server.log.error "(#{self.object_id}) Connection#handle_input"
+    @server.log.error $!
+  end
+
+  # handle_output is called to order a connection to process any output
+  # waiting on its socket.
+  def handle_output
+    @outbuffer = filter_call(:filter_out,@outbuffer)
+    done = @sockio.write(@outbuffer)
+    @outbuffer = ""
+    if done
+      @write_blocked = false
+    else
+      @write_blocked = true
+    end
+  rescue EOFError, Errno::ECONNABORTED, Errno::ECONNRESET
+    @closing = true
+    message(:logged_out)
+    delete_observers
+    @server.log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
+  rescue Exception
+    @closing = true
+    message(:disconnected)
+    delete_observers
+    @server.log.error "(#{self.object_id}) Connection#handle_output"
+    @server.log.error $!
+  end
+
+  # handle_close is called to when an close event occurs for this session.
+  def handle_close
+    @connected = false
+    message(:logged_out)
+    delete_observers
+    @server.log.info "(#{self.object_id}) Connection '#{@addr}' closing"
+    @server.unregister(self)
+#    @sock.shutdown   # odd errors thrown with this
+    @sock.close
+  rescue Exception
+    @server.log.error "(#{self.object_id}) Connection#handle_close"
+    @server.log.error $!
+  end
+
+  # handle_oob is called when an out of band data event occurs for this
+  # session.
+  def handle_oob
+    buf = @sockio.read_urgent
+    @server.log.debug "(#{self.object_id}) Connection urgent data received - '#{buf[0]}'"
+    filter_call(:filter_set,[:urgent, true])
+    buf = filter_call(:filter_in,buf)
+  rescue Exception
+    @server.log.error "(#{self.object_id}) Connection#handle_oob"
+    @server.log.error $!
+  end
+
   # This is called from TelnetFilter when we are done with negotiations.
   # The event :initdone wakens observer to begin user activity
   def set_initdone
     @initdone = true
-    changed
-    notify_observers(:initdone)
+    message(:initdone)
   end
+
+  # A method is called on each filter in the stack in order.
+  #
+  # [+method+]
+  # [+args+]
+  def filter_call(method, args)
+    case method
+    when :filter_in, :filter_out, :init
+      retval = args
+      @filters.each do |v|
+        retval = v.send(method,retval)
+      end
+    else
+      retval = false
+      @filters.each do |v|
+        retval = v.send(method, args)
+        break if retval
+      end
+      if method == :filter_query
+        message(retval)
+      end
+      @server.log.debug "(#{self.object_id}) Connection filter_call called '#{method}',a:#{args.inspect},r:#{retval.inspect}"
+    end
+    retval
+  end
+
 
   # Update will be called when the object the connection is observing
   # has notified us of a change in state or new message.
@@ -243,102 +370,15 @@ class Connection < Session
   def update(msg)
     case msg
     when :logged_out then @closing = true
-    when :hide
-      @filters[:telnet].hide = true
-    when :unhide
-      @filters[:telnet].hide = false
-    else
+    when Array
+      filter_call(:filter_set,msg)
+    when Symbol
+      filter_call(:filter_query,msg)
+    when String
       sendmsg(msg)
-    end
-  end
-
-  # handle_input is called to order a connection to process any input
-  # waiting on its socket.  Input is parsed into lines based on the
-  # occurance of the CRLF terminator and pushed into a buffer
-  # which is a list of lines.  The buffer expands dynamically as input
-  # is processed.  Input that has yet to see a CRLF terminator
-  # is left in the connection's inbuffer.
-  def handle_input
-    buf = @sockio.read
-    return if buf.nil?
-    @filters.each {|k,v| buf = v.filter_in(buf)}
-    @inbuffer << buf
-    if @initdone  # Just let buffer fill until we indicate we're done
-                  # negotiating.  Set by calling initdone from TelnetFilter
-      p = @inbuffer.rindex("\n")
-      return if p.nil?
-      buf = @inbuffer.slice!(0..p)
-      buf.split(/\n/).each do |ln|
-        changed
-        notify_observers(ln)
-      end
-    end
-  rescue EOFError, Errno::ECONNABORTED, Errno::ECONNRESET
-    @closing = true
-    changed
-    notify_observers(:logged_out)
-    delete_observers
-    @server.log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
-  rescue Exception
-    @closing = true
-    changed
-    notify_observers(:disconnected)
-    delete_observers
-    @server.log.error "(#{self.object_id}) Connection#handle_input"
-    @server.log.error $!
-  end
-
-  # handle_output is called to order a connection to process any output
-  # waiting on its socket.
-  def handle_output
-    @filters.each {|k,v| @outbuffer = v.filter_out(@outbuffer)}
-    done = @sockio.write(@outbuffer)
-    @outbuffer = ""
-    if done
-      @write_blocked = false
     else
-      @write_blocked = true
+      @server.log.error "(#{self.object_id}) Connection#update - unknown message '#{@msg.inspect}'"
     end
-  rescue EOFError, Errno::ECONNABORTED, Errno::ECONNRESET
-    @closing = true
-    changed
-    notify_observers(:logged_out)
-    delete_observers
-    @server.log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
-  rescue Exception
-    @closing = true
-    changed
-    notify_observers(:disconnected)
-    delete_observers
-    @server.log.error "(#{self.object_id}) Connection#handle_output"
-    @server.log.error $!
-  end
-
-  # handle_close is called to when an close event occurs for this session.
-  def handle_close
-    @connected = false
-    changed
-    notify_observers(:logged_out)
-    delete_observers
-    @server.log.info "(#{self.object_id}) Connection '#{@addr}' closing"
-    @server.unregister(self)
-#    @sock.shutdown   # odd errors thrown with this
-    @sock.close
-  rescue Exception
-    @server.log.error "(#{self.object_id}) Connection#handle_close"
-    @server.log.error $!
-  end
-
-
-  # handle_oob is called when an out of band data event occurs for this
-  # session.
-  def handle_oob
-    buf = @sockio.read_urgent
-    @server.log.debug "(#{self.object_id}) Connection urgent data received - '#{buf[0]}'"
-    @filters.each {|k,v| buf = v.filter_in(buf)}
-  rescue Exception
-    @server.log.error "(#{self.object_id}) Connection#handle_oob"
-    @server.log.error $!
   end
 
   # sendmsg places a message on the Connection's output buffer.
@@ -392,8 +432,7 @@ class Acceptor < Session
       c = Connection.new(@server, sckt)
       if c.init
         @server.log.info "(#{c.object_id}) Connection accepted."
-        changed
-        notify_observers(c)
+        message(c)
       end
     else
       raise "Error in accepting connection."
@@ -485,7 +524,7 @@ class Reactor
       s.handle_close if s.closing
       # special handling for Telnet initialization
       if s.respond_to?(:initdone) && !s.initdone
-        s.filters[:telnet].init_subneg
+        s.filter_call(:filter_set,[:init_subneg])
       end
     end
   rescue

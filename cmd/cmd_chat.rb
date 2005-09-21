@@ -18,10 +18,10 @@ module Cmd
     when nil, ""
       sendto("What are you trying to tell everyone?")
     else
-      sendto(Colors[:magenta] + "You chat, \"#{args}\"." + Colors[:reset])
+      sendto("[COLOR=magenta]You chat, \"#{args}\".[/COLOR]")
       $engine.world.db.players_connected(@oid).each do |p|
         $engine.world.add_event(@oid,p.oid,:show,
-          Colors[:magenta] + "#{@name} chats, \"#{args}\"." + Colors[:reset])
+          "[COLOR=magenta]#{@name} chats, \"#{args}\".[/COLOR]")
       end
     end
   end

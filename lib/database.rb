@@ -121,7 +121,7 @@ EOH
       end
     end
     stats=<<EOH
-#{Colors[:cyan]}
+[COLOR=cyan]
 ---* Database Statistics *---
   Rooms   - #{rooms}
   Players - #{players}
@@ -129,7 +129,7 @@ EOH
   Total Objects - #{rooms+objs+players}
   Highest OID in use - #{@dbtop}
 ---*                     *---
-#{Colors[:reset]}
+[/COLOR]
 EOH
     return stats
   end

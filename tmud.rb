@@ -1,8 +1,8 @@
 #
 # file::    tmud.rb
 # author::  Jon A. Lambert
-# version:: 2.5.2
-# date::    09/18/2005
+# version:: 2.5.3
+# date::    09/21/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -17,12 +17,14 @@ require 'logger'
 require 'pp'
 
 $:.unshift "lib"
+$:.unshift "vendor"
+
 require 'net'
 require 'command'
 require 'database'
 require 'farts_parser'
 
-Version = "2.5.2"
+Version = "2.5.3"
 
 # Displayed upon connecting
 BANNER=<<-EOH
@@ -35,10 +37,6 @@ BANNER=<<-EOH
 
 
 EOH
-
-Colors = {:black => "\e[30m", :red => "\e[31m", :green => "\e[32m",
-  :yellow => "\e[33m", :blue => "\e[34m", :magenta => "\e[35m",
-  :cyan => "\e[36m", :white => "\e[37m", :reset => "\e[0m"}
 
 # The Obj class is the mother of all objects.
 #
@@ -64,6 +62,7 @@ class Obj
     @farts = {}
     @desc = ""
     @powered = false
+    @color = false
     $engine.world.db.get(@location).add_contents(@oid) if @location
   end
 
@@ -174,7 +173,7 @@ class Obj
   def ass(e)
     case e.kind
     when :describe
-      msg = Colors[:yellow] + "A " + @name + " is here" + Colors[:reset]
+      msg = "[COLOR=yellow]A #{name} is here[/COLOR]"
       $engine.world.add_event(@oid,e.from,:show,msg)
       fart(e)
     when :get
@@ -224,15 +223,14 @@ class Room < Obj
   def ass(e)
     case e.kind
     when :describe
-      msg = Colors[:green] + "(" + @oid.to_s + ") " + name +
-        Colors[:reset] + "\n" + desc + "\n"
+      msg = "[COLOR=green](#{@oid.to_s}) #{name}[/COLOR]\n#{desc}\n"
       $engine.world.add_event(@oid,e.from,:show,msg)
       fart(e)
     when :describe_exits
-      msg = Colors[:red] + "Exits:\n"
+      msg = "[COLOR=red]Exits:\n"
       s = @exits.size
       if s == 0
-        msg << "None." + Colors[:reset]
+        msg << "None.[/COLOR]"
       else
         i = 0
         @exits.keys.each do |ex|
@@ -245,7 +243,7 @@ class Room < Obj
             msg << ", "
           end
         end
-        msg << Colors[:reset]
+        msg << "[/COLOR]"
       end
       $engine.world.add_event(@oid,e.from,:show,msg)
       fart(e)
@@ -301,12 +299,13 @@ class Player < Obj
   # [+s+]      The message string
   # [+return+] Undefined.
   def sendto(s)
-    sendmsg(s+"\n") if @session
+    message(s+"\n") if @session
   end
 
-  # Helper method to notify all observers
-  # [+msg+]      The message string
-  def sendmsg(msg)
+  # Sends a notification message to all the our Observers.
+  # Symbols, Arrays and Strings are understood
+  # [+msg+] The message to send.
+  def message(msg)
     changed
     notify_observers(msg)
   end
@@ -318,17 +317,36 @@ class Player < Obj
     when :logged_out
       @session = nil
       delete_observers
-      $engine.world.db.players_connected(@oid).each {|p|
+      $engine.world.db.players_connected(@oid).each do |p|
         $engine.world.add_event(@oid,p.oid,:show,"#{@name} has quit.")
-      }
+      end
     when :disconnected
       @session = nil
       delete_observers
-      $engine.world.db.players_connected(@oid).each {|p|
+      $engine.world.db.players_connected(@oid).each do |p|
         $engine.world.add_event(@oid,p.oid,:show,"#{@name} has disconnected.")
-      }
-    else
+      end
+    when Array
+      $engine.log.debug "Player#update query return - #{msg.inspect}"
+      case msg[0]
+      when :terminal
+        sendto("Terminal: #{msg[1]}")
+      when :termsize
+        sendto("Terminal size: #{msg[1][0]} X #{msg[1][1]}")
+      when :color
+        @color = msg[1]
+        if @color
+          sendto("Colors toggled [COLOR=magenta]ON[/COLOR]")
+        else
+          sendto("Colors toggled OFF")
+        end
+      else
+        $engine.log.error "Player#update unknown message - #{msg.inspect}"
+      end
+    when String
       parse(msg)
+    else
+      $engine.log.error "Player#update unknown message - #{msg.inspect}"
     end
   end
 
@@ -341,7 +359,7 @@ class Player < Obj
 
   # Disconnects this player
   def disconnect
-    sendmsg(:logged_out)
+    message(:logged_out)
     delete_observers
     @session = nil
   end
@@ -394,7 +412,7 @@ class Player < Obj
   def ass(e)
     case e.kind
     when :describe
-      msg = Colors[:cyan] + @name + " is here." + Colors[:reset]
+      msg = "[COLOR=cyan]#{@name} is here.[/COLOR]"
       $engine.world.add_event(@oid,e.from,:show,msg)
       fart(e)
     when :show
@@ -545,7 +563,7 @@ class Incoming
   def initialize(conn)
     @conn = conn
     @state = :name
-    @checked = 0
+    @checked = 3
     @player = nil
     @initdone = false # keep silent until we're done negotiating
   end
@@ -560,45 +578,61 @@ class Incoming
       delete_observers
     when :initdone
       @initdone = true
-      sendmsg(BANNER)
-      sendmsg("login> ")
-    else
+      message(BANNER)
+      message("login> ")
+    when :initdone
+    when String
       if @initdone
-        if (@checked += 1) > 3
-          sendmsg("\nBye!\n")
-          sendmsg(:logged_out)
-          delete_observers
-        end
         case @state
         when :name
           @login_name = msg
           @player = $engine.world.db.find_player_by_name(@login_name)
-          sendmsg("\npassword> ")
-          sendmsg(:hide)
+          message("password> ")
+          message([:hide, true])
           @state = :password
         when :password
           @login_passwd = msg
-          sendmsg(:unhide)
+          message([:hide, false])
           if @player
             if @player.check_passwd(@login_passwd)  # good login
               @player.session = @conn
               login
             else  # bad login
-              sendmsg("\nSorry wrong password.\n")
-              @state = :name
-              sendmsg("\nlogin> ")
+              @checked -= 1
+              message("Sorry wrong password.\n")
+              if @checked < 1
+                message("Bye!\n")
+                message(:logged_out)
+                delete_observers
+              else
+                @state = :name
+                message("login> ")
+              end
             end
           else  # new player
+            message("Create new user?\n'Y'|'y' to create, Enter to retry login> ")
+            @state = :new
+          end
+        when :new
+          if msg =~ /^[Yy]/
             @player = Player.new(@login_name,@login_passwd,@conn)
             $engine.world.db.put(@player)
             login
+          else
+            @state = :name
+            message("login> ")
           end
         end
       end
+    else
+      $engine.log.error "Incoming#update unknown message - #{msg.inspect}"
     end
   end
 
-  def sendmsg(msg)
+  # Sends a notification message to all the our Observers.
+  # Symbols, Arrays and Strings are understood
+  # [+msg+] The message to send.
+  def message(msg)
     changed
     notify_observers(msg)
   end
@@ -614,7 +648,7 @@ private
     @conn.add_observer(@player)
     @player.add_observer(@conn)
 
-    @player.sendto("\nWelcome " + @login_name + "@" + @conn.sock.peeraddr[2] + "!")
+    @player.sendto("Welcome #{@login_name}@#{@conn.sock.peeraddr[2]}!")
     $engine.world.db.players_connected(@player.oid).each {|p|
       $engine.world.add_event(@oid,p.oid,:show,"#{@player.name} has connected.")
     }
@@ -688,6 +722,7 @@ def get_options
     myopts.home = 1
     myopts.dbname = "db/world.yaml"
     myopts.verbose = false
+    myopts.trace = false
 
     opts = OptionParser.new do |opts|
       opts.banner = BANNER
@@ -703,6 +738,7 @@ def get_options
       opts.on("-h", "--home LOCATIONID", Integer,
         "Select the object id where new players will start",
         "  (defaults to 1)") {|myopts.home|}
+      opts.on("-t", "--[no-]trace", "Trace execution") {|myopts.trace|}
       opts.on("-v", "--[no-]verbose", "Run verbosely") {|myopts.verbose|}
       opts.on_tail("-h", "--help", "Show this message") do
         $stdout.puts opts.help
@@ -742,6 +778,7 @@ def handle_signal(sig)
   exit
 end
 
+
 if $0 == __FILE__
   Signal.trap("INT", method(:handle_signal))
   Signal.trap("TERM", method(:handle_signal))
@@ -749,6 +786,11 @@ if $0 == __FILE__
 
   begin
     $engine = Engine.new(get_options)
+    if $engine.world.options.trace
+      set_trace_func proc { |event, file, line, id, binding, classname|
+        printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
+      }
+    end
     $engine.run
   rescue => e
     if $engine

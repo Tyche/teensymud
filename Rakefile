@@ -21,6 +21,7 @@ PKG_FILES = FileList[
   'logs/README',
 #  'test/**/*',
   'lib/**/*',
+  'vendor/**/*',
   'cmd/**/*',
   'doc/**/*'
 ]
