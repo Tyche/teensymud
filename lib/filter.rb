@@ -347,16 +347,16 @@ class TelnetFilter < Filter
           @log.info("(#{@conn.object_id}) ZMP successfully negotiated." )
           @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
             "zmp.check#{NUL.chr}color.#{NUL.chr}" +
-            "#{SE.chr}")
+            "#{IAC.chr}#{SE.chr}")
           @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
             "zmp.ident#{NUL.chr}TeensyMUD#{NUL.chr}#{Version}#{NUL.chr}A sexy mud server#{NUL.chr}" +
-            "#{SE.chr}")
+            "#{IAC.chr}#{SE.chr}")
           @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
             "zmp.time#{NUL.chr}#{Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")}#{NUL.chr}" +
-            "#{SE.chr}")
+            "#{IAC.chr}#{SE.chr}")
           @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
             "zmp.input#{NUL.chr}\n     I see you support...\n     ZMP protocol\n{NUL.chr}" +
-            "#{SE.chr}")
+            "#{IAC.chr}#{SE.chr}")
         end
         @sneg_opts.delete(opt)
       end
@@ -668,18 +668,18 @@ private
     when "zmp.ping"
       @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
         "zmp.time#{NUL.chr}#{Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")}#{NUL.chr}" +
-        "#{SE.chr}")
+        "#{IAC.chr}#{SE.chr}")
     when "zmp.time"
     when "zmp.ident"
       # simply return the favor
       @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
         "zmp.ident#{NUL.chr}TeensyMUD#{NUL.chr}#{Version}#{NUL.chr}A sexy mud server#{NUL.chr}" +
-        "#{SE.chr}")
+        "#{IAC.chr}#{SE.chr}")
     when "zmp.check"
       # We support nothing yet so we'll echo back nay on whatever they requested
       @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
         "zmp.no-support#{NUL.chr}args[0]{NUL.chr}" +
-        "#{SE.chr}")
+        "#{IAC.chr}#{SE.chr}")
     when "zmp.support"
     when "zmp.no-support"
     when "zmp.input"
