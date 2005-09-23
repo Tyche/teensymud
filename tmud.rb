@@ -310,8 +310,29 @@ class Player < Obj
     notify_observers(msg)
   end
 
-  # Receives messages from connection and passes text ones on to parse.
+  # Receives messages from a Connection being observed and handles them
+  #
   # [+msg+]      The message string
+  #
+  # This supports the following:
+  # [:logged_out] - This symbol from the server informs us that the
+  #                 Connection has disconnected in an expected manner.
+  # [:disconnected] - This symbol from the server informs us that the
+  #                 Connection has disconnected in an unexpected manner.
+  #                 There is no practical difference from :logged_out to
+  #                 us.
+  # [String] - A String is assumed to be input from the Session and we
+  #            send it to Player#parse.
+  # [Array] - An Array is assumed to be the return value of a query we
+  #           issued to the Connection.
+  #
+  #         <pre>
+  #         us     -> Connection
+  #             query :color
+  #         Connection -> us
+  #             [:color, true]
+  #         </pre>
+  #
   def update(msg)
     case msg
     when :logged_out
@@ -568,10 +589,35 @@ class Incoming
     @initdone = false # keep silent until we're done negotiating
   end
 
-  # Receives messages from connection and handles login state.  On
-  # successful login the observer status will be transferred to the
-  # player object.
+  # Receives messages from a Connection being observed and handles login
+  # state.  On successful login the observer status will be transferred
+  # to the player object.
+  #
   # [+msg+]      The message string
+  #
+  # This supports the following:
+  # [:logged_out] - This symbol from the server informs us that the
+  #                 Connection has disconnected in an expected manner.
+  # [:disconnected] - This symbol from the server informs us that the
+  #                 Connection has disconnected in an unexpected manner.
+  #                 There is no practical difference from :logged_out to
+  #                 us.
+  # [:initdone] - This symbol from the server indicates that the Connection
+  #               is done setting up and done negotiating an initial state.
+  #               It triggers us to start sending output and parsing input.
+  # [String] - A String is assumed to be input from the Session and we
+  #            parse and handle it here.
+  # [Array] - An Array is assumed to be the return value of a query we
+  #           issued to the Connection.  Currently no queries or set
+  #           requests are made from Incoming (see Player).
+  #
+  #         <pre>
+  #         us     -> Connection
+  #             query :color
+  #         Connection -> us
+  #             [:color, true]
+  #         </pre>
+  #
   def update(msg)
     case msg
     when :logged_out, :disconnected
@@ -580,7 +626,6 @@ class Incoming
       @initdone = true
       message(BANNER)
       message("login> ")
-    when :initdone
     when String
       if @initdone
         case @state
@@ -669,7 +714,7 @@ class Engine
   # [+return+] A handle to the engine.
   def initialize(options)
     @log = Logger.new('logs/engine_log', 'daily')
-    @log.datetime_format = "%Y-%m-%d %H:%M:%S"
+    @log.datetime_format = "%Y-%m-%d %H:%M:%S "
     # Create the world an object containing most everything.
     @world = World.new(@log, options)
     @log.info "Booting server on port #{options.port}"
