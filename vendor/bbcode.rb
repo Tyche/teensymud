@@ -118,8 +118,11 @@ module BBCode
   # --- strip_bbcode( string )
   # Will strip any BBCode tags from the given string.
   def BBCode.strip_bbcode(string)
-#      string.strip!  # Removed JAL - 09/20/05 no need for stripping WS from string
-      return string.gsub(/\[[A-Za-z0-9\/=]+\]/, "")
+      string.gsub!(/\[COLOR=.*?\]|\[\/COLOR\]/, "")
+      string.gsub!(/\[SIZE=.*?\]|\[\/SIZE\]/, "")
+      string.gsub!(/\[FONT=.*?\]|\[\/FONT\]/, "")
+      string.gsub!(/\[[BUI]\]|\[\/[BUI]\]/, "")
+      return string
   end
 
   # Returns the string with all ansi escape sequences converted to BBCodes
