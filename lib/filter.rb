@@ -1,8 +1,8 @@
 #
 # file::    filter.rb
 # author::  Jon A. Lambert
-# version:: 2.5.0
-# date::    09/16/2005
+# version:: 2.5.4
+# date::    09/21/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -14,7 +14,133 @@ require 'ostruct'
 require 'pp'
 
 require 'bbcode'
+require 'asciicodes'
 require 'telnetcodes'
+require 'vt100codes'
+
+
+# The ProtocolStack class implements a stack of input and output filters.
+# It also maintains some interesting state variables that are shared
+# amongst filters.  It keeps its own log.
+#
+# Remarks:: This should have its own configuration file.
+#
+class ProtocolStack
+  attr_accessor :echo_on, :binary_on, :zmp_on, :color_on, :urgent_on, :hide_on
+  attr_accessor :terminal, :twidth, :theight
+  attr :conn
+  attr :log
+
+  # Construct a ProtocolStack
+  #
+  # [+conn+] The connection associated with this filter
+  def initialize(conn)
+    @conn = conn
+    @log = Logger.new('logs/protocol_log', 'daily')
+    @log.datetime_format = "%Y-%m-%d %H:%M:%S "
+    @filters = []  # Filter order is critical as lowest level protocol is first.
+    @filters << DebugFilter.new(self)
+    @filters << TelnetFilter.new(self,
+       {
+         TelnetCodes::SGA => true,
+         TelnetCodes::ECHO => true,
+         TelnetCodes::NAWS => true,
+         TelnetCodes::TTYPE => true,
+         TelnetCodes::ZMP => true
+       })
+    @filters << ColorFilter.new(self)
+
+    # Shared variables to facilitate inter-filter communication.
+    @echo_on = false
+    @binary_on = false
+    @zmp_on = false
+    @color_on = false
+    @urgent_on = false
+    @hide_on = false
+    @terminal = nil
+    @twidth = 80
+    @theight = 23
+  end
+
+  # A method is called on each filter in the stack in order.
+  #
+  # [+method+]
+  # [+args+]
+  def filter_call(method, args)
+    case method
+    when :filter_in, :init
+      retval = args
+      @filters.each do |v|
+        retval = v.send(method,retval)
+      end
+    when :filter_out
+      retval = args
+      @filters.reverse_each do |v|
+        retval = v.send(method,retval)
+      end
+    else
+      log.error "(#{self.object_id}) ProtocolStack#filter_call unknown method '#{method}',a:#{args.inspect},r:#{retval.inspect}"
+    end
+    retval
+  end
+
+  # The filter_query method returns state information for the filter.
+  # [+attr+]    A symbol representing the attribute being queried.
+  # [+return+] An attr/value pair or false if not defined in this filter
+  def query(attr)
+    case attr
+    when :terminal
+      retval =  [:terminal, @terminal]
+    when :termsize
+      retval =  [:termsize, [@twidth, @theight]]
+    when :color
+      retval =  [:color, @color_on]
+    when :zmp
+      retval =  [:zmp, @zmp_on]
+    when :echo
+      retval =  [:echo, @echo_on]
+    when :binary
+      retval =  [:binary, @binary_on]
+    when :urgent
+      retval =  [:urgent, @urgent_on]
+    when :hide
+      retval =  [:hide, @hide_on]
+    else
+      log.error "(#{self.object_id}) ProtocolStack#query unknown setting '#{pair.inspect}'"
+      retval = false
+    end
+    log.debug "(#{self.object_id}) ProtocolStack#query called '#{attr}',r:#{retval.inspect}"
+    retval
+  end
+
+  # The filter_set method sets state information on the filter.
+  # [+pair+]   An attr/value pair [:symbol, value]
+  # [+return+] true if attr not defined in this filter, false if not
+  def set(attr, value)
+    case attr
+    when :color
+      @color_on = value
+      true
+    when :urgent
+      @urgent_on = value
+      true
+    when :hide
+      @hide_on = value
+      true
+    when :init_subneg
+    # DEBUG 0
+      @filters[1].init_subneg
+      true
+    else
+      log.error "(#{self.object_id}) ProtocolStack#set unknown setting '#{attr}=#{value}'"
+      false
+    end
+    log.debug "(#{self.object_id}) ProtocolStack#set called '#{attr}=#{value}'"
+  end
+
+
+end
+
 
 # The Filter class is an abstract class defining the minimal methods
 # needed to filter data.
@@ -24,10 +150,9 @@ class Filter
 
   # Construct filter
   #
-  # [+conn+] The connection associated with this filter
-  def initialize(conn)
-    @conn = conn
-    @log = conn.server.log
+  # [+pstack+] The ProtocolStack associated with this filter
+  def initialize(pstack)
+    @pstack = pstack
   end
 
   # Run any post-contruction initialization
@@ -50,21 +175,6 @@ class Filter
     return str
   end
 
-  # The filter_query method returns state information for the filter.
-  # [+attr+]    A symbol representing the attribute being queried.
-  # [+return+] An attr/value pair or false if not defined in this filter
-  def filter_query(attr)
-    false
-  end
-
-
-  # The filter_set method sets state information on the filter.
-  # [+pair+]   An attr/value pair [:symbol, value]
-  # [+return+] true if attr not defined in this filter, false if not
-  def filter_set(pair)
-    false
-  end
-
 end
 
 # The TelnetFilter class implements the Telnet protocol.
@@ -73,29 +183,25 @@ end
 # options in RFC 857/858/1073/1091
 #
 class TelnetFilter < Filter
+  include ASCIICodes
   include TelnetCodes
-  attr_accessor :hide
 
   # Initialize state of filter
   #
-  # [+conn+] The connection associated with this filter
+  # [+pstack+] The ProtocolStack associated with this filter
   # [+opts+] An optional hash of desired initial options
-  def initialize(conn, wopts={})
+  def initialize(pstack, wopts={})
+    super(pstack)
     @wopts = wopts
     @mode = :normal #  Parse mode :normal, :cmd, :cr
     @state = {}
     @sc = nil
     @supp_opts = [ TTYPE, ECHO, SGA, NAWS, BINARY, ZMP ] # supported options
     @sneg_opts = [ TTYPE, ZMP ]  # supported options which imply an initial
+                                 # sub negotiation of options
     @ttype = []
-    @terminal = nil
-    @twidth = 80
-    @theight = 23
-    @hide = false     # if true and server echo set, we echo back asterixes
     @init_tries = 0   # Number of tries at negotitating sub options
     @synch = false
-    @urgent = false
-    super(conn)
   end
 
   # Negotiate starting wanted options
@@ -119,16 +225,16 @@ class TelnetFilter < Filter
   # [+return+] The filtered data
   def filter_in(str)
     init_subneg
+    return "" if str.nil? || str.empty?
     buf = ""
-    return buf if str.nil? || str.empty?
 
     @sc ? @sc.concat(str) : @sc = StringScanner.new(str)
     while b = @sc.get_byte
 
       # OOB sync data
-      if @urgent || b[0] == DM
-        @log.debug("(#{@conn.object_id}) Sync mode on")
-        @urgent = false
+      if @pstack.urgent_on || b[0] == DM
+        @pstack.log.debug("(#{@pstack.conn.object_id}) Sync mode on")
+        @pstack.urgent_on = false
         @synch = true
         break
       end
@@ -138,25 +244,31 @@ class TelnetFilter < Filter
         case b[0]
         when CR
           next if @synch
-          set_mode(:cr) if !enabled?(BINARY, :us)
+          set_mode(:cr) if !@pstack.binary_on
         when IAC
           set_mode(:cmd)
-        when BS
-          next if @synch
-          buf.slice!(-1)
-          echo(BS.chr)
+        #  BS should be handled in Terminal specific manner??
+#        when BS
+#          next if @synch
+#          buf.slice!(-1)
+#          echo(BS.chr)
         when NUL  # ignore NULs in stream when in normal mode
           next if @synch
-          if enabled?(BINARY, :us)
+          if @pstack.binary_on
             buf << b
             echo(b)
           else
-            @log.debug("(#{@conn.object_id}) unhandled NUL found in stream #{@sc.string}")
+            @pstack.log.error("(#{@pstack.conn.object_id}) unexpected NUL found in stream")
           end
         else
           next if @synch
-          buf << b
-          echo(b)
+          # Only let 7-bit values through in normal mode
+          if (b[0] & 0x80 == 0) && !@pstack.binary_on
+            buf << b
+            echo(b)
+          else
+            @pstack.log.error("(#{@pstack.conn.object_id}) unexpected 8-bit byte found in stream '#{b[0]}'")
+          end
         end
       when :cr
         # handle CRLF and CRNUL by swallowing what follows CR and
@@ -173,42 +285,42 @@ class TelnetFilter < Filter
           buf << IAC.chr
           set_mode(:normal)
         when AYT
-          @log.debug("(#{@conn.object_id}) AYT sent - Msg returned")
-          @conn.sock.send("TeensyMUD is here.\n",0)
+          @pstack.log.debug("(#{@pstack.conn.object_id}) AYT sent - Msg returned")
+          @pstack.conn.sock.send("TeensyMUD is here.\n",0)
           set_mode(:normal)
         when AO
-          @log.debug("(#{@conn.object_id}) AO sent - Synch returned")
-          @conn.sockio.write_flush
-          @conn.sock.send(IAC.chr + DM.chr, 0)
-          @conn.sockio.write_urgent(DM.chr)
+          @pstack.log.debug("(#{@pstack.conn.object_id}) AO sent - Synch returned")
+          @pstack.conn.sockio.write_flush
+          @pstack.conn.sock.send(IAC.chr + DM.chr, 0)
+          @pstack.conn.sockio.write_urgent(DM.chr)
           set_mode(:normal)
         when IP
-          @conn.sockio.read_flush
-          @conn.sockio.write_flush
-          @log.debug("(#{@conn.object_id}) IP sent")
+          @pstack.conn.sockio.read_flush
+          @pstack.conn.sockio.write_flush
+          @pstack.log.debug("(#{@pstack.conn.object_id}) IP sent")
           set_mode(:normal)
         when GA, NOP, BRK  # not implemented or ignored
-          @log.debug("(#{@conn.object_id}) GA, NOP or BRK sent")
+          @pstack.log.debug("(#{@pstack.conn.object_id}) GA, NOP or BRK sent")
           set_mode(:normal)
         when DM
-          @log.debug("(#{@conn.object_id}) Synch mode off")
+          @pstack.log.debug("(#{@pstack.conn.object_id}) Synch mode off")
           @synch = false
           set_mode(:normal)
         when EC
           next if @synch
-          @log.debug("(#{@conn.object_id}) EC sent")
+          @pstack.log.debug("(#{@pstack.conn.object_id}) EC sent")
           buf.slice!(-1)
           set_mode(:normal)
         when EL
           next if @synch
-          @log.debug("(#{@conn.object_id}) EL sent")
+          @pstack.log.debug("(#{@pstack.conn.object_id}) EL sent")
           p = buf.rindex("\n")
           p ? buf.slice!(pos+1..-1) : buf = ""
           set_mode(:normal)
         when DO, DONT, WILL, WONT
           opt = @sc.getbyte
           if opt.nil?
-            @sc.peep
+            @sc.unscan
             break
           end
           case b[0]
@@ -221,18 +333,27 @@ class TelnetFilter < Filter
           when DONT
             requests_us(opt[0],false)
           end
+          # Update interesting things in ProtocolStack after negotiation
+          case opt[0]
+          when ECHO
+            @pstack.echo_on = enabled?(ECHO, :us)
+          when BINARY
+            @pstack.binary_on = enabled?(BINARY, :us)
+          when ZMP
+            @pstack.zmp_on = enabled?(ZMP, :us)
+          end
           set_mode(:normal)
         when SB
           opt = @sc.getbyte
           if opt.nil? || @sc.check_until(/#{IAC.chr}#{SE.chr}/).nil?
-            @sc.peep
+            @sc.unscan
             break
           end
           data = @sc.scan_until(/#{IAC.chr}#{SE.chr}/).chop.chop
           parse_subneg(opt[0],data)
           set_mode(:normal)
         else
-          @log.debug("(#{@conn.object_id}) Unknown Telnet command - #{b[0]}")
+          @pstack.log.debug("(#{@pstack.conn.object_id}) Unknown Telnet command - #{b[0]}")
           set_mode(:normal)
         end
       end
@@ -249,42 +370,10 @@ class TelnetFilter < Filter
     buf = ""
     return buf if str.nil? || str.empty?
 
-    if !enabled?(BINARY, :us)
+    if !@pstack.binary_on
       buf = str.gsub(/\n/, "\r\n")
     end
     buf
-  end
-
-  # The filter_query method returns state information for the filter.
-  # [+attr+]    A symbol representing the attribute being queried.
-  # [+return+] An attr/value pair or nil if not defined in this filter
-  def filter_query(attr)
-    case attr
-    when :terminal
-      return [:terminal, @terminal]
-    when :termsize
-      return [:termsize, [@twidth, @theight]]
-    end
-    false
-  end
-
-  # The filter_set method sets state information on the filter.
-  # [+pair+]   An attr/value pair [:symbol, value]
-  # [+return+] true or false if attr not defined in this filter
-  def filter_set(pair)
-    case pair[0]
-    when :urgent
-      @urgent = pair[1]
-      true
-    when :hide
-      @hide = pair[1]
-      true
-    when :init_subneg
-      init_subneg
-      true
-    else
-      false
-    end
   end
 
   ###### Custom public methods
@@ -315,11 +404,11 @@ class TelnetFilter < Filter
 
   # Handle server-side echo
   def echo(ch)
-    if enabled?(ECHO, :us)
-      if @hide && ch[0] != CR
-        @conn.sock.send('*',0)
+    if @pstack.echo_on
+      if @pstack.hide_on && ch[0] != CR
+        @pstack.conn.sock.send('*',0)
       else
-        @conn.sock.send(ch,0)
+        @pstack.conn.sock.send(ch,0)
       end
     end
   end
@@ -342,19 +431,19 @@ class TelnetFilter < Filter
       if desired?(opt) == enabled?(opt, who)
         case opt
         when TTYPE
-          @conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
+          @pstack.conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
         when ZMP
-          @log.info("(#{@conn.object_id}) ZMP successfully negotiated." )
-          @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+          @pstack.log.info("(#{@pstack.conn.object_id}) ZMP successfully negotiated." )
+          @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
             "zmp.check#{NUL.chr}color.#{NUL.chr}" +
             "#{IAC.chr}#{SE.chr}")
-          @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+          @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
             "zmp.ident#{NUL.chr}TeensyMUD#{NUL.chr}#{Version}#{NUL.chr}A sexy mud server#{NUL.chr}" +
             "#{IAC.chr}#{SE.chr}")
-          @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
-            "zmp.time#{NUL.chr}#{Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")}#{NUL.chr}" +
+          @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+            "zmp.ping#{NUL.chr}" +
             "#{IAC.chr}#{SE.chr}")
-          @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+          @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
             "zmp.input#{NUL.chr}\n     I see you support...\n     ZMP protocol\n{NUL.chr}" +
             "#{IAC.chr}#{SE.chr}")
         end
@@ -363,11 +452,11 @@ class TelnetFilter < Filter
     end
 
     if @init_tries > 15
-      @log.debug("(#{@conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.")
+      @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.")
     end
     if @sneg_opts.empty? || @init_tries > 15
       @sneg_opts = []
-      @conn.set_initdone
+      @pstack.conn.set_initdone
     else
 
     end
@@ -380,32 +469,31 @@ private
   # [+opt+] The Telnet option found
   # [+data+] The data found between SB OPTION and IAC SE
   def parse_subneg(opt,data)
+    data.gsub!(/#{IAC}#{IAC}/, IAC.chr) # 255 needs to be undoubled from all data
     case opt
     when NAWS
-      data.gsub!(/#{IAC}#{IAC}/, IAC.chr) # 255 needs to be undoubled from data
-      @twidth = data[0..1].unpack('n')
-      @theight = data[2..3].unpack('n')
-      @log.debug("(#{@conn.object_id}) Terminal width #{@twidth} / height #{@theight}")
+      @pstack.twidth = data[0..1].unpack('n')
+      @pstack.theight = data[2..3].unpack('n')
+      @pstack.log.debug("(#{@pstack.conn.object_id}) Terminal width #{@pstack.twidth} / height #{@pstack.theight}")
     when TTYPE
-      if data[0] = 0
+      if data[0] == 0
+        @pstack.log.debug("(#{@pstack.conn.object_id}) Terminal type - #{data[1..-1]}")
         if !@ttype.include?(data[1..-1])
-          @log.debug("(#{@conn.object_id}) Terminal type - #{data[1..-1]}")
           # short-circuit choice because of Windows telnet client
           if data[1..-1].downcase == 'vt100'
             @ttype << data[1..-1]
-            @terminal = 'vt100'
-            @log.debug("(#{@conn.object_id}) Terminal choice - #{@terminal} in list #{@ttype.inspect}")
+            @pstack.terminal = 'vt100'
+            @pstack.log.debug("(#{@pstack.conn.object_id}) Terminal choice - #{@pstack.terminal} in list #{@ttype.inspect}")
           end
-          return if @terminal
+          return if @pstack.terminal
           @ttype << data[1..-1]
-          @conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
+          @pstack.conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
         else
-          return if @terminal
+          return if @pstack.terminal
           choose_terminal
         end
       end
     when ZMP
-      data.gsub!(/#{IAC}#{IAC}/, IAC.chr) # 255 needs to be undoubled from data
       args = data.split("\0")
       cmd = args.shift
       handle_zmp(cmd,args)
@@ -417,25 +505,25 @@ private
   # Should not pick vtnt as we dont handle it
   def choose_terminal
     if @ttype.empty?
-      @terminal = "dumb"
+      @pstack.terminal = "dumb"
     end
 
-    @terminal = @ttype.find {|t| t =~  /(vt|VT)[-]?100/ } if !@terminal
-    @terminal = @ttype.find {|t| t =~ /(vt|VT)[-]?\d+/ } if !@terminal
-    @terminal = @ttype.find {|t| t =~ /(ansi|ANSI).*/ } if !@terminal
-    @terminal = @ttype.find {|t| t =~ /(xterm|XTERM).*/ } if !@terminal
-    @terminal = @ttype.find {|t| t =~ /mushclient/ } if !@terminal
+    @pstack.terminal = @ttype.find {|t| t =~  /(vt|VT)[-]?100/ } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~ /(vt|VT)[-]?\d+/ } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~ /(ansi|ANSI).*/ } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~ /(xterm|XTERM).*/ } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~ /mushclient/ } if !@pstack.terminal
 
-    if @terminal && @ttype.last != @terminal # short circuit retraversal of options
+    if @pstack.terminal && @ttype.last != @pstack.terminal # short circuit retraversal of options
       @ttype.each do |t|
-        @conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
-        break if t == @terminal
+        @pstack.conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
+        break if t == @pstack.terminal
       end
-    elsif @ttype.last != @terminal
-      @terminal = 'dumb'
+    elsif @ttype.last != @pstack.terminal
+      @pstack.terminal = 'dumb'
     end
 
-    @log.debug("(#{@conn.object_id}) Terminal choice - #{@terminal} in list #{@ttype.inspect}")
+    @pstack.log.debug("(#{@pstack.conn.object_id}) Terminal choice - #{@pstack.terminal} in list #{@ttype.inspect}")
   end
 
   # Get current parse mode
@@ -466,7 +554,7 @@ private
   # [+opt+]   The option code
   # [+enable+] true for enable, false for disable
   def ask_him(opt, enable)
-    @log.debug("(#{@conn.object_id}) Requested Telnet option #{opt.to_s} set to #{enable.to_s}")
+    @pstack.log.debug("(#{@pstack.conn.object_id}) Requested Telnet option #{opt.to_s} set to #{enable.to_s}")
     initiate(opt, enable, :him)
   end
 
@@ -475,7 +563,7 @@ private
   # [+opt+]   The option code
   # [+enable+] true for enable, false for disable
   def offer_us(opt, enable)
-    @log.debug("(#{@conn.object_id}) Offered Telnet option #{opt.to_s} set to #{enable.to_s}")
+    @pstack.log.debug("(#{@pstack.conn.object_id}) Offered Telnet option #{opt.to_s} set to #{enable.to_s}")
     initiate(opt, enable, :us)
   end
 
@@ -504,18 +592,18 @@ private
     when :no
       if enable
         @state[opt].send("#{who}=", :wantyes)
-        @conn.sendmsg(IAC.chr + willdo + opt.chr)
+        @pstack.conn.sendmsg(IAC.chr + willdo + opt.chr)
       else
         # Error already disabled
-        @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} already disabled")
+        @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already disabled")
       end
     when :yes
       if enable
         # Error already enabled
-        @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} already enabled")
+        @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already enabled")
       else
         @state[opt].send("#{who}=", :wantno)
-        @conn.sendmsg(IAC.chr + wontdont + opt.chr)
+        @pstack.conn.sendmsg(IAC.chr + wontdont + opt.chr)
       end
     when :wantno
       if enable
@@ -524,13 +612,13 @@ private
           @state[opt].send("#{whoq}=", :opposite)
         when :opposite
           # Error already queued enable request
-          @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} already queued enable request")
+          @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already queued enable request")
         end
       else
         case @state[opt].send(whoq)
         when :empty
           # Error already negotiating for disable
-          @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} already negotiating for disable")
+          @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already negotiating for disable")
         when :opposite
           @state[opt].send("#{whoq}=", :empty)
         end
@@ -540,7 +628,7 @@ private
         case @state[opt].send(whoq)
         when :empty
           #Error already negotiating for enable
-          @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} already negotiating for enable")
+          @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already negotiating for enable")
         when :opposite
           @state[opt].send("#{whoq}=", :empty)
         end
@@ -550,7 +638,7 @@ private
           @state[opt].send("#{whoq}=", :opposite)
         when :opposite
           #Error already queued for disable request
-          @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} already queued for disable request")
+          @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already queued for disable request")
         end
       end
     end
@@ -561,7 +649,7 @@ private
   # [+opt+]   The option code
   # [+enable+] true for WILL answer, false for WONT answer
   def replies_him(opt, enable)
-    @log.debug("(#{@conn.object_id}) Client replies to Telnet option #{opt.to_s} set to #{enable.to_s}")
+    @pstack.log.debug("(#{@pstack.conn.object_id}) Client replies to Telnet option #{opt.to_s} set to #{enable.to_s}")
     response(opt, enable, :him)
   end
 
@@ -570,7 +658,7 @@ private
   # [+opt+]   The option code
   # [+enable+] true for DO request, false for DONT request
   def requests_us(opt, enable)
-    @log.debug("(#{@conn.object_id}) Client requests Telnet option #{opt.to_s} set to #{enable.to_s}")
+    @pstack.log.debug("(#{@pstack.conn.object_id}) Client requests Telnet option #{opt.to_s} set to #{enable.to_s}")
     response(opt, enable, :us)
   end
 
@@ -601,12 +689,12 @@ private
         if desired?(opt)
         # If we agree
           @state[opt].send("#{who}=", :yes)
-          @conn.sendmsg(IAC.chr + willdo + opt.chr)
-          @log.debug("(#{@conn.object_id}) Telnet negotiation: agreed to enable option #{opt.to_s}")
+          @pstack.conn.sendmsg(IAC.chr + willdo + opt.chr)
+          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to enable option #{opt.to_s}")
         else
         # If we disagree
-          @conn.sendmsg(IAC.chr + wontdont + opt.chr)
-          @log.debug("(#{@conn.object_id}) Telnet negotiation: disagreed to enable option #{opt.to_s}")
+          @pstack.conn.sendmsg(IAC.chr + wontdont + opt.chr)
+          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: disagreed to enable option #{opt.to_s}")
         end
       else
         # Ignore
@@ -616,7 +704,7 @@ private
         # Ignore
       else
         @state[opt].send("#{who}=", :no)
-        @conn.sendmsg(IAC.chr + wontdont + opt.chr)
+        @pstack.conn.sendmsg(IAC.chr + wontdont + opt.chr)
       end
     when :wantno
       if enable
@@ -629,7 +717,7 @@ private
           @state[opt].send("#{who}=", :yes)
           @state[opt].send("#{whoq}=", :empty)
         end
-        @log.error("(#{@conn.object_id}) Telnet negotiation: option #{opt.to_s} DONT/WONT answered by WILL/DO")
+        @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} DONT/WONT answered by WILL/DO")
       else
         case @state[opt].send(whoq)
         when :empty
@@ -637,7 +725,7 @@ private
         when :opposite
           @state[opt].send("#{who}=", :wantyes)
           @state[opt].send("#{whoq}=", :empty)
-          @conn.sendmsg(IAC.chr + willdo + opt.chr)
+          @pstack.conn.sendmsg(IAC.chr + willdo + opt.chr)
         end
       end
     when :wantyes
@@ -648,7 +736,7 @@ private
         when :opposite
           @state[opt].send("#{who}=", :wantno)
           @state[opt].send("#{whoq}=", :empty)
-          @conn.sendmsg(IAC.chr + wontdont + opt.chr)
+          @pstack.conn.sendmsg(IAC.chr + wontdont + opt.chr)
         end
       else
         case @state[opt].send(whoq)
@@ -663,29 +751,34 @@ private
   end
 
   def handle_zmp(cmd,args)
-    @log.info("(#{@conn.object_id}) ZMP command recieved - '#{cmd}' args: #{args.inspect}" )
+    @pstack.log.debug("(#{@pstack.conn.object_id}) ZMP command recieved - '#{cmd}' args: #{args.inspect}" )
     case cmd
     when "zmp.ping"
-      @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+      @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
         "zmp.time#{NUL.chr}#{Time.now.utc.strftime("%Y-%m-%d %H:%M:%S")}#{NUL.chr}" +
         "#{IAC.chr}#{SE.chr}")
     when "zmp.time"
     when "zmp.ident"
-      # simply return the favor
-      @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
-        "zmp.ident#{NUL.chr}TeensyMUD#{NUL.chr}#{Version}#{NUL.chr}A sexy mud server#{NUL.chr}" +
-        "#{IAC.chr}#{SE.chr}")
+      # That's nice
     when "zmp.check"
-      # We support nothing yet so we'll echo back nay on whatever they requested
-      @conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
-        "zmp.no-support#{NUL.chr}args[0]{NUL.chr}" +
-        "#{IAC.chr}#{SE.chr}")
+      case arg[0]
+      when /zmp.*/
+      # We support all 'zmp.' package and commands so..
+        @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+          "zmp.support#{NUL.chr}args[0]{NUL.chr}" +
+          "#{IAC.chr}#{SE.chr}")
+      else
+        @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
+          "zmp.no-support#{NUL.chr}args[0]#{NUL.chr}" +
+          "#{IAC.chr}#{SE.chr}")
+      end
     when "zmp.support"
     when "zmp.no-support"
     when "zmp.input"
       # Now we just simply pass this whole load to the Player.parse
-      # WARN: This means there is a possibility of out-of-order processing of @inbuffer
-      @conn.message(args[0])
+      # WARN: This means there is a possibility of out-of-order processing
+      #       of @inbuffer, though extremely unlikely.
+      @pstack.conn.message(args[0])
     end
   end
 
@@ -698,18 +791,17 @@ class ColorFilter < Filter
 
   # Construct filter
   #
-  # [+conn+] The connection associated with this filter
-  # [+wopts+] An optional hash of desired initial options
-  def initialize(conn)
-    @color = false
-    super(conn)
+  # [+pstack+] The ProtocolStack associated with this filter
+  def initialize(pstack)
+    super(pstack)
   end
 
   # The filter_out method filters output data
   # [+str+]    The string to be processed
   # [+return+] The filtered data
   def filter_out(str)
-    if @color
+    return "" if str.nil? || str.empty?
+    if @pstack.color_on
       s = BBCode.bbcode_to_ansi(str)
     else
       s = BBCode.strip_bbcode(str)
@@ -717,30 +809,94 @@ class ColorFilter < Filter
     return s
   end
 
-  # The filter_query method returns state information for the filter.
-  # [+attr+]    A symbol representing the attribute being queried.
-  # [+return+] An attr/value pair or false if not defined in this filter
-  def filter_query(attr)
-    case attr
-    when :color
-      return [:color, @color]
-    end
-    false
+end
+
+
+# The TerminalFilter class implements a subset of ANSI/VT100 protocol.
+#
+class TerminalFilter < Filter
+
+  # Construct filter
+  #
+  # [+pstack+] The ProtocolStack associated with this filter
+  def initialize(pstack)
+    super(pstack)
   end
 
-  # The filter_set method sets state information on the filter.
-  # [+pair+]   An attr/value pair [:symbol, value]
-  # [+return+] true if attr not defined in this filter, false if not
-  def filter_set(pair)
-    case pair[0]
-    when :color
-      @color = pair[1]
-      true
-    else
-      false
+  # Run any post-contruction initialization
+  # [+args+] Optional initial options
+  def init(args=nil)
+    true
+  end
+
+  # The filter_in method filters input data
+  # [+str+]    The string to be processed
+  # [+return+] The filtered data
+  def filter_in(str)
+    return str
+  end
+
+  # The filter_out method filters output data
+  # [+str+]    The string to be processed
+  # [+return+] The filtered data
+  def filter_out(str)
+    return "" if str.nil? || str.empty?
+    buf = ""
+
+    if !@pstack.binary_on
+      buf = str.gsub(/\n/, "\r\n")
     end
+    buf
   end
 
 end
+
+
+# The DebugFilter class simply logs all that passes through it
+#
+class DebugFilter < Filter
+  include VT100Codes
+  # Construct filter
+  #
+  # [+pstack+] The ProtocolStack associated with this filter
+  def initialize(pstack)
+    super(pstack)
+  end
+
+  # The filter_in method filters input data
+  # [+str+]    The string to be processed
+  # [+return+] The filtered data
+  def filter_in(str)
+    return "" if str.nil? || str.empty?
+    @pstack.log.debug("(#{@pstack.conn.object_id}) INPUT #{str.inspect}" )
+    case str
+    when /#{F5.sub(/\[/,"\\[")}/
+      @pstack.conn.sendmsg(CSI + "1;21" + SS)
+    when /#{F6.sub(/\[/,"\\[")}/
+      @pstack.conn.sendmsg(ESOL)
+    when /#{F7.sub(/\[/,"\\[")}/
+      @pstack.conn.sendmsg(QCP)
+    when /#{F8.sub(/\[/,"\\[")}/
+      @pstack.conn.sendmsg(CSI + HOME)
+    when /#{F9.sub(/\[/,"\\[")}/
+      @pstack.conn.sendmsg(CSI + "15;40" + HOME + "Hello World")
+    when /#{F10.sub(/\[/,"\\[")}/
+      @pstack.conn.sendmsg(ES)
+    end
+    str
+  end
+
+  # The filter_out method filters output data
+  # [+str+]    The string to be processed
+  # [+return+] The filtered data
+  def filter_out(str)
+    return "" if str.nil? || str.empty?
+    @pstack.log.debug("(#{@pstack.conn.object_id}) OUTPUT #{str.inspect}" )
+    str
+  end
+
+end
+
+
 
 

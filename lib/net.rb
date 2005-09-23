@@ -1,8 +1,8 @@
 #
 # file::    net.rb
 # author::  Jon A. Lambert
-# version:: 2.5.0
-# date::    09/16/2005
+# version:: 2.5.4
+# date::    09/22/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -43,7 +43,6 @@ class SockIO
   # [+IOError+]  A sockets error occurred.
   # [+EOFError+] The connection has closed normally.
   def read
-    # @sock.sysread(@bufsize)
     @sock.recv(@bufsize)
   end
 
@@ -55,7 +54,6 @@ class SockIO
   # [+EOFError+] The connection has closed normally.
   def write(msg)
     @outbuffer << msg
-    #n = @sock.syswrite(tmp)
     n = @sock.send(@outbuffer, 0)
     # save unsent data for next call
     @outbuffer.slice!(0...n)
@@ -116,7 +114,6 @@ class LineIO < SockIO
   # [+IOError+]  A sockets error occurred.
   # [+EOFError+] The connection has closed normally.
   def read
-    #@inbuffer << @sock.sysread(@bufsize)
     @inbuffer << @sock.recv(@bufsize)
     @inbuffer.gsub!(/\r\n|\r\x00|\n\r|\r|\n/,"\n")
     pos = @inbuffer.rindex("\n")
@@ -202,7 +199,7 @@ end
 class Connection < Session
   attr :server
   attr :initdone
-  attr :filters
+  attr :pstack
   attr :sockio
 
   # Create a new connection object
@@ -213,19 +210,10 @@ class Connection < Session
     super(server, sock)
     @sockio = SockIO.new(@sock) # Object that handles low level Socket I/O
                                 # Should be configurable
-    @filters = []  # Filter order is critical as lowest level protocol is first.
-    @filters << TelnetFilter.new(self,
-       {
-         TelnetCodes::SGA => true,
-         TelnetCodes::ECHO => true,
-         TelnetCodes::NAWS => true,
-         TelnetCodes::TTYPE => true,
-         TelnetCodes::ZMP => true
-       })
-    @filters << ColorFilter.new(self)
     @inbuffer = ""              # buffer lines waiting to be processed
     @outbuffer = ""             # buffer lines waiting to be output
     @initdone = false           # keeps silent until we're done with negotiations
+    @pstack = ProtocolStack.new(self)
   end
 
   # init is called before using the connection.
@@ -235,7 +223,7 @@ class Connection < Session
     @connected = true
     @server.register(self)
     @server.log.info "(#{self.object_id}) New Connection on '#{@addr}'"
-    filter_call(:init,nil)
+    @pstack.filter_call(:init,nil)
     true
   rescue Exception
     @server.log.error "(#{self.object_id}) Error-Connection#init"
@@ -252,9 +240,7 @@ class Connection < Session
   def handle_input
     buf = @sockio.read
     return if buf.nil?
-#    @server.log.debug "before filter #{buf.inspect}"
-    buf = filter_call(:filter_in,buf)
-#    @server.log.debug "after filter #{buf.inspect}"
+    buf = @pstack.filter_call(:filter_in,buf)
     @inbuffer << buf
     if @initdone  # Just let buffer fill until we indicate we're done
                   # negotiating.  Set by calling initdone from TelnetFilter
@@ -279,7 +265,7 @@ class Connection < Session
   # handle_output is called to order a connection to process any output
   # waiting on its socket.
   def handle_output
-    @outbuffer = filter_call(:filter_out,@outbuffer)
+    @outbuffer = @pstack.filter_call(:filter_out,@outbuffer)
     done = @sockio.write(@outbuffer)
     @outbuffer = ""
     if done
@@ -319,8 +305,8 @@ class Connection < Session
   def handle_oob
     buf = @sockio.read_urgent
     @server.log.debug "(#{self.object_id}) Connection urgent data received - '#{buf[0]}'"
-    filter_call(:filter_set,[:urgent, true])
-    buf = filter_call(:filter_in,buf)
+    @pstack.set(:urgent, true)
+    buf = @pstack.filter_call(:filter_in,buf)
   rescue Exception
     @server.log.error "(#{self.object_id}) Connection#handle_oob"
     @server.log.error $!
@@ -333,53 +319,54 @@ class Connection < Session
     message(:initdone)
   end
 
-  # A method is called on each filter in the stack in order.
-  #
-  # [+method+]
-  # [+args+]
-  def filter_call(method, args)
-    case method
-    when :filter_in, :init
-      retval = args
-      @filters.each do |v|
-        retval = v.send(method,retval)
-      end
-    when :filter_out
-      retval = args
-      @filters.reverse_each do |v|
-        retval = v.send(method,retval)
-      end
-    else
-      retval = false
-      @filters.each do |v|
-        retval = v.send(method, args)
-        break if retval
-      end
-      if method == :filter_query
-        message(retval)
-      end
-      @server.log.debug "(#{self.object_id}) Connection filter_call called '#{method}',a:#{args.inspect},r:#{retval.inspect}"
-    end
-    retval
-  end
-
 
   # Update will be called when the object the connection is observing
-  # has notified us of a change in state or new message.
+  # wants to notify us of a change in state or new message.
   # When a new connection is accepted in acceptor that connection
   # is passed to the observer of the acceptor which allows the client
   # to attach an observer to the connection and make the connection
-  # an observer of that object.  In this case we want to keep this
-  # side real simple to avoid "unnecessary foreign entanglements".
-  # We simply support a message to be sent to the socket or a token
-  # indicating the clent wants to disconnect this connection.
+  # an observer of that object.  We need to keep both sides interest
+  # in each other limited to a narrow but flexible interface to
+  # prevent tight coupling.
+  #
+  # This supports the following:
+  # [:logged_out] - This symbol message from the client is a request to
+  #               close the Connection.  It is handled here.
+  # [String] - A String is assumed to be output and placed in our
+  #            @outbuffer.
+  # [Symbol] - A Symbol not handled here is assumed to be a query and
+  #            its handling is delegated to the ProtocolStack, the result
+  #            of which is a pair immediately sent back to as a message
+  #            to the client.
+  #
+  #         <pre>
+  #         client -> us
+  #             :echo
+  #         us     -> ProtocolStack
+  #             query(:echo)
+  #         ProtocolStack -> us
+  #             [:echo, true]
+  #         us -> client
+  #             [:echo, true]
+  #         </pre>
+  #
+  # [Array] - An Array not handled here is assumed to be a set command and
+  #           its handling is delegated to the ProtocolStack.
+  #
+  #         <pre>
+  #         client -> us
+  #             [:color, true]
+  #         us     -> ProtocolStack
+  #             set(:color, true)
+  #         </pre>
+  #
   def update(msg)
     case msg
     when :logged_out then @closing = true
-    when Array
-      filter_call(:filter_set,msg)
+    when Array    # Arrays are assumed to be
+      @pstack.set(msg[0],msg[1])
     when Symbol
-      filter_call(:filter_query,msg)
+      message(@pstack.query(msg))
     when String
       sendmsg(msg)
     else
@@ -481,7 +468,7 @@ class Reactor
   # [+return+'] true if server boots correctly, false if an error occurs.
   def start(engine)
     @log = Logger.new('logs/net_log', 'daily')
-    @log.datetime_format = "%Y-%m-%d %H:%M:%S"
+    @log.datetime_format = "%Y-%m-%d %H:%M:%S "
     # Create an acceptor to listen for this server.
     @acceptor = Acceptor.new(self, @port)
     return false if !@acceptor.init
@@ -530,7 +517,7 @@ class Reactor
       s.handle_close if s.closing
       # special handling for Telnet initialization
       if s.respond_to?(:initdone) && !s.initdone
-        s.filter_call(:filter_set,[:init_subneg])
+        s.pstack.set(:init_subneg, true)
       end
     end
   rescue
