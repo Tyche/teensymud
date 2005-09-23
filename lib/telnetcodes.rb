@@ -1,8 +1,8 @@
 #
-# file::    telnetdata.rb
+# file::    telnetcodes.rb
 # author::  Jon A. Lambert
-# version:: 2.5.0
-# date::    09/16/2005
+# version:: 2.5.4
+# date::    09/21/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -13,11 +13,6 @@
 
 # This module contains the contants used for Telnet
 module TelnetCodes
-
-  CR  = 13   # Carriage return
-  LF  = 10   # Linefeed
-  NUL =  0   # NUL character
-  BS  =  8   # Backspace
 
   IAC = 255  # Command  - RFC 854, 855, 1123, 1143
 
@@ -49,7 +44,6 @@ module TelnetCodes
   ABORT = 238 # Abort process
   SUSP  = 237 # Suspend process
   EOF   = 236 # End of file
-
 
   # Options
   BINARY         =   0 # Transmit Binary - RFC 856
@@ -107,5 +101,11 @@ module TelnetCodes
   PHEARTBEAT     = 140 # Telnat Pragma Heartbeat
   EXOPL          = 255 # Extended-Options-List - RFC 861
 
+  COMPRESS =  85 # MCCP 1 support (broken)
+  COMPRESS2 = 86 # MCCP 2 support
+  MSP  = 90 # MSP  support
+  MSP2 = 92 # MSP2 support
+    MUSIC = 0
+    SOUND = 1
   ZMP = 93 # ZMP support
 end
