@@ -17,6 +17,7 @@ require 'bbcode'
 require 'asciicodes'
 require 'telnetcodes'
 require 'vt100codes'
+require 'strscan'
 
 
 # The ProtocolStack class implements a stack of input and output filters.
@@ -34,30 +35,46 @@ class ProtocolStack
   # Construct a ProtocolStack
   #
   # [+conn+] The connection associated with this filter
-  def initialize(conn)
-    @conn = conn
-    @log = Logger.new('logs/protocol_log', 'daily')
-    @log.datetime_format = "%Y-%m-%d %H:%M:%S "
+  def initialize(conn, opts)
+    @conn,@opts = conn,opts
+    if @opts.include? :client
+      @log = Logger.new('logs/protocol_client_log', 'daily')
+      @log.datetime_format = "%Y-%m-%d %H:%M:%S "
+    else
+      @log = Logger.new('logs/protocol_log', 'daily')
+      @log.datetime_format = "%Y-%m-%d %H:%M:%S "
+    end
     @filters = []  # Filter order is critical as lowest level protocol is first.
-    @filters << DebugFilter.new(self)
-    @filters << TelnetFilter.new(self,
-       {
-         TelnetCodes::SGA => true,
-         TelnetCodes::ECHO => true,
-         TelnetCodes::NAWS => true,
-         TelnetCodes::TTYPE => true,
-         TelnetCodes::ZMP => true
-       })
-    @filters << ColorFilter.new(self)
+    if @opts.include? :debugfilter
+      @filters << DebugFilter.new(self)
+    end
+    if @opts.include? :telnetfilter
+      @filters << TelnetFilter.new(self,@opts)
+    end
+    if @opts.include? :terminalfilter
+      @filters << TerminalFilter.new(self,@opts)
+    end
+    if @opts.include? :colorfilter
+      @filters << ColorFilter.new(self)
+    end
+    if @opts.include? :filter
+      @filters << Filter.new(self)
+    end
 
     # Shared variables to facilitate inter-filter communication.
+    @sga_on = false
     @echo_on = false
     @binary_on = false
     @zmp_on = false
     @color_on = false
     @urgent_on = false
     @hide_on = false
-    @terminal = nil
+    # This is a hack as set(:terminal, "vt100") is too late from client session.
+    if @opts.include? :vt100
+      @terminal = "vt100"
+    else
+      @terminal = nil
+    end
     @twidth = 80
     @theight = 23
   end
@@ -127,9 +144,30 @@ class ProtocolStack
     when :hide
       @hide_on = value
       true
+    when :terminal
+      @terminal = value
+      true
+    when :termsize
+      @twidth = value[0]
+      @theight = value[1]
+      # telnet filter always first except when debugfilter on
+      if @opts.include? :telnetfilter
+        if @opts.include? :debugfilter
+          @filters[1].send_naws
+        else
+          @filters[0].send_naws
+        end
+      end
+      true
     when :init_subneg
-    # DEBUG 0
-      @filters[1].init_subneg
+      # telnet filter always first except when debugfilter on
+      if @opts.include? :telnetfilter
+        if @opts.include? :debugfilter
+          @filters[1].init_subneg
+        else
+          @filters[0].init_subneg
+        end
+      end
       true
     else
       log.error "(#{self.object_id}) ProtocolStack#set unknown setting '#{attr}=#{value}'"
@@ -190,13 +228,14 @@ class TelnetFilter < Filter
   #
   # [+pstack+] The ProtocolStack associated with this filter
   # [+opts+] An optional hash of desired initial options
-  def initialize(pstack, wopts={})
+  def initialize(pstack, wopts=[])
     super(pstack)
-    @wopts = wopts
+    @opts = wopts
+    @wopts = {}
+    getopts(wopts)
     @mode = :normal #  Parse mode :normal, :cmd, :cr
     @state = {}
     @sc = nil
-    @supp_opts = [ TTYPE, ECHO, SGA, NAWS, BINARY, ZMP ] # supported options
     @sneg_opts = [ TTYPE, ZMP ]  # supported options which imply an initial
                                  # sub negotiation of options
     @ttype = []
@@ -208,6 +247,7 @@ class TelnetFilter < Filter
   #
   # [+args+] Optional initial options
   def init(args)
+    return true if @opts.include? :client  # let server offer and ask for client
     # severl sorts of options here - server offer, ask client or both
     @wopts.each do |key,val|
       case key
@@ -387,13 +427,6 @@ class TelnetFilter < Filter
     e == :yes ? true : false
   end
 
-  # Test to see if option is supported
-  # [+opt+] The Telnet option code
-  # [+who+] The side to check :us or :him
-  def supports?(opt)
-    @supp_opts.include?(opt)
-  end
-
   # Test to see which state we prefer this option to be in
   # [+opt+] The Telnet option code
   def desired?(opt)
@@ -416,7 +449,7 @@ class TelnetFilter < Filter
   # Negotiate starting wanted options that imply subnegotation
   # So far only terminal type
   def init_subneg
-    return if @sneg_opts.empty?
+    return if @init_tries > 15
 
     @init_tries += 1
 
@@ -453,17 +486,41 @@ class TelnetFilter < Filter
 
     if @init_tries > 15
       @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.")
-    end
-    if @sneg_opts.empty? || @init_tries > 15
       @sneg_opts = []
       @pstack.conn.set_initdone
-    else
-
     end
+  end
+
+  def send_naws
+    return if !enabled?(NAWS, :us)
+    ts = @pstack.query(:termsize)
+    data = [ts[1][0]].pack('n') + [ts[1][1]].pack('n')
+    data.gsub!(/#{IAC}/, IAC.chr + IAC.chr) # 255 needs to be doubled
+    @pstack.conn.sendmsg(IAC.chr + SB.chr + NAWS.chr + data + IAC.chr + SE.chr)
   end
 
 private
   ###### Private methods
+
+  def getopts(wopts)
+    # supported options
+    wopts.each do |op|
+      case op
+      when :ttype
+        @wopts[TTYPE] = true
+      when :echo
+        @wopts[ECHO] = true
+      when :sga
+        @wopts[SGA] = true
+      when :naws
+        @wopts[NAWS] = true
+      when :binary
+        @wopts[BINARY] = true
+      when :zmp
+        @wopts[ZMP] = true
+      end
+    end
+  end
 
   # parse the subnegotiation data and save it
   # [+opt+] The Telnet option found
@@ -492,6 +549,9 @@ private
           return if @pstack.terminal
           choose_terminal
         end
+      elsif data[0] == 1
+        return if !@pstack.terminal
+        @pstack.conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 0.chr + @pstack.terminal + IAC.chr + SE.chr)
       end
     when ZMP
       args = data.split("\0")
