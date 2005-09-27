@@ -118,10 +118,10 @@ module BBCode
   # --- strip_bbcode( string )
   # Will strip any BBCode tags from the given string.
   def BBCode.strip_bbcode(string)
-      string.gsub!(/\[COLOR=.*?\]|\[\/COLOR\]/, "")
-      string.gsub!(/\[SIZE=.*?\]|\[\/SIZE\]/, "")
-      string.gsub!(/\[FONT=.*?\]|\[\/FONT\]/, "")
-      string.gsub!(/\[[BUI]\]|\[\/[BUI]\]/, "")
+      string.gsub!(/\[COLOR=.*?\]|\[\/COLOR\]/i, "")
+      string.gsub!(/\[SIZE=.*?\]|\[\/SIZE\]/i, "")
+      string.gsub!(/\[FONT=.*?\]|\[\/FONT\]/i, "")
+      string.gsub!(/\[[BUI]\]|\[\/[BUI]\]/i, "")
       return string
   end
 
