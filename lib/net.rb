@@ -315,7 +315,7 @@ class Connection < Session
     @pstack.filter_call(:init,nil)
     true
   rescue Exception
-    @server.log.error "(#{self.object_id}) Error-Connection#init"
+    @server.log.error "(#{self.object_id}) Connection#init"
     @server.log.error $!
     false
   end
@@ -330,24 +330,19 @@ class Connection < Session
     buf = @sockio.read
     return if buf.nil?
     buf = @pstack.filter_call(:filter_in,buf)
-    if @opts.include? :packetio
+    if @opts.include?(:packetio) || @opts.include?(:client)
       message(buf)
     else
       @inbuffer << buf
       if @initdone  # Just let buffer fill until we indicate we're done
                     # negotiating.  Set by calling initdone from TelnetFilter
-        if @opts.include? :client
-          message(@inbuffer)
-          @inbuffer = ""
-        else
-          while p = @inbuffer.index("\n")
-            ln = @inbuffer.slice!(0..p).chop
-            message(ln)
-          end
+        while p = @inbuffer.index("\n")
+          ln = @inbuffer.slice!(0..p).chop
+          message(ln)
         end
       end
     end
-  rescue EOFError, Errno::ECONNABORTED, Errno::ECONNRESET
+  rescue EOFError, Errno::ECONNRESET, Errno::ECONNABORTED
     @closing = true
     message(:logged_out)
     delete_observers

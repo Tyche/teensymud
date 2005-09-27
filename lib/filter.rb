@@ -314,8 +314,14 @@ class TelnetFilter < Filter
         # handle CRLF and CRNUL by swallowing what follows CR and
         # insertion of LF
         if !@synch
-          buf << LF.chr
-          echo(CR.chr + LF.chr)
+          case b[0]
+          when LF, NUL
+            buf << LF.chr
+            echo(CR.chr + LF.chr)
+          else  # Handle screwed up muds
+            buf << CR.chr + b
+            echo(CR.chr + b)
+          end
         end
         set_mode(:normal)
       when :cmd
@@ -455,6 +461,7 @@ class TelnetFilter < Filter
 
     @wopts.each_key do |opt|
       next if !@sneg_opts.include?(opt)
+      @pstack.log.debug("(#{@pstack.conn.object_id}) Subnegotiation attempt for option #{opt}.")
       case opt
       when TTYPE
         who = :him
@@ -477,7 +484,7 @@ class TelnetFilter < Filter
             "zmp.ping#{NUL.chr}" +
             "#{IAC.chr}#{SE.chr}")
           @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
-            "zmp.input#{NUL.chr}\n     I see you support...\n     ZMP protocol\n{NUL.chr}" +
+            "zmp.input#{NUL.chr}\n     I see you support...\n     ZMP protocol\n#{NUL.chr}" +
             "#{IAC.chr}#{SE.chr}")
         end
         @sneg_opts.delete(opt)
@@ -750,11 +757,11 @@ private
         # If we agree
           @state[opt].send("#{who}=", :yes)
           @pstack.conn.sendmsg(IAC.chr + willdo + opt.chr)
-          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to enable option #{opt.to_s}")
+          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to enable option #{opt}")
         else
         # If we disagree
           @pstack.conn.sendmsg(IAC.chr + wontdont + opt.chr)
-          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: disagreed to enable option #{opt.to_s}")
+          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: disagreed to enable option #{opt}")
         end
       else
         # Ignore
@@ -782,6 +789,7 @@ private
         case @state[opt].send(whoq)
         when :empty
           @state[opt].send("#{who}=", :no)
+          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to disable option #{opt}")
         when :opposite
           @state[opt].send("#{who}=", :wantyes)
           @state[opt].send("#{whoq}=", :empty)
@@ -793,6 +801,7 @@ private
         case @state[opt].send(whoq)
         when :empty
           @state[opt].send("#{who}=", :yes)
+          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to enable option #{opt}")
         when :opposite
           @state[opt].send("#{who}=", :wantno)
           @state[opt].send("#{whoq}=", :empty)
@@ -802,6 +811,7 @@ private
         case @state[opt].send(whoq)
         when :empty
           @state[opt].send("#{who}=", :no)
+          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to disable option #{opt}")
         when :opposite
           @state[opt].send("#{who}=", :no)
           @state[opt].send("#{whoq}=", :empty)
@@ -821,7 +831,7 @@ private
     when "zmp.ident"
       # That's nice
     when "zmp.check"
-      case arg[0]
+      case args[0]
       when /zmp.*/
       # We support all 'zmp.' package and commands so..
         @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
