@@ -17,6 +17,13 @@ module Cmd
     message(:terminal)
     message(:termsize)
     message(:color)
+    message(:echo)
+    message(:zmp)
+    sendto("Terminal: #{@terminal}")
+    sendto("Terminal size: #{@termsize[0]} X #{@termsize[1]}")
+    sendto("Colors toggled #{@color ? "[COLOR=magenta]ON[/COLOR]" : "OFF" }")
+    sendto("Echo is #{@echo ? "ON" : "OFF" }")
+    sendto("ZMP is #{@zmp ? "ON" : "OFF" }")
   end
 
 end

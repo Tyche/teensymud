@@ -62,7 +62,6 @@ class Obj
     @farts = {}
     @desc = ""
     @powered = false
-    @color = false
     $engine.world.db.get(@location).add_contents(@oid) if @location
   end
 
@@ -281,7 +280,7 @@ class Player < Obj
   include Observable
 
   # The Session object this player is connected on or nil if not connected.
-  attr_accessor :session
+  attr_accessor :session, :color
 
   # Create a new Player object
   # [+name+]    The displayed name of the player.
@@ -293,6 +292,13 @@ class Player < Obj
     @passwd = encrypt(passwd)
     super(name,$engine.world.options.home)
     @powered = true
+
+    # session related - only color settable
+    @color = false
+    @echo = false
+    @zmp = false
+    @termsize = [80,43]
+    @terminal = "unknown"
   end
 
   # Sends a message to the player if they are connected.
@@ -351,16 +357,15 @@ class Player < Obj
       $engine.log.debug "Player#update query return - #{msg.inspect}"
       case msg[0]
       when :terminal
-        sendto("Terminal: #{msg[1]}")
+        @terminal = msg[1]
       when :termsize
-        sendto("Terminal size: #{msg[1][0]} X #{msg[1][1]}")
+        @termsize = msg[1]
       when :color
         @color = msg[1]
-        if @color
-          sendto("Colors toggled [COLOR=magenta]ON[/COLOR]")
-        else
-          sendto("Colors toggled OFF")
-        end
+      when :zmp
+        @zmp = msg[1]
+      when :echo
+        @echo = msg[1]
       else
         $engine.log.error "Player#update unknown message - #{msg.inspect}"
       end
@@ -685,6 +690,8 @@ class Incoming
 private
   # Called on successful login
   def login
+    message([:color, @player.color])
+
     # deregister all observers here and on connection
     delete_observers
     @conn.delete_observers
@@ -697,6 +704,10 @@ private
     $engine.world.db.players_connected(@player.oid).each {|p|
       $engine.world.add_event(@oid,p.oid,:show,"#{@player.name} has connected.")
     }
+    @player.message(:echo)
+    @player.message(:zmp)
+    @player.message(:terminal)
+    @player.message(:termsize)
     @player.parse('look')
   end
 
