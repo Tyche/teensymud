@@ -456,7 +456,14 @@ class Connection < Session
   #
   def update(msg)
     case msg
-    when :logged_out then @closing = true
+    when :logged_out
+      @closing = true
+    when :reconnecting
+      delete_observers
+      @server.log.info "(#{self.object_id}) Connection '#{@addr}' closing for reconnection"
+      @server.unregister(self)
+  #    @sock.shutdown   # odd errors thrown with this
+      @sock.close
     when Array    # Arrays are assumed to be
       @pstack.set(msg[0],msg[1])
     when Symbol

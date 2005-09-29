@@ -692,6 +692,13 @@ private
   def login
     message([:color, @player.color])
 
+    # Check if this player already logged in
+    if @player.count_observers > 0
+      @player.message(:reconnecting)
+      @player.delete_observers
+      @player.sendto("Welcome reconnecting #{@login_name}@#{@conn.sock.peeraddr[2]}!")
+    end
+
     # deregister all observers here and on connection
     delete_observers
     @conn.delete_observers
