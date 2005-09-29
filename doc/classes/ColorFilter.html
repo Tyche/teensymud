@@ -81,12 +81,17 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="6,113,86,161"      href="TelnetFilter.html" alt="TelnetFilter">
-  <area shape="RECT" coords="110,17,182,65"      href="Filter.html" alt="Filter">
-  <area shape="RECT" coords="110,113,188,161"      href="ColorFilter.html" alt="ColorFilter">
-  <area shape="RECT" coords="8,17,85,65"      href="TelnetCodes.html" alt="TelnetCodes">
+  <area shape="RECT" coords="210,113,293,161"      href="DebugFilter.html" alt="DebugFilter">
+  <area shape="RECT" coords="106,113,186,161"      href="TelnetFilter.html" alt="TelnetFilter">
+  <area shape="RECT" coords="322,17,394,65"      href="Filter.html" alt="Filter">
+  <area shape="RECT" coords="317,113,408,161"      href="TerminalFilter.html" alt="TerminalFilter">
+  <area shape="RECT" coords="432,113,509,161"      href="ColorFilter.html" alt="ColorFilter">
+  <area shape="RECT" coords="418,17,512,65"      href="ProtocolStack.html" alt="ProtocolStack">
+  <area shape="RECT" coords="209,17,294,65"      href="VT100Codes.html" alt="VT100Codes">
+  <area shape="RECT" coords="6,17,84,65"      href="ASCIICodes.html" alt="ASCIICodes">
+  <area shape="RECT" coords="108,17,185,65"      href="TelnetCodes.html" alt="TelnetCodes">
 </map>
-<img src="../dot/f_8.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_9.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -107,10 +112,8 @@ A <a href="Filter.html">Filter</a> can keep state and partial data
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000105">filter_out</a>&nbsp;&nbsp;
-      <a href="#M000106">filter_query</a>&nbsp;&nbsp;
-      <a href="#M000107">filter_set</a>&nbsp;&nbsp;
-      <a href="#M000104">new</a>&nbsp;&nbsp;
+      <a href="#M000113">filter_out</a>&nbsp;&nbsp;
+      <a href="#M000112">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -132,12 +135,12 @@ A <a href="Filter.html">Filter</a> can keep state and partial data
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000104" class="method-detail">
-        <a name="M000104"></a>
+      <div id="method-M000112" class="method-detail">
+        <a name="M000112"></a>
 
         <div class="method-heading">
-          <a href="#M000104" class="method-signature">
-          <span class="method-name">new</span><span class="method-args">(conn)</span>
+          <a href="#M000112" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(pstack)</span>
           </a>
         </div>
       
@@ -146,22 +149,19 @@ A <a href="Filter.html">Filter</a> can keep state and partial data
 Construct filter
 </p>
 <dl>
-<dt><tt>conn</tt></dt><dd>The connection associated with this filter
-
-</dd>
-<dt><tt>wopts</tt></dt><dd>An optional hash of desired initial options
+<dt><tt>pstack</tt></dt><dd>The <a href="ProtocolStack.html">ProtocolStack</a> associated with this
+filter
 
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000104-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000104-source">
+            onclick="toggleCode('M000112-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000112-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 657</span>
-657:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">conn</span>)
-658:     <span class="ruby-ivar">@color</span> = <span class="ruby-keyword kw">false</span>
-659:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">conn</span>)
-660:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/filter.rb, line 865</span>
+865:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">pstack</span>)
+866:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">pstack</span>)
+867:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -169,18 +169,18 @@ Construct filter
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000105" class="method-detail">
-        <a name="M000105"></a>
+      <div id="method-M000113" class="method-detail">
+        <a name="M000113"></a>
 
         <div class="method-heading">
-          <a href="#M000105" class="method-signature">
+          <a href="#M000113" class="method-signature">
           <span class="method-name">filter_out</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-The <a href="ColorFilter.html#M000105">filter_out</a> method filters output
+The <a href="ColorFilter.html#M000113">filter_out</a> method filters output
 data
 </p>
 <dl>
@@ -192,98 +192,19 @@ data
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000105-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000105-source">
+            onclick="toggleCode('M000113-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000113-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 665</span>
-665:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_out</span>(<span class="ruby-identifier">str</span>)
-666:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@color</span>
-667:       <span class="ruby-identifier">s</span> = <span class="ruby-constant">BBCode</span>.<span class="ruby-identifier">bbcode_to_ansi</span>(<span class="ruby-identifier">str</span>)
-668:     <span class="ruby-keyword kw">else</span>
-669:       <span class="ruby-identifier">s</span> = <span class="ruby-constant">BBCode</span>.<span class="ruby-identifier">strip_bbcode</span>(<span class="ruby-identifier">str</span>)
-670:     <span class="ruby-keyword kw">end</span>
-671:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>
-672:   <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000106" class="method-detail">
-        <a name="M000106"></a>
-
-        <div class="method-heading">
-          <a href="#M000106" class="method-signature">
-          <span class="method-name">filter_query</span><span class="method-args">(attr)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-The <a href="ColorFilter.html#M000106">filter_query</a> method returns
-state information for the filter.
-</p>
-<dl>
-<dt><tt>attr</tt></dt><dd>A symbol representing the attribute being queried.
-
-</dd>
-<dt><tt>return</tt></dt><dd>An attr/value pair or false if not defined in this filter
-
-</dd>
-</dl>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000106-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000106-source">
-<pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 677</span>
-677:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_query</span>(<span class="ruby-identifier">attr</span>)
-678:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">attr</span>
-679:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:color</span>
-680:       <span class="ruby-keyword kw">return</span> [<span class="ruby-identifier">:color</span>, <span class="ruby-ivar">@color</span>]
-681:     <span class="ruby-keyword kw">end</span>
-682:     <span class="ruby-keyword kw">false</span>
-683:   <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000107" class="method-detail">
-        <a name="M000107"></a>
-
-        <div class="method-heading">
-          <a href="#M000107" class="method-signature">
-          <span class="method-name">filter_set</span><span class="method-args">(pair)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-The <a href="ColorFilter.html#M000107">filter_set</a> method sets state
-information on the filter.
-</p>
-<dl>
-<dt><tt>pair</tt></dt><dd>An attr/value pair [:symbol, value]
-
-</dd>
-<dt><tt>return</tt></dt><dd>true if attr not defined in this filter, false if not
-
-</dd>
-</dl>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000107-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000107-source">
-<pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 688</span>
-688:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_set</span>(<span class="ruby-identifier">pair</span>)
-689:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">pair</span>[<span class="ruby-value">0</span>]
-690:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:color</span>
-691:       <span class="ruby-ivar">@color</span> = <span class="ruby-identifier">pair</span>[<span class="ruby-value">1</span>]
-692:       <span class="ruby-keyword kw">true</span>
-693:     <span class="ruby-keyword kw">else</span>
-694:       <span class="ruby-keyword kw">false</span>
-695:     <span class="ruby-keyword kw">end</span>
-696:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/filter.rb, line 872</span>
+872:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_out</span>(<span class="ruby-identifier">str</span>)
+873:     <span class="ruby-keyword kw">return</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>
+874:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">color_on</span>
+875:       <span class="ruby-identifier">s</span> = <span class="ruby-constant">BBCode</span>.<span class="ruby-identifier">bbcode_to_ansi</span>(<span class="ruby-identifier">str</span>)
+876:     <span class="ruby-keyword kw">else</span>
+877:       <span class="ruby-identifier">s</span> = <span class="ruby-constant">BBCode</span>.<span class="ruby-identifier">strip_bbcode</span>(<span class="ruby-identifier">str</span>)
+878:     <span class="ruby-keyword kw">end</span>
+879:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>
+880:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

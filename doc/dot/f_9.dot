@@ -3,86 +3,110 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/net.rb"
+    label = "lib/filter.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    Acceptor [
+    DebugFilter [
         fontcolor = black,
-        URL = "classes/Acceptor.html",
+        URL = "classes/DebugFilter.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Acceptor"
+        label = "DebugFilter"
     ]
 
-    Reactor [
+    TelnetFilter [
         fontcolor = black,
-        URL = "classes/Reactor.html",
+        URL = "classes/TelnetFilter.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Reactor"
+        label = "TelnetFilter"
     ]
 
-    SockIO [
+    Filter [
         fontcolor = black,
-        URL = "classes/SockIO.html",
+        URL = "classes/Filter.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "SockIO"
+        label = "Filter"
     ]
 
-    Session [
+    TerminalFilter [
         fontcolor = black,
-        URL = "classes/Session.html",
+        URL = "classes/TerminalFilter.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Session"
+        label = "TerminalFilter"
     ]
 
-    Connection [
+    ColorFilter [
         fontcolor = black,
-        URL = "classes/Connection.html",
+        URL = "classes/ColorFilter.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Connection"
+        label = "ColorFilter"
     ]
 
-    LineIO [
+    ProtocolStack [
         fontcolor = black,
-        URL = "classes/LineIO.html",
+        URL = "classes/ProtocolStack.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "LineIO"
+        label = "ProtocolStack"
     ]
 
-    Session -> Acceptor [
-
-    ]
-
-    Observable [
-        URL = "classes/Observable.html",
+    VT100Codes [
+        URL = "classes/VT100Codes.html",
         shape = box,
-        label = "Observable"
+        label = "VT100Codes"
     ]
 
-    Observable -> Session [
-
-    ]
-
-    Session -> Connection [
+    VT100Codes -> DebugFilter [
 
     ]
 
-    SockIO -> LineIO [
+    Filter -> DebugFilter [
+
+    ]
+
+    ASCIICodes [
+        URL = "classes/ASCIICodes.html",
+        shape = box,
+        label = "ASCIICodes"
+    ]
+
+    ASCIICodes -> TelnetFilter [
+
+    ]
+
+    TelnetCodes [
+        URL = "classes/TelnetCodes.html",
+        shape = box,
+        label = "TelnetCodes"
+    ]
+
+    TelnetCodes -> TelnetFilter [
+
+    ]
+
+    Filter -> TelnetFilter [
+
+    ]
+
+    Filter -> TerminalFilter [
+
+    ]
+
+    Filter -> ColorFilter [
 
     ]
 

@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: VT100Codes</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">VT100Codes</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/lib/vt100codes_rb.html">
+                lib/vt100codes.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+    <div id="diagram">
+      <map id="map" name="map">
+  <area shape="RECT" coords="17,17,111,61"      href="VT100Codes.html" alt="VT100Codes">
+</map>
+<img src="../dot/m_13_0.gif" usemap="#map" border=0 alt="Module: VT100Codes">
+    </div>
+
+    <div id="description">
+      <p>
+This module contains the contants used for Telnet
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+    <div id="constants-list">
+      <h3 class="section-bar">Constants</h3>
+
+      <div class="name-list">
+        <table summary="Constants">
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">CSI</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SS3</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\eO&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">IND</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\eD&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SGR</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;m&quot;</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+Final bytes
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">DVC</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[c&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">DVST</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[5n&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">QCP</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[6n&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">RD</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\ec&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">ELW</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[7h&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">DLW</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[7l&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">HOME</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;H&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">HOMEF</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;f&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">UP</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;A&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">DOWN</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;B&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">RIGHT</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;C&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">LEFT</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;D&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SCURS</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[s&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">RCURS</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[u&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SCURA</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e7&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">RCURA</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e7&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SDF</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e(&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SAF</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e)&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SS</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;r&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SD</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\eD&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SU</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\eU&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">ST</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\eH&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">CT</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[g&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">CTA</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[3g&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">EEOL</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[K&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">ESOL</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[1K&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">ERL</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[2K&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">ED</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[J&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">EU</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[1J&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">ES</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[2J&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">BSPC</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\177&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">W_BSPC</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\010&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">INS</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[2~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">DEL</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[3~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">W_DEL</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\177&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">X_HOMEKEY</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[7~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">X_ENDKEY</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[8~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">V_HOMEKEY</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[1~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">V_ENDKEY</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[4~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">PAGEUP</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[5~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">PAGEDOWN</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[6~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">W_F1</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\eOP&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">W_F2</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\eOQ&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">W_F3</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\eOR&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">W_F4</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\eOS&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">F1</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[11~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">F2</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[12~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">F3</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[13~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">F4</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[14~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">F5</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[15~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">F6</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[17~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">F7</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[18~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">F8</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[19~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">F9</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[20~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">F10</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[21~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SF1</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[23~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SF2</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[24~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SF3</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[25~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SF4</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[26~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SF5</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[28~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SF6</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[29~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SF7</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[31~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SF8</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[32~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SF9</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[33~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SF10</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;\e[34~&quot;</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

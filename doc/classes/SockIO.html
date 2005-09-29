@@ -79,15 +79,17 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="6,209,81,257"      href="Acceptor.html" alt="Acceptor">
-  <area shape="RECT" coords="156,17,228,65"      href="Reactor.html" alt="Reactor">
-  <area shape="RECT" coords="252,17,324,65"      href="SockIO.html" alt="SockIO">
-  <area shape="RECT" coords="252,113,324,161"      href="LineIO.html" alt="LineIO">
-  <area shape="RECT" coords="58,113,130,161"      href="Session.html" alt="Session">
-  <area shape="RECT" coords="105,209,188,257"      href="Connection.html" alt="Connection">
-  <area shape="RECT" coords="57,17,132,65"      href="Observable.html" alt="Observable">
+  <area shape="RECT" coords="7,209,81,257"      href="Acceptor.html" alt="Acceptor">
+  <area shape="RECT" coords="205,17,277,65"      href="Reactor.html" alt="Reactor">
+  <area shape="RECT" coords="301,17,373,65"      href="SockIO.html" alt="SockIO">
+  <area shape="RECT" coords="253,113,325,161"      href="PacketIO.html" alt="PacketIO">
+  <area shape="RECT" coords="349,113,421,161"      href="LineIO.html" alt="LineIO">
+  <area shape="RECT" coords="108,113,180,161"      href="Session.html" alt="Session">
+  <area shape="RECT" coords="105,209,183,257"      href="Connector.html" alt="Connector">
+  <area shape="RECT" coords="207,209,289,257"      href="Connection.html" alt="Connection">
+  <area shape="RECT" coords="107,17,181,65"      href="Observable.html" alt="Observable">
 </map>
-<img src="../dot/f_9.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_10.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -158,12 +160,12 @@ Creates a new <a href="SockIO.html">SockIO</a> object
             onclick="toggleCode('M000037-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000037-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net.rb, line 34</span>
-34:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">sock</span>, <span class="ruby-identifier">bufsize</span>=<span class="ruby-value">8192</span>)
-35:     <span class="ruby-ivar">@sock</span>,<span class="ruby-ivar">@bufsize</span>=<span class="ruby-identifier">sock</span>,<span class="ruby-identifier">bufsize</span>
-36:     <span class="ruby-ivar">@inbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
-37:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
-38:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net.rb, line 38</span>
+38:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">sock</span>, <span class="ruby-identifier">bufsize</span>=<span class="ruby-value">8192</span>)
+39:     <span class="ruby-ivar">@sock</span>,<span class="ruby-ivar">@bufsize</span>=<span class="ruby-identifier">sock</span>,<span class="ruby-identifier">bufsize</span>
+40:     <span class="ruby-ivar">@inbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
+41:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
+42:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -199,11 +201,10 @@ read will receive a data from the socket.
             onclick="toggleCode('M000038-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000038-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net.rb, line 45</span>
-45:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read</span>
-46:     <span class="ruby-comment cmt"># @sock.sysread(@bufsize)</span>
-47:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">recv</span>(<span class="ruby-ivar">@bufsize</span>)
-48:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net.rb, line 49</span>
+49:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read</span>
+50:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">recv</span>(<span class="ruby-ivar">@bufsize</span>)
+51:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -226,10 +227,10 @@ read will receive a data from the socket.
             onclick="toggleCode('M000041-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000041-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net.rb, line 74</span>
-74:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_flush</span>
-75:     <span class="ruby-ivar">@inbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
-76:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net.rb, line 76</span>
+76:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_flush</span>
+77:     <span class="ruby-ivar">@inbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
+78:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -264,10 +265,10 @@ the socket.
             onclick="toggleCode('M000042-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000042-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net.rb, line 83</span>
-83:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_urgent</span>
-84:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">recv</span>(<span class="ruby-ivar">@bufsize</span>, <span class="ruby-constant">Socket</span><span class="ruby-operator">::</span><span class="ruby-constant">MSG_OOB</span>)
-85:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net.rb, line 85</span>
+85:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_urgent</span>
+86:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">recv</span>(<span class="ruby-ivar">@bufsize</span>, <span class="ruby-constant">Socket</span><span class="ruby-operator">::</span><span class="ruby-constant">MSG_OOB</span>)
+87:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -304,18 +305,17 @@ write will transmit a message to the socket
             onclick="toggleCode('M000039-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000039-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net.rb, line 56</span>
-56:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write</span>(<span class="ruby-identifier">msg</span>)
-57:     <span class="ruby-ivar">@outbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">msg</span>
-58:     <span class="ruby-comment cmt">#n = @sock.syswrite(tmp)</span>
-59:     <span class="ruby-identifier">n</span> = <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-ivar">@outbuffer</span>, <span class="ruby-value">0</span>)
-60:     <span class="ruby-comment cmt"># save unsent data for next call</span>
-61:     <span class="ruby-ivar">@outbuffer</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">n</span>)
-62:     <span class="ruby-ivar">@outbuffer</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
-63:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-64:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>  <span class="ruby-comment cmt"># Does it really matter?</span>
-65:     <span class="ruby-identifier">raise</span>
-66:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net.rb, line 59</span>
+59:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write</span>(<span class="ruby-identifier">msg</span>)
+60:     <span class="ruby-ivar">@outbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">msg</span>
+61:     <span class="ruby-identifier">n</span> = <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-ivar">@outbuffer</span>, <span class="ruby-value">0</span>)
+62:     <span class="ruby-comment cmt"># save unsent data for next call</span>
+63:     <span class="ruby-ivar">@outbuffer</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">n</span>)
+64:     <span class="ruby-ivar">@outbuffer</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+65:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+66:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>  <span class="ruby-comment cmt"># Does it really matter?</span>
+67:     <span class="ruby-identifier">raise</span>
+68:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -338,10 +338,10 @@ write will transmit a message to the socket
             onclick="toggleCode('M000040-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000040-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net.rb, line 69</span>
-69:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_flush</span>
-70:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
-71:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net.rb, line 71</span>
+71:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_flush</span>
+72:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
+73:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -376,10 +376,10 @@ the socket.
             onclick="toggleCode('M000043-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000043-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net.rb, line 92</span>
-92:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_urgent</span>(<span class="ruby-identifier">msg</span>)
-93:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-constant">Socket</span><span class="ruby-operator">::</span><span class="ruby-constant">MSG_OOB</span>)
-94:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net.rb, line 94</span>
+94:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_urgent</span>(<span class="ruby-identifier">msg</span>)
+95:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-constant">Socket</span><span class="ruby-operator">::</span><span class="ruby-constant">MSG_OOB</span>)
+96:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

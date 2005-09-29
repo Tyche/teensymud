@@ -79,15 +79,17 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="6,209,81,257"      href="Acceptor.html" alt="Acceptor">
-  <area shape="RECT" coords="156,17,228,65"      href="Reactor.html" alt="Reactor">
-  <area shape="RECT" coords="252,17,324,65"      href="SockIO.html" alt="SockIO">
-  <area shape="RECT" coords="252,113,324,161"      href="LineIO.html" alt="LineIO">
-  <area shape="RECT" coords="58,113,130,161"      href="Session.html" alt="Session">
-  <area shape="RECT" coords="105,209,188,257"      href="Connection.html" alt="Connection">
-  <area shape="RECT" coords="57,17,132,65"      href="Observable.html" alt="Observable">
+  <area shape="RECT" coords="7,209,81,257"      href="Acceptor.html" alt="Acceptor">
+  <area shape="RECT" coords="205,17,277,65"      href="Reactor.html" alt="Reactor">
+  <area shape="RECT" coords="301,17,373,65"      href="SockIO.html" alt="SockIO">
+  <area shape="RECT" coords="253,113,325,161"      href="PacketIO.html" alt="PacketIO">
+  <area shape="RECT" coords="349,113,421,161"      href="LineIO.html" alt="LineIO">
+  <area shape="RECT" coords="108,113,180,161"      href="Session.html" alt="Session">
+  <area shape="RECT" coords="105,209,183,257"      href="Connector.html" alt="Connector">
+  <area shape="RECT" coords="207,209,289,257"      href="Connection.html" alt="Connection">
+  <area shape="RECT" coords="107,17,181,65"      href="Observable.html" alt="Observable">
 </map>
-<img src="../dot/f_9.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_10.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -204,13 +206,13 @@ connection.
             onclick="toggleCode('M000044-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000044-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 147</span>
-147:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">sock</span>=<span class="ruby-keyword kw">nil</span>)
-148:     <span class="ruby-ivar">@server</span> = <span class="ruby-identifier">server</span>   <span class="ruby-comment cmt"># Reactor or connector associated with this session.</span>
-149:     <span class="ruby-ivar">@sock</span> = <span class="ruby-identifier">sock</span>       <span class="ruby-comment cmt"># File descriptor handle for this session.</span>
-150:     <span class="ruby-ivar">@addr</span> = <span class="ruby-value str">&quot;&quot;</span>         <span class="ruby-comment cmt"># Network address of this socket.</span>
-151:     <span class="ruby-ivar">@accepting</span>=<span class="ruby-ivar">@connected</span>=<span class="ruby-ivar">@closing</span>=<span class="ruby-ivar">@write_blocked</span>=<span class="ruby-keyword kw">false</span>
-152:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 223</span>
+223:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">sock</span>=<span class="ruby-keyword kw">nil</span>)
+224:     <span class="ruby-ivar">@server</span> = <span class="ruby-identifier">server</span>   <span class="ruby-comment cmt"># Reactor or connector associated with this session.</span>
+225:     <span class="ruby-ivar">@sock</span> = <span class="ruby-identifier">sock</span>       <span class="ruby-comment cmt"># File descriptor handle for this session.</span>
+226:     <span class="ruby-ivar">@addr</span> = <span class="ruby-value str">&quot;&quot;</span>         <span class="ruby-comment cmt"># Network address of this socket.</span>
+227:     <span class="ruby-ivar">@accepting</span>=<span class="ruby-ivar">@connected</span>=<span class="ruby-ivar">@closing</span>=<span class="ruby-ivar">@write_blocked</span>=<span class="ruby-keyword kw">false</span>
+228:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -236,9 +238,9 @@ event occurs for this session.
             onclick="toggleCode('M000048-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000048-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 169</span>
-169:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
-170:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 245</span>
+245:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
+246:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -262,9 +264,9 @@ event occurs for this session.
             onclick="toggleCode('M000046-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000046-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 161</span>
-161:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_input</span>
-162:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 237</span>
+237:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_input</span>
+238:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -288,9 +290,9 @@ data event occurs for this session.
             onclick="toggleCode('M000049-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000049-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 174</span>
-174:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_oob</span>
-175:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 250</span>
+250:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_oob</span>
+251:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -314,9 +316,9 @@ event occurs for this session.
             onclick="toggleCode('M000047-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000047-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 165</span>
-165:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_output</span>
-166:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 241</span>
+241:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_output</span>
+242:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -344,10 +346,10 @@ init is called before using the session.
             onclick="toggleCode('M000045-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000045-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 156</span>
-156:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>
-157:     <span class="ruby-keyword kw">true</span>
-158:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 232</span>
+232:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>
+233:     <span class="ruby-keyword kw">true</span>
+234:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -371,10 +373,10 @@ candidate for select read {<tt>return</tt>] true if so, false if not
             onclick="toggleCode('M000050-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000050-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 179</span>
-179:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_readable?</span>
-180:     <span class="ruby-ivar">@connected</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@accepting</span>
-181:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 255</span>
+255:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_readable?</span>
+256:     <span class="ruby-ivar">@connected</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@accepting</span>
+257:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -398,10 +400,10 @@ candidate for select write {<tt>return</tt>] true if so, false if not
             onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000051-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 185</span>
-185:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_writable?</span>
-186:     <span class="ruby-ivar">@write_blocked</span>
-187:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 261</span>
+261:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_writable?</span>
+262:     <span class="ruby-ivar">@write_blocked</span>
+263:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -430,11 +432,11 @@ Strings are understood
             onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000052-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 192</span>
-192:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">message</span>(<span class="ruby-identifier">msg</span>)
-193:     <span class="ruby-identifier">changed</span>
-194:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">msg</span>)
-195:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 268</span>
+268:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">message</span>(<span class="ruby-identifier">msg</span>)
+269:     <span class="ruby-identifier">changed</span>
+270:     <span class="ruby-identifier">notify_observers</span>(<span class="ruby-identifier">msg</span>)
+271:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

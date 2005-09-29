@@ -81,15 +81,17 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="6,209,81,257"      href="Acceptor.html" alt="Acceptor">
-  <area shape="RECT" coords="156,17,228,65"      href="Reactor.html" alt="Reactor">
-  <area shape="RECT" coords="252,17,324,65"      href="SockIO.html" alt="SockIO">
-  <area shape="RECT" coords="252,113,324,161"      href="LineIO.html" alt="LineIO">
-  <area shape="RECT" coords="58,113,130,161"      href="Session.html" alt="Session">
-  <area shape="RECT" coords="105,209,188,257"      href="Connection.html" alt="Connection">
-  <area shape="RECT" coords="57,17,132,65"      href="Observable.html" alt="Observable">
+  <area shape="RECT" coords="7,209,81,257"      href="Acceptor.html" alt="Acceptor">
+  <area shape="RECT" coords="205,17,277,65"      href="Reactor.html" alt="Reactor">
+  <area shape="RECT" coords="301,17,373,65"      href="SockIO.html" alt="SockIO">
+  <area shape="RECT" coords="253,113,325,161"      href="PacketIO.html" alt="PacketIO">
+  <area shape="RECT" coords="349,113,421,161"      href="LineIO.html" alt="LineIO">
+  <area shape="RECT" coords="108,113,180,161"      href="Session.html" alt="Session">
+  <area shape="RECT" coords="105,209,183,257"      href="Connector.html" alt="Connector">
+  <area shape="RECT" coords="207,209,289,257"      href="Connection.html" alt="Connection">
+  <area shape="RECT" coords="107,17,181,65"      href="Observable.html" alt="Observable">
 </map>
-<img src="../dot/f_9.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_10.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -108,8 +110,8 @@ class is intended for line-oriented protocols.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000101">new</a>&nbsp;&nbsp;
-      <a href="#M000102">read</a>&nbsp;&nbsp;
+      <a href="#M000105">new</a>&nbsp;&nbsp;
+      <a href="#M000106">read</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -131,11 +133,11 @@ class is intended for line-oriented protocols.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000101" class="method-detail">
-        <a name="M000101"></a>
+      <div id="method-M000105" class="method-detail">
+        <a name="M000105"></a>
 
         <div class="method-heading">
-          <a href="#M000101" class="method-signature">
+          <a href="#M000105" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(sock, bufsize=8192)</span>
           </a>
         </div>
@@ -153,13 +155,13 @@ Creates a new <a href="LineIO.html">LineIO</a> object
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000101-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000101-source">
+            onclick="toggleCode('M000105-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000105-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 107</span>
-107:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">sock</span>, <span class="ruby-identifier">bufsize</span>=<span class="ruby-value">8192</span>)
-108:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">sock</span>,<span class="ruby-identifier">bufsize</span>)
-109:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 109</span>
+109:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">sock</span>, <span class="ruby-identifier">bufsize</span>=<span class="ruby-value">8192</span>)
+110:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">sock</span>,<span class="ruby-identifier">bufsize</span>)
+111:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -167,11 +169,11 @@ Creates a new <a href="LineIO.html">LineIO</a> object
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000102" class="method-detail">
-        <a name="M000102"></a>
+      <div id="method-M000106" class="method-detail">
+        <a name="M000106"></a>
 
         <div class="method-heading">
-          <a href="#M000102" class="method-signature">
+          <a href="#M000106" class="method-signature">
           <span class="method-name">read</span><span class="method-args">()</span>
           </a>
         </div>
@@ -194,19 +196,17 @@ by CRLF, CRNUL, LFCR, CR, or LF. Not yet terminated lines are left in the
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000102-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000102-source">
+            onclick="toggleCode('M000106-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000106-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 118</span>
-118:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read</span>
-119:     <span class="ruby-comment cmt">#@inbuffer &lt;&lt; @sock.sysread(@bufsize)</span>
-120:     <span class="ruby-ivar">@inbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">recv</span>(<span class="ruby-ivar">@bufsize</span>)
-121:     <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\r\n|\r\x00|\n\r|\r|\n/</span>,<span class="ruby-value str">&quot;\n&quot;</span>)
-122:     <span class="ruby-identifier">pos</span> = <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
-123:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pos</span>
-124:       <span class="ruby-identifier">msg</span> = <span class="ruby-ivar">@inbuffer</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">pos</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>]
-125:       <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">pos</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>)
-126:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">msg</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 120</span>
+120:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read</span>
+121:     <span class="ruby-ivar">@inbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">recv</span>(<span class="ruby-ivar">@bufsize</span>)
+122:     <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\r\n|\r\x00|\n\r|\r|\n/</span>,<span class="ruby-value str">&quot;\n&quot;</span>)
+123:     <span class="ruby-identifier">pos</span> = <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+124:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pos</span>
+125:       <span class="ruby-identifier">ln</span> = <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">pos</span>)
+126:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">ln</span>
 127:     <span class="ruby-keyword kw">end</span>
 128:     <span class="ruby-keyword kw">nil</span>
 129:   <span class="ruby-keyword kw">end</span>

@@ -79,15 +79,17 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="6,209,81,257"      href="Acceptor.html" alt="Acceptor">
-  <area shape="RECT" coords="156,17,228,65"      href="Reactor.html" alt="Reactor">
-  <area shape="RECT" coords="252,17,324,65"      href="SockIO.html" alt="SockIO">
-  <area shape="RECT" coords="252,113,324,161"      href="LineIO.html" alt="LineIO">
-  <area shape="RECT" coords="58,113,130,161"      href="Session.html" alt="Session">
-  <area shape="RECT" coords="105,209,188,257"      href="Connection.html" alt="Connection">
-  <area shape="RECT" coords="57,17,132,65"      href="Observable.html" alt="Observable">
+  <area shape="RECT" coords="7,209,81,257"      href="Acceptor.html" alt="Acceptor">
+  <area shape="RECT" coords="205,17,277,65"      href="Reactor.html" alt="Reactor">
+  <area shape="RECT" coords="301,17,373,65"      href="SockIO.html" alt="SockIO">
+  <area shape="RECT" coords="253,113,325,161"      href="PacketIO.html" alt="PacketIO">
+  <area shape="RECT" coords="349,113,421,161"      href="LineIO.html" alt="LineIO">
+  <area shape="RECT" coords="108,113,180,161"      href="Session.html" alt="Session">
+  <area shape="RECT" coords="105,209,183,257"      href="Connector.html" alt="Connector">
+  <area shape="RECT" coords="207,209,289,257"      href="Connection.html" alt="Connection">
+  <area shape="RECT" coords="107,17,181,65"      href="Observable.html" alt="Observable">
 </map>
-<img src="../dot/f_9.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_10.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -150,7 +152,7 @@ multiplexer. It defines the traditional non-blocking select() server.
 
         <div class="method-heading">
           <a href="#M000028" class="method-signature">
-          <span class="method-name">new</span><span class="method-args">(port)</span>
+          <span class="method-name">new</span><span class="method-args">(port, opts=[:server, :sockio, :debugfilter, :telnetfilter, :sga, :echo, :naws, :ttype, :zmp, :colorfilter], address=nil)</span>
           </a>
         </div>
       
@@ -159,7 +161,30 @@ multiplexer. It defines the traditional non-blocking select() server.
 Constructor for <a href="Reactor.html">Reactor</a>
 </p>
 <dl>
-<dt><tt>port</tt></dt><dd>The port the server will listen on.
+<dt><tt>port</tt></dt><dd>The port the server will listen on/client will connect to.
+
+</dd>
+<dt><tt>opts</tt></dt><dd>Optional array of options passed to all participants.
+
+</dd>
+</dl>
+<pre>
+  Valid options are
+    :server  - run reactor as server (default)
+    :client  - run reactor as client
+    :sockio  - use sockio as io handler (default)
+    :lineio  - use lineio as io handler
+    :packetio  - use packetio as io handler
+    :filter  - attach dummy filter
+    :debugfilter - attach debug filter (default)
+    :telnetfilter - attach telnet filter (default)
+       :sga, :echo, :naws, :ttype, :zmp (negotiate default)
+       :binary
+    :colorfilter - attach color filter (default)
+    :terminalfilter - attach terminal filter
+</pre>
+<dl>
+<dt><tt>address</tt></dt><dd>Optional address for outgoing connection.
 
 </dd>
 </dl>
@@ -167,13 +192,20 @@ Constructor for <a href="Reactor.html">Reactor</a>
             onclick="toggleCode('M000028-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000028-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 465</span>
-465:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">port</span>)
-466:     <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>       <span class="ruby-comment cmt"># port server will listen on</span>
-467:     <span class="ruby-ivar">@shutdown</span> = <span class="ruby-keyword kw">false</span>  <span class="ruby-comment cmt"># Flag to indicate that server is shutting down.</span>
-468:     <span class="ruby-ivar">@acceptor</span> = <span class="ruby-keyword kw">nil</span>    <span class="ruby-comment cmt"># Listening socket for incoming connections.</span>
-469:     <span class="ruby-ivar">@registry</span> = []     <span class="ruby-comment cmt"># list of sessions</span>
-470:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 630</span>
+630:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">port</span>, <span class="ruby-identifier">opts</span>=[<span class="ruby-identifier">:server</span>, <span class="ruby-identifier">:sockio</span>, <span class="ruby-identifier">:debugfilter</span>,
+631:                              <span class="ruby-identifier">:telnetfilter</span>,
+632:                                <span class="ruby-identifier">:sga</span>, <span class="ruby-identifier">:echo</span>, <span class="ruby-identifier">:naws</span>, <span class="ruby-identifier">:ttype</span>, <span class="ruby-identifier">:zmp</span>,
+633:                              <span class="ruby-identifier">:colorfilter</span>],
+634:                              <span class="ruby-identifier">address</span>=<span class="ruby-keyword kw">nil</span>)
+635:     <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>       <span class="ruby-comment cmt"># port server will listen on</span>
+636:     <span class="ruby-ivar">@shutdown</span> = <span class="ruby-keyword kw">false</span>  <span class="ruby-comment cmt"># Flag to indicate that server is shutting down.</span>
+637:     <span class="ruby-ivar">@acceptor</span> = <span class="ruby-keyword kw">nil</span>    <span class="ruby-comment cmt"># Listening socket for incoming connections.</span>
+638:     <span class="ruby-ivar">@connector</span> = <span class="ruby-keyword kw">nil</span>   <span class="ruby-comment cmt"># Connecting socket for outgoing connections.</span>
+639:     <span class="ruby-ivar">@registry</span> = []     <span class="ruby-comment cmt"># list of sessions</span>
+640:     <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">opts</span>       <span class="ruby-comment cmt"># array of options - symbols</span>
+641:     <span class="ruby-ivar">@address</span> = <span class="ruby-identifier">address</span> <span class="ruby-comment cmt"># Address for Connector.</span>
+642:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -205,40 +237,40 @@ from input requests.
             onclick="toggleCode('M000031-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000031-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 503</span>
-503:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">poll</span>(<span class="ruby-identifier">tm_out</span>)
-504:     <span class="ruby-comment cmt"># Reset our socket interest set</span>
-505:     <span class="ruby-identifier">infds</span> = [];<span class="ruby-identifier">outfds</span> = [];<span class="ruby-identifier">oobfds</span> = []
-506:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
-507:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">is_readable?</span>
-508:         <span class="ruby-identifier">infds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>
-509:         <span class="ruby-identifier">oobfds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>
-510:       <span class="ruby-keyword kw">end</span>
-511:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">is_writable?</span>
-512:         <span class="ruby-identifier">outfds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>
-513:       <span class="ruby-keyword kw">end</span>
-514:     <span class="ruby-keyword kw">end</span>
-515: 
-516:     <span class="ruby-comment cmt"># Poll our socket interest set</span>
-517:     <span class="ruby-identifier">infds</span>,<span class="ruby-identifier">outfds</span>,<span class="ruby-identifier">oobfds</span> = <span class="ruby-identifier">select</span>(<span class="ruby-identifier">infds</span>, <span class="ruby-identifier">outfds</span>, <span class="ruby-identifier">oobfds</span>, <span class="ruby-identifier">tm_out</span>)
-518: 
-519:     <span class="ruby-comment cmt"># Dispatch events to handlers</span>
-520:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
-521:       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">handle_output</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">outfds</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">outfds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>)
-522:       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">handle_oob</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">oobfds</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">oobfds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>)
-523:       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">handle_input</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">infds</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">infds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>)
-524:       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">handle_close</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">closing</span>
-525:       <span class="ruby-comment cmt"># special handling for Telnet initialization</span>
-526:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:initdone</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">s</span>.<span class="ruby-identifier">initdone</span>
-527:         <span class="ruby-identifier">s</span>.<span class="ruby-identifier">filter_call</span>(<span class="ruby-identifier">:filter_set</span>,[<span class="ruby-identifier">:init_subneg</span>])
-528:       <span class="ruby-keyword kw">end</span>
-529:     <span class="ruby-keyword kw">end</span>
-530:   <span class="ruby-keyword kw">rescue</span>
-531:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Reactor#poll&quot;</span>
-532:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-533:     <span class="ruby-identifier">stop</span>
-534:     <span class="ruby-identifier">raise</span>
-535:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 684</span>
+684:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">poll</span>(<span class="ruby-identifier">tm_out</span>)
+685:     <span class="ruby-comment cmt"># Reset our socket interest set</span>
+686:     <span class="ruby-identifier">infds</span> = [];<span class="ruby-identifier">outfds</span> = [];<span class="ruby-identifier">oobfds</span> = []
+687:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+688:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">is_readable?</span>
+689:         <span class="ruby-identifier">infds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>
+690:         <span class="ruby-identifier">oobfds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>
+691:       <span class="ruby-keyword kw">end</span>
+692:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">is_writable?</span>
+693:         <span class="ruby-identifier">outfds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>
+694:       <span class="ruby-keyword kw">end</span>
+695:     <span class="ruby-keyword kw">end</span>
+696: 
+697:     <span class="ruby-comment cmt"># Poll our socket interest set</span>
+698:     <span class="ruby-identifier">infds</span>,<span class="ruby-identifier">outfds</span>,<span class="ruby-identifier">oobfds</span> = <span class="ruby-identifier">select</span>(<span class="ruby-identifier">infds</span>, <span class="ruby-identifier">outfds</span>, <span class="ruby-identifier">oobfds</span>, <span class="ruby-identifier">tm_out</span>)
+699: 
+700:     <span class="ruby-comment cmt"># Dispatch events to handlers</span>
+701:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+702:       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">handle_output</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">outfds</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">outfds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>)
+703:       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">handle_oob</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">oobfds</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">oobfds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>)
+704:       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">handle_input</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">infds</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">infds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">s</span>.<span class="ruby-identifier">sock</span>)
+705:       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">handle_close</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">closing</span>
+706:       <span class="ruby-comment cmt"># special handling for Telnet initialization</span>
+707:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:telnetfilter</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:initdone</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">s</span>.<span class="ruby-identifier">initdone</span>
+708:         <span class="ruby-identifier">s</span>.<span class="ruby-identifier">pstack</span>.<span class="ruby-identifier">set</span>(<span class="ruby-identifier">:init_subneg</span>, <span class="ruby-keyword kw">true</span>)
+709:       <span class="ruby-keyword kw">end</span>
+710:     <span class="ruby-keyword kw">end</span>
+711:   <span class="ruby-keyword kw">rescue</span>
+712:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Reactor#poll&quot;</span>
+713:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+714:     <span class="ruby-identifier">stop</span>
+715:     <span class="ruby-identifier">raise</span>
+716:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -261,10 +293,10 @@ register adds a session to the registry [<tt>session</tt>]
             onclick="toggleCode('M000032-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000032-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 539</span>
-539:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">session</span>)
-540:     <span class="ruby-ivar">@registry</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">session</span>
-541:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 720</span>
+720:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">session</span>)
+721:     <span class="ruby-ivar">@registry</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">session</span>
+722:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -296,20 +328,28 @@ connections.
             onclick="toggleCode('M000029-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000029-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 476</span>
-476:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>(<span class="ruby-identifier">engine</span>)
-477:     <span class="ruby-ivar">@log</span> = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">'logs/net_log'</span>, <span class="ruby-value str">'daily'</span>)
-478:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">datetime_format</span> = <span class="ruby-value str">&quot;%Y-%m-%d %H:%M:%S&quot;</span>
-479:     <span class="ruby-comment cmt"># Create an acceptor to listen for this server.</span>
-480:     <span class="ruby-ivar">@acceptor</span> = <span class="ruby-constant">Acceptor</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-ivar">@port</span>)
-481:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@acceptor</span>.<span class="ruby-identifier">init</span>
-482:     <span class="ruby-ivar">@acceptor</span>.<span class="ruby-identifier">add_observer</span>(<span class="ruby-identifier">engine</span>)
-483:     <span class="ruby-keyword kw">true</span>
-484:   <span class="ruby-keyword kw">rescue</span>
-485:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Reactor#start&quot;</span>
-486:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-487:     <span class="ruby-keyword kw">false</span>
-488:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 648</span>
+648:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>(<span class="ruby-identifier">engine</span>)
+649:     <span class="ruby-comment cmt"># Create an acceptor to listen for this server.</span>
+650:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">:client</span>
+651:       <span class="ruby-ivar">@log</span> = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">'logs/net_client_log'</span>, <span class="ruby-value str">'daily'</span>)
+652:       <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">datetime_format</span> = <span class="ruby-value str">&quot;%Y-%m-%d %H:%M:%S &quot;</span>
+653:       <span class="ruby-ivar">@connector</span> = <span class="ruby-constant">Connector</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-ivar">@port</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@address</span>)
+654:       <span class="ruby-ivar">@connector</span>.<span class="ruby-identifier">add_observer</span>(<span class="ruby-identifier">engine</span>)
+655:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@connector</span>.<span class="ruby-identifier">init</span>
+656:     <span class="ruby-keyword kw">else</span>
+657:       <span class="ruby-ivar">@log</span> = <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">'logs/net_log'</span>, <span class="ruby-value str">'daily'</span>)
+658:       <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">datetime_format</span> = <span class="ruby-value str">&quot;%Y-%m-%d %H:%M:%S &quot;</span>
+659:       <span class="ruby-ivar">@acceptor</span> = <span class="ruby-constant">Acceptor</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-ivar">@port</span>, <span class="ruby-ivar">@opts</span>)
+660:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@acceptor</span>.<span class="ruby-identifier">init</span>
+661:       <span class="ruby-ivar">@acceptor</span>.<span class="ruby-identifier">add_observer</span>(<span class="ruby-identifier">engine</span>)
+662:     <span class="ruby-keyword kw">end</span>
+663:     <span class="ruby-keyword kw">true</span>
+664:   <span class="ruby-keyword kw">rescue</span>
+665:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Reactor#start&quot;</span>
+666:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+667:     <span class="ruby-keyword kw">false</span>
+668:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -334,13 +374,14 @@ then closes its own listening port.
             onclick="toggleCode('M000030-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000030-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 493</span>
-493:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop</span>
-494:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">closing</span> = <span class="ruby-keyword kw">true</span>}
-495:     <span class="ruby-ivar">@acceptor</span>.<span class="ruby-identifier">delete_observers</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@acceptor</span>
-496:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;INFO-Reactor#shutdown: Reactor shutting down&quot;</span>
-497:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">close</span>
-498:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 673</span>
+673:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop</span>
+674:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">closing</span> = <span class="ruby-keyword kw">true</span>}
+675:     <span class="ruby-ivar">@acceptor</span>.<span class="ruby-identifier">delete_observers</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@acceptor</span>
+676:     <span class="ruby-ivar">@connector</span>.<span class="ruby-identifier">delete_observers</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@connector</span>
+677:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Reactor#shutdown: Reactor shutting down&quot;</span>
+678:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">close</span>
+679:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -363,10 +404,10 @@ unregister removes a session from the registry [<tt>session</tt>]
             onclick="toggleCode('M000033-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000033-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 545</span>
-545:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unregister</span>(<span class="ruby-identifier">session</span>)
-546:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">session</span>)
-547:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 726</span>
+726:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unregister</span>(<span class="ruby-identifier">session</span>)
+727:     <span class="ruby-ivar">@registry</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">session</span>)
+728:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

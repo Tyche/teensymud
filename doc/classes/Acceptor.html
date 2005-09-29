@@ -81,15 +81,17 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="6,209,81,257"      href="Acceptor.html" alt="Acceptor">
-  <area shape="RECT" coords="156,17,228,65"      href="Reactor.html" alt="Reactor">
-  <area shape="RECT" coords="252,17,324,65"      href="SockIO.html" alt="SockIO">
-  <area shape="RECT" coords="252,113,324,161"      href="LineIO.html" alt="LineIO">
-  <area shape="RECT" coords="58,113,130,161"      href="Session.html" alt="Session">
-  <area shape="RECT" coords="105,209,188,257"      href="Connection.html" alt="Connection">
-  <area shape="RECT" coords="57,17,132,65"      href="Observable.html" alt="Observable">
+  <area shape="RECT" coords="7,209,81,257"      href="Acceptor.html" alt="Acceptor">
+  <area shape="RECT" coords="205,17,277,65"      href="Reactor.html" alt="Reactor">
+  <area shape="RECT" coords="301,17,373,65"      href="SockIO.html" alt="SockIO">
+  <area shape="RECT" coords="253,113,325,161"      href="PacketIO.html" alt="PacketIO">
+  <area shape="RECT" coords="349,113,421,161"      href="LineIO.html" alt="LineIO">
+  <area shape="RECT" coords="108,113,180,161"      href="Session.html" alt="Session">
+  <area shape="RECT" coords="105,209,183,257"      href="Connector.html" alt="Connector">
+  <area shape="RECT" coords="207,209,289,257"      href="Connection.html" alt="Connection">
+  <area shape="RECT" coords="107,17,181,65"      href="Observable.html" alt="Observable">
 </map>
-<img src="../dot/f_9.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_10.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -136,7 +138,7 @@ The acceptor class handles client connection requests for a reactor
 
         <div class="method-heading">
           <a href="#M000003" class="method-signature">
-          <span class="method-name">new</span><span class="method-args">(server, port)</span>
+          <span class="method-name">new</span><span class="method-args">(server, port, opts)</span>
           </a>
         </div>
       
@@ -159,11 +161,12 @@ Create a new acceptor object
             onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000003-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 401</span>
-401:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">port</span>)
-402:     <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>
-403:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">server</span>)
-404:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 495</span>
+495:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">port</span>, <span class="ruby-identifier">opts</span>)
+496:     <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>
+497:     <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">opts</span>
+498:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">server</span>)
+499:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -189,15 +192,15 @@ event occurs for this acceptor.
             onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000006-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 446</span>
-446:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
-447:     <span class="ruby-ivar">@accepting</span> = <span class="ruby-keyword kw">false</span>
-448:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">unregister</span>(<span class="ruby-keyword kw">self</span>)
-449:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">close</span>
-450:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-451:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Acceptor#handle_close&quot;</span>
-452:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-453:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 543</span>
+543:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
+544:     <span class="ruby-ivar">@accepting</span> = <span class="ruby-keyword kw">false</span>
+545:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">unregister</span>(<span class="ruby-keyword kw">self</span>)
+546:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">close</span>
+547:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+548:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Acceptor#handle_close&quot;</span>
+549:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+550:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -223,25 +226,25 @@ it&#8217;s init routine.
             onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000005-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 426</span>
-426:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_input</span>
-427:     <span class="ruby-identifier">sckt</span> = <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">accept</span>
-428:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">sckt</span>
-429:       <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">RUBY_PLATFORM</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/win32/</span>
-430:         <span class="ruby-identifier">sckt</span>.<span class="ruby-identifier">fcntl</span>(<span class="ruby-constant">Fcntl</span><span class="ruby-operator">::</span><span class="ruby-constant">F_SETFL</span>, <span class="ruby-constant">Fcntl</span><span class="ruby-operator">::</span><span class="ruby-constant">O_NONBLOCK</span>)
-431:       <span class="ruby-keyword kw">end</span>
-432:       <span class="ruby-identifier">c</span> = <span class="ruby-constant">Connection</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@server</span>, <span class="ruby-identifier">sckt</span>)
-433:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">init</span>
-434:         <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{c.object_id}) Connection accepted.&quot;</span>
-435:         <span class="ruby-identifier">message</span>(<span class="ruby-identifier">c</span>)
-436:       <span class="ruby-keyword kw">end</span>
-437:     <span class="ruby-keyword kw">else</span>
-438:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Error in accepting connection.&quot;</span>
-439:     <span class="ruby-keyword kw">end</span>
-440:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-441:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Acceptor#handle_input&quot;</span>
-442:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-443:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 523</span>
+523:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_input</span>
+524:     <span class="ruby-identifier">sckt</span> = <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">accept</span>
+525:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">sckt</span>
+526:       <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">RUBY_PLATFORM</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/win32/</span>
+527:         <span class="ruby-identifier">sckt</span>.<span class="ruby-identifier">fcntl</span>(<span class="ruby-constant">Fcntl</span><span class="ruby-operator">::</span><span class="ruby-constant">F_SETFL</span>, <span class="ruby-constant">Fcntl</span><span class="ruby-operator">::</span><span class="ruby-constant">O_NONBLOCK</span>)
+528:       <span class="ruby-keyword kw">end</span>
+529:       <span class="ruby-identifier">c</span> = <span class="ruby-constant">Connection</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@server</span>, <span class="ruby-identifier">sckt</span>, <span class="ruby-ivar">@opts</span>)
+530:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">init</span>
+531:         <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{c.object_id}) Connection accepted.&quot;</span>
+532:         <span class="ruby-identifier">message</span>(<span class="ruby-identifier">c</span>)
+533:       <span class="ruby-keyword kw">end</span>
+534:     <span class="ruby-keyword kw">else</span>
+535:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Error in accepting connection.&quot;</span>
+536:     <span class="ruby-keyword kw">end</span>
+537:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+538:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Acceptor#handle_input&quot;</span>
+539:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+540:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -269,21 +272,23 @@ init is called before using the acceptor
             onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000004-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net.rb, line 408</span>
-408:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>
-409:     <span class="ruby-comment cmt"># Open a socket for the server to listen on.</span>
-410:     <span class="ruby-ivar">@sock</span> = <span class="ruby-constant">TCPServer</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">'0.0.0.0'</span>, <span class="ruby-ivar">@port</span>)
-411:     <span class="ruby-comment cmt">#@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)</span>
-412:     <span class="ruby-comment cmt">#@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_LINGER, 0)</span>
-413:     <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">RUBY_PLATFORM</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/win32/</span>
-414:       <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">fcntl</span>(<span class="ruby-constant">Fcntl</span><span class="ruby-operator">::</span><span class="ruby-constant">F_SETFL</span>, <span class="ruby-constant">Fcntl</span><span class="ruby-operator">::</span><span class="ruby-constant">O_NONBLOCK</span>)
-415:     <span class="ruby-keyword kw">end</span>
-416:     <span class="ruby-ivar">@accepting</span> = <span class="ruby-keyword kw">true</span>
-417:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">register</span>(<span class="ruby-keyword kw">self</span>)
-418:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-419:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Acceptor#init&quot;</span>
-420:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-421:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net.rb, line 503</span>
+503:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>
+504:     <span class="ruby-comment cmt"># Open a socket for the server to listen on.</span>
+505:     <span class="ruby-ivar">@sock</span> = <span class="ruby-constant">TCPServer</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">'0.0.0.0'</span>, <span class="ruby-ivar">@port</span>)
+506:     <span class="ruby-comment cmt">#@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)</span>
+507:     <span class="ruby-comment cmt">#@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_LINGER, 0)</span>
+508:     <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">RUBY_PLATFORM</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/win32/</span>
+509:       <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">fcntl</span>(<span class="ruby-constant">Fcntl</span><span class="ruby-operator">::</span><span class="ruby-constant">F_SETFL</span>, <span class="ruby-constant">Fcntl</span><span class="ruby-operator">::</span><span class="ruby-constant">O_NONBLOCK</span>)
+510:     <span class="ruby-keyword kw">end</span>
+511:     <span class="ruby-ivar">@accepting</span> = <span class="ruby-keyword kw">true</span>
+512:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">register</span>(<span class="ruby-keyword kw">self</span>)
+513:     <span class="ruby-keyword kw">true</span>
+514:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+515:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Acceptor#init&quot;</span>
+516:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+517:     <span class="ruby-keyword kw">false</span>
+518:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
