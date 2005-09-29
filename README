@@ -1,5 +1,5 @@
 = TeensyMUD Server
-= v2.5.3
+= v2.5.4
 
 ---
 == Introduction
@@ -46,6 +46,7 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 * Hamster powered servo timer issues events to interested objects at predefined intervals.
 * Implements TELNET protocol include NAWS, TTYPE, ECHO, SGA, and BINARY options.
 * NOSY logging. 
+* TeensyClient a barebones client that runs as console or curses application.
 
 ---
 == Installation
@@ -96,6 +97,8 @@ That's it.  It will boot on port 4000 and build an initial database in the db di
 - inventory  - displays player inventory
 - drop       - drops all objects in your inventory into the room
 - @stats     - displays a statistical report of the database
+- @color     - toggles colors on or off
+- @status    - displays session information
 
 ---
 == Contributors

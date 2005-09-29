@@ -5,6 +5,7 @@ require 'rake/packagetask'
 # files to distribute
 PKG_FILES = FileList[
   'tmud.rb',
+  'tclient.rb',
   'LICENSE',
   'CONTRIBUTORS', 
   'CHANGELOG', 
