@@ -395,7 +395,7 @@ class Player < Obj
   # [+return+] Undefined.
   def parse(m)
     # match legal command
-    m=~/([A-Za-z0-9_@?"'#!]+)(.*)/
+    m=~/([A-Za-z0-9_@?"'#!\]\[]+)(.*)/
     cmd=$1
     arg=$2
     arg.strip! if arg
@@ -411,6 +411,8 @@ class Player < Obj
     # escape certain characters in cmd
     check = cmd.gsub(/\?/,"\\?")
     check.gsub!(/\#/,"\\#")
+    check.gsub!(/\[/,"\\[")
+    check.gsub!(/\]/,"\\]")
     $engine.world.db.get(@location).exits.keys.grep(/^#{check}/).each do |ex|
       c << Command.new(:cmd_go,"go #{ex}",nil)
       arg = ex
@@ -630,14 +632,14 @@ class Incoming
     when :initdone
       @initdone = true
       message(BANNER)
-      message("login> ")
+      message("\nlogin> ")
     when String
       if @initdone
         case @state
         when :name
           @login_name = msg
           @player = $engine.world.db.find_player_by_name(@login_name)
-          message("password> ")
+          message("\npassword> ")
           message([:hide, true])
           @state = :password
         when :password
@@ -656,11 +658,11 @@ class Incoming
                 delete_observers
               else
                 @state = :name
-                message("login> ")
+                message("\nlogin> ")
               end
             end
           else  # new player
-            message("Create new user?\n'Y'|'y' to create, Enter to retry login> ")
+            message("\nCreate new user?\n'Y'|'y' to create, Enter to retry login> ")
             @state = :new
           end
         when :new
@@ -670,7 +672,7 @@ class Incoming
             login
           else
             @state = :name
-            message("login> ")
+            message("\nlogin> ")
           end
         end
       end

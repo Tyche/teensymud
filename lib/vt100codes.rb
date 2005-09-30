@@ -30,7 +30,7 @@ module VT100Codes
   DLW = "\e[7l"     # Disable line wrap
 
   HOME = "H"       # Home \e[H or \e[<row>;<col>H
-  HOMEF = "f"       # Home \e[H or \e[<row>;<col>H
+  HOMEF = "f"      # Home \e[H or \e[<row>;<col>H
   UP   = "A"       # Up \e[A or \e[<count>A
   DOWN = "B"       # Up \e[B or \e[<count>B
   RIGHT = "C"      # Up \e[C or \e[<count>C
@@ -38,7 +38,7 @@ module VT100Codes
   SCURS = "\e[s"   # save cursor position
   RCURS = "\e[u"   # restore cursor position
   SCURA = "\e7"    # save cursor pos and attributes
-  RCURA = "\e7"    # restore cursor pos and attributes
+  RCURA = "\e8"    # restore cursor pos and attributes
 
   SDF = "\e("      # Set default font
   SAF = "\e)"      # Set alternate font
@@ -63,7 +63,7 @@ module VT100Codes
   BSPC = "\177"
   W_BSPC = "\010"
   INS= "\e[2~"
-  DEL= "\e[3~"
+  X_DEL= "\e[3~"
   W_DEL = "\177"
 
   X_HOMEKEY = "\e[7~"
@@ -99,5 +99,19 @@ module VT100Codes
   SF8 = "\e[32~"
   SF9 = "\e[33~"
   SF10= "\e[34~"
+
+
+  SGR2CODE = { "0" => "[RESET]", "1" => "[B]",
+               "2" => "[D]", "4" => "[U]", "5" => "[BLINK]",
+               "7" => "[I]", "8" => "[HIDDEN]",
+               "30" => "[COLOR=black]", "31" => "[COLOR=red]",
+               "32" => "[COLOR=green]", "33" => "[COLOR=yellow]",
+               "34" => "[COLOR=blue]",  "35" => "[COLOR=magenta]",
+               "36" => "[COLOR=cyan]",  "37" => "[COLOR=white]",
+               "40" => "[COLOR=bgblack]", "41" => "[COLOR=bgred]",
+               "42" => "[COLOR=bggreen]", "43" => "[COLOR=bgyellow]",
+               "44" => "[COLOR=bgblue]",  "45" => "[COLOR=bgmagenta]",
+               "46" => "[COLOR=bgcyan]",  "47" => "[COLOR=bgwhite]" }
+
 
 end

@@ -192,7 +192,7 @@ class PacketIO < SockIO
   # [+IOError+]  A sockets error occurred.
   # [+EOFError+] The connection has closed normally.
   def write(msg)
-    if !msg.nil? || !msg.empty?
+    if !msg.nil? && !msg.empty?
       @outbuffer << [msg.length].pack("N") << msg
     end
     n = @sock.send(@outbuffer, 0)
@@ -280,6 +280,7 @@ class Connection < Session
   attr :initdone
   attr :pstack
   attr :sockio
+  attr_accessor :inbuffer, :outbuffer # filters need to this in charmode
 
   # Create a new connection object
   # [+server+]  The reactor this connection is associated with.
@@ -628,7 +629,7 @@ class Reactor
   # [+address+] Optional address for outgoing connection.
   #
   def initialize(port, opts=[:server, :sockio, :debugfilter,
-                             :telnetfilter,
+                             :telnetfilter, :terminalfilter,
                                :sga, :echo, :naws, :ttype, :zmp,
                              :colorfilter],
                              address=nil)

@@ -174,20 +174,63 @@ class ConsoleClient < Client
       c = getkey
       case c
       when nil
-#      when 32..127
-#        message(c.chr)
+      when 32..127
+        message(c.chr)
       when 13
         message("\n") if @opts.win32
       when 10
         message("\n") if !@opts.win32
-#      when ?D+256 # Windows F10
-#        conmsg "Quitting..."
-#        shutdown = true
+      when 315
+        message("\e[11~")
+      when 316
+        message("\e[12~")
+      when 317
+        message("\e[13~")
+      when 318
+        message("\e[14~")
+      when 319
+        message("\e[15~")
+      when 320
+        message("\e[17~")
+      when 321
+        message("\e[18~")
+      when 322
+        message("\e[19~")
+      when 323
+        message("\e[20~")
+      when 324 # Windows F10
+        conmsg "Quitting..."
+        shutdown = true
 #      when 27 # xterm F10
 #        if getkey == 91 && getkey == 50 && getkey == 49 && getkey == 126
 #          conmsg "Quitting..."
 #          shutdown = true
 #        end
+
+      when 338  # INS
+        message("\e[2~")
+      when 339  # DEL
+        message("\010")
+      when 327  # HOME
+        message("\e[7~")
+      when 335  # END
+        message("\e[8~")
+      when 329  # PAGEUP
+        message("\e[5~")
+      when 337  # PAGEDOWN
+        message("\e[6~")
+      when 328  # UP
+        message("\e[A")
+      when 336  # DOWN
+        message("\e[B")
+      when 333  # RIGHT
+        message("\e[C")
+      when 331  # LEFT
+        message("\e[D")
+
+
+      when 256..512
+        conmsg "Unknown key hit code - #{c.inspect}"
       else
         message(c.chr)
 #        conmsg "Unknown key hit code - #{c.inspect}"
@@ -263,7 +306,7 @@ end
 
 if $0 == __FILE__
 
-  $connopts = [:client, :sockio, :zmp, :telnetfilter, :ttype, :naws, :debugfilter, :vt100]
+  $connopts = [:client, :sockio, :zmp, :telnetfilter, :ttype, :naws, :debugfilter, :vt100, :terminalfilter]
   $opts = get_options
 
   if $opts.echo
