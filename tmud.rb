@@ -19,7 +19,7 @@ require 'pp'
 $:.unshift "lib"
 $:.unshift "vendor"
 
-require 'net'
+require 'net/reactor'
 require 'command'
 require 'database'
 require 'farts_parser'

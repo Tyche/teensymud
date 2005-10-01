@@ -20,6 +20,7 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 [RubyGems] To install rake and various things.  See - http://rubyforge.org/projects/rubygems
 [Rake] To build documentation, run tests, etc.  See - http://rake.rubyforge.org
 [Racc] To rebuild FARTS parser.  Ruby comes with Racc runtime so this is not needed for execution. See - http://i.loveruby.net/en/prog/racc.html
+[FlexMock] To run regression tests.  See - http://onestepback.org/software/flexmock/
 
 == Features
 * Multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns.

@@ -42,7 +42,8 @@ Rake::RDocTask.new do |rd|
   rd.title = "TeensyMUD #{TMUDV} Mud Server"
 #  rd.template = 'kilmer'
 #  rd.template = './rdoctemplate.rb'
-  rd.rdoc_files.include('README', 'farts.grammar', 'tmud.rb', 'lib/*.rb', 'cmd/*.rb')
+  rd.rdoc_files.include('README', 'farts.grammar', 'tmud.rb', 'tclient.rb',
+    'lib/*.rb', 'lib/net/*.rb', 'cmd/*.rb')
   rd.options << '-dSN -I gif' 
 end
 
@@ -69,8 +70,9 @@ desc "Report code statistics (KLOCs, etc) from the application"
 task :stats do
   require 'code_statistics'
   CodeStatistics.new(
-    ["Main", ".", /^tmud.rb$/], 
+    ["Main", ".", /^tmud.rb$|^tclient.rb$/], 
     ["Library", "lib", /.*\.rb$/], 
+    ["Network", "lib/net", /.*\.rb$/], 
     ["Commands", "cmd", /.*\.rb$/],
     ["Tests", "test", /.*\.rb$/]
   ).to_s

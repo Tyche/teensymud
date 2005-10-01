@@ -2,8 +2,8 @@
 #
 # file::    tclient.rb
 # author::  Jon A. Lambert
-# version:: 2.5.4
-# date::    09/23/2005
+# version:: 2.6.0
+# date::    09/30/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -17,9 +17,9 @@ require 'pp'
 $:.unshift "lib"
 $:.unshift "vendor"
 
-require 'net'
+require 'net/reactor'
 
-Version = "0.1.0"
+Version = "0.2.0"
 BANNER=<<-EOH
 
           This is TeensyClient version #{Version}

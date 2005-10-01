@@ -97,7 +97,7 @@ end
 #
 if $0 == __FILE__
   Dir.chdir("..")
-  $:.unshift "lib"
+  $:.unshift "../lib"
 end
 require 'farts_lexer'
 require 'farts_lib'
