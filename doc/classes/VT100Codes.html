@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../files/lib/vt100codes_rb.html">
-                lib/vt100codes.rb
+                <a href="../files/lib/protocol/vt100codes_rb.html">
+                lib/protocol/vt100codes.rb
                 </a>
         <br />
             </td>
@@ -75,7 +75,7 @@
       <map id="map" name="map">
   <area shape="RECT" coords="17,17,111,61"      href="VT100Codes.html" alt="VT100Codes">
 </map>
-<img src="../dot/m_13_0.gif" usemap="#map" border=0 alt="Module: VT100Codes">
+<img src="../dot/m_26_0.gif" usemap="#map" border=0 alt="Module: VT100Codes">
     </div>
 
     <div id="description">
@@ -205,7 +205,7 @@ Final bytes
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">RCURA</td>
           <td>=</td>
-          <td class="context-item-value">&quot;\e7&quot;</td>
+          <td class="context-item-value">&quot;\e8&quot;</td>
         </tr>
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">SDF</td>
@@ -293,7 +293,7 @@ Final bytes
           <td class="context-item-value">&quot;\e[2~&quot;</td>
         </tr>
         <tr class="top-aligned-row context-row">
-          <td class="context-item-name">DEL</td>
+          <td class="context-item-name">X_DEL</td>
           <td>=</td>
           <td class="context-item-value">&quot;\e[3~&quot;</td>
         </tr>
@@ -451,6 +451,11 @@ Final bytes
           <td class="context-item-name">SF10</td>
           <td>=</td>
           <td class="context-item-value">&quot;\e[34~&quot;</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SGR2CODE</td>
+          <td>=</td>
+          <td class="context-item-value">{ &quot;0&quot; =&gt; &quot;[RESET]&quot;, &quot;1&quot; =&gt; &quot;[B]&quot;,                &quot;2&quot; =&gt; &quot;[D]&quot;, &quot;4&quot; =&gt; &quot;[U]&quot;, &quot;5&quot; =&gt; &quot;[BLINK]&quot;,                &quot;7&quot; =&gt; &quot;[I]&quot;, &quot;8&quot; =&gt; &quot;[HIDDEN]&quot;,                &quot;30&quot; =&gt; &quot;[COLOR=black]&quot;, &quot;31&quot; =&gt; &quot;[COLOR=red]&quot;,                &quot;32&quot; =&gt; &quot;[COLOR=green]&quot;, &quot;33&quot; =&gt; &quot;[COLOR=yellow]&quot;,                &quot;34&quot; =&gt; &quot;[COLOR=blue]&quot;,  &quot;35&quot; =&gt; &quot;[COLOR=magenta]&quot;,                &quot;36&quot; =&gt; &quot;[COLOR=cyan]&quot;,  &quot;37&quot; =&gt; &quot;[COLOR=white]&quot;,                &quot;40&quot; =&gt; &quot;[COLOR=bgblack]&quot;, &quot;41&quot; =&gt; &quot;[COLOR=bgred]&quot;,                &quot;42&quot; =&gt; &quot;[COLOR=bggreen]&quot;, &quot;43&quot; =&gt; &quot;[COLOR=bgyellow]&quot;,                &quot;44&quot; =&gt; &quot;[COLOR=bgblue]&quot;,  &quot;45&quot; =&gt; &quot;[COLOR=bgmagenta]&quot;,                &quot;46&quot; =&gt; &quot;[COLOR=bgcyan]&quot;,  &quot;47&quot; =&gt; &quot;[COLOR=bgwhite]&quot; }</td>
         </tr>
         </table>
       </div>

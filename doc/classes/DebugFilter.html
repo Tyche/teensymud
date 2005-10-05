@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../files/lib/filter_rb.html">
-                lib/filter.rb
+                <a href="../files/lib/protocol/debugfilter_rb.html">
+                lib/protocol/debugfilter.rb
                 </a>
         <br />
             </td>
@@ -81,17 +81,11 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="210,113,293,161"      href="DebugFilter.html" alt="DebugFilter">
-  <area shape="RECT" coords="106,113,186,161"      href="TelnetFilter.html" alt="TelnetFilter">
-  <area shape="RECT" coords="322,17,394,65"      href="Filter.html" alt="Filter">
-  <area shape="RECT" coords="317,113,408,161"      href="TerminalFilter.html" alt="TerminalFilter">
-  <area shape="RECT" coords="432,113,509,161"      href="ColorFilter.html" alt="ColorFilter">
-  <area shape="RECT" coords="418,17,512,65"      href="ProtocolStack.html" alt="ProtocolStack">
-  <area shape="RECT" coords="209,17,294,65"      href="VT100Codes.html" alt="VT100Codes">
-  <area shape="RECT" coords="6,17,84,65"      href="ASCIICodes.html" alt="ASCIICodes">
-  <area shape="RECT" coords="108,17,185,65"      href="TelnetCodes.html" alt="TelnetCodes">
+  <area shape="RECT" coords="58,113,141,161"      href="DebugFilter.html" alt="DebugFilter">
+  <area shape="RECT" coords="6,17,92,65"      href="VT100Codes.html" alt="VT100Codes">
+  <area shape="RECT" coords="116,17,188,65"      href="Filter.html" alt="Filter">
 </map>
-<img src="../dot/f_9.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_20.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -109,9 +103,9 @@ passes through it
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000054">filter_in</a>&nbsp;&nbsp;
-      <a href="#M000055">filter_out</a>&nbsp;&nbsp;
-      <a href="#M000053">new</a>&nbsp;&nbsp;
+      <a href="#M000061">filter_in</a>&nbsp;&nbsp;
+      <a href="#M000062">filter_out</a>&nbsp;&nbsp;
+      <a href="#M000060">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -140,11 +134,11 @@ passes through it
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000053" class="method-detail">
-        <a name="M000053"></a>
+      <div id="method-M000060" class="method-detail">
+        <a name="M000060"></a>
 
         <div class="method-heading">
-          <a href="#M000053" class="method-signature">
+          <a href="#M000060" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(pstack)</span>
           </a>
         </div>
@@ -160,13 +154,13 @@ filter
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000053-source">
+            onclick="toggleCode('M000060-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000060-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 932</span>
-932:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">pstack</span>)
-933:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">pstack</span>)
-934:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/protocol/debugfilter.rb, line 24</span>
+24:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">pstack</span>)
+25:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">pstack</span>)
+26:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -174,18 +168,18 @@ filter
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000054" class="method-detail">
-        <a name="M000054"></a>
+      <div id="method-M000061" class="method-detail">
+        <a name="M000061"></a>
 
         <div class="method-heading">
-          <a href="#M000054" class="method-signature">
+          <a href="#M000061" class="method-signature">
           <span class="method-name">filter_in</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-The <a href="DebugFilter.html#M000054">filter_in</a> method filters input
+The <a href="DebugFilter.html#M000061">filter_in</a> method filters input
 data
 </p>
 <dl>
@@ -197,46 +191,33 @@ data
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000054-source">
+            onclick="toggleCode('M000061-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000061-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 939</span>
-939:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_in</span>(<span class="ruby-identifier">str</span>)
-940:     <span class="ruby-keyword kw">return</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>
-941:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) INPUT #{str.inspect}&quot;</span> )
-942:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">str</span>
-943:     <span class="ruby-keyword kw">when</span> <span class="ruby-node">/#{F5.sub(/\[/,&quot;\\[&quot;)}/</span>
-944:       <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">CSI</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;1;21&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">SS</span>)
-945:     <span class="ruby-keyword kw">when</span> <span class="ruby-node">/#{F6.sub(/\[/,&quot;\\[&quot;)}/</span>
-946:       <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">ESOL</span>)
-947:     <span class="ruby-keyword kw">when</span> <span class="ruby-node">/#{F7.sub(/\[/,&quot;\\[&quot;)}/</span>
-948:       <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">QCP</span>)
-949:     <span class="ruby-keyword kw">when</span> <span class="ruby-node">/#{F8.sub(/\[/,&quot;\\[&quot;)}/</span>
-950:       <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">CSI</span> <span class="ruby-operator">+</span> <span class="ruby-constant">HOME</span>)
-951:     <span class="ruby-keyword kw">when</span> <span class="ruby-node">/#{F9.sub(/\[/,&quot;\\[&quot;)}/</span>
-952:       <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">CSI</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;15;40&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">HOME</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;Hello World&quot;</span>)
-953:     <span class="ruby-keyword kw">when</span> <span class="ruby-node">/#{F10.sub(/\[/,&quot;\\[&quot;)}/</span>
-954:       <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">ES</span>)
-955:     <span class="ruby-keyword kw">end</span>
-956:     <span class="ruby-identifier">str</span>
-957:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/protocol/debugfilter.rb, line 31</span>
+31:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_in</span>(<span class="ruby-identifier">str</span>)
+32:     <span class="ruby-keyword kw">return</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>
+33:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) INPUT #{str.inspect}&quot;</span> )
+34: ??
+35:     <span class="ruby-identifier">str</span>
+36:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000055" class="method-detail">
-        <a name="M000055"></a>
+      <div id="method-M000062" class="method-detail">
+        <a name="M000062"></a>
 
         <div class="method-heading">
-          <a href="#M000055" class="method-signature">
+          <a href="#M000062" class="method-signature">
           <span class="method-name">filter_out</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-The <a href="DebugFilter.html#M000055">filter_out</a> method filters output
+The <a href="DebugFilter.html#M000062">filter_out</a> method filters output
 data
 </p>
 <dl>
@@ -248,15 +229,15 @@ data
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000055-source">
+            onclick="toggleCode('M000062-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000062-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 962</span>
-962:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_out</span>(<span class="ruby-identifier">str</span>)
-963:     <span class="ruby-keyword kw">return</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>
-964:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) OUTPUT #{str.inspect}&quot;</span> )
-965:     <span class="ruby-identifier">str</span>
-966:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/protocol/debugfilter.rb, line 56</span>
+56:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_out</span>(<span class="ruby-identifier">str</span>)
+57:     <span class="ruby-keyword kw">return</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>
+58:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) OUTPUT #{str.inspect}&quot;</span> )
+59:     <span class="ruby-identifier">str</span>
+60:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

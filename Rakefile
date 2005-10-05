@@ -4,24 +4,13 @@ require 'rake/packagetask'
 
 # files to distribute
 PKG_FILES = FileList[
-  'tmud.rb',
-  'tclient.rb',
-  'LICENSE',
-  'CONTRIBUTORS', 
-  'CHANGELOG', 
-  'README',
-  'farts.grammar',
-  'Rakefile', 
-  'db',
-  'db/README',
-  'db/testworld.yaml',
-  'farts',
-  'farts/**/*',
-  'test',
-  'test/README',
-  'logs',
-  'logs/README',
-#  'test/**/*',
+  'tmud.rb', 'tclient.rb',
+  'LICENSE', 'CONTRIBUTORS', 'CHANGELOG', 'README',
+  'farts.grammar', 'Rakefile', 
+  'db', 'db/README', 'db/testworld.yaml',
+  'farts', 'farts/**/*',
+  'test', 'test/test*.rb', 'test/README',
+  'logs', 'logs/README',
   'lib/**/*',
   'vendor/**/*',
   'cmd/**/*',
@@ -43,7 +32,8 @@ Rake::RDocTask.new do |rd|
 #  rd.template = 'kilmer'
 #  rd.template = './rdoctemplate.rb'
   rd.rdoc_files.include('README', 'farts.grammar', 'tmud.rb', 'tclient.rb',
-    'lib/*.rb', 'lib/net/*.rb', 'cmd/*.rb')
+    'lib/*.rb', 'lib/net/*.rb', 'lib/farts/*.rb', 'lib/protocol/*.rb', 
+    'cmd/*.rb')
   rd.options << '-dSN -I gif' 
 end
 
@@ -54,6 +44,8 @@ end
 
 # run tests
 Rake::TestTask.new do |t|
+  t.libs << "vendor"  # default "lib"
+  #t.pattern = 'test/test*.rb' # default 'test/test*.rb'
   t.test_files = FileList['test/test*.rb']
   t.verbose = true
 end
@@ -73,6 +65,8 @@ task :stats do
     ["Main", ".", /^tmud.rb$|^tclient.rb$/], 
     ["Library", "lib", /.*\.rb$/], 
     ["Network", "lib/net", /.*\.rb$/], 
+    ["Farts", "lib/farts", /.*\.rb$/], 
+    ["Protocol", "lib/protocol", /.*\.rb$/], 
     ["Commands", "cmd", /.*\.rb$/],
     ["Tests", "test", /.*\.rb$/]
   ).to_s
@@ -88,7 +82,7 @@ task :release do
 end
 
 task :farts do
-  sh "racc -o lib/farts_parser.rb lib/farts_parser.y"
+  sh "racc -o lib/farts/farts_parser.rb lib/farts/farts_parser.y"
 end
 
 task :release => [:package]

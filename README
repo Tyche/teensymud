@@ -1,5 +1,5 @@
 = TeensyMUD Server
-= v2.5.4
+= v2.6.0
 
 ---
 == Introduction
@@ -48,6 +48,8 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 * Implements TELNET protocol include NAWS, TTYPE, ECHO, SGA, and BINARY options.
 * NOSY logging. 
 * TeensyClient a barebones client that runs as console or curses application.
+* VT100 support
+* Exhaustive regression testing.
 
 ---
 == Installation

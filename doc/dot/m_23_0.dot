@@ -10,14 +10,14 @@ digraph TopLevel {
         color = black
     ]
 
-    subgraph cluster_Cmd {
+    subgraph cluster_TelnetCodes {
         fillcolor = palegreen1
-        URL = "classes/Cmd.html"
+        URL = "classes/TelnetCodes.html"
         fontname = Arial
         color = blue
-        label = "Cmd"
+        label = "TelnetCodes"
         style = filled
-        Cmd [
+        TelnetCodes [
             shape = plaintext,
             height = 0.01,
             width = 0.75,

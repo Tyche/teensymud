@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../files/lib/farts_parser_rb.html">
-                lib/farts_parser.rb
+                <a href="../../files/lib/farts/farts_parser_rb.html">
+                lib/farts/farts_parser.rb
                 </a>
         <br />
             </td>
@@ -102,7 +102,7 @@
   <area shape="RECT" coords="28,113,100,161"      href="Lib.html" alt="Lib">
   <area shape="RECT" coords="17,91,1305,268"      href="../Farts.html" alt="Farts">
 </map>
-<img src="../../dot/m_8_0.gif" usemap="#map" border=0 alt="Module: Farts">
+<img src="../../dot/m_17_0.gif" usemap="#map" border=0 alt="Module: Farts">
     </div>
 
 
@@ -113,8 +113,8 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000133">execute</a>&nbsp;&nbsp;
-      <a href="#M000132">new</a>&nbsp;&nbsp;
+      <a href="#M000150">execute</a>&nbsp;&nbsp;
+      <a href="#M000149">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -136,21 +136,21 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000132" class="method-detail">
-        <a name="M000132"></a>
+      <div id="method-M000149" class="method-detail">
+        <a name="M000149"></a>
 
         <div class="method-heading">
-          <a href="#M000132" class="method-signature">
+          <a href="#M000149" class="method-signature">
           <span class="method-name">new</span><span class="method-args">( lineno, func, args )</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000132-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000132-source">
+            onclick="toggleCode('M000149-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000149-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/farts_parser.rb, line 675</span>
+     <span class="ruby-comment cmt"># File lib/farts/farts_parser.rb, line 675</span>
 675:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>( <span class="ruby-identifier">lineno</span>, <span class="ruby-identifier">func</span>, <span class="ruby-identifier">args</span> )
 676:       <span class="ruby-keyword kw">super</span> <span class="ruby-identifier">lineno</span>
 677:       <span class="ruby-ivar">@funcname</span> = <span class="ruby-identifier">func</span>
@@ -163,21 +163,21 @@
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000133" class="method-detail">
-        <a name="M000133"></a>
+      <div id="method-M000150" class="method-detail">
+        <a name="M000150"></a>
 
         <div class="method-heading">
-          <a href="#M000133" class="method-signature">
+          <a href="#M000150" class="method-signature">
           <span class="method-name">execute</span><span class="method-args">(intp)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000133-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000133-source">
+            onclick="toggleCode('M000150-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000150-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/farts_parser.rb, line 681</span>
+     <span class="ruby-comment cmt"># File lib/farts/farts_parser.rb, line 681</span>
 681:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">intp</span>)
 682:       <span class="ruby-identifier">arg</span> = <span class="ruby-ivar">@args</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span>.<span class="ruby-identifier">execute</span>(<span class="ruby-identifier">intp</span>) }
 683:       <span class="ruby-keyword kw">begin</span>

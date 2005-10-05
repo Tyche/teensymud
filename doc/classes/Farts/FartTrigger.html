@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../files/lib/farts_parser_rb.html">
-                lib/farts_parser.rb
+                <a href="../../files/lib/farts/farts_parser_rb.html">
+                lib/farts/farts_parser.rb
                 </a>
         <br />
             </td>
@@ -100,7 +100,7 @@
   <area shape="RECT" coords="28,113,100,161"      href="Lib.html" alt="Lib">
   <area shape="RECT" coords="17,91,1305,268"      href="../Farts.html" alt="Farts">
 </map>
-<img src="../../dot/m_8_0.gif" usemap="#map" border=0 alt="Module: Farts">
+<img src="../../dot/m_17_0.gif" usemap="#map" border=0 alt="Module: Farts">
     </div>
 
 
@@ -111,9 +111,9 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000142">execute</a>&nbsp;&nbsp;
-      <a href="#M000141">load</a>&nbsp;&nbsp;
-      <a href="#M000140">new</a>&nbsp;&nbsp;
+      <a href="#M000159">execute</a>&nbsp;&nbsp;
+      <a href="#M000158">load</a>&nbsp;&nbsp;
+      <a href="#M000157">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -158,21 +158,21 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000140" class="method-detail">
-        <a name="M000140"></a>
+      <div id="method-M000157" class="method-detail">
+        <a name="M000157"></a>
 
         <div class="method-heading">
-          <a href="#M000140" class="method-signature">
+          <a href="#M000157" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(fname,event)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000140-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000140-source">
+            onclick="toggleCode('M000157-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000157-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/farts_parser.rb, line 828</span>
+     <span class="ruby-comment cmt"># File lib/farts/farts_parser.rb, line 828</span>
 828:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">fname</span>,<span class="ruby-identifier">event</span>)
 829:       <span class="ruby-ivar">@fname</span>,<span class="ruby-ivar">@event</span> = <span class="ruby-identifier">fname</span>,<span class="ruby-identifier">event</span>
 830:       <span class="ruby-ivar">@event</span> = <span class="ruby-identifier">event</span>.<span class="ruby-identifier">intern</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">event</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">to_str</span>)
@@ -185,21 +185,21 @@
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000142" class="method-detail">
-        <a name="M000142"></a>
+      <div id="method-M000159" class="method-detail">
+        <a name="M000159"></a>
 
         <div class="method-heading">
-          <a href="#M000142" class="method-signature">
+          <a href="#M000159" class="method-signature">
           <span class="method-name">execute</span><span class="method-args">(ev)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000142-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000142-source">
+            onclick="toggleCode('M000159-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000159-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/farts_parser.rb, line 852</span>
+     <span class="ruby-comment cmt"># File lib/farts/farts_parser.rb, line 852</span>
 852:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">ev</span>)
 853:       <span class="ruby-identifier">retval</span> = <span class="ruby-keyword kw">true</span>
 854:       <span class="ruby-identifier">vars</span> = {}
@@ -224,21 +224,21 @@
         </div>
       </div>
 
-      <div id="method-M000141" class="method-detail">
-        <a name="M000141"></a>
+      <div id="method-M000158" class="method-detail">
+        <a name="M000158"></a>
 
         <div class="method-heading">
-          <a href="#M000141" class="method-signature">
+          <a href="#M000158" class="method-signature">
           <span class="method-name">load</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000141-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000141-source">
+            onclick="toggleCode('M000158-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000158-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/farts_parser.rb, line 834</span>
+     <span class="ruby-comment cmt"># File lib/farts/farts_parser.rb, line 834</span>
 834:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load</span>
 835:       <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;&quot;</span>
 836:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;farts/#{@fname}.fart&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>

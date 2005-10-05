@@ -3,110 +3,28 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/filter.rb"
+    label = "lib/net/connector.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    DebugFilter [
+    Connector [
         fontcolor = black,
-        URL = "classes/DebugFilter.html",
+        URL = "classes/Connector.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "DebugFilter"
+        label = "Connector"
     ]
 
-    TelnetFilter [
-        fontcolor = black,
-        URL = "classes/TelnetFilter.html",
-        shape = ellipse,
-        color = palegoldenrod,
-        style = filled,
-        label = "TelnetFilter"
+    Session [
+        URL = "classes/Session.html",
+        label = "Session"
     ]
 
-    Filter [
-        fontcolor = black,
-        URL = "classes/Filter.html",
-        shape = ellipse,
-        color = palegoldenrod,
-        style = filled,
-        label = "Filter"
-    ]
-
-    TerminalFilter [
-        fontcolor = black,
-        URL = "classes/TerminalFilter.html",
-        shape = ellipse,
-        color = palegoldenrod,
-        style = filled,
-        label = "TerminalFilter"
-    ]
-
-    ColorFilter [
-        fontcolor = black,
-        URL = "classes/ColorFilter.html",
-        shape = ellipse,
-        color = palegoldenrod,
-        style = filled,
-        label = "ColorFilter"
-    ]
-
-    ProtocolStack [
-        fontcolor = black,
-        URL = "classes/ProtocolStack.html",
-        shape = ellipse,
-        color = palegoldenrod,
-        style = filled,
-        label = "ProtocolStack"
-    ]
-
-    VT100Codes [
-        URL = "classes/VT100Codes.html",
-        shape = box,
-        label = "VT100Codes"
-    ]
-
-    VT100Codes -> DebugFilter [
-
-    ]
-
-    Filter -> DebugFilter [
-
-    ]
-
-    ASCIICodes [
-        URL = "classes/ASCIICodes.html",
-        shape = box,
-        label = "ASCIICodes"
-    ]
-
-    ASCIICodes -> TelnetFilter [
-
-    ]
-
-    TelnetCodes [
-        URL = "classes/TelnetCodes.html",
-        shape = box,
-        label = "TelnetCodes"
-    ]
-
-    TelnetCodes -> TelnetFilter [
-
-    ]
-
-    Filter -> TelnetFilter [
-
-    ]
-
-    Filter -> TerminalFilter [
-
-    ]
-
-    Filter -> ColorFilter [
+    Session -> Connector [
 
     ]
 

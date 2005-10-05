@@ -54,7 +54,9 @@ class PacketIO < SockIO
       else
         return nil # not enough data yet
       end
-    else
+    end
+
+    if @prefix_found
       if @inbuffer.size >= @packet_size
         # We have it
         @prefix_found = false

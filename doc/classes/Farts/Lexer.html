@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../files/lib/farts_lexer_rb.html">
-                lib/farts_lexer.rb
+                <a href="../../files/lib/farts/farts_lexer_rb.html">
+                lib/farts/farts_lexer.rb
                 </a>
         <br />
             </td>
@@ -100,7 +100,7 @@
   <area shape="RECT" coords="28,113,100,161"      href="Lib.html" alt="Lib">
   <area shape="RECT" coords="17,91,1305,268"      href="../Farts.html" alt="Farts">
 </map>
-<img src="../../dot/m_8_0.gif" usemap="#map" border=0 alt="Module: Farts">
+<img src="../../dot/m_17_0.gif" usemap="#map" border=0 alt="Module: Farts">
     </div>
 
     <div id="description">
@@ -123,10 +123,10 @@ tokens
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000159">lineno</a>&nbsp;&nbsp;
-      <a href="#M000156">new</a>&nbsp;&nbsp;
-      <a href="#M000157">next_token</a>&nbsp;&nbsp;
-      <a href="#M000158">tokenpos</a>&nbsp;&nbsp;
+      <a href="#M000176">lineno</a>&nbsp;&nbsp;
+      <a href="#M000173">new</a>&nbsp;&nbsp;
+      <a href="#M000174">next_token</a>&nbsp;&nbsp;
+      <a href="#M000175">tokenpos</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -166,21 +166,21 @@ Table of keywords and token type values
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000156" class="method-detail">
-        <a name="M000156"></a>
+      <div id="method-M000173" class="method-detail">
+        <a name="M000173"></a>
 
         <div class="method-heading">
-          <a href="#M000156" class="method-signature">
+          <a href="#M000173" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000156-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000156-source">
+            onclick="toggleCode('M000173-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000173-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/farts_lexer.rb, line 24</span>
+    <span class="ruby-comment cmt"># File lib/farts/farts_lexer.rb, line 24</span>
 24:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">str</span>)
 25:     <span class="ruby-ivar">@token</span> = [<span class="ruby-identifier">:UNKNOWN</span>, <span class="ruby-keyword kw">nil</span>]
 26:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">str</span>)
@@ -192,21 +192,21 @@ Table of keywords and token type values
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000159" class="method-detail">
-        <a name="M000159"></a>
+      <div id="method-M000176" class="method-detail">
+        <a name="M000176"></a>
 
         <div class="method-heading">
-          <a href="#M000159" class="method-signature">
+          <a href="#M000176" class="method-signature">
           <span class="method-name">lineno</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000159-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000159-source">
+            onclick="toggleCode('M000176-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000176-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/farts_lexer.rb, line 53</span>
+    <span class="ruby-comment cmt"># File lib/farts/farts_lexer.rb, line 53</span>
 53:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lineno</span>
 54:     <span class="ruby-identifier">string</span>[<span class="ruby-value">0</span>,<span class="ruby-identifier">pos</span>].<span class="ruby-identifier">count</span>(<span class="ruby-value str">&quot;\n&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
 55:   <span class="ruby-keyword kw">end</span>
@@ -215,21 +215,21 @@ Table of keywords and token type values
         </div>
       </div>
 
-      <div id="method-M000157" class="method-detail">
-        <a name="M000157"></a>
+      <div id="method-M000174" class="method-detail">
+        <a name="M000174"></a>
 
         <div class="method-heading">
-          <a href="#M000157" class="method-signature">
+          <a href="#M000174" class="method-signature">
           <span class="method-name">next_token</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000157-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000157-source">
+            onclick="toggleCode('M000174-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000174-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/farts_lexer.rb, line 29</span>
+    <span class="ruby-comment cmt"># File lib/farts/farts_lexer.rb, line 29</span>
 29:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">next_token</span>
 30:     <span class="ruby-ivar">@token</span> = [<span class="ruby-identifier">:UNKNOWN</span>, <span class="ruby-keyword kw">nil</span>]
 31:     <span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\s+/</span>)
@@ -252,21 +252,21 @@ Table of keywords and token type values
         </div>
       </div>
 
-      <div id="method-M000158" class="method-detail">
-        <a name="M000158"></a>
+      <div id="method-M000175" class="method-detail">
+        <a name="M000175"></a>
 
         <div class="method-heading">
-          <a href="#M000158" class="method-signature">
+          <a href="#M000175" class="method-signature">
           <span class="method-name">tokenpos</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000158-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000158-source">
+            onclick="toggleCode('M000175-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000175-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/farts_lexer.rb, line 47</span>
+    <span class="ruby-comment cmt"># File lib/farts/farts_lexer.rb, line 47</span>
 47:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tokenpos</span>
 48:     <span class="ruby-identifier">p</span> = <span class="ruby-identifier">string</span>[<span class="ruby-value">0</span>,<span class="ruby-identifier">pos</span>].<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
 49:     <span class="ruby-identifier">p</span> = <span class="ruby-value">-1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">p</span>

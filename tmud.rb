@@ -1,8 +1,8 @@
 #
 # file::    tmud.rb
 # author::  Jon A. Lambert
-# version:: 2.5.4
-# date::    09/21/2005
+# version:: 2.6.0
+# date::    09/30/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -22,9 +22,9 @@ $:.unshift "vendor"
 require 'net/reactor'
 require 'command'
 require 'database'
-require 'farts_parser'
+require 'farts/farts_parser'
 
-Version = "2.5.4"
+Version = "2.6.0"
 
 # Displayed upon connecting
 BANNER=<<-EOH

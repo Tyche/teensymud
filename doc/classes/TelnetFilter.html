@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../files/lib/filter_rb.html">
-                lib/filter.rb
+                <a href="../files/lib/protocol/telnetfilter_rb.html">
+                lib/protocol/telnetfilter.rb
                 </a>
         <br />
             </td>
@@ -81,17 +81,12 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="210,113,293,161"      href="DebugFilter.html" alt="DebugFilter">
-  <area shape="RECT" coords="106,113,186,161"      href="TelnetFilter.html" alt="TelnetFilter">
-  <area shape="RECT" coords="322,17,394,65"      href="Filter.html" alt="Filter">
-  <area shape="RECT" coords="317,113,408,161"      href="TerminalFilter.html" alt="TerminalFilter">
-  <area shape="RECT" coords="432,113,509,161"      href="ColorFilter.html" alt="ColorFilter">
-  <area shape="RECT" coords="418,17,512,65"      href="ProtocolStack.html" alt="ProtocolStack">
-  <area shape="RECT" coords="209,17,294,65"      href="VT100Codes.html" alt="VT100Codes">
-  <area shape="RECT" coords="6,17,84,65"      href="ASCIICodes.html" alt="ASCIICodes">
+  <area shape="RECT" coords="107,113,187,161"      href="TelnetFilter.html" alt="TelnetFilter">
+  <area shape="RECT" coords="7,17,84,65"      href="ASCIICodes.html" alt="ASCIICodes">
   <area shape="RECT" coords="108,17,185,65"      href="TelnetCodes.html" alt="TelnetCodes">
+  <area shape="RECT" coords="209,17,281,65"      href="Filter.html" alt="Filter">
 </map>
-<img src="../dot/f_9.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_24.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -113,15 +108,15 @@ RFC 857/858/1073/1091
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000061">desired?</a>&nbsp;&nbsp;
-      <a href="#M000062">echo</a>&nbsp;&nbsp;
-      <a href="#M000060">enabled?</a>&nbsp;&nbsp;
-      <a href="#M000058">filter_in</a>&nbsp;&nbsp;
-      <a href="#M000059">filter_out</a>&nbsp;&nbsp;
-      <a href="#M000057">init</a>&nbsp;&nbsp;
-      <a href="#M000063">init_subneg</a>&nbsp;&nbsp;
-      <a href="#M000056">new</a>&nbsp;&nbsp;
-      <a href="#M000064">send_naws</a>&nbsp;&nbsp;
+      <a href="#M000056">desired?</a>&nbsp;&nbsp;
+      <a href="#M000057">echo</a>&nbsp;&nbsp;
+      <a href="#M000055">enabled?</a>&nbsp;&nbsp;
+      <a href="#M000053">filter_in</a>&nbsp;&nbsp;
+      <a href="#M000054">filter_out</a>&nbsp;&nbsp;
+      <a href="#M000052">init</a>&nbsp;&nbsp;
+      <a href="#M000058">init_subneg</a>&nbsp;&nbsp;
+      <a href="#M000051">new</a>&nbsp;&nbsp;
+      <a href="#M000059">send_naws</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -151,11 +146,11 @@ RFC 857/858/1073/1091
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000056" class="method-detail">
-        <a name="M000056"></a>
+      <div id="method-M000051" class="method-detail">
+        <a name="M000051"></a>
 
         <div class="method-heading">
-          <a href="#M000056" class="method-signature">
+          <a href="#M000051" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(pstack, wopts=[])</span>
           </a>
         </div>
@@ -174,24 +169,24 @@ filter
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000056-source">
+            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000051-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 231</span>
-231:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">pstack</span>, <span class="ruby-identifier">wopts</span>=[])
-232:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">pstack</span>)
-233:     <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">wopts</span>
-234:     <span class="ruby-ivar">@wopts</span> = {}
-235:     <span class="ruby-identifier">getopts</span>(<span class="ruby-identifier">wopts</span>)
-236:     <span class="ruby-ivar">@mode</span> = <span class="ruby-identifier">:normal</span> <span class="ruby-comment cmt">#  Parse mode :normal, :cmd, :cr</span>
-237:     <span class="ruby-ivar">@state</span> = {}
-238:     <span class="ruby-ivar">@sc</span> = <span class="ruby-keyword kw">nil</span>
-239:     <span class="ruby-ivar">@sneg_opts</span> = [ <span class="ruby-constant">TTYPE</span>, <span class="ruby-constant">ZMP</span> ]  <span class="ruby-comment cmt"># supported options which imply an initial</span>
-240:                                  <span class="ruby-comment cmt"># sub negotiation of options</span>
-241:     <span class="ruby-ivar">@ttype</span> = []
-242:     <span class="ruby-ivar">@init_tries</span> = <span class="ruby-value">0</span>   <span class="ruby-comment cmt"># Number of tries at negotitating sub options</span>
-243:     <span class="ruby-ivar">@synch</span> = <span class="ruby-keyword kw">false</span>
-244:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 31</span>
+31:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">pstack</span>, <span class="ruby-identifier">wopts</span>=[])
+32:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">pstack</span>)
+33:     <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">wopts</span>
+34:     <span class="ruby-ivar">@wopts</span> = {}
+35:     <span class="ruby-identifier">getopts</span>(<span class="ruby-identifier">wopts</span>)
+36:     <span class="ruby-ivar">@mode</span> = <span class="ruby-identifier">:normal</span> <span class="ruby-comment cmt">#  Parse mode :normal, :cmd, :cr</span>
+37:     <span class="ruby-ivar">@state</span> = {}
+38:     <span class="ruby-ivar">@sc</span> = <span class="ruby-keyword kw">nil</span>
+39:     <span class="ruby-ivar">@sneg_opts</span> = [ <span class="ruby-constant">TTYPE</span>, <span class="ruby-constant">ZMP</span> ]  <span class="ruby-comment cmt"># supported options which imply an initial</span>
+40:                                  <span class="ruby-comment cmt"># sub negotiation of options</span>
+41:     <span class="ruby-ivar">@ttype</span> = []
+42:     <span class="ruby-ivar">@init_tries</span> = <span class="ruby-value">0</span>   <span class="ruby-comment cmt"># Number of tries at negotitating sub options</span>
+43:     <span class="ruby-ivar">@synch</span> = <span class="ruby-keyword kw">false</span>
+44:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -199,11 +194,11 @@ filter
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000061" class="method-detail">
-        <a name="M000061"></a>
+      <div id="method-M000056" class="method-detail">
+        <a name="M000056"></a>
 
         <div class="method-heading">
-          <a href="#M000061" class="method-signature">
+          <a href="#M000056" class="method-signature">
           <span class="method-name">desired?</span><span class="method-args">(opt)</span>
           </a>
         </div>
@@ -218,25 +213,25 @@ Test to see which state we prefer this option to be in
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000061-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000061-source">
+            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000056-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 438</span>
-438:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">desired?</span>(<span class="ruby-identifier">opt</span>)
-439:     <span class="ruby-identifier">st</span> = <span class="ruby-ivar">@wopts</span>[<span class="ruby-identifier">opt</span>]
-440:     <span class="ruby-identifier">st</span> = <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">st</span>.<span class="ruby-identifier">nil?</span>
-441:     <span class="ruby-identifier">st</span>
-442:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 249</span>
+249:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">desired?</span>(<span class="ruby-identifier">opt</span>)
+250:     <span class="ruby-identifier">st</span> = <span class="ruby-ivar">@wopts</span>[<span class="ruby-identifier">opt</span>]
+251:     <span class="ruby-identifier">st</span> = <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">st</span>.<span class="ruby-identifier">nil?</span>
+252:     <span class="ruby-identifier">st</span>
+253:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000062" class="method-detail">
-        <a name="M000062"></a>
+      <div id="method-M000057" class="method-detail">
+        <a name="M000057"></a>
 
         <div class="method-heading">
-          <a href="#M000062" class="method-signature">
+          <a href="#M000057" class="method-signature">
           <span class="method-name">echo</span><span class="method-args">(ch)</span>
           </a>
         </div>
@@ -246,29 +241,29 @@ Test to see which state we prefer this option to be in
 Handle server-side echo
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000062-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000062-source">
+            onclick="toggleCode('M000057-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000057-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 445</span>
-445:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">echo</span>(<span class="ruby-identifier">ch</span>)
-446:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">echo_on</span>
-447:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">hide_on</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">ch</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">!=</span> <span class="ruby-constant">CR</span>
-448:         <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value str">'*'</span>,<span class="ruby-value">0</span>)
-449:       <span class="ruby-keyword kw">else</span>
-450:         <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">ch</span>,<span class="ruby-value">0</span>)
-451:       <span class="ruby-keyword kw">end</span>
-452:     <span class="ruby-keyword kw">end</span>
-453:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 256</span>
+256:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">echo</span>(<span class="ruby-identifier">ch</span>)
+257:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">echo_on</span>
+258:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">hide_on</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">ch</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">!=</span> <span class="ruby-constant">CR</span>
+259:         <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value str">'*'</span>,<span class="ruby-value">0</span>)
+260:       <span class="ruby-keyword kw">else</span>
+261:         <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">ch</span>,<span class="ruby-value">0</span>)
+262:       <span class="ruby-keyword kw">end</span>
+263:     <span class="ruby-keyword kw">end</span>
+264:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000060" class="method-detail">
-        <a name="M000060"></a>
+      <div id="method-M000055" class="method-detail">
+        <a name="M000055"></a>
 
         <div class="method-heading">
-          <a href="#M000060" class="method-signature">
+          <a href="#M000055" class="method-signature">
           <span class="method-name">enabled?</span><span class="method-args">(opt, who)</span>
           </a>
         </div>
@@ -286,32 +281,32 @@ Test to see if option is enabled
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000060-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000060-source">
+            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000055-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 430</span>
-430:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enabled?</span>(<span class="ruby-identifier">opt</span>, <span class="ruby-identifier">who</span>)
-431:     <span class="ruby-identifier">option</span>(<span class="ruby-identifier">opt</span>)
-432:     <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@state</span>[<span class="ruby-identifier">opt</span>].<span class="ruby-identifier">send</span>(<span class="ruby-identifier">who</span>)
-433:     <span class="ruby-identifier">e</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:yes</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">true</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">false</span>
-434:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 241</span>
+241:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enabled?</span>(<span class="ruby-identifier">opt</span>, <span class="ruby-identifier">who</span>)
+242:     <span class="ruby-identifier">option</span>(<span class="ruby-identifier">opt</span>)
+243:     <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@state</span>[<span class="ruby-identifier">opt</span>].<span class="ruby-identifier">send</span>(<span class="ruby-identifier">who</span>)
+244:     <span class="ruby-identifier">e</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:yes</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">true</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">false</span>
+245:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000058" class="method-detail">
-        <a name="M000058"></a>
+      <div id="method-M000053" class="method-detail">
+        <a name="M000053"></a>
 
         <div class="method-heading">
-          <a href="#M000058" class="method-signature">
+          <a href="#M000053" class="method-signature">
           <span class="method-name">filter_in</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-The <a href="TelnetFilter.html#M000058">filter_in</a> method filters input
+The <a href="TelnetFilter.html#M000053">filter_in</a> method filters input
 data
 </p>
 <dl>
@@ -323,172 +318,183 @@ data
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000058-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000058-source">
+            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000053-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 266</span>
-266:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_in</span>(<span class="ruby-identifier">str</span>)
-267:     <span class="ruby-identifier">init_subneg</span>
-268:     <span class="ruby-keyword kw">return</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>
-269:     <span class="ruby-identifier">buf</span> = <span class="ruby-value str">&quot;&quot;</span>
-270: 
-271:     <span class="ruby-ivar">@sc</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">concat</span>(<span class="ruby-identifier">str</span>) <span class="ruby-operator">:</span> <span class="ruby-ivar">@sc</span> = <span class="ruby-constant">StringScanner</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">str</span>)
-272:     <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">b</span> = <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">get_byte</span>
-273: 
-274:       <span class="ruby-comment cmt"># OOB sync data</span>
-275:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">urgent_on</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-constant">DM</span>
-276:         <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) Sync mode on&quot;</span>)
-277:         <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">urgent_on</span> = <span class="ruby-keyword kw">false</span>
-278:         <span class="ruby-ivar">@synch</span> = <span class="ruby-keyword kw">true</span>
-279:         <span class="ruby-keyword kw">break</span>
-280:       <span class="ruby-keyword kw">end</span>
-281: 
-282:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">mode?</span>
-283:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:normal</span>
-284:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>]
-285:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">CR</span>
-286:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@synch</span>
-287:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:cr</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">binary_on</span>
-288:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">IAC</span>
-289:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:cmd</span>)
-290:         <span class="ruby-comment cmt">#  BS should be handled in Terminal specific manner??</span>
-291: <span class="ruby-comment cmt">#        when BS</span>
-292: <span class="ruby-comment cmt">#          next if @synch</span>
-293: <span class="ruby-comment cmt">#          buf.slice!(-1)</span>
-294: <span class="ruby-comment cmt">#          echo(BS.chr)</span>
-295:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">NUL</span>  <span class="ruby-comment cmt"># ignore NULs in stream when in normal mode</span>
-296:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@synch</span>
-297:           <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">binary_on</span>
-298:             <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">b</span>
-299:             <span class="ruby-identifier">echo</span>(<span class="ruby-identifier">b</span>)
-300:           <span class="ruby-keyword kw">else</span>
-301:             <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) unexpected NUL found in stream&quot;</span>)
-302:           <span class="ruby-keyword kw">end</span>
-303:         <span class="ruby-keyword kw">else</span>
-304:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@synch</span>
-305:           <span class="ruby-comment cmt"># Only let 7-bit values through in normal mode</span>
-306:           <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">&amp;</span> <span class="ruby-value">0x80</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">binary_on</span>
-307:             <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">b</span>
-308:             <span class="ruby-identifier">echo</span>(<span class="ruby-identifier">b</span>)
-309:           <span class="ruby-keyword kw">else</span>
-310:             <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) unexpected 8-bit byte found in stream '#{b[0]}'&quot;</span>)
-311:           <span class="ruby-keyword kw">end</span>
-312:         <span class="ruby-keyword kw">end</span>
-313:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:cr</span>
-314:         <span class="ruby-comment cmt"># handle CRLF and CRNUL by swallowing what follows CR and</span>
-315:         <span class="ruby-comment cmt"># insertion of LF</span>
-316:         <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@synch</span>
-317:           <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>]
-318:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">LF</span>, <span class="ruby-constant">NUL</span>
-319:             <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">LF</span>.<span class="ruby-identifier">chr</span>
-320:             <span class="ruby-identifier">echo</span>(<span class="ruby-constant">CR</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">LF</span>.<span class="ruby-identifier">chr</span>)
-321:           <span class="ruby-keyword kw">else</span>  <span class="ruby-comment cmt"># Handle screwed up muds</span>
-322:             <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">CR</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">b</span>
-323:             <span class="ruby-identifier">echo</span>(<span class="ruby-constant">CR</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">b</span>)
-324:           <span class="ruby-keyword kw">end</span>
-325:         <span class="ruby-keyword kw">end</span>
-326:         <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
-327:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:cmd</span>
-328:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>]
-329:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">IAC</span>
-330:           <span class="ruby-comment cmt"># IAC escapes IAC</span>
-331:           <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span>
-332:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
-333:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">AYT</span>
-334:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) AYT sent - Msg returned&quot;</span>)
-335:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value str">&quot;TeensyMUD is here.\n&quot;</span>,<span class="ruby-value">0</span>)
-336:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
-337:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">AO</span>
-338:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) AO sent - Synch returned&quot;</span>)
-339:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sockio</span>.<span class="ruby-identifier">write_flush</span>
-340:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">DM</span>.<span class="ruby-identifier">chr</span>, <span class="ruby-value">0</span>)
-341:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sockio</span>.<span class="ruby-identifier">write_urgent</span>(<span class="ruby-constant">DM</span>.<span class="ruby-identifier">chr</span>)
-342:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
-343:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">IP</span>
-344:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sockio</span>.<span class="ruby-identifier">read_flush</span>
-345:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sockio</span>.<span class="ruby-identifier">write_flush</span>
-346:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) IP sent&quot;</span>)
-347:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
-348:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">GA</span>, <span class="ruby-constant">NOP</span>, <span class="ruby-constant">BRK</span>  <span class="ruby-comment cmt"># not implemented or ignored</span>
-349:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) GA, NOP or BRK sent&quot;</span>)
-350:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
-351:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">DM</span>
-352:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) Synch mode off&quot;</span>)
-353:           <span class="ruby-ivar">@synch</span> = <span class="ruby-keyword kw">false</span>
-354:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
-355:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">EC</span>
-356:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@synch</span>
-357:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) EC sent&quot;</span>)
-358:           <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">-1</span>)
-359:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
-360:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">EL</span>
-361:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@synch</span>
-362:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) EL sent&quot;</span>)
-363:           <span class="ruby-identifier">p</span> = <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
-364:           <span class="ruby-identifier">p</span> <span class="ruby-value">? </span><span class="ruby-identifier">buf</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-identifier">pos</span><span class="ruby-operator">+</span><span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">buf</span> = <span class="ruby-value str">&quot;&quot;</span>
-365:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
-366:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">DO</span>, <span class="ruby-constant">DONT</span>, <span class="ruby-constant">WILL</span>, <span class="ruby-constant">WONT</span>
-367:           <span class="ruby-identifier">opt</span> = <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">getbyte</span>
-368:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opt</span>.<span class="ruby-identifier">nil?</span>
-369:             <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">unscan</span>
-370:             <span class="ruby-keyword kw">break</span>
-371:           <span class="ruby-keyword kw">end</span>
-372:           <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>]
-373:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">WILL</span>
-374:             <span class="ruby-identifier">replies_him</span>(<span class="ruby-identifier">opt</span>[<span class="ruby-value">0</span>],<span class="ruby-keyword kw">true</span>)
-375:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">WONT</span>
-376:             <span class="ruby-identifier">replies_him</span>(<span class="ruby-identifier">opt</span>[<span class="ruby-value">0</span>],<span class="ruby-keyword kw">false</span>)
-377:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">DO</span>
-378:             <span class="ruby-identifier">requests_us</span>(<span class="ruby-identifier">opt</span>[<span class="ruby-value">0</span>],<span class="ruby-keyword kw">true</span>)
-379:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">DONT</span>
-380:             <span class="ruby-identifier">requests_us</span>(<span class="ruby-identifier">opt</span>[<span class="ruby-value">0</span>],<span class="ruby-keyword kw">false</span>)
-381:           <span class="ruby-keyword kw">end</span>
-382:           <span class="ruby-comment cmt"># Update interesting things in ProtocolStack after negotiation</span>
-383:           <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">opt</span>[<span class="ruby-value">0</span>]
-384:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">ECHO</span>
-385:             <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">echo_on</span> = <span class="ruby-identifier">enabled?</span>(<span class="ruby-constant">ECHO</span>, <span class="ruby-identifier">:us</span>)
-386:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">BINARY</span>
-387:             <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">binary_on</span> = <span class="ruby-identifier">enabled?</span>(<span class="ruby-constant">BINARY</span>, <span class="ruby-identifier">:us</span>)
-388:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">ZMP</span>
-389:             <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">zmp_on</span> = <span class="ruby-identifier">enabled?</span>(<span class="ruby-constant">ZMP</span>, <span class="ruby-identifier">:us</span>)
-390:           <span class="ruby-keyword kw">end</span>
-391:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
-392:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">SB</span>
-393:           <span class="ruby-identifier">opt</span> = <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">getbyte</span>
-394:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opt</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">check_until</span>(<span class="ruby-node">/#{IAC.chr}#{SE.chr}/</span>).<span class="ruby-identifier">nil?</span>
-395:             <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">unscan</span>
-396:             <span class="ruby-keyword kw">break</span>
-397:           <span class="ruby-keyword kw">end</span>
-398:           <span class="ruby-identifier">data</span> = <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">scan_until</span>(<span class="ruby-node">/#{IAC.chr}#{SE.chr}/</span>).<span class="ruby-identifier">chop</span>.<span class="ruby-identifier">chop</span>
-399:           <span class="ruby-identifier">parse_subneg</span>(<span class="ruby-identifier">opt</span>[<span class="ruby-value">0</span>],<span class="ruby-identifier">data</span>)
-400:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
-401:         <span class="ruby-keyword kw">else</span>
-402:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) Unknown Telnet command - #{b[0]}&quot;</span>)
-403:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
-404:         <span class="ruby-keyword kw">end</span>
-405:       <span class="ruby-keyword kw">end</span>
-406:     <span class="ruby-keyword kw">end</span>  <span class="ruby-comment cmt"># while b</span>
-407: 
-408:     <span class="ruby-ivar">@sc</span> = <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">eos?</span>
-409:     <span class="ruby-identifier">buf</span>
-410:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 66</span>
+ 66:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_in</span>(<span class="ruby-identifier">str</span>)
+ 67:     <span class="ruby-identifier">init_subneg</span>
+ 68:     <span class="ruby-keyword kw">return</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>
+ 69:     <span class="ruby-identifier">buf</span> = <span class="ruby-value str">&quot;&quot;</span>
+ 70: 
+ 71:     <span class="ruby-ivar">@sc</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">concat</span>(<span class="ruby-identifier">str</span>) <span class="ruby-operator">:</span> <span class="ruby-ivar">@sc</span> = <span class="ruby-constant">StringScanner</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">str</span>)
+ 72:     <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">b</span> = <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">get_byte</span>
+ 73: 
+ 74:       <span class="ruby-comment cmt"># OOB sync data</span>
+ 75:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">urgent_on</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-constant">DM</span>
+ 76:         <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) Sync mode on&quot;</span>)
+ 77:         <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">urgent_on</span> = <span class="ruby-keyword kw">false</span>
+ 78:         <span class="ruby-ivar">@synch</span> = <span class="ruby-keyword kw">true</span>
+ 79:         <span class="ruby-keyword kw">break</span>
+ 80:       <span class="ruby-keyword kw">end</span>
+ 81: 
+ 82:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">mode?</span>
+ 83:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:normal</span>
+ 84:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>]
+ 85:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">CR</span>
+ 86:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@synch</span>
+ 87:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:cr</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">binary_on</span>
+ 88:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">IAC</span>
+ 89:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:cmd</span>)
+ 90:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">NUL</span>  <span class="ruby-comment cmt"># ignore NULs in stream when in normal mode</span>
+ 91:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@synch</span>
+ 92:           <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">binary_on</span>
+ 93:             <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">b</span>
+ 94:             <span class="ruby-identifier">echo</span>(<span class="ruby-identifier">b</span>)
+ 95:           <span class="ruby-keyword kw">else</span>
+ 96:             <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) unexpected NUL found in stream&quot;</span>)
+ 97:           <span class="ruby-keyword kw">end</span>
+ 98:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">BS</span>, <span class="ruby-constant">DEL</span>
+ 99:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@synch</span>
+100:           <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">b</span>
+101:           <span class="ruby-identifier">echo</span>(<span class="ruby-constant">BS</span>.<span class="ruby-identifier">chr</span>)
+102:         <span class="ruby-keyword kw">else</span>
+103:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@synch</span>
+104:           <span class="ruby-comment cmt"># Only let 7-bit values through in normal mode</span>
+105:           <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">&amp;</span> <span class="ruby-value">0x80</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">binary_on</span>
+106:             <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">b</span>
+107:             <span class="ruby-identifier">echo</span>(<span class="ruby-identifier">b</span>)
+108:           <span class="ruby-keyword kw">else</span>
+109:             <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) unexpected 8-bit byte found in stream '#{b[0]}'&quot;</span>)
+110:           <span class="ruby-keyword kw">end</span>
+111:         <span class="ruby-keyword kw">end</span>
+112:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:cr</span>
+113:         <span class="ruby-comment cmt"># handle CRLF and CRNUL by swallowing what follows CR and</span>
+114:         <span class="ruby-comment cmt"># insertion of LF</span>
+115:         <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@synch</span>
+116:           <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>]
+117:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">LF</span>, <span class="ruby-constant">NUL</span>
+118:             <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">LF</span>.<span class="ruby-identifier">chr</span>
+119:             <span class="ruby-identifier">echo</span>(<span class="ruby-constant">CR</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">LF</span>.<span class="ruby-identifier">chr</span>)
+120:           <span class="ruby-keyword kw">else</span>  <span class="ruby-comment cmt"># Handle screwed up muds</span>
+121:             <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">CR</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">b</span>
+122:             <span class="ruby-identifier">echo</span>(<span class="ruby-constant">CR</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">b</span>)
+123:           <span class="ruby-keyword kw">end</span>
+124:         <span class="ruby-keyword kw">end</span>
+125:         <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
+126:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:cmd</span>
+127:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>]
+128:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">IAC</span>
+129:           <span class="ruby-comment cmt"># IAC escapes IAC</span>
+130:           <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span>
+131:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
+132:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">AYT</span>
+133:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) AYT sent - Msg returned&quot;</span>)
+134:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value str">&quot;TeensyMUD is here.\n&quot;</span>,<span class="ruby-value">0</span>)
+135:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
+136:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">AO</span>
+137:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) AO sent - Synch returned&quot;</span>)
+138:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sockio</span>.<span class="ruby-identifier">write_flush</span>
+139:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sock</span>.<span class="ruby-identifier">send</span>(<span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">DM</span>.<span class="ruby-identifier">chr</span>, <span class="ruby-value">0</span>)
+140:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sockio</span>.<span class="ruby-identifier">write_urgent</span>(<span class="ruby-constant">DM</span>.<span class="ruby-identifier">chr</span>)
+141:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
+142:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">IP</span>
+143:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sockio</span>.<span class="ruby-identifier">read_flush</span>
+144:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sockio</span>.<span class="ruby-identifier">write_flush</span>
+145:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) IP sent&quot;</span>)
+146:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
+147:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">GA</span>, <span class="ruby-constant">NOP</span>, <span class="ruby-constant">BRK</span>  <span class="ruby-comment cmt"># not implemented or ignored</span>
+148:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) GA, NOP or BRK sent&quot;</span>)
+149:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
+150:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">DM</span>
+151:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) Synch mode off&quot;</span>)
+152:           <span class="ruby-ivar">@synch</span> = <span class="ruby-keyword kw">false</span>
+153:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
+154:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">EC</span>
+155:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@synch</span>
+156:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) EC sent&quot;</span>)
+157:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>
+158:             <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">-1</span>)
+159:           <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">inbuffer</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+160:             <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">inbuffer</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">-1</span>)
+161:           <span class="ruby-keyword kw">end</span>
+162:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
+163:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">EL</span>
+164:           <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@synch</span>
+165:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) EL sent&quot;</span>)
+166:           <span class="ruby-identifier">p</span> = <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+167:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">p</span>
+168:             <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-identifier">p</span><span class="ruby-operator">+</span><span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>)
+169:           <span class="ruby-keyword kw">else</span>
+170:             <span class="ruby-identifier">buf</span> = <span class="ruby-value str">&quot;&quot;</span>
+171:             <span class="ruby-identifier">p</span> = <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">inbuffer</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+172:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">p</span>
+173:               <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">inbuffer</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-identifier">p</span><span class="ruby-operator">+</span><span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>)
+174:             <span class="ruby-keyword kw">end</span>
+175:           <span class="ruby-keyword kw">end</span>
+176:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
+177:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">DO</span>, <span class="ruby-constant">DONT</span>, <span class="ruby-constant">WILL</span>, <span class="ruby-constant">WONT</span>
+178:           <span class="ruby-identifier">opt</span> = <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">getbyte</span>
+179:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opt</span>.<span class="ruby-identifier">nil?</span>
+180:             <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">unscan</span>
+181:             <span class="ruby-keyword kw">break</span>
+182:           <span class="ruby-keyword kw">end</span>
+183:           <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>]
+184:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">WILL</span>
+185:             <span class="ruby-identifier">replies_him</span>(<span class="ruby-identifier">opt</span>[<span class="ruby-value">0</span>],<span class="ruby-keyword kw">true</span>)
+186:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">WONT</span>
+187:             <span class="ruby-identifier">replies_him</span>(<span class="ruby-identifier">opt</span>[<span class="ruby-value">0</span>],<span class="ruby-keyword kw">false</span>)
+188:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">DO</span>
+189:             <span class="ruby-identifier">requests_us</span>(<span class="ruby-identifier">opt</span>[<span class="ruby-value">0</span>],<span class="ruby-keyword kw">true</span>)
+190:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">DONT</span>
+191:             <span class="ruby-identifier">requests_us</span>(<span class="ruby-identifier">opt</span>[<span class="ruby-value">0</span>],<span class="ruby-keyword kw">false</span>)
+192:           <span class="ruby-keyword kw">end</span>
+193:           <span class="ruby-comment cmt"># Update interesting things in ProtocolStack after negotiation</span>
+194:           <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">opt</span>[<span class="ruby-value">0</span>]
+195:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">ECHO</span>
+196:             <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">echo_on</span> = <span class="ruby-identifier">enabled?</span>(<span class="ruby-constant">ECHO</span>, <span class="ruby-identifier">:us</span>)
+197:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">BINARY</span>
+198:             <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">binary_on</span> = <span class="ruby-identifier">enabled?</span>(<span class="ruby-constant">BINARY</span>, <span class="ruby-identifier">:us</span>)
+199:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">ZMP</span>
+200:             <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">zmp_on</span> = <span class="ruby-identifier">enabled?</span>(<span class="ruby-constant">ZMP</span>, <span class="ruby-identifier">:us</span>)
+201:           <span class="ruby-keyword kw">end</span>
+202:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
+203:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">SB</span>
+204:           <span class="ruby-identifier">opt</span> = <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">getbyte</span>
+205:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opt</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">check_until</span>(<span class="ruby-node">/#{IAC.chr}#{SE.chr}/</span>).<span class="ruby-identifier">nil?</span>
+206:             <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">unscan</span>
+207:             <span class="ruby-keyword kw">break</span>
+208:           <span class="ruby-keyword kw">end</span>
+209:           <span class="ruby-identifier">data</span> = <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">scan_until</span>(<span class="ruby-node">/#{IAC.chr}#{SE.chr}/</span>).<span class="ruby-identifier">chop</span>.<span class="ruby-identifier">chop</span>
+210:           <span class="ruby-identifier">parse_subneg</span>(<span class="ruby-identifier">opt</span>[<span class="ruby-value">0</span>],<span class="ruby-identifier">data</span>)
+211:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
+212:         <span class="ruby-keyword kw">else</span>
+213:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) Unknown Telnet command - #{b[0]}&quot;</span>)
+214:           <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">:normal</span>)
+215:         <span class="ruby-keyword kw">end</span>
+216:       <span class="ruby-keyword kw">end</span>
+217:     <span class="ruby-keyword kw">end</span>  <span class="ruby-comment cmt"># while b</span>
+218: 
+219:     <span class="ruby-ivar">@sc</span> = <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@sc</span>.<span class="ruby-identifier">eos?</span>
+220:     <span class="ruby-identifier">buf</span>
+221:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000059" class="method-detail">
-        <a name="M000059"></a>
+      <div id="method-M000054" class="method-detail">
+        <a name="M000054"></a>
 
         <div class="method-heading">
-          <a href="#M000059" class="method-signature">
+          <a href="#M000054" class="method-signature">
           <span class="method-name">filter_out</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-The <a href="TelnetFilter.html#M000059">filter_out</a> method filters
+The <a href="TelnetFilter.html#M000054">filter_out</a> method filters
 output data
 </p>
 <dl>
@@ -500,29 +506,29 @@ output data
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000059-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000059-source">
+            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000054-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 415</span>
-415:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_out</span>(<span class="ruby-identifier">str</span>)
-416:     <span class="ruby-identifier">buf</span> = <span class="ruby-value str">&quot;&quot;</span>
-417:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">buf</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>
-418: 
-419:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">binary_on</span>
-420:       <span class="ruby-identifier">buf</span> = <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\n/</span>, <span class="ruby-value str">&quot;\r\n&quot;</span>)
-421:     <span class="ruby-keyword kw">end</span>
-422:     <span class="ruby-identifier">buf</span>
-423:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 226</span>
+226:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_out</span>(<span class="ruby-identifier">str</span>)
+227:     <span class="ruby-identifier">buf</span> = <span class="ruby-value str">&quot;&quot;</span>
+228:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">buf</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>
+229: 
+230:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">binary_on</span>
+231:       <span class="ruby-identifier">buf</span> = <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\n/</span>, <span class="ruby-value str">&quot;\r\n&quot;</span>)
+232:     <span class="ruby-keyword kw">end</span>
+233:     <span class="ruby-identifier">buf</span>
+234:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000057" class="method-detail">
-        <a name="M000057"></a>
+      <div id="method-M000052" class="method-detail">
+        <a name="M000052"></a>
 
         <div class="method-heading">
-          <a href="#M000057" class="method-signature">
+          <a href="#M000052" class="method-signature">
           <span class="method-name">init</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -537,33 +543,33 @@ Negotiate starting wanted options
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000057-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000057-source">
+            onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000052-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 249</span>
-249:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>(<span class="ruby-identifier">args</span>)
-250:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">:client</span>  <span class="ruby-comment cmt"># let server offer and ask for client</span>
-251:     <span class="ruby-comment cmt"># severl sorts of options here - server offer, ask client or both</span>
-252:     <span class="ruby-ivar">@wopts</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>,<span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
-253:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">key</span>
-254:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">ECHO</span>, <span class="ruby-constant">SGA</span>, <span class="ruby-constant">BINARY</span>, <span class="ruby-constant">ZMP</span>
-255:         <span class="ruby-identifier">offer_us</span>(<span class="ruby-identifier">key</span>,<span class="ruby-identifier">val</span>)
-256:       <span class="ruby-keyword kw">else</span>
-257:         <span class="ruby-identifier">ask_him</span>(<span class="ruby-identifier">key</span>,<span class="ruby-identifier">val</span>)
-258:       <span class="ruby-keyword kw">end</span>
-259:     <span class="ruby-keyword kw">end</span>
-260:     <span class="ruby-keyword kw">true</span>
-261:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 49</span>
+49:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>(<span class="ruby-identifier">args</span>)
+50:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">:client</span>  <span class="ruby-comment cmt"># let server offer and ask for client</span>
+51:     <span class="ruby-comment cmt"># severl sorts of options here - server offer, ask client or both</span>
+52:     <span class="ruby-ivar">@wopts</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>,<span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+53:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">key</span>
+54:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">ECHO</span>, <span class="ruby-constant">SGA</span>, <span class="ruby-constant">BINARY</span>, <span class="ruby-constant">ZMP</span>
+55:         <span class="ruby-identifier">offer_us</span>(<span class="ruby-identifier">key</span>,<span class="ruby-identifier">val</span>)
+56:       <span class="ruby-keyword kw">else</span>
+57:         <span class="ruby-identifier">ask_him</span>(<span class="ruby-identifier">key</span>,<span class="ruby-identifier">val</span>)
+58:       <span class="ruby-keyword kw">end</span>
+59:     <span class="ruby-keyword kw">end</span>
+60:     <span class="ruby-keyword kw">true</span>
+61:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000063" class="method-detail">
-        <a name="M000063"></a>
+      <div id="method-M000058" class="method-detail">
+        <a name="M000058"></a>
 
         <div class="method-heading">
-          <a href="#M000063" class="method-signature">
+          <a href="#M000058" class="method-signature">
           <span class="method-name">init_subneg</span><span class="method-args">()</span>
           </a>
         </div>
@@ -574,80 +580,80 @@ Negotiate starting wanted options that imply subnegotation So far only
 terminal type
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000063-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000063-source">
+            onclick="toggleCode('M000058-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000058-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 457</span>
-457:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init_subneg</span>
-458:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@init_tries</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">15</span>
-459: 
-460:     <span class="ruby-ivar">@init_tries</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
-461: 
-462:     <span class="ruby-ivar">@wopts</span>.<span class="ruby-identifier">each_key</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">opt</span><span class="ruby-operator">|</span>
-463:       <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@sneg_opts</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">opt</span>)
-464:       <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) Subnegotiation attempt for option #{opt}.&quot;</span>)
-465:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">opt</span>
-466:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">TTYPE</span>
-467:         <span class="ruby-identifier">who</span> = <span class="ruby-identifier">:him</span>
-468:       <span class="ruby-keyword kw">else</span>
-469:         <span class="ruby-identifier">who</span> = <span class="ruby-identifier">:us</span>
-470:       <span class="ruby-keyword kw">end</span>
-471:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">desired?</span>(<span class="ruby-identifier">opt</span>) <span class="ruby-operator">==</span> <span class="ruby-identifier">enabled?</span>(<span class="ruby-identifier">opt</span>, <span class="ruby-identifier">who</span>)
-472:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">opt</span>
-473:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">TTYPE</span>
-474:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">SB</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">TTYPE</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">SE</span>.<span class="ruby-identifier">chr</span>)
-475:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">ZMP</span>
-476:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) ZMP successfully negotiated.&quot;</span> )
-477:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-node">&quot;#{IAC.chr}#{SB.chr}#{ZMP.chr}&quot;</span> <span class="ruby-operator">+</span>
-478:             <span class="ruby-node">&quot;zmp.check#{NUL.chr}color.#{NUL.chr}&quot;</span> <span class="ruby-operator">+</span>
-479:             <span class="ruby-node">&quot;#{IAC.chr}#{SE.chr}&quot;</span>)
-480:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-node">&quot;#{IAC.chr}#{SB.chr}#{ZMP.chr}&quot;</span> <span class="ruby-operator">+</span>
-481:             <span class="ruby-node">&quot;zmp.ident#{NUL.chr}TeensyMUD#{NUL.chr}#{Version}#{NUL.chr}A sexy mud server#{NUL.chr}&quot;</span> <span class="ruby-operator">+</span>
-482:             <span class="ruby-node">&quot;#{IAC.chr}#{SE.chr}&quot;</span>)
-483:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-node">&quot;#{IAC.chr}#{SB.chr}#{ZMP.chr}&quot;</span> <span class="ruby-operator">+</span>
-484:             <span class="ruby-node">&quot;zmp.ping#{NUL.chr}&quot;</span> <span class="ruby-operator">+</span>
-485:             <span class="ruby-node">&quot;#{IAC.chr}#{SE.chr}&quot;</span>)
-486:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-node">&quot;#{IAC.chr}#{SB.chr}#{ZMP.chr}&quot;</span> <span class="ruby-operator">+</span>
-487:             <span class="ruby-node">&quot;zmp.input#{NUL.chr}\n     I see you support...\n     ZMP protocol\n#{NUL.chr}&quot;</span> <span class="ruby-operator">+</span>
-488:             <span class="ruby-node">&quot;#{IAC.chr}#{SE.chr}&quot;</span>)
-489:         <span class="ruby-keyword kw">end</span>
-490:         <span class="ruby-ivar">@sneg_opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">opt</span>)
-491:       <span class="ruby-keyword kw">end</span>
-492:     <span class="ruby-keyword kw">end</span>
-493: 
-494:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@init_tries</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">15</span>
-495:       <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.&quot;</span>)
-496:       <span class="ruby-ivar">@sneg_opts</span> = []
-497:       <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">set_initdone</span>
-498:     <span class="ruby-keyword kw">end</span>
-499:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 268</span>
+268:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init_subneg</span>
+269:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@init_tries</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">15</span>
+270: 
+271:     <span class="ruby-ivar">@init_tries</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+272: 
+273:     <span class="ruby-ivar">@wopts</span>.<span class="ruby-identifier">each_key</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">opt</span><span class="ruby-operator">|</span>
+274:       <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@sneg_opts</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">opt</span>)
+275:       <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) Subnegotiation attempt for option #{opt}.&quot;</span>)
+276:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">opt</span>
+277:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">TTYPE</span>
+278:         <span class="ruby-identifier">who</span> = <span class="ruby-identifier">:him</span>
+279:       <span class="ruby-keyword kw">else</span>
+280:         <span class="ruby-identifier">who</span> = <span class="ruby-identifier">:us</span>
+281:       <span class="ruby-keyword kw">end</span>
+282:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">desired?</span>(<span class="ruby-identifier">opt</span>) <span class="ruby-operator">==</span> <span class="ruby-identifier">enabled?</span>(<span class="ruby-identifier">opt</span>, <span class="ruby-identifier">who</span>)
+283:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">opt</span>
+284:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">TTYPE</span>
+285:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">SB</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">TTYPE</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">SE</span>.<span class="ruby-identifier">chr</span>)
+286:         <span class="ruby-keyword kw">when</span> <span class="ruby-constant">ZMP</span>
+287:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) ZMP successfully negotiated.&quot;</span> )
+288:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-node">&quot;#{IAC.chr}#{SB.chr}#{ZMP.chr}&quot;</span> <span class="ruby-operator">+</span>
+289:             <span class="ruby-node">&quot;zmp.check#{NUL.chr}color.#{NUL.chr}&quot;</span> <span class="ruby-operator">+</span>
+290:             <span class="ruby-node">&quot;#{IAC.chr}#{SE.chr}&quot;</span>)
+291:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-node">&quot;#{IAC.chr}#{SB.chr}#{ZMP.chr}&quot;</span> <span class="ruby-operator">+</span>
+292:             <span class="ruby-node">&quot;zmp.ident#{NUL.chr}TeensyMUD#{NUL.chr}#{Version}#{NUL.chr}A sexy mud server#{NUL.chr}&quot;</span> <span class="ruby-operator">+</span>
+293:             <span class="ruby-node">&quot;#{IAC.chr}#{SE.chr}&quot;</span>)
+294:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-node">&quot;#{IAC.chr}#{SB.chr}#{ZMP.chr}&quot;</span> <span class="ruby-operator">+</span>
+295:             <span class="ruby-node">&quot;zmp.ping#{NUL.chr}&quot;</span> <span class="ruby-operator">+</span>
+296:             <span class="ruby-node">&quot;#{IAC.chr}#{SE.chr}&quot;</span>)
+297:           <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-node">&quot;#{IAC.chr}#{SB.chr}#{ZMP.chr}&quot;</span> <span class="ruby-operator">+</span>
+298:             <span class="ruby-node">&quot;zmp.input#{NUL.chr}\n     I see you support...\n     ZMP protocol\n#{NUL.chr}&quot;</span> <span class="ruby-operator">+</span>
+299:             <span class="ruby-node">&quot;#{IAC.chr}#{SE.chr}&quot;</span>)
+300:         <span class="ruby-keyword kw">end</span>
+301:         <span class="ruby-ivar">@sneg_opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">opt</span>)
+302:       <span class="ruby-keyword kw">end</span>
+303:     <span class="ruby-keyword kw">end</span>
+304: 
+305:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@init_tries</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">15</span>
+306:       <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;(#{@pstack.conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.&quot;</span>)
+307:       <span class="ruby-ivar">@sneg_opts</span> = []
+308:       <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">set_initdone</span>
+309:     <span class="ruby-keyword kw">end</span>
+310:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000064" class="method-detail">
-        <a name="M000064"></a>
+      <div id="method-M000059" class="method-detail">
+        <a name="M000059"></a>
 
         <div class="method-heading">
-          <a href="#M000064" class="method-signature">
+          <a href="#M000059" class="method-signature">
           <span class="method-name">send_naws</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000064-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000064-source">
+            onclick="toggleCode('M000059-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000059-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/filter.rb, line 501</span>
-501:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">send_naws</span>
-502:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">enabled?</span>(<span class="ruby-constant">NAWS</span>, <span class="ruby-identifier">:us</span>)
-503:     <span class="ruby-identifier">ts</span> = <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">query</span>(<span class="ruby-identifier">:termsize</span>)
-504:     <span class="ruby-identifier">data</span> = [<span class="ruby-identifier">ts</span>[<span class="ruby-value">1</span>][<span class="ruby-value">0</span>]].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">'n'</span>) <span class="ruby-operator">+</span> [<span class="ruby-identifier">ts</span>[<span class="ruby-value">1</span>][<span class="ruby-value">1</span>]].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">'n'</span>)
-505:     <span class="ruby-identifier">data</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-node">/#{IAC}/</span>, <span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span>) <span class="ruby-comment cmt"># 255 needs to be doubled</span>
-506:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">SB</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">NAWS</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">data</span> <span class="ruby-operator">+</span> <span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">SE</span>.<span class="ruby-identifier">chr</span>)
-507:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 312</span>
+312:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">send_naws</span>
+313:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">enabled?</span>(<span class="ruby-constant">NAWS</span>, <span class="ruby-identifier">:us</span>)
+314:     <span class="ruby-identifier">ts</span> = <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">query</span>(<span class="ruby-identifier">:termsize</span>)
+315:     <span class="ruby-identifier">data</span> = [<span class="ruby-identifier">ts</span>[<span class="ruby-value">1</span>][<span class="ruby-value">0</span>]].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">'n'</span>) <span class="ruby-operator">+</span> [<span class="ruby-identifier">ts</span>[<span class="ruby-value">1</span>][<span class="ruby-value">1</span>]].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">'n'</span>)
+316:     <span class="ruby-identifier">data</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-node">/#{IAC}/</span>, <span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span>) <span class="ruby-comment cmt"># 255 needs to be doubled</span>
+317:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">conn</span>.<span class="ruby-identifier">sendmsg</span>(<span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">SB</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">NAWS</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">data</span> <span class="ruby-operator">+</span> <span class="ruby-constant">IAC</span>.<span class="ruby-identifier">chr</span> <span class="ruby-operator">+</span> <span class="ruby-constant">SE</span>.<span class="ruby-identifier">chr</span>)
+318:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

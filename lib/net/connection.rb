@@ -15,7 +15,7 @@ require 'net/session'
 require 'net/sockio'
 require 'net/lineio'
 require 'net/packetio'
-require 'filter'
+require 'protocol/protocolstack'
 
 # The connection class maintains a socket connection with a
 # reactor and handles all events dispatched by the reactor.

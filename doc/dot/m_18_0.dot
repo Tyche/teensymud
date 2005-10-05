@@ -10,14 +10,14 @@ digraph TopLevel {
         color = black
     ]
 
-    subgraph cluster_Cmd {
+    subgraph cluster_ASCIICodes {
         fillcolor = palegreen1
-        URL = "classes/Cmd.html"
+        URL = "classes/ASCIICodes.html"
         fontname = Arial
         color = blue
-        label = "Cmd"
+        label = "ASCIICodes"
         style = filled
-        Cmd [
+        ASCIICodes [
             shape = plaintext,
             height = 0.01,
             width = 0.75,
