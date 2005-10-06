@@ -659,7 +659,7 @@ private
       # Now we just simply pass this whole load to the Player.parse
       # WARN: This means there is a possibility of out-of-order processing
       #       of @inbuffer, though extremely unlikely.
-      @pstack.conn.message(args[0])
+      @pstack.conn.publish(args[0])
     end
   end
 

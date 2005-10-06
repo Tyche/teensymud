@@ -5,11 +5,6 @@
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'net/reactor'
-require 'flexmock'
-class FlexMock
-  undef_method(:send)
-  rescue NameError
-end
 end
 
 class TestReactor < Test::Unit::TestCase

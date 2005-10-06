@@ -9,7 +9,7 @@ PKG_FILES = FileList[
   'farts.grammar', 'Rakefile', 
   'db', 'db/README', 'db/testworld.yaml',
   'farts', 'farts/**/*',
-  'test', 'test/test*.rb', 'test/README',
+  'test', 'test/**/*', 
   'logs', 'logs/README',
   'lib/**/*',
   'vendor/**/*',
@@ -44,8 +44,8 @@ end
 
 # run tests
 Rake::TestTask.new do |t|
-  t.libs << "vendor"  # default "lib"
-  #t.pattern = 'test/test*.rb' # default 'test/test*.rb'
+  t.libs << "vendor" << "test"  # default "lib"
+  #t.pattern = 'test/test*.rb'  # default 'test/test*.rb'
   t.test_files = FileList['test/test*.rb']
   t.verbose = true
 end

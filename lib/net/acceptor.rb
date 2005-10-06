@@ -61,7 +61,7 @@ class Acceptor < Session
       c = Connection.new(@server, sckt, @opts)
       if c.init
         @server.log.info "(#{c.object_id}) Connection accepted."
-        message(c)
+        publish(c)
       end
     else
       raise "Error in accepting connection."

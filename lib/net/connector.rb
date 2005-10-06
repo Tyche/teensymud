@@ -45,7 +45,7 @@ class Connector < Session
     c = Connection.new(@server, @sock, @opts)
     if c.init
       @server.log.info "(#{c.object_id}) Connection made."
-      message(c)
+      publish(c)
       true
     else
       false

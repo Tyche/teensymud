@@ -6,21 +6,18 @@ unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'net/acceptor'
 require 'flexmock'
-class FlexMock
-  undef_method(:send)
-  rescue NameError
-end
 end
 
 class TestAcceptor < Test::Unit::TestCase
   def setup
     @log = FlexMock.new
-    @log.mock_handle(:info) { |msg| msg }
-    @log.mock_handle(:debug) { |msg| msg }
-    @log.mock_handle(:warn) { |msg| msg }
-    @log.mock_handle(:error) { |msg| msg }
+    @log.mock_handle(:info) { |msg| puts msg }
+    @log.mock_handle(:debug) { |msg| puts msg }
+    @log.mock_handle(:warn) { |msg| puts msg }
+    @log.mock_handle(:error) { |msg| puts msg }
     @serv = FlexMock.new
     @serv.mock_handle(:log) { @log }
+    @serv.mock_handle(:register) { true }
     @acceptor = Acceptor.new(@serv,4000,[:server, :filter, :sockio])
   end
 
@@ -33,8 +30,7 @@ class TestAcceptor < Test::Unit::TestCase
   end
 
   def test_init
-    assert_respond_to(@acceptor, :init)
-#    assert_equal(true, @acceptor.init)
+    assert_equal(true, @acceptor.init)
   end
 end
 

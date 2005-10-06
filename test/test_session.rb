@@ -74,10 +74,6 @@ class TestSession < Test::Unit::TestCase
     assert_equal(true, @sess.is_writable?)
   end
 
-  def test_message
-    assert_respond_to(@sess, :message)
-  end
-
   def test_sock
     assert_respond_to(@sess, :sock)
   end

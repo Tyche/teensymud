@@ -14,11 +14,11 @@ module Cmd
 
   # displays session information
   def cmd_status(args)
-    message(:terminal)
-    message(:termsize)
-    message(:color)
-    message(:echo)
-    message(:zmp)
+    publish(:terminal)
+    publish(:termsize)
+    publish(:color)
+    publish(:echo)
+    publish(:zmp)
     sendto("Terminal: #{@terminal}")
     sendto("Terminal size: #{@termsize[0]} X #{@termsize[1]}")
     sendto("Colors toggled #{@color ? "[COLOR=magenta]ON[/COLOR]" : "OFF" }")

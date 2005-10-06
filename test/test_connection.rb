@@ -5,19 +5,12 @@
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'net/connection'
-require 'flexmock'
-class FlexMock
-  undef_method(:send)
-  rescue NameError
-end
+require 'mocksocket'
 end
 
 class TestConnection < Test::Unit::TestCase
   def setup
-    @data = "hello world\r\n"
-    @sock = FlexMock.new
-    @sock.mock_handle(:recv) { |bufsize,flag| @data.slice!(0...bufsize) }
-    @sock.mock_handle(:send) { |msg,flag| msg.size }
+    @sock = MockSocket.new("hello world\r\nfoobar")
     @conn = Connection.new("foo",@sock,[:sockio])
   end
 

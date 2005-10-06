@@ -81,7 +81,7 @@
       <map id="map" name="map">
   <area shape="RECT" coords="13,17,96,65"      href="TernaryTrie.html" alt="TernaryTrie">
 </map>
-<img src="../dot/f_6.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_7.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -100,11 +100,11 @@ any object. This is a very lightweight and useful object
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000138">find</a>&nbsp;&nbsp;
-      <a href="#M000137">find_exact</a>&nbsp;&nbsp;
-      <a href="#M000136">insert</a>&nbsp;&nbsp;
-      <a href="#M000135">new</a>&nbsp;&nbsp;
-      <a href="#M000139">to_hash</a>&nbsp;&nbsp;
+      <a href="#M000135">find</a>&nbsp;&nbsp;
+      <a href="#M000134">find_exact</a>&nbsp;&nbsp;
+      <a href="#M000133">insert</a>&nbsp;&nbsp;
+      <a href="#M000132">new</a>&nbsp;&nbsp;
+      <a href="#M000136">to_hash</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -132,11 +132,11 @@ any object. This is a very lightweight and useful object
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000135" class="method-detail">
-        <a name="M000135"></a>
+      <div id="method-M000132" class="method-detail">
+        <a name="M000132"></a>
 
         <div class="method-heading">
-          <a href="#M000135" class="method-signature">
+          <a href="#M000132" class="method-signature">
           <span class="method-name">new</span><span class="method-args">()</span>
           </a>
         </div>
@@ -146,8 +146,8 @@ any object. This is a very lightweight and useful object
 constructor simply ensures we have a root
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000135-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000135-source">
+            onclick="toggleCode('M000132-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000132-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/ternarytrie.rb, line 22</span>
 22:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>
@@ -160,11 +160,11 @@ constructor simply ensures we have a root
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000138" class="method-detail">
-        <a name="M000138"></a>
+      <div id="method-M000135" class="method-detail">
+        <a name="M000135"></a>
 
         <div class="method-heading">
-          <a href="#M000138" class="method-signature">
+          <a href="#M000135" class="method-signature">
           <span class="method-name">find</span><span class="method-args">(key)</span>
           </a>
         </div>
@@ -182,8 +182,8 @@ Returns array of values that are the shortest possible match of the key.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000138-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000138-source">
+            onclick="toggleCode('M000135-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000135-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/ternarytrie.rb, line 46</span>
 46:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find</span>(<span class="ruby-identifier">key</span>)
@@ -198,11 +198,11 @@ Returns array of values that are the shortest possible match of the key.
         </div>
       </div>
 
-      <div id="method-M000137" class="method-detail">
-        <a name="M000137"></a>
+      <div id="method-M000134" class="method-detail">
+        <a name="M000134"></a>
 
         <div class="method-heading">
-          <a href="#M000137" class="method-signature">
+          <a href="#M000134" class="method-signature">
           <span class="method-name">find_exact</span><span class="method-args">(key)</span>
           </a>
         </div>
@@ -220,8 +220,8 @@ Returns an exact match only of the key or nil if not found
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000137-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000137-source">
+            onclick="toggleCode('M000134-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000134-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/ternarytrie.rb, line 36</span>
 36:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_exact</span>(<span class="ruby-identifier">key</span>)
@@ -234,11 +234,11 @@ Returns an exact match only of the key or nil if not found
         </div>
       </div>
 
-      <div id="method-M000136" class="method-detail">
-        <a name="M000136"></a>
+      <div id="method-M000133" class="method-detail">
+        <a name="M000133"></a>
 
         <div class="method-heading">
-          <a href="#M000136" class="method-signature">
+          <a href="#M000133" class="method-signature">
           <span class="method-name">insert</span><span class="method-args">(key, val)</span>
           </a>
         </div>
@@ -256,8 +256,8 @@ Inserts a key/val pair - no duplicate keys (will replace key if found).
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000136-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000136-source">
+            onclick="toggleCode('M000133-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000133-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/ternarytrie.rb, line 29</span>
 29:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">insert</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">val</span>)
@@ -268,11 +268,11 @@ Inserts a key/val pair - no duplicate keys (will replace key if found).
         </div>
       </div>
 
-      <div id="method-M000139" class="method-detail">
-        <a name="M000139"></a>
+      <div id="method-M000136" class="method-detail">
+        <a name="M000136"></a>
 
         <div class="method-heading">
-          <a href="#M000139" class="method-signature">
+          <a href="#M000136" class="method-signature">
           <span class="method-name">to_hash</span><span class="method-args">()</span>
           </a>
         </div>
@@ -287,8 +287,8 @@ Routine which converts the trie into a hash table
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000139-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000139-source">
+            onclick="toggleCode('M000136-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000136-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/ternarytrie.rb, line 56</span>
 56:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_hash</span>

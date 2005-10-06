@@ -3,20 +3,20 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/net/connector.rb"
+    label = "lib/net/connection.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    Connector [
+    Connection [
         fontcolor = black,
-        URL = "classes/Connector.html",
+        URL = "classes/Connection.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Connector"
+        label = "Connection"
     ]
 
     Session [
@@ -24,7 +24,7 @@ digraph TopLevel {
         label = "Session"
     ]
 
-    Session -> Connector [
+    Session -> Connection [
 
     ]
 

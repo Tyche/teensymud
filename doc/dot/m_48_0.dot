@@ -10,14 +10,14 @@ digraph TopLevel {
         color = black
     ]
 
-    subgraph cluster_ObjCmd {
+    subgraph cluster_Cmd {
         fillcolor = palegreen1
-        URL = "classes/ObjCmd.html"
+        URL = "classes/Cmd.html"
         fontname = Arial
         color = blue
-        label = "ObjCmd"
+        label = "Cmd"
         style = filled
-        ObjCmd [
+        Cmd [
             shape = plaintext,
             height = 0.01,
             width = 0.75,

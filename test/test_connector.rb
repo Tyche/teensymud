@@ -6,21 +6,18 @@ unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'net/connector'
 require 'flexmock'
-class FlexMock
-  undef_method(:send)
-  rescue NameError
-end
 end
 
 class TestConnector < Test::Unit::TestCase
   def setup
     @log = FlexMock.new
-    @log.mock_handle(:info) { |msg| msg }
-    @log.mock_handle(:debug) { |msg| msg }
-    @log.mock_handle(:warn) { |msg| msg }
-    @log.mock_handle(:error) { |msg| msg }
+    @log.mock_handle(:info) { |msg| puts msg }
+    @log.mock_handle(:debug) { |msg| puts msg }
+    @log.mock_handle(:warn) { |msg| puts msg }
+    @log.mock_handle(:error) { |msg| puts msg }
     @serv = FlexMock.new
     @serv.mock_handle(:log) { @log }
+    @serv.mock_handle(:register) { true }
     @connector = Connector.new(@serv,80,[:client, :filter, :sockio],'google.com')
   end
 
@@ -29,9 +26,7 @@ class TestConnector < Test::Unit::TestCase
   end
 
   def test_init
-    assert_respond_to(@connector, :init)
-    #assert_equal(true, @connector.init)
+    assert_equal(true, @connector.init)
   end
 end
 
-# Number of errors detected: 1

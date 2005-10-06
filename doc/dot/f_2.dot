@@ -82,13 +82,13 @@ digraph TopLevel {
         label = "Incoming"
     ]
 
-    Observable [
-        URL = "classes/Observable.html",
+    Publisher [
+        URL = "classes/Publisher.html",
         shape = box,
-        label = "Observable"
+        label = "Publisher"
     ]
 
-    Observable -> Player [
+    Publisher -> Player [
 
     ]
 
@@ -109,7 +109,7 @@ digraph TopLevel {
 
     ]
 
-    Observable -> Incoming [
+    Publisher -> Incoming [
 
     ]
 

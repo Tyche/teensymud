@@ -41,13 +41,13 @@ digraph TopLevel {
 
     ]
 
-    Observable [
-        URL = "classes/Observable.html",
+    Publisher [
+        URL = "classes/Publisher.html",
         shape = box,
-        label = "Observable"
+        label = "Publisher"
     ]
 
-    Observable -> Client [
+    Publisher -> Client [
 
     ]
 

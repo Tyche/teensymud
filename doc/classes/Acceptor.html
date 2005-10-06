@@ -84,7 +84,7 @@
   <area shape="RECT" coords="21,113,96,161"      href="Acceptor.html" alt="Acceptor">
   <area shape="RECT" coords="23,17,95,65"      href="Session.html" alt="Session">
 </map>
-<img src="../dot/f_7.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_8.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -229,7 +229,7 @@ it&#8217;s init routine.
 61:       <span class="ruby-identifier">c</span> = <span class="ruby-constant">Connection</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@server</span>, <span class="ruby-identifier">sckt</span>, <span class="ruby-ivar">@opts</span>)
 62:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">init</span>
 63:         <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{c.object_id}) Connection accepted.&quot;</span>
-64:         <span class="ruby-identifier">message</span>(<span class="ruby-identifier">c</span>)
+64:         <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">c</span>)
 65:       <span class="ruby-keyword kw">end</span>
 66:     <span class="ruby-keyword kw">else</span>
 67:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Error in accepting connection.&quot;</span>

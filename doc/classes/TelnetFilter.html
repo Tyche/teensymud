@@ -86,7 +86,7 @@
   <area shape="RECT" coords="108,17,185,65"      href="TelnetCodes.html" alt="TelnetCodes">
   <area shape="RECT" coords="209,17,281,65"      href="Filter.html" alt="Filter">
 </map>
-<img src="../dot/f_24.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_25.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -108,15 +108,15 @@ RFC 857/858/1073/1091
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000056">desired?</a>&nbsp;&nbsp;
-      <a href="#M000057">echo</a>&nbsp;&nbsp;
-      <a href="#M000055">enabled?</a>&nbsp;&nbsp;
-      <a href="#M000053">filter_in</a>&nbsp;&nbsp;
-      <a href="#M000054">filter_out</a>&nbsp;&nbsp;
-      <a href="#M000052">init</a>&nbsp;&nbsp;
-      <a href="#M000058">init_subneg</a>&nbsp;&nbsp;
-      <a href="#M000051">new</a>&nbsp;&nbsp;
-      <a href="#M000059">send_naws</a>&nbsp;&nbsp;
+      <a href="#M000055">desired?</a>&nbsp;&nbsp;
+      <a href="#M000056">echo</a>&nbsp;&nbsp;
+      <a href="#M000054">enabled?</a>&nbsp;&nbsp;
+      <a href="#M000052">filter_in</a>&nbsp;&nbsp;
+      <a href="#M000053">filter_out</a>&nbsp;&nbsp;
+      <a href="#M000051">init</a>&nbsp;&nbsp;
+      <a href="#M000057">init_subneg</a>&nbsp;&nbsp;
+      <a href="#M000050">new</a>&nbsp;&nbsp;
+      <a href="#M000058">send_naws</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -146,11 +146,11 @@ RFC 857/858/1073/1091
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000051" class="method-detail">
-        <a name="M000051"></a>
+      <div id="method-M000050" class="method-detail">
+        <a name="M000050"></a>
 
         <div class="method-heading">
-          <a href="#M000051" class="method-signature">
+          <a href="#M000050" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(pstack, wopts=[])</span>
           </a>
         </div>
@@ -169,8 +169,8 @@ filter
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000051-source">
+            onclick="toggleCode('M000050-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000050-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 31</span>
 31:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">pstack</span>, <span class="ruby-identifier">wopts</span>=[])
@@ -194,11 +194,11 @@ filter
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000056" class="method-detail">
-        <a name="M000056"></a>
+      <div id="method-M000055" class="method-detail">
+        <a name="M000055"></a>
 
         <div class="method-heading">
-          <a href="#M000056" class="method-signature">
+          <a href="#M000055" class="method-signature">
           <span class="method-name">desired?</span><span class="method-args">(opt)</span>
           </a>
         </div>
@@ -213,8 +213,8 @@ Test to see which state we prefer this option to be in
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000056-source">
+            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000055-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 249</span>
 249:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">desired?</span>(<span class="ruby-identifier">opt</span>)
@@ -227,11 +227,11 @@ Test to see which state we prefer this option to be in
         </div>
       </div>
 
-      <div id="method-M000057" class="method-detail">
-        <a name="M000057"></a>
+      <div id="method-M000056" class="method-detail">
+        <a name="M000056"></a>
 
         <div class="method-heading">
-          <a href="#M000057" class="method-signature">
+          <a href="#M000056" class="method-signature">
           <span class="method-name">echo</span><span class="method-args">(ch)</span>
           </a>
         </div>
@@ -241,8 +241,8 @@ Test to see which state we prefer this option to be in
 Handle server-side echo
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000057-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000057-source">
+            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000056-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 256</span>
 256:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">echo</span>(<span class="ruby-identifier">ch</span>)
@@ -259,11 +259,11 @@ Handle server-side echo
         </div>
       </div>
 
-      <div id="method-M000055" class="method-detail">
-        <a name="M000055"></a>
+      <div id="method-M000054" class="method-detail">
+        <a name="M000054"></a>
 
         <div class="method-heading">
-          <a href="#M000055" class="method-signature">
+          <a href="#M000054" class="method-signature">
           <span class="method-name">enabled?</span><span class="method-args">(opt, who)</span>
           </a>
         </div>
@@ -281,8 +281,8 @@ Test to see if option is enabled
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000055-source">
+            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000054-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 241</span>
 241:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enabled?</span>(<span class="ruby-identifier">opt</span>, <span class="ruby-identifier">who</span>)
@@ -295,18 +295,18 @@ Test to see if option is enabled
         </div>
       </div>
 
-      <div id="method-M000053" class="method-detail">
-        <a name="M000053"></a>
+      <div id="method-M000052" class="method-detail">
+        <a name="M000052"></a>
 
         <div class="method-heading">
-          <a href="#M000053" class="method-signature">
+          <a href="#M000052" class="method-signature">
           <span class="method-name">filter_in</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-The <a href="TelnetFilter.html#M000053">filter_in</a> method filters input
+The <a href="TelnetFilter.html#M000052">filter_in</a> method filters input
 data
 </p>
 <dl>
@@ -318,8 +318,8 @@ data
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000053-source">
+            onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000052-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 66</span>
  66:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_in</span>(<span class="ruby-identifier">str</span>)
@@ -483,18 +483,18 @@ data
         </div>
       </div>
 
-      <div id="method-M000054" class="method-detail">
-        <a name="M000054"></a>
+      <div id="method-M000053" class="method-detail">
+        <a name="M000053"></a>
 
         <div class="method-heading">
-          <a href="#M000054" class="method-signature">
+          <a href="#M000053" class="method-signature">
           <span class="method-name">filter_out</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-The <a href="TelnetFilter.html#M000054">filter_out</a> method filters
+The <a href="TelnetFilter.html#M000053">filter_out</a> method filters
 output data
 </p>
 <dl>
@@ -506,8 +506,8 @@ output data
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000054-source">
+            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000053-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 226</span>
 226:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_out</span>(<span class="ruby-identifier">str</span>)
@@ -524,11 +524,11 @@ output data
         </div>
       </div>
 
-      <div id="method-M000052" class="method-detail">
-        <a name="M000052"></a>
+      <div id="method-M000051" class="method-detail">
+        <a name="M000051"></a>
 
         <div class="method-heading">
-          <a href="#M000052" class="method-signature">
+          <a href="#M000051" class="method-signature">
           <span class="method-name">init</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -543,8 +543,8 @@ Negotiate starting wanted options
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000052-source">
+            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000051-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 49</span>
 49:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>(<span class="ruby-identifier">args</span>)
@@ -565,11 +565,11 @@ Negotiate starting wanted options
         </div>
       </div>
 
-      <div id="method-M000058" class="method-detail">
-        <a name="M000058"></a>
+      <div id="method-M000057" class="method-detail">
+        <a name="M000057"></a>
 
         <div class="method-heading">
-          <a href="#M000058" class="method-signature">
+          <a href="#M000057" class="method-signature">
           <span class="method-name">init_subneg</span><span class="method-args">()</span>
           </a>
         </div>
@@ -580,8 +580,8 @@ Negotiate starting wanted options that imply subnegotation So far only
 terminal type
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000058-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000058-source">
+            onclick="toggleCode('M000057-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000057-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 268</span>
 268:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init_subneg</span>
@@ -632,19 +632,19 @@ terminal type
         </div>
       </div>
 
-      <div id="method-M000059" class="method-detail">
-        <a name="M000059"></a>
+      <div id="method-M000058" class="method-detail">
+        <a name="M000058"></a>
 
         <div class="method-heading">
-          <a href="#M000059" class="method-signature">
+          <a href="#M000058" class="method-signature">
           <span class="method-name">send_naws</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000059-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000059-source">
+            onclick="toggleCode('M000058-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000058-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/telnetfilter.rb, line 312</span>
 312:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">send_naws</span>

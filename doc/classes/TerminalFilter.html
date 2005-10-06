@@ -86,7 +86,7 @@
   <area shape="RECT" coords="108,17,193,65"      href="VT100Codes.html" alt="VT100Codes">
   <area shape="RECT" coords="217,17,289,65"      href="Filter.html" alt="Filter">
 </map>
-<img src="../dot/f_25.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_26.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -104,13 +104,13 @@ subset of ANSI/VT100 protocol.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000126">echo</a>&nbsp;&nbsp;
-      <a href="#M000124">filter_in</a>&nbsp;&nbsp;
-      <a href="#M000125">filter_out</a>&nbsp;&nbsp;
-      <a href="#M000123">init</a>&nbsp;&nbsp;
-      <a href="#M000127">mode?</a>&nbsp;&nbsp;
-      <a href="#M000122">new</a>&nbsp;&nbsp;
-      <a href="#M000128">set_mode</a>&nbsp;&nbsp;
+      <a href="#M000123">echo</a>&nbsp;&nbsp;
+      <a href="#M000121">filter_in</a>&nbsp;&nbsp;
+      <a href="#M000122">filter_out</a>&nbsp;&nbsp;
+      <a href="#M000120">init</a>&nbsp;&nbsp;
+      <a href="#M000124">mode?</a>&nbsp;&nbsp;
+      <a href="#M000119">new</a>&nbsp;&nbsp;
+      <a href="#M000125">set_mode</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -140,11 +140,11 @@ subset of ANSI/VT100 protocol.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000122" class="method-detail">
-        <a name="M000122"></a>
+      <div id="method-M000119" class="method-detail">
+        <a name="M000119"></a>
 
         <div class="method-heading">
-          <a href="#M000122" class="method-signature">
+          <a href="#M000119" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(pstack)</span>
           </a>
         </div>
@@ -160,8 +160,8 @@ filter
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000122-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000122-source">
+            onclick="toggleCode('M000119-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000119-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/protocol/terminalfilter.rb, line 27</span>
 27:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">pstack</span>)
@@ -176,11 +176,11 @@ filter
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000126" class="method-detail">
-        <a name="M000126"></a>
+      <div id="method-M000123" class="method-detail">
+        <a name="M000123"></a>
 
         <div class="method-heading">
-          <a href="#M000126" class="method-signature">
+          <a href="#M000123" class="method-signature">
           <span class="method-name">echo</span><span class="method-args">(ch)</span>
           </a>
         </div>
@@ -190,8 +190,8 @@ filter
 Handle server-side echo
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000126-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000126-source">
+            onclick="toggleCode('M000123-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000123-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/terminalfilter.rb, line 217</span>
 217:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">echo</span>(<span class="ruby-identifier">ch</span>)
@@ -208,18 +208,18 @@ Handle server-side echo
         </div>
       </div>
 
-      <div id="method-M000124" class="method-detail">
-        <a name="M000124"></a>
+      <div id="method-M000121" class="method-detail">
+        <a name="M000121"></a>
 
         <div class="method-heading">
-          <a href="#M000124" class="method-signature">
+          <a href="#M000121" class="method-signature">
           <span class="method-name">filter_in</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-The <a href="TerminalFilter.html#M000124">filter_in</a> method filters out
+The <a href="TerminalFilter.html#M000121">filter_in</a> method filters out
 VTxx terminal data and inserts format strings into the input stream.
 </p>
 <dl>
@@ -231,8 +231,8 @@ VTxx terminal data and inserts format strings into the input stream.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000124-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000124-source">
+            onclick="toggleCode('M000121-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000121-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/terminalfilter.rb, line 43</span>
  43:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_in</span>(<span class="ruby-identifier">str</span>)
@@ -405,18 +405,18 @@ VTxx terminal data and inserts format strings into the input stream.
         </div>
       </div>
 
-      <div id="method-M000125" class="method-detail">
-        <a name="M000125"></a>
+      <div id="method-M000122" class="method-detail">
+        <a name="M000122"></a>
 
         <div class="method-heading">
-          <a href="#M000125" class="method-signature">
+          <a href="#M000122" class="method-signature">
           <span class="method-name">filter_out</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-The <a href="TerminalFilter.html#M000125">filter_out</a> method filters
+The <a href="TerminalFilter.html#M000122">filter_out</a> method filters
 output data
 </p>
 <dl>
@@ -428,8 +428,8 @@ output data
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000125-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000125-source">
+            onclick="toggleCode('M000122-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000122-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/terminalfilter.rb, line 212</span>
 212:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_out</span>(<span class="ruby-identifier">str</span>)
@@ -440,11 +440,11 @@ output data
         </div>
       </div>
 
-      <div id="method-M000123" class="method-detail">
-        <a name="M000123"></a>
+      <div id="method-M000120" class="method-detail">
+        <a name="M000120"></a>
 
         <div class="method-heading">
-          <a href="#M000123" class="method-signature">
+          <a href="#M000120" class="method-signature">
           <span class="method-name">init</span><span class="method-args">(args=nil)</span>
           </a>
         </div>
@@ -459,8 +459,8 @@ Run any post-contruction initialization
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000123-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000123-source">
+            onclick="toggleCode('M000120-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000120-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/protocol/terminalfilter.rb, line 35</span>
 35:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>(<span class="ruby-identifier">args</span>=<span class="ruby-keyword kw">nil</span>)
@@ -471,11 +471,11 @@ Run any post-contruction initialization
         </div>
       </div>
 
-      <div id="method-M000127" class="method-detail">
-        <a name="M000127"></a>
+      <div id="method-M000124" class="method-detail">
+        <a name="M000124"></a>
 
         <div class="method-heading">
-          <a href="#M000127" class="method-signature">
+          <a href="#M000124" class="method-signature">
           <span class="method-name">mode?</span><span class="method-args">()</span>
           </a>
         </div>
@@ -490,8 +490,8 @@ Get current parse mode
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000127-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000127-source">
+            onclick="toggleCode('M000124-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000124-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/terminalfilter.rb, line 229</span>
 229:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mode?</span>
@@ -502,11 +502,11 @@ Get current parse mode
         </div>
       </div>
 
-      <div id="method-M000128" class="method-detail">
-        <a name="M000128"></a>
+      <div id="method-M000125" class="method-detail">
+        <a name="M000125"></a>
 
         <div class="method-heading">
-          <a href="#M000128" class="method-signature">
+          <a href="#M000125" class="method-signature">
           <span class="method-name">set_mode</span><span class="method-args">(m)</span>
           </a>
         </div>
@@ -521,8 +521,8 @@ set current parse mode
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000128-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000128-source">
+            onclick="toggleCode('M000125-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000125-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/terminalfilter.rb, line 235</span>
 235:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_mode</span>(<span class="ruby-identifier">m</span>)

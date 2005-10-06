@@ -38,30 +38,25 @@ EOH
 
 #
 class Client
-  include Observable
+  include Publisher
 
   def initialize(opts)
     @opts = opts
   end
 
-  def message(msg)
-    changed
-    notify_observers(msg)
-  end
-
   def update(msg)
     case msg
     when Connection
-      delete_observers
-      msg.add_observer(self)
-      self.add_observer(msg)
+      unsubscribe_all
+      msg.subscribe(self)
+      self.subscribe(msg)
       if @opts.win32
-        message([:terminal, "vt100"])
+        publish([:terminal, "vt100"])
       else
-        message([:terminal, "xterm"])
+        publish([:terminal, "xterm"])
       end
     when :initdone
-      message([:termsize, [80,43]])
+      publish([:termsize, [80,43]])
     end
   end
 
@@ -90,7 +85,7 @@ class CursesClient < Client
     when Connection, :initdone
       super(msg)
     when :logged_out, :disconnected
-      delete_observers
+      unsubscribe_all
       $shutdown = true
       Curses.addstr "Disconnected."
       exit
@@ -113,11 +108,11 @@ class CursesClient < Client
       c = Curses.getch
       case c
       when 32..127
-        message(c.chr)
+        publish(c.chr)
       when Curses::KEY_ENTER
-        message("\r\n")
+        publish("\r\n")
       when 10
-        message("\n")
+        publish("\n")
       when 4294967295 # Error Timeout. This is -1 in Bignum format
       when Curses::KEY_F10
         conmsg "Quitting..."
@@ -153,7 +148,7 @@ class ConsoleClient < Client
     when Connection, :initdone
       super(msg)
     when :logged_out, :disconnected
-      delete_observers
+      unsubscribe_all
       $shutdown = true
       puts "Disconnected."
       exit
@@ -175,29 +170,29 @@ class ConsoleClient < Client
       case c
       when nil
       when 32..127
-        message(c.chr)
+        publish(c.chr)
       when 13
-        message("\n") if @opts.win32
+        publish("\n") if @opts.win32
       when 10
-        message("\n") if !@opts.win32
+        publish("\n") if !@opts.win32
       when 315
-        message("\e[11~")
+        publish("\e[11~")
       when 316
-        message("\e[12~")
+        publish("\e[12~")
       when 317
-        message("\e[13~")
+        publish("\e[13~")
       when 318
-        message("\e[14~")
+        publish("\e[14~")
       when 319
-        message("\e[15~")
+        publish("\e[15~")
       when 320
-        message("\e[17~")
+        publish("\e[17~")
       when 321
-        message("\e[18~")
+        publish("\e[18~")
       when 322
-        message("\e[19~")
+        publish("\e[19~")
       when 323
-        message("\e[20~")
+        publish("\e[20~")
       when 324 # Windows F10
         conmsg "Quitting..."
         shutdown = true
@@ -208,31 +203,31 @@ class ConsoleClient < Client
 #        end
 
       when 338  # INS
-        message("\e[2~")
+        publish("\e[2~")
       when 339  # DEL
-        message("\010")
+        publish("\010")
       when 327  # HOME
-        message("\e[7~")
+        publish("\e[7~")
       when 335  # END
-        message("\e[8~")
+        publish("\e[8~")
       when 329  # PAGEUP
-        message("\e[5~")
+        publish("\e[5~")
       when 337  # PAGEDOWN
-        message("\e[6~")
+        publish("\e[6~")
       when 328  # UP
-        message("\e[A")
+        publish("\e[A")
       when 336  # DOWN
-        message("\e[B")
+        publish("\e[B")
       when 333  # RIGHT
-        message("\e[C")
+        publish("\e[C")
       when 331  # LEFT
-        message("\e[D")
+        publish("\e[D")
 
 
       when 256..512
         conmsg "Unknown key hit code - #{c.inspect}"
       else
-        message(c.chr)
+        publish(c.chr)
 #        conmsg "Unknown key hit code - #{c.inspect}"
       end
     end # until

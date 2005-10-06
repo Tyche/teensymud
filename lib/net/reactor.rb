@@ -71,14 +71,14 @@ class Reactor
       @log = Logger.new('logs/net_client_log', 'daily')
       @log.datetime_format = "%Y-%m-%d %H:%M:%S "
       @connector = Connector.new(self, @port, @opts, @address)
-      @connector.add_observer(engine)
+      @connector.subscribe(engine)
       return false if !@connector.init
     else
       @log = Logger.new('logs/net_log', 'daily')
       @log.datetime_format = "%Y-%m-%d %H:%M:%S "
       @acceptor = Acceptor.new(self, @port, @opts)
       return false if !@acceptor.init
-      @acceptor.add_observer(engine)
+      @acceptor.subscribe(engine)
     end
     true
   rescue
@@ -92,8 +92,8 @@ class Reactor
   # the user list.  It then closes its own listening port.
   def stop
     @registry.each {|s| s.closing = true}
-    @acceptor.delete_observers if @acceptor
-    @connector.delete_observers if @connector
+    @acceptor.unsubscribe_all if @acceptor
+    @connector.unsubscribe_all if @connector
     @log.info "Reactor#shutdown: Reactor shutting down"
     @log.close
   end

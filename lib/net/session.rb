@@ -11,13 +11,13 @@
 # See LICENSE file for additional information.
 #
 
-require 'observer'
+require 'publisher'
 
 # The session class is a base class contains the minimum amount of
 # attributes to reasonably maintain a socket session with a client.
 #
 class Session
-  include Observable
+  include Publisher
 
   attr_reader :sock
   attr_accessor :accepting, :connected, :closing, :write_blocked
@@ -67,14 +67,6 @@ class Session
   # {+return+] true if so, false if not
   def is_writable?
     @write_blocked
-  end
-
-  # Sends a notification message to all the our Observers.
-  # Symbols, Arrays and Strings are understood
-  # [+msg+] The message to send.
-  def message(msg)
-    changed
-    notify_observers(msg)
   end
 
 end

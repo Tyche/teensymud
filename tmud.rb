@@ -10,7 +10,6 @@
 # Released under the terms of the TeensyMUD Public License
 # See LICENSE file for additional information.
 #
-require 'observer'
 require 'yaml'
 require 'thread'
 require 'logger'
@@ -19,6 +18,7 @@ require 'pp'
 $:.unshift "lib"
 $:.unshift "vendor"
 
+require 'publisher'
 require 'net/reactor'
 require 'command'
 require 'database'
@@ -277,7 +277,7 @@ end
 # Who's their daddy?
 #
 class Player < Obj
-  include Observable
+  include Publisher
 
   # The Session object this player is connected on or nil if not connected.
   attr_accessor :session, :color
@@ -305,15 +305,7 @@ class Player < Obj
   # [+s+]      The message string
   # [+return+] Undefined.
   def sendto(s)
-    message(s+"\n") if @session
-  end
-
-  # Sends a notification message to all the our Observers.
-  # Symbols, Arrays and Strings are understood
-  # [+msg+] The message to send.
-  def message(msg)
-    changed
-    notify_observers(msg)
+    publish(s+"\n") if @session
   end
 
   # Receives messages from a Connection being observed and handles them
@@ -343,13 +335,13 @@ class Player < Obj
     case msg
     when :logged_out
       @session = nil
-      delete_observers
+      unsubscribe_all
       $engine.world.db.players_connected(@oid).each do |p|
         $engine.world.add_event(@oid,p.oid,:show,"#{@name} has quit.")
       end
     when :disconnected
       @session = nil
-      delete_observers
+      unsubscribe_all
       $engine.world.db.players_connected(@oid).each do |p|
         $engine.world.add_event(@oid,p.oid,:show,"#{@name} has disconnected.")
       end
@@ -385,8 +377,8 @@ class Player < Obj
 
   # Disconnects this player
   def disconnect
-    message(:logged_out)
-    delete_observers
+    publish(:logged_out)
+    unsubscribe_all
     @session = nil
   end
 
@@ -582,7 +574,7 @@ end
 # The Incoming class handles connection login and passes them to
 # player.
 class Incoming
-  include Observable
+  include Publisher
 
   # Create an incoming connection.  This is a temporary object that handles
   # login for player and gets them connected.
@@ -628,41 +620,41 @@ class Incoming
   def update(msg)
     case msg
     when :logged_out, :disconnected
-      delete_observers
+      unsubscribe_all
     when :initdone
       @initdone = true
-      message(BANNER)
-      message("\nlogin> ")
+      publish(BANNER)
+      publish("\nlogin> ")
     when String
       if @initdone
         case @state
         when :name
           @login_name = msg
           @player = $engine.world.db.find_player_by_name(@login_name)
-          message("\npassword> ")
-          message([:hide, true])
+          publish("\npassword> ")
+          publish([:hide, true])
           @state = :password
         when :password
           @login_passwd = msg
-          message([:hide, false])
+          publish([:hide, false])
           if @player
             if @player.check_passwd(@login_passwd)  # good login
               @player.session = @conn
               login
             else  # bad login
               @checked -= 1
-              message("Sorry wrong password.\n")
+              publish("Sorry wrong password.\n")
               if @checked < 1
-                message("Bye!\n")
-                message(:logged_out)
-                delete_observers
+                publish("Bye!\n")
+                publish(:logged_out)
+                unsubscribe_all
               else
                 @state = :name
-                message("\nlogin> ")
+                publish("\nlogin> ")
               end
             end
           else  # new player
-            message("\nCreate new user?\n'Y'|'y' to create, Enter to retry login> ")
+            publish("\nCreate new user?\n'Y'|'y' to create, Enter to retry login> ")
             @state = :new
           end
         when :new
@@ -672,7 +664,7 @@ class Incoming
             login
           else
             @state = :name
-            message("\nlogin> ")
+            publish("\nlogin> ")
           end
         end
       end
@@ -681,42 +673,34 @@ class Incoming
     end
   end
 
-  # Sends a notification message to all the our Observers.
-  # Symbols, Arrays and Strings are understood
-  # [+msg+] The message to send.
-  def message(msg)
-    changed
-    notify_observers(msg)
-  end
-
 private
   # Called on successful login
   def login
-    message([:color, @player.color])
+    publish([:color, @player.color])
 
     # Check if this player already logged in
-    if @player.count_observers > 0
-      @player.message(:reconnecting)
-      @player.delete_observers
+    if @player.subscriber_count > 0
+      @player.publish(:reconnecting)
+      @player.unsubscribe_all
       @player.sendto("Welcome reconnecting #{@login_name}@#{@conn.sock.peeraddr[2]}!")
     end
 
     # deregister all observers here and on connection
-    delete_observers
-    @conn.delete_observers
+    unsubscribe_all
+    @conn.unsubscribe_all
 
     # reregister all observers to @player
-    @conn.add_observer(@player)
-    @player.add_observer(@conn)
+    @conn.subscribe(@player)
+    @player.subscribe(@conn)
 
     @player.sendto("Welcome #{@login_name}@#{@conn.sock.peeraddr[2]}!")
     $engine.world.db.players_connected(@player.oid).each {|p|
       $engine.world.add_event(@oid,p.oid,:show,"#{@player.name} has connected.")
     }
-    @player.message(:echo)
-    @player.message(:zmp)
-    @player.message(:terminal)
-    @player.message(:termsize)
+    @player.publish(:echo)
+    @player.publish(:zmp)
+    @player.publish(:terminal)
+    @player.publish(:termsize)
     @player.parse('look')
   end
 
@@ -762,8 +746,8 @@ class Engine
   def update(newconn)
     inc = Incoming.new(newconn)
     # Observe each other
-    newconn.add_observer(inc)
-    inc.add_observer(newconn)
+    newconn.subscribe(inc)
+    inc.subscribe(newconn)
   end
 end
 

@@ -3,30 +3,20 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/net/session.rb"
+    label = "lib/net/reactor.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    Session [
+    Reactor [
         fontcolor = black,
-        URL = "classes/Session.html",
+        URL = "classes/Reactor.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Session"
-    ]
-
-    Observable [
-        URL = "classes/Observable.html",
-        shape = box,
-        label = "Observable"
-    ]
-
-    Observable -> Session [
-
+        label = "Reactor"
     ]
 
 }

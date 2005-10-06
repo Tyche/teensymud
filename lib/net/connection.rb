@@ -77,27 +77,27 @@ class Connection < Session
     return if buf.nil?
     buf = @pstack.filter_call(:filter_in,buf)
     if @opts.include?(:packetio) || @opts.include?(:client)
-      message(buf)
+      publish(buf)
     else
       @inbuffer << buf
       if @initdone  # Just let buffer fill until we indicate we're done
                     # negotiating.  Set by calling initdone from TelnetFilter
         while p = @inbuffer.index("\n")
           ln = @inbuffer.slice!(0..p).chop
-          message(ln)
+          publish(ln)
         end
       end
     end
   rescue EOFError, Errno::ECONNRESET, Errno::ECONNABORTED
     @closing = true
-    message(:logged_out)
-    delete_observers
+    publish(:logged_out)
+    unsubscribe_all
     @server.log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
     @server.log.error $!
   rescue Exception
     @closing = true
-    message(:disconnected)
-    delete_observers
+    publish(:disconnected)
+    unsubscribe_all
     @server.log.error "(#{self.object_id}) Connection#handle_input"
     @server.log.error $!
   end
@@ -115,13 +115,13 @@ class Connection < Session
     end
   rescue EOFError, Errno::ECONNABORTED, Errno::ECONNRESET
     @closing = true
-    message(:logged_out)
-    delete_observers
+    publish(:logged_out)
+    unsubscribe_all
     @server.log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
   rescue Exception
     @closing = true
-    message(:disconnected)
-    delete_observers
+    publish(:disconnected)
+    unsubscribe_all
     @server.log.error "(#{self.object_id}) Connection#handle_output"
     @server.log.error $!
   end
@@ -129,8 +129,8 @@ class Connection < Session
   # handle_close is called to when an close event occurs for this session.
   def handle_close
     @connected = false
-    message(:logged_out)
-    delete_observers
+    publish(:logged_out)
+    unsubscribe_all
     @server.log.info "(#{self.object_id}) Connection '#{@addr}' closing"
     @server.unregister(self)
 #    @sock.shutdown   # odd errors thrown with this
@@ -156,7 +156,7 @@ class Connection < Session
   # The event :initdone wakens observer to begin user activity
   def set_initdone
     @initdone = true
-    message(:initdone)
+    publish(:initdone)
   end
 
 
@@ -205,7 +205,7 @@ class Connection < Session
     when :logged_out
       @closing = true
     when :reconnecting
-      delete_observers
+      unsubscribe_all
       @server.log.info "(#{self.object_id}) Connection '#{@addr}' closing for reconnection"
       @server.unregister(self)
   #    @sock.shutdown   # odd errors thrown with this
@@ -213,7 +213,7 @@ class Connection < Session
     when Array    # Arrays are assumed to be
       @pstack.set(msg[0],msg[1])
     when Symbol
-      message(@pstack.query(msg))
+      publish(@pstack.query(msg))
     when String
       sendmsg(msg)
     else

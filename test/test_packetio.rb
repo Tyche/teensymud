@@ -5,19 +5,13 @@
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'net/packetio'
-require 'flexmock'
-class FlexMock
-  undef_method(:send)
-  rescue NameError
-end
+require 'mocksocket'
 end
 
 class TestPacketIO < Test::Unit::TestCase
   def setup
     @data = ["hello world\000".size].pack("N") + "hello world\000foobar"
-    sock = FlexMock.new
-    sock.mock_handle(:recv) { |bufsize,flag| @data.slice!(0...bufsize) }
-    sock.mock_handle(:send) { |msg,flag| msg.size }
+    sock = MockSocket.new(@data)
     @sock = PacketIO.new(sock)
   end
 

@@ -5,20 +5,12 @@
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'net/lineio'
-require 'flexmock'
-class FlexMock
-  undef_method(:send)
-  rescue NameError
-end
+require 'mocksocket'
 end
 
 class TestLineIO < Test::Unit::TestCase
   def setup
-    @data = "hello world\r\nfoobar"
-    sock = FlexMock.new
-    sock.mock_handle(:recv) { |bufsize,flag| @data.slice!(0...bufsize) }
-    sock.mock_handle(:send) { |msg,flag| msg.size }
-    @sock = LineIO.new(sock, 5)
+    @sock = LineIO.new(MockSocket.new("hello world\r\nfoobar"), 5)
   end
 
   def test_read

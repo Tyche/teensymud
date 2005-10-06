@@ -5,26 +5,18 @@
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'net/sockio'
-require 'flexmock'
-class FlexMock
-  undef_method(:send)
-  rescue NameError
-end
+require 'mocksocket'
 end
 
 class TestSockIO < Test::Unit::TestCase
   def setup
-    @data = "hello world\r\n"
-    sock = FlexMock.new
-    sock.mock_handle(:recv) { |bufsize,flag| @data.slice!(0...bufsize) }
-    sock.mock_handle(:send) { |msg,flag| msg.size }
-    @sock = SockIO.new(sock, 5)
+    @sock = SockIO.new(MockSocket.new("hello world\r\nfoobar"), 5)
   end
 
   def test_read
     assert_equal("hello", @sock.read)
     assert_equal(" worl", @sock.read)
-    assert_equal("d\r\n", @sock.read)
+    assert_equal("d\r\nfo", @sock.read)
   end
 
   def test_read_flush
@@ -34,7 +26,7 @@ class TestSockIO < Test::Unit::TestCase
   def test_read_urgent
     assert_equal("hello", @sock.read_urgent)
     assert_equal(" worl", @sock.read_urgent)
-    assert_equal("d\r\n", @sock.read_urgent)
+    assert_equal("d\r\nfo", @sock.read_urgent)
   end
 
   def test_write
