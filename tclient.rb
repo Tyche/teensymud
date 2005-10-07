@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby -w
 #
 # file::    tclient.rb
 # author::  Jon A. Lambert

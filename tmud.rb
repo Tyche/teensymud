@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby -w
 #
 # file::    tmud.rb
 # author::  Jon A. Lambert

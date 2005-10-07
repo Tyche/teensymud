@@ -212,7 +212,7 @@ module BBCode
           ## TODO: QUOTEs
           ## TODO: LISTs
 
-          result << sprintf("%s\n", line)
+          result << sprintf("%s", line)
       end
 
       return result
