@@ -16,7 +16,7 @@ module Cmd
   def cmd_object(args)
     case args
     when /(.*)/
-      $engine.world.db.put(Obj.new($1,@location))
+      $engine.world.db.put(GameObject.new($1,@location))
       sendto("Ok.")
     else
       sendto("What!!?")

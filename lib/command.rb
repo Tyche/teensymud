@@ -11,11 +11,6 @@
 # See LICENSE file for additional information.
 #
 
-if $0 == __FILE__
-  Dir.chdir("..")
-  $:.unshift "lib"
-end
-
 require 'yaml'
 require 'ternarytrie'
 
@@ -46,28 +41,6 @@ class Command
     puts $!
     puts $@
   end
-
-end
-
-
-if $0 == __FILE__
-  require 'pp'
-  class Player
-  end
-
-  cmdtable = Command.load
-  puts "--dump---------------------------"
-  pp cmdtable.to_hash.values
-  puts "--pp cmdtable--------------------"
-  pp cmdtable
-  puts "--execute commands---------------"
-  p = Player.new
-  c = cmdtable.find_exact("help")
-  p.send(c.cmd)
-  c = cmdtable.find_exact("look")
-  p.send(c.cmd)
-  c = cmdtable.find("l")
-  p.send(c[0].cmd)
 
 end
 

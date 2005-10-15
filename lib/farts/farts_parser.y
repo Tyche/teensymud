@@ -372,7 +372,7 @@ module Farts
       vars = {}
       vars['actor'] = $engine.world.db.get(ev.from)
       vars['this'] = $engine.world.db.get(ev.to)
-      if ev.msg.kind_of?(Obj)
+      if ev.msg.kind_of?(GameObject)
         vars['args'] = $engine.world.db.get(ev.msg)
       else
         vars['args'] = ev.msg

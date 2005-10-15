@@ -175,7 +175,7 @@ class TelnetFilter < Filter
           end
           set_mode(:normal)
         when DO, DONT, WILL, WONT
-          opt = @sc.getbyte
+          opt = @sc.get_byte
           if opt.nil?
             @sc.unscan
             break
@@ -201,7 +201,7 @@ class TelnetFilter < Filter
           end
           set_mode(:normal)
         when SB
-          opt = @sc.getbyte
+          opt = @sc.get_byte
           if opt.nil? || @sc.check_until(/#{IAC.chr}#{SE.chr}/).nil?
             @sc.unscan
             break

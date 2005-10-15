@@ -31,7 +31,7 @@ module Farts
 
   class Parser < Racc::Parser
 
-module_eval <<'..end lib/farts/farts_parser.y modeval..id863e5d9649', 'lib/farts/farts_parser.y', 106
+module_eval <<'..end lib/farts/farts_parser.y modeval..idfb95d43f22', 'lib/farts/farts_parser.y', 106
 
   def initialize
     @scope = {}
@@ -51,7 +51,7 @@ module_eval <<'..end lib/farts/farts_parser.y modeval..id863e5d9649', 'lib/farts
     raise Racc::ParseError, "Error: #{@sc.lineno}:#{@sc.tokenpos} syntax error at '#{val}'"
   end
 
-..end lib/farts/farts_parser.y modeval..id863e5d9649
+..end lib/farts/farts_parser.y modeval..idfb95d43f22
 
 ##### racc 1.4.4 generates ###
 
@@ -820,7 +820,7 @@ module Farts
       vars = {}
       vars['actor'] = $engine.world.db.get(ev.from)
       vars['this'] = $engine.world.db.get(ev.to)
-      if ev.msg.kind_of?(Obj)
+      if ev.msg.kind_of?(GameObject)
         vars['args'] = $engine.world.db.get(ev.msg)
       else
         vars['args'] = ev.msg

@@ -66,7 +66,7 @@ module BBCode
                     "brown"     => "\e[0;33m", "yellow"     => "\e[1;33m",
                     "blue"      => "\e[0;34m", "lightblue"  => "\e[1;34m",
                     "purple"    => "\e[0;35m", "magenta"    => "\e[1;35m",
-                    "cyan"      => "\e[1;36m", "lightcyan"  => "\e[1;36m",
+                    "cyan"      => "\e[0;36m", "lightcyan"  => "\e[1;36m",
                     "grey"      => "\e[0;37m", "white"      => "\e[1;37m",
                     "bgblack"   => "\e[40m",   "bgred"      => "\e[41m",
                     "bggreen"   => "\e[42m",   "bgyellow"   => "\e[43m",
@@ -212,7 +212,7 @@ module BBCode
           ## TODO: QUOTEs
           ## TODO: LISTs
 
-          result << sprintf("%s", line)
+          result << sprintf("%s\n", line)
       end
 
       return result

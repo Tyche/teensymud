@@ -1,8 +1,8 @@
 #
 # file::    database.rb
 # author::  Jon A. Lambert
-# version:: 2.4.0
-# date::    09/06/2005
+# version:: 2.6.0
+# date::    10/12/2005
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -116,7 +116,7 @@ EOH
         rooms += 1
       when Player
         players += 1
-      when Obj
+      when GameObject
         objs += 1
       end
     end

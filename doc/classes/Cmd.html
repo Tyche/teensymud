@@ -155,7 +155,7 @@
       <map id="map" name="map">
   <area shape="RECT" coords="17,17,111,61"      href="Cmd.html" alt="Cmd">
 </map>
-<img src="../dot/m_48_0.gif" usemap="#map" border=0 alt="Module: Cmd">
+<img src="../dot/m_52_0.gif" usemap="#map" border=0 alt="Module: Cmd">
     </div>
 
     <div id="description">
@@ -700,7 +700,7 @@ sets the description for an object (ex. @set 1 A beautiful rose.)
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_object</span>(<span class="ruby-identifier">args</span>)
 17:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>
 18:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/(.*)/</span>
-19:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">put</span>(<span class="ruby-constant">Obj</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">$1</span>,<span class="ruby-ivar">@location</span>))
+19:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">put</span>(<span class="ruby-constant">GameObject</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">$1</span>,<span class="ruby-ivar">@location</span>))
 20:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Ok.&quot;</span>)
 21:     <span class="ruby-keyword kw">else</span>
 22:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;What!!?&quot;</span>)
@@ -757,7 +757,7 @@ This reloads the commands
     <span class="ruby-comment cmt"># File cmd/cmd_reload.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmd_reload</span>(<span class="ruby-identifier">args</span>)
 17:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">cmds</span> = <span class="ruby-constant">Command</span>.<span class="ruby-identifier">load</span>(<span class="ruby-value str">&quot;commands.yaml&quot;</span>, <span class="ruby-constant">Player</span>, <span class="ruby-identifier">:Cmd</span>)
-18:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">ocmds</span> = <span class="ruby-constant">Command</span>.<span class="ruby-identifier">load</span>(<span class="ruby-value str">&quot;obj_cmds.yaml&quot;</span>, <span class="ruby-constant">Obj</span>, <span class="ruby-identifier">:ObjCmd</span>)
+18:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">ocmds</span> = <span class="ruby-constant">Command</span>.<span class="ruby-identifier">load</span>(<span class="ruby-value str">&quot;obj_cmds.yaml&quot;</span>, <span class="ruby-constant">GameObject</span>, <span class="ruby-identifier">:ObjCmd</span>)
 19:     <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Command table reloaded.&quot;</span>)
 20:   <span class="ruby-keyword kw">end</span>
 </pre>

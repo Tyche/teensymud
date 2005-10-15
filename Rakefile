@@ -5,7 +5,7 @@ require 'rake/packagetask'
 # files to distribute
 PKG_FILES = FileList[
   'tmud.rb', 'tclient.rb',
-  'LICENSE', 'CONTRIBUTORS', 'CHANGELOG', 'README',
+  'LICENSE', 'CONTRIBUTORS', 'CHANGELOG', 'README', 'TML',
   'farts.grammar', 'Rakefile', 
   'db', 'db/README', 'db/testworld.yaml',
   'farts', 'farts/**/*',
@@ -31,8 +31,8 @@ Rake::RDocTask.new do |rd|
   rd.title = "TeensyMUD #{TMUDV} Mud Server"
 #  rd.template = 'kilmer'
 #  rd.template = './rdoctemplate.rb'
-  rd.rdoc_files.include('README', 'farts.grammar', 'tmud.rb', 'tclient.rb',
-    'lib/*.rb', 'lib/net/*.rb', 'lib/farts/*.rb', 'lib/protocol/*.rb', 
+  rd.rdoc_files.include('README', 'farts.grammar', 'TML', 'tmud.rb', 'tclient.rb',
+    'lib/*.rb', 'lib/net/*.rb', 'lib/farts/*.rb', 'lib/protocol/*.rb', 'lib/db/*.rb',
     'cmd/*.rb')
   rd.options << '-dSN -I gif' 
 end
@@ -64,6 +64,7 @@ task :stats do
   CodeStatistics.new(
     ["Main", ".", /^tmud.rb$|^tclient.rb$/], 
     ["Library", "lib", /.*\.rb$/], 
+    ["Database", "lib/db", /.*\.rb$/], 
     ["Network", "lib/net", /.*\.rb$/], 
     ["Farts", "lib/farts", /.*\.rb$/], 
     ["Protocol", "lib/protocol", /.*\.rb$/], 
@@ -86,6 +87,6 @@ task :farts do
 end
 
 task :release => [:package]
-task :clean => [:clobber_rdoc]
+#task :clean => [:clobber_rdoc]
 task :package => [:rdoc]
 task :default => [:farts, :rdoc, :test]

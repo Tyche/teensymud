@@ -23,7 +23,7 @@ class TestColorFilter < Test::Unit::TestCase
   end
 
   def test_filter_out
-    assert_equal("\e[0;30mhello\e[0m",
+    assert_equal("\e[0;30mhello\e[0m\n",
       @filter.filter_out("[COLOR=black]hello[/COLOR]"))
     assert_equal("hello",
       @filter.filter_out("[COLOR=black]hello[/COLOR]"))

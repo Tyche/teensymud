@@ -3,41 +3,64 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "tclient.rb"
+    label = "tmud.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    CursesClient [
+    Engine [
         fontcolor = black,
-        URL = "classes/CursesClient.html",
+        URL = "classes/Engine.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "CursesClient"
+        label = "Engine"
     ]
 
-    Client [
+    Hamster [
         fontcolor = black,
-        URL = "classes/Client.html",
+        URL = "classes/Hamster.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Client"
+        label = "Hamster"
     ]
 
-    ConsoleClient [
+    World [
         fontcolor = black,
-        URL = "classes/ConsoleClient.html",
+        URL = "classes/World.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "ConsoleClient"
+        label = "World"
     ]
 
-    Client -> CursesClient [
+    Event [
+        fontcolor = black,
+        URL = "classes/Event.html",
+        shape = ellipse,
+        color = palegoldenrod,
+        style = filled,
+        label = "Event"
+    ]
+
+    Incoming [
+        fontcolor = black,
+        URL = "classes/Incoming.html",
+        shape = ellipse,
+        color = palegoldenrod,
+        style = filled,
+        label = "Incoming"
+    ]
+
+    Thread [
+        URL = "classes/Thread.html",
+        label = "Thread"
+    ]
+
+    Thread -> Hamster [
 
     ]
 
@@ -47,11 +70,7 @@ digraph TopLevel {
         label = "Publisher"
     ]
 
-    Publisher -> Client [
-
-    ]
-
-    Client -> ConsoleClient [
+    Publisher -> Incoming [
 
     ]
 

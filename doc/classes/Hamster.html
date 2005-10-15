@@ -79,18 +79,15 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="103,113,175,161"      href="Player.html" alt="Player">
-  <area shape="RECT" coords="7,17,79,65"      href="Obj.html" alt="Obj">
-  <area shape="RECT" coords="7,113,79,161"      href="Room.html" alt="Room">
-  <area shape="RECT" coords="199,17,271,65"      href="Engine.html" alt="Engine">
-  <area shape="RECT" coords="295,113,367,161"      href="Hamster.html" alt="Hamster">
-  <area shape="RECT" coords="391,17,463,65"      href="World.html" alt="World">
-  <area shape="RECT" coords="487,17,559,65"      href="Event.html" alt="Event">
-  <area shape="RECT" coords="199,113,271,161"      href="Incoming.html" alt="Incoming">
-  <area shape="RECT" coords="103,17,175,65"      href="Publisher.html" alt="Publisher">
-  <area shape="RECT" coords="295,17,367,65"      href="Thread.html" alt="Thread">
+  <area shape="RECT" coords="7,17,79,65"      href="Engine.html" alt="Engine">
+  <area shape="RECT" coords="103,113,175,161"      href="Hamster.html" alt="Hamster">
+  <area shape="RECT" coords="199,17,271,65"      href="World.html" alt="World">
+  <area shape="RECT" coords="295,17,367,65"      href="Event.html" alt="Event">
+  <area shape="RECT" coords="391,113,463,161"      href="Incoming.html" alt="Incoming">
+  <area shape="RECT" coords="103,17,175,65"      href="Thread.html" alt="Thread">
+  <area shape="RECT" coords="391,17,463,65"      href="Publisher.html" alt="Publisher">
 </map>
-<img src="../dot/f_2.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_3.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -161,15 +158,15 @@ Constructor for a <a href="Hamster.html">Hamster</a>.
             onclick="toggleCode('M000097-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000097-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 468</span>
-468:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">world</span>, <span class="ruby-identifier">time</span>, <span class="ruby-identifier">eventtype</span>)
-469:     <span class="ruby-ivar">@world</span> = <span class="ruby-identifier">world</span>
-470:     <span class="ruby-ivar">@time</span> = <span class="ruby-identifier">time</span>
-471:     <span class="ruby-ivar">@eventtype</span> = <span class="ruby-identifier">eventtype</span>
-472:     <span class="ruby-ivar">@interested</span> = []
-473:     <span class="ruby-ivar">@mutex</span> = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>
-474:     <span class="ruby-keyword kw">super</span> {<span class="ruby-identifier">run</span>}
-475:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tmud.rb, line 54</span>
+54:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">world</span>, <span class="ruby-identifier">time</span>, <span class="ruby-identifier">eventtype</span>)
+55:     <span class="ruby-ivar">@world</span> = <span class="ruby-identifier">world</span>
+56:     <span class="ruby-ivar">@time</span> = <span class="ruby-identifier">time</span>
+57:     <span class="ruby-ivar">@eventtype</span> = <span class="ruby-identifier">eventtype</span>
+58:     <span class="ruby-ivar">@interested</span> = []
+59:     <span class="ruby-ivar">@mutex</span> = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>
+60:     <span class="ruby-keyword kw">super</span> {<span class="ruby-identifier">run</span>}
+61:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -200,12 +197,12 @@ href="Hamster.html">Hamster</a>.
             onclick="toggleCode('M000098-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000098-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 479</span>
-479:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">obj</span>)
-480:     <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
-481:       <span class="ruby-ivar">@interested</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">obj</span>
-482:     <span class="ruby-keyword kw">end</span>
-483:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tmud.rb, line 65</span>
+65:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">obj</span>)
+66:     <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+67:       <span class="ruby-ivar">@interested</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">obj</span>
+68:     <span class="ruby-keyword kw">end</span>
+69:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -228,17 +225,17 @@ The timing thread loop
             onclick="toggleCode('M000100-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000100-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 494</span>
-494:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>
-495:     <span class="ruby-keyword kw">while</span> <span class="ruby-keyword kw">true</span>
-496:       <span class="ruby-identifier">sleep</span> <span class="ruby-ivar">@time</span>
-497:       <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
-498:         <span class="ruby-ivar">@interested</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>
-499:           <span class="ruby-ivar">@world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span>, <span class="ruby-ivar">@eventtype</span>, <span class="ruby-keyword kw">nil</span>)
-500:         <span class="ruby-keyword kw">end</span>
-501:       <span class="ruby-keyword kw">end</span>
-502:     <span class="ruby-keyword kw">end</span>
-503:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tmud.rb, line 80</span>
+80:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>
+81:     <span class="ruby-keyword kw">while</span> <span class="ruby-keyword kw">true</span>
+82:       <span class="ruby-identifier">sleep</span> <span class="ruby-ivar">@time</span>
+83:       <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+84:         <span class="ruby-ivar">@interested</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>
+85:           <span class="ruby-ivar">@world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">o</span>.<span class="ruby-identifier">oid</span>, <span class="ruby-ivar">@eventtype</span>, <span class="ruby-keyword kw">nil</span>)
+86:         <span class="ruby-keyword kw">end</span>
+87:       <span class="ruby-keyword kw">end</span>
+88:     <span class="ruby-keyword kw">end</span>
+89:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -266,12 +263,12 @@ Unregister from the <a href="Hamster.html">Hamster</a>.
             onclick="toggleCode('M000099-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000099-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 487</span>
-487:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unregister</span>(<span class="ruby-identifier">obj</span>)
-488:     <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
-489:       <span class="ruby-ivar">@interested</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">obj</span>)
-490:     <span class="ruby-keyword kw">end</span>
-491:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tmud.rb, line 73</span>
+73:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unregister</span>(<span class="ruby-identifier">obj</span>)
+74:     <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+75:       <span class="ruby-ivar">@interested</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">obj</span>)
+76:     <span class="ruby-keyword kw">end</span>
+77:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
