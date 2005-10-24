@@ -15,7 +15,7 @@ module Cmd
   # toggles colors on or off
   def cmd_color(args)
     @color ? @color = false : @color = true
-    publish([:color,@color])
+    @session.set(:color,@color)
     sendto("Colors toggled #{@color ? "[COLOR=magenta]ON[/COLOR]" : "OFF" }")
   end
 

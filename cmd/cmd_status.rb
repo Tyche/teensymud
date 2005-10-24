@@ -14,16 +14,12 @@ module Cmd
 
   # displays session information
   def cmd_status(args)
-    publish(:terminal)
-    publish(:termsize)
-    publish(:color)
-    publish(:echo)
-    publish(:zmp)
-    sendto("Terminal: #{@terminal}")
-    sendto("Terminal size: #{@termsize[0]} X #{@termsize[1]}")
+    sendto("Terminal: #{@session.query(:terminal)}")
+    ts = @session.query(:termsize)
+    sendto("Terminal size: #{ts[0]} X #{ts[1]}")
     sendto("Colors toggled #{@color ? "[COLOR=magenta]ON[/COLOR]" : "OFF" }")
-    sendto("Echo is #{@echo ? "ON" : "OFF" }")
-    sendto("ZMP is #{@zmp ? "ON" : "OFF" }")
+    sendto("Echo is #{@session.query(:echo) ? "ON" : "OFF" }")
+    sendto("ZMP is #{@session.query(:zmp) ? "ON" : "OFF" }")
   end
 
 end
