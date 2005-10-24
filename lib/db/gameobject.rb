@@ -57,19 +57,20 @@ class GameObject
   end
 
   # Add a trigger to this object
-  # [+oid+] The object id to add
+  # [+t+] The trigger to add
   def add_trigger(t)
     @farts[t.event] = t
   end
 
   # Deletes a trigger from this object
-  # [+oid+] The object id to delete
+  # [+event+] The trigger event type to delete
   def delete_trigger(event)
     event = event.intern if event.respond_to?(:to_str)
     @farts.delete(event)
   end
 
   # Returns a specific trigger from the object
+  # [+event+] The trigger event type to retrieve
   # [+return+] A trigger or nil
   def get_trigger(event)
     event = event.intern if event.respond_to?(:to_str)

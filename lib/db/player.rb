@@ -36,10 +36,6 @@ class Player < GameObject
 
     # session related - only color settable
     @color = false
-    @echo = false
-    @zmp = false
-    @termsize = [80,43]
-    @terminal = "unknown"
   end
 
   # Sends a message to the player if they are connected.
@@ -62,15 +58,6 @@ class Player < GameObject
   #                 us.
   # [String] - A String is assumed to be input from the Session and we
   #            send it to Player#parse.
-  # [Array] - An Array is assumed to be the return value of a query we
-  #           issued to the Connection.
-  #
-  #         <pre>
-  #         us     -> Connection
-  #             query :color
-  #         Connection -> us
-  #             [:color, true]
-  #         </pre>
   #
   def update(msg)
     case msg
@@ -85,22 +72,6 @@ class Player < GameObject
       unsubscribe_all
       $engine.world.db.players_connected(@oid).each do |p|
         $engine.world.add_event(@oid,p.oid,:show,"#{@name} has disconnected.")
-      end
-    when Array
-      $engine.log.debug "Player#update query return - #{msg.inspect}"
-      case msg[0]
-      when :terminal
-        @terminal = msg[1]
-      when :termsize
-        @termsize = msg[1]
-      when :color
-        @color = msg[1]
-      when :zmp
-        @zmp = msg[1]
-      when :echo
-        @echo = msg[1]
-      else
-        $engine.log.error "Player#update unknown message - #{msg.inspect}"
       end
     when String
       parse(msg)

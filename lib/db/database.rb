@@ -73,10 +73,10 @@ EOH
   end
 
   # Deletes an object from the database.
-  # [+obj+] is a reference to object to be deleted.
+  # [+oid+] is the oid to to be deleted.
   # [+return+] Undefined.
-  def delete(obj)
-    @db.delete(obj)
+  def delete(oid)
+    @db.delete(oid)
   end
 
   # Finds an object in the database by its oid.
