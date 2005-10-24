@@ -30,8 +30,23 @@ require 'farts/farts_parser'
 
 Version = "2.6.0"
 
+=begin
 # Displayed upon connecting
 BANNER=<<-EOH
+
+
+            This is TeensyMUD version #{Version}
+
+          Copyright (C) 2005 by Jon A. Lambert
+ Released under the terms of the TeensyMUD Public License
+
+
+EOH
+=end
+
+# Displayed upon connecting
+BANNER=<<-EOH
+[cursave][home 1,1][clear][currest]
 
 
             This is TeensyMUD version #{Version}
@@ -212,6 +227,13 @@ class Incoming
       @echo = @conn.query(:echo)
       @initdone = true
       publish(BANNER)
+      ts = @conn.query(:termsize)
+ # ansi test
+      publish("[cursave]")
+      15.times do
+        publish("[home #{rand(ts[1])+1},#{rand(ts[0])+1}]*")
+      end
+      publish("[currest]")
       prompt("login> ")
     when String
       if @initdone
@@ -290,6 +312,8 @@ private
     $engine.world.db.players_connected(@player.oid).each {|p|
       $engine.world.add_event(@oid,p.oid,:show,"#{@player.name} has connected.")
     }
+
+
     @player.parse('look')
   end
 

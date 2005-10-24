@@ -12,12 +12,10 @@
 #
 
 require 'protocol/filter'
-require 'protocol/vt100codes'
 
 # The DebugFilter class simply logs all that passes through it
 #
 class DebugFilter < Filter
-  include VT100Codes
   # Construct filter
   #
   # [+pstack+] The ProtocolStack associated with this filter
@@ -31,22 +29,6 @@ class DebugFilter < Filter
   def filter_in(str)
     return "" if str.nil? || str.empty?
     @pstack.log.debug("(#{@pstack.conn.object_id}) INPUT #{str.inspect}" )
-=begin
-    case str
-    when /#{F5.sub(/\[/,"\\[")}/
-      @pstack.conn.sendmsg(CSI + "1;21" + SS)
-    when /#{F6.sub(/\[/,"\\[")}/
-      @pstack.conn.sendmsg(ESOL)
-    when /#{F7.sub(/\[/,"\\[")}/
-      @pstack.conn.sendmsg(QCP)
-    when /#{F8.sub(/\[/,"\\[")}/
-      @pstack.conn.sendmsg(CSI + HOME)
-    when /#{F9.sub(/\[/,"\\[")}/
-      @pstack.conn.sendmsg(CSI + "15;40" + HOME + "Hello World")
-    when /#{F10.sub(/\[/,"\\[")}/
-      @pstack.conn.sendmsg(ES)
-    end
-=end
     str
   end
 

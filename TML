@@ -7,6 +7,7 @@ Teensy Markup Language is a general mechanism used to markup mud text.  Markup d
 == Syntax
 Markup is placed inline in strings using keywords in brackets.  Keywords are case insensitive.  Normal use of brackets is allowed and needs no special escaping.
 
+== Text Markup
 
 === [COLOR name] or [COLOR name ON name]
  
@@ -58,6 +59,81 @@ This directs the enclosed text to be marked as underlined.  It's terminated by [
 Example:
   [u]My underlined text[/u]
   
+== Display Control
 
-  
-  
+Some of these are meaningless when sent to the client, and are more likely to be received.  The terminalfilter protocol layer will translate these VT100 codes to this format before sending on the the player parser.  All are unterminated.
+
+=== [SCROLLDOWN]
+
+Client scroll down a line.
+
+=== [SCROLLUP]
+
+Client scroll up a line.
+
+=== [UP n] | [DOWN n] | [RIGHT n] | [LEFT n]
+
+Move the cursor up, down, right or left n positions.
+
+Example:
+  [up 5]text[down 5]more text
+
+=== [TAB] | "\t"
+
+Client hit the tab key, or send client tab.
+
+=== [BELL] | "\b"
+
+Send client annoying belltone, or client sent us annoying belltone.
+
+=== [BS] | "\b"
+
+Send client a backspace.
+
+=== [HOME n,n]
+
+Client hit home key, or tell client to move the cursor to row, col
+
+Example:
+  [HOME 15,40]Center of screen
+
+=== [CURREPT| | [CURSOR n,n]
+
+Ask client to tell us the position of the cursor.  
+Client sends us the position of the cursor in row, col.
+
+=== [CLEAR]
+
+Clear the client screen
+
+=== [CURSAVE] | [CURREST]
+
+Ask client to save cursor or restore the saved cursor
+
+Example:
+  [CURSAVE][HOME 1,1]Title[CURREST]
+
+=== [SCRREG n,n] 
+
+Tell client to setup a scroll region with start and end rows.
+
+=== [INSERT]
+
+Client hit insert key.
+
+=== [END]
+
+Client hit end key.
+
+=== [PAGEDOWN]
+
+Client hit page down key.
+
+=== [PAGEUP]
+
+Client hit page down key.
+
+=== [Fn]
+
+Client hit function key.  We support F1-F10
+

@@ -86,10 +86,10 @@ class TerminalFilter < Filter
           @pstack.log.debug("(#{@pstack.conn.object_id}) SOS/PM/APC sequence found")
           set_mode :sospmapc
         when ?D
-          buf << "[SCROLL DOWN]"
+          buf << "[SCROLLDOWN]"
           set_mode :ground
         when ?M
-          buf << "[SCROLL UP]"
+          buf << "[SCROLLUP]"
           set_mode :ground
         # VT52
         when ?A
@@ -107,8 +107,8 @@ class TerminalFilter < Filter
         # /VT52
 #        when ?H # Set tab at current position - ignored
 #        when ?E # Next line - like CRLF?
-#        when ?7 # Save cursor and attributes
-#        when ?8 # Restore cursor and attributes
+#        when ?7 # Save cursor and attributes SCURA
+#        when ?8 # Restore cursor and attributes RCURA
 #        when ?c # reset device
         # These cause immediate execution no matter what mode
         when ENQ, BEL, BS, TAB, VT, FF, SO, SI, DC1, DC3, CAN, SUB, DEL
@@ -143,6 +143,7 @@ class TerminalFilter < Filter
 #        end
          set_mode :ground
       when :dcs
+# terminated by ST or ESC \
          set_mode :ground
       when :xterm
          set_mode :ground
@@ -162,30 +163,36 @@ class TerminalFilter < Filter
         when ?D
           buf << "[LEFT #{@collect.to_i == 0 ? 1 : @collect.to_i}]"
           set_mode :ground
-        when ?H, ?f  # set cursor position
+        when ?H, ?f  # set cursor position \e[H or \e[<row>;<col>H
           a = @collect.split(";")
-          a = ["0","0"] if a.empty?
+          a = ["1","1"] if a.empty?
           buf << "[HOME #{a[0]},#{a[1]}]"
           set_mode :ground
         when ?R # report cursor pos
           a = @collect.split(";")
-          a = ["0","0"] if a.empty?
+          a = ["1","1"] if a.empty?
           buf << "[CURSOR #{a[0]},#{a[1]}]"
           set_mode :ground
         when ?r # Set scrolling region
+          # Enable scrolling entire display \e[r or just a region \e[<srow>;<erow>r
           a = @collect.split(";")
           a = ["1","1"] if a.empty?  # lines numbered from 1
                  # This should be 1 to n or the whole screen if no parms
-          buf << "[SREGION #{a[0]},#{a[1]}]"
+          buf << "[SCRREG #{a[0]},#{a[1]}]"
           set_mode :ground
-        when ?J, ?K, ?g, ?c, ?h, ?l, ?s, ?u, ?x, ?y, ?q, ?i, ?p
-          # unhandled
-          set_mode :ground
-#        when ?c  DA request/response
-#        when ?J  Erase display
+        when ?J
+          if @collect.to_i == 2
+            buf << "[CLEAR]"
+          end
 #     Erase from cursor to end of screen         Esc [ 0 J    or Esc [ J
 #     Erase from beginning of screen to cursor   Esc [ 1 J
 #     Erase entire screen                        Esc [ 2 J
+
+        when ?K, ?g, ?c, ?h, ?l, ?s, ?u, ?x, ?y, ?q, ?i, ?p, ?G
+          # unhandled
+          set_mode :ground
+#        when ?c  DA request/response - Device code - response is \e[<code>0c
+#        when ?G  Set starting column of presentation
 
 #        when ?K  Erase line
 #     Erase from cursor to end of line           Esc [ 0 K    or Esc [ K
@@ -202,7 +209,7 @@ class TerminalFilter < Filter
 
 #        when ?s  save cursor
 #        when ?u  unsave cursor
-#  Same as ESC7 and ESC8
+#  Same as ESC7 and ESC8 but not attributes?
 
 #        when ?x  Report terminal parameters
 #        when ?y  Confidence test
@@ -212,11 +219,12 @@ class TerminalFilter < Filter
 
 #        when ?P # -> set_mode :dcs
 
+
         when ?n  # Device status request
           i = @collect.to_i
-          if i == 6
+          if i == 6  # Query cursor position - response is \e[<row>;<col>R
             # request for report cursor pos
-            buf << "[CURSOR REPORT]"
+            buf << "[CURREPT]"
           end
           set_mode :ground
         when ?m  # SGR color
@@ -230,9 +238,9 @@ class TerminalFilter < Filter
           i = @collect.to_i
           case i
           when 1, 7
-            buf << "[HOME 0,0]"
+            buf << "[HOME 1,1]"
           when 2
-            buf << "[INS]"
+            buf << "[INSERT]"
           when 3  # delete
             @pstack.log.debug("(#{@pstack.conn.object_id}) BS, DEL found")
             buf.slice!(-1) || @pstack.conn.inbuffer.slice!(-1)
@@ -283,6 +291,7 @@ class TerminalFilter < Filter
         end
       when :ss3
         case b
+        # Windows XP telnet
         when ?P
           buf << "[F1]"
         when ?Q
@@ -291,6 +300,7 @@ class TerminalFilter < Filter
           buf << "[F3]"
         when ?S
           buf << "[F4]"
+        # /Windows XP telnet
         # ANSI cursor key mode
         when ?A
           buf << "[UP 1]"
@@ -326,6 +336,19 @@ class TerminalFilter < Filter
   # [+str+]    The string to be processed
   # [+return+] The filtered data
   def filter_out(str)
+    VTKeys.each do |key,val|
+      while str =~ key do
+        s = val.dup
+        p1 = $1.dup if $1
+        p2 = $2.dup if $2
+        if p1 && p2
+          s.sub!(/\$;\$/, "#{p1};#{p2}")
+        elsif p1
+          s.sub!(/\$/, p1)
+        end
+        str.sub!(key,s)
+      end
+    end
     str
   end
 
@@ -348,6 +371,7 @@ class TerminalFilter < Filter
 # SI   Switch to G0 character set
 # DC1  Causes terminal to resume transmission (XON).
 # DC3  Causes terminal to stop transmitting all codes except XOFF and XON (XOFF).
+      ""
     when VT, FF
       "[UP 1]"
     when TAB

@@ -305,7 +305,7 @@ end
 
 if $0 == __FILE__
 
-  $connopts = [:client, :sockio, :zmp, :telnetfilter, :ttype, :naws, :debugfilter, :vt100, :terminalfilter]
+  $connopts = [:client, :sockio, :zmp, :telnetfilter, :ttype, :naws, :debugfilter, :vt100] #, :terminalfilter]
   $opts = get_options
 
   if $opts.echo

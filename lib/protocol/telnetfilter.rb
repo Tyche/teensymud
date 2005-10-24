@@ -360,8 +360,8 @@ private
     data.gsub!(/#{IAC}#{IAC}/, IAC.chr) # 255 needs to be undoubled from all data
     case opt
     when NAWS
-      @pstack.twidth = data[0..1].unpack('n')
-      @pstack.theight = data[2..3].unpack('n')
+      @pstack.twidth = data[0..1].unpack('n')[0]
+      @pstack.theight = data[2..3].unpack('n')[0]
       @pstack.log.debug("(#{@pstack.conn.object_id}) Terminal width #{@pstack.twidth} / height #{@pstack.theight}")
     when TTYPE
       if data[0] == 0

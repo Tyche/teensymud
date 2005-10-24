@@ -34,7 +34,8 @@ class TestTerminalFilter < Test::Unit::TestCase
   end
 
   def test_filter_out
-    assert_equal("foobar", @filter.filter_out("foobar"))
+    assert_equal("\ttext\e[15;7Hfoo\e9Abar\e[1;1H",
+      @filter.filter_out("[TAB]text[HOME 15,7]foo[UP 9]bar[HOME 1,1]"))
   end
 
   def test_init
@@ -42,7 +43,7 @@ class TestTerminalFilter < Test::Unit::TestCase
   end
 
   def test_mode_eh
-    assert_equal(:normal, @filter.mode?)
+    assert_equal(:ground, @filter.mode?)
   end
 
   def test_set_mode
