@@ -101,17 +101,16 @@ module VT100Codes
   SF10= "\e[34~"
 
 
-  SGR2CODE = { "0" => "[RESET]", "1" => "[B]",
-               "2" => "[D]", "4" => "[U]", "5" => "[BLINK]",
-               "7" => "[I]", "8" => "[HIDDEN]",
-               "30" => "[COLOR=black]", "31" => "[COLOR=red]",
-               "32" => "[COLOR=green]", "33" => "[COLOR=yellow]",
-               "34" => "[COLOR=blue]",  "35" => "[COLOR=magenta]",
-               "36" => "[COLOR=cyan]",  "37" => "[COLOR=white]",
-               "40" => "[COLOR=bgblack]", "41" => "[COLOR=bgred]",
-               "42" => "[COLOR=bggreen]", "43" => "[COLOR=bgyellow]",
-               "44" => "[COLOR=bgblue]",  "45" => "[COLOR=bgmagenta]",
-               "46" => "[COLOR=bgcyan]",  "47" => "[COLOR=bgwhite]" }
+  SGR2CODE = { "0", "[RESET]", "1", "[B]", "2", "[D]", "4", "[U]",
+               "5", "[BLINK]", "7", "[I]", "8", "[HIDDEN]",
+               "30", "[COLOR=black]", "31", "[COLOR=red]",
+               "32", "[COLOR=green]", "33", "[COLOR=yellow]",
+               "34", "[COLOR=blue]",  "35", "[COLOR=magenta]",
+               "36", "[COLOR=cyan]",  "37", "[COLOR=white]",
+               "40", "[COLOR=bgblack]", "41", "[COLOR=bgred]",
+               "42", "[COLOR=bggreen]", "43", "[COLOR=bgyellow]",
+               "44", "[COLOR=bgblue]",  "45", "[COLOR=bgmagenta]",
+               "46", "[COLOR=bgcyan]",  "47", "[COLOR=bgwhite]" }
 
 
 end

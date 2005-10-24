@@ -132,9 +132,9 @@ class World
     @log.info "Done."
     @tits = []
     @bra = Mutex.new
-    @log.info "Releasing Hamster..."
-    @hamster = Hamster.new(self, 2.0, :timer)
-    @db.objects {|obj| @hamster.register(obj) if obj.powered}
+#    @log.info "Releasing Hamster..."
+#    @hamster = Hamster.new(self, 2.0, :timer)
+#    @db.objects {|obj| @hamster.register(obj) if obj.powered}
     @log.info "World initialized."
   end
 
@@ -168,6 +168,7 @@ class Incoming
   # [+return+] A handle to the incoming object.
   def initialize(conn)
     @conn = conn
+    @echo = false
     @state = :name
     @checked = 3
     @player = nil
@@ -208,39 +209,40 @@ class Incoming
     when :logged_out, :disconnected
       unsubscribe_all
     when :initdone
+      @echo = @conn.query(:echo)
       @initdone = true
       publish(BANNER)
-      publish("\nlogin> ")
+      prompt("login> ")
     when String
       if @initdone
         case @state
         when :name
           @login_name = msg
           @player = $engine.world.db.find_player_by_name(@login_name)
-          publish("\npassword> ")
-          publish([:hide, true])
+          prompt("password> ")
+          @conn.set(:hide, true)
           @state = :password
         when :password
           @login_passwd = msg
-          publish([:hide, false])
+          @conn.set(:hide, false)
           if @player
             if @player.check_passwd(@login_passwd)  # good login
               @player.session = @conn
               login
             else  # bad login
               @checked -= 1
-              publish("Sorry wrong password.\n")
+              prompt("Sorry wrong password.\n")
               if @checked < 1
                 publish("Bye!\n")
                 publish(:logged_out)
                 unsubscribe_all
               else
                 @state = :name
-                publish("\nlogin> ")
+                publish("login> ")
               end
             end
           else  # new player
-            publish("\nCreate new user?\n'Y'|'y' to create, Enter to retry login> ")
+            prompt("Create new user?\n'Y'|'y' to create, Enter to retry login> ")
             @state = :new
           end
         when :new
@@ -250,7 +252,7 @@ class Incoming
             login
           else
             @state = :name
-            publish("\nlogin> ")
+            prompt("login> ")
           end
         end
       end
@@ -260,15 +262,20 @@ class Incoming
   end
 
 private
+  def prompt(msg)
+    msg = "\n" + msg if !@echo
+    publish(msg)
+  end
+
   # Called on successful login
   def login
-    publish([:color, @player.color])
+    @conn.set(:color, @player.color)
 
     # Check if this player already logged in
     if @player.subscriber_count > 0
       @player.publish(:reconnecting)
       @player.unsubscribe_all
-      @player.sendto("Welcome reconnecting #{@login_name}@#{@conn.sock.peeraddr[2]}!")
+      @player.sendto("\nWelcome reconnecting #{@login_name}@#{@conn.sock.peeraddr[2]}!")
     end
 
     # deregister all observers here and on connection
@@ -279,14 +286,10 @@ private
     @conn.subscribe(@player)
     @player.subscribe(@conn)
 
-    @player.sendto("Welcome #{@login_name}@#{@conn.sock.peeraddr[2]}!")
+    @player.sendto("\nWelcome #{@login_name}@#{@conn.sock.peeraddr[2]}!")
     $engine.world.db.players_connected(@player.oid).each {|p|
       $engine.world.add_event(@oid,p.oid,:show,"#{@player.name} has connected.")
     }
-    @player.publish(:echo)
-    @player.publish(:zmp)
-    @player.publish(:terminal)
-    @player.publish(:termsize)
     @player.parse('look')
   end
 
@@ -423,7 +426,9 @@ if $0 == __FILE__
     $engine = Engine.new(get_options)
     if $engine.world.options.trace
       set_trace_func proc { |event, file, line, id, binding, classname|
-        printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
+        if file !~ /\/usr\/lib\/ruby/
+          printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
+        end
       }
     end
     $engine.run

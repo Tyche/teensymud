@@ -174,10 +174,27 @@ class Connection < Session
   #               close the Connection.  It is handled here.
   # [String] - A String is assumed to be output and placed in our
   #            @outbuffer.
-  # [Symbol] - A Symbol not handled here is assumed to be a query and
-  #            its handling is delegated to the ProtocolStack, the result
-  #            of which is a pair immediately sent back to as a message
-  #            to the client.
+  def update(msg)
+    case msg
+    when :logged_out
+      @closing = true
+    when :reconnecting
+      unsubscribe_all
+      @server.log.info "(#{self.object_id}) Connection '#{@addr}' closing for reconnection"
+      @server.unregister(self)
+  #    @sock.shutdown   # odd errors thrown with this
+      @sock.close
+    when String
+      sendmsg(msg)
+    else
+      @server.log.error "(#{self.object_id}) Connection#update - unknown message '#{@msg.inspect}'"
+    end
+  end
+
+  # [+attrib+] - A Symbol not handled here is assumed to be a query and
+  #           its handling is delegated to the ProtocolStack, the result
+  #           of which is a pair immediately sent back to as a message
+  #           to the client.
   #
   #         <pre>
   #         client -> us
@@ -190,7 +207,11 @@ class Connection < Session
   #             [:echo, true]
   #         </pre>
   #
-  # [Array] - An Array not handled here is assumed to be a set command and
+  def query(attrib)
+    @pstack.query(attrib)
+  end
+
+  # [+attrib,val+] - An Array not handled here is assumed to be a set command and
   #           its handling is delegated to the ProtocolStack.
   #
   #         <pre>
@@ -200,26 +221,10 @@ class Connection < Session
   #             set(:color, true)
   #         </pre>
   #
-  def update(msg)
-    case msg
-    when :logged_out
-      @closing = true
-    when :reconnecting
-      unsubscribe_all
-      @server.log.info "(#{self.object_id}) Connection '#{@addr}' closing for reconnection"
-      @server.unregister(self)
-  #    @sock.shutdown   # odd errors thrown with this
-      @sock.close
-    when Array    # Arrays are assumed to be
-      @pstack.set(msg[0],msg[1])
-    when Symbol
-      publish(@pstack.query(msg))
-    when String
-      sendmsg(msg)
-    else
-      @server.log.error "(#{self.object_id}) Connection#update - unknown message '#{@msg.inspect}'"
-    end
+  def set(attrib, val)
+    @pstack.set(attrib, val)
   end
+
 
   # sendmsg places a message on the Connection's output buffer.
   # [+msg+]  The message, a reference to a buffer

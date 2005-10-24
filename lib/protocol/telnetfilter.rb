@@ -11,6 +11,7 @@
 # See LICENSE file for additional information.
 #
 
+require 'strscan'
 require 'protocol/filter'
 require 'protocol/telnetcodes'
 require 'protocol/asciicodes'
@@ -64,7 +65,7 @@ class TelnetFilter < Filter
   # [+str+]    The string to be processed
   # [+return+] The filtered data
   def filter_in(str)
-    init_subneg
+#    init_subneg
     return "" if str.nil? || str.empty?
     buf = ""
 
@@ -85,6 +86,11 @@ class TelnetFilter < Filter
         when CR
           next if @synch
           set_mode(:cr) if !@pstack.binary_on
+        when LF  # LF or LF/CR may be issued by broken mud servers and clients
+          next if @synch
+          set_mode(:lf) if !@pstack.binary_on
+          buf << LF.chr
+          echo(CR.chr + LF.chr)
         when IAC
           set_mode(:cmd)
         when NUL  # ignore NULs in stream when in normal mode
@@ -97,6 +103,7 @@ class TelnetFilter < Filter
           end
         when BS, DEL
           next if @synch
+          # Leaves BS, DEL in input stream for higher filter to deal with.
           buf << b
           echo(BS.chr)
         else
@@ -110,17 +117,23 @@ class TelnetFilter < Filter
           end
         end
       when :cr
-        # handle CRLF and CRNUL by swallowing what follows CR and
-        # insertion of LF
-        if !@synch
-          case b[0]
-          when LF, NUL
-            buf << LF.chr
-            echo(CR.chr + LF.chr)
-          else  # Handle screwed up muds
-            buf << CR.chr + b
-            echo(CR.chr + b)
-          end
+        # handle CRLF and CRNUL by insertion of LF
+        case b[0]
+        when LF, NUL
+          buf << LF.chr
+          echo(CR.chr + LF.chr)
+        else # eat lone CR
+          buf << b
+          echo(b)
+        end
+        set_mode(:normal)
+      when :lf
+        # handle LF, LFCR
+        case b[0]
+        when CR # Handle LFCR by swallowing CR
+        else  # Handle other stuff that follows - single LF
+          buf << b
+          echo(b)
         end
         set_mode(:normal)
       when :cmd
@@ -266,13 +279,13 @@ class TelnetFilter < Filter
   # Negotiate starting wanted options that imply subnegotation
   # So far only terminal type
   def init_subneg
-    return if @init_tries > 15
+    return if @init_tries > 31
 
     @init_tries += 1
 
     @wopts.each_key do |opt|
       next if !@sneg_opts.include?(opt)
-      @pstack.log.debug("(#{@pstack.conn.object_id}) Subnegotiation attempt for option #{opt}.")
+#      @pstack.log.debug("(#{@pstack.conn.object_id}) Subnegotiation attempt for option #{opt}.")
       case opt
       when TTYPE
         who = :him
@@ -302,7 +315,7 @@ class TelnetFilter < Filter
       end
     end
 
-    if @init_tries > 15
+    if @init_tries > 31
       @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.")
       @sneg_opts = []
       @pstack.conn.set_initdone
@@ -646,11 +659,11 @@ private
       when /zmp.*/
       # We support all 'zmp.' package and commands so..
         @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
-          "zmp.support#{NUL.chr}args[0]{NUL.chr}" +
+          "zmp.support#{NUL.chr}#{args[0]}{NUL.chr}" +
           "#{IAC.chr}#{SE.chr}")
       else
         @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
-          "zmp.no-support#{NUL.chr}args[0]#{NUL.chr}" +
+          "zmp.no-support#{NUL.chr}#{args[0]}#{NUL.chr}" +
           "#{IAC.chr}#{SE.chr}")
       end
     when "zmp.support"

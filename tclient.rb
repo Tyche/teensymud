@@ -42,21 +42,23 @@ class Client
 
   def initialize(opts)
     @opts = opts
+    @conn = nil
   end
 
   def update(msg)
     case msg
     when Connection
+      @conn = msg
       unsubscribe_all
       msg.subscribe(self)
       self.subscribe(msg)
       if @opts.win32
-        publish([:terminal, "vt100"])
+        @conn.set(:terminal, "vt100")
       else
-        publish([:terminal, "xterm"])
+        @conn.set(:terminal, "xterm")
       end
     when :initdone
-      publish([:termsize, [80,43]])
+      @conn.set(:termsize, [80,43])
     end
   end
 
@@ -69,9 +71,11 @@ class CursesClient < Client
     Curses.cbreak
     Curses.noecho if @opts.echo
     Curses.nl
-    Curses.stdscr.keypad(true)
     Curses.stdscr.scrollok(true)
-    Curses.timeout = 0
+    if !$opts.win32  # Need workaround for these
+      Curses.stdscr.keypad(true)
+      Curses.timeout = 0
+    end
     Curses.start_color
   end
 

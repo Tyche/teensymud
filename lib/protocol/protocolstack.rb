@@ -107,21 +107,21 @@ class ProtocolStack
   def query(attr)
     case attr
     when :terminal
-      retval =  [:terminal, @terminal]
+      retval =  @terminal
     when :termsize
-      retval =  [:termsize, [@twidth, @theight]]
+      retval =  [@twidth, @theight]
     when :color
-      retval =  [:color, @color_on]
+      retval =  @color_on
     when :zmp
-      retval =  [:zmp, @zmp_on]
+      retval =  @zmp_on
     when :echo
-      retval =  [:echo, @echo_on]
+      retval =  @echo_on
     when :binary
-      retval =  [:binary, @binary_on]
+      retval =  @binary_on
     when :urgent
-      retval =  [:urgent, @urgent_on]
+      retval =  @urgent_on
     when :hide
-      retval =  [:hide, @hide_on]
+      retval =  @hide_on
     else
       log.error "(#{self.object_id}) ProtocolStack#query unknown setting '#{pair.inspect}'"
       retval = false
