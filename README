@@ -21,6 +21,7 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 [Rake] To build documentation, run tests, etc.  See - http://rake.rubyforge.org
 [Racc] To rebuild FARTS parser.  Ruby comes with Racc runtime so this is not needed for execution. See - http://i.loveruby.net/en/prog/racc.html
 [FlexMock] To run regression tests.  See - http://onestepback.org/software/flexmock/
+[Curses] To run tclient in curses mode under windows.  The Windows one-click installer is missing the pdcurses.dll, or if you built it yourself from source the curses.so extension probably wasn't built.  You can get binaries for it at http://www.dave.burt.id.au/ruby/curses.zip.  The pdcurses.dll should be placed in your ruby\bin directory and not your windows directories.   See http://jarp.does.notwork.org/win32/ for the sources.
 
 == Features
 * Multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns.
