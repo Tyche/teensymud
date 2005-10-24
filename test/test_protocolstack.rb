@@ -59,14 +59,14 @@ class TestProtocolStack < Test::Unit::TestCase
   end
 
   def test_query
-    assert_equal([:termsize, [80,23]], @ps.query(:termsize))
+    assert_equal([80,23], @ps.query(:termsize))
   end
 
   def test_set
     assert(true, @ps.set(:termsize, [120,5] ))
-    assert_equal([:termsize, [120,5]], @ps.query(:termsize))
+    assert_equal([120,5], @ps.query(:termsize))
     assert(true, @ps.set(:terminal, "ansi"))
-    assert_equal([:terminal, "ansi"], @ps.query(:terminal))
+    assert_equal("ansi", @ps.query(:terminal))
   end
 
   def test_terminal

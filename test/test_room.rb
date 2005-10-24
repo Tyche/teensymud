@@ -2,20 +2,48 @@
 #                 classname: asrt / meth =  ratio%
 #                      Room:    0 /    2 =   0.00%
 
-require 'test/unit' unless defined? $ZENTEST and $ZENTEST
+unless defined? $ZENTEST and $ZENTEST
+require 'test/unit'
+require 'db/room'
+require 'flexmock'
+end
 
 class TestRoom < Test::Unit::TestCase
+  def setup
+    @id = 0
+    $engine = FlexMock.new
+    $engine.mock_handle(:world) {$engine}
+    $engine.mock_handle(:options) {$engine}
+    $engine.mock_handle(:db) {$engine}
+    $engine.mock_handle(:getid) {@id += 1}
+    $engine.mock_handle(:add_event) {|e| true}
+    @r = Room.new("Here")
+    @r2 = Room.new("There")
+    $engine.mock_handle(:get) {|oid| @r2}
+  end
+
   def test_ass
-    raise NotImplementedError, 'Need to write test_ass'
+    k = [:describe,:describe_exits,:leave,:arrive,:get,:drop,:timer,:foobar]
+    m = FlexMock.new
+    m.mock_handle(:kind) {k.shift}
+    m.mock_handle(:from) {1}
+    m.mock_handle(:msg) {2}
+    assert(@r.ass(m))
+    assert(@r.ass(m))
+    assert(@r.ass(m))
+    assert(@r.ass(m))
+    assert(@r.ass(m))
+    assert(@r.ass(m))
+    assert(@r.ass(m))
+    assert_equal(nil,@o.ass(m))
   end
 
   def test_exits
-    raise NotImplementedError, 'Need to write test_exits'
+    assert_equal({},@r.exits)
   end
 
   def test_exits_equals
-    raise NotImplementedError, 'Need to write test_exits_equals'
+    assert_equal({1,1},@r.exits={1,1})
   end
 end
 
-# Number of errors detected: 1

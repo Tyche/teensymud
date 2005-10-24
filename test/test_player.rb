@@ -2,48 +2,88 @@
 #                 classname: asrt / meth =  ratio%
 #                    Player:    0 /    8 =   0.00%
 
-require 'test/unit' unless defined? $ZENTEST and $ZENTEST
+unless defined? $ZENTEST and $ZENTEST
+require 'test/unit'
+require 'db/player'
+require 'db/room'
+require 'flexmock'
+end
 
 class TestPlayer < Test::Unit::TestCase
+  def setup
+    @log = FlexMock.new
+    @log.mock_handle(:info) { |msg| puts msg }
+    @log.mock_handle(:debug) { |msg| puts msg }
+    @log.mock_handle(:warn) { |msg| puts msg }
+    @log.mock_handle(:error) { |msg| puts msg }
+    @id = 0
+    $engine = FlexMock.new
+    $engine.mock_handle(:world) {$engine}
+    $engine.mock_handle(:options) {$engine}
+    $engine.mock_handle(:log) {@log}
+    $engine.mock_handle(:home) {1}
+    $engine.mock_handle(:db) {$engine}
+    $engine.mock_handle(:getid) {@id += 1}
+    $engine.mock_handle(:add_event) {|e| true}
+    $engine.mock_handle(:ocmds) {$engine}
+    $engine.mock_handle(:cmds) {$engine}
+    $engine.mock_handle(:find) {[]}
+    @r = Room.new("Here")
+    $engine.mock_handle(:get) {@r}
+    @p = Player.new("Tyche","tyche",nil)
+  end
+
   def test_ass
-    raise NotImplementedError, 'Need to write test_ass'
+    k = [:describe,:show,:get,:drop,:timer,:foobar]
+    m = FlexMock.new
+    m.mock_handle(:kind) {k.shift}
+    m.mock_handle(:from) {9}
+    assert(@p.ass(m))
+    assert(@p.ass(m))
+    assert(@p.ass(m))
+    assert(@p.ass(m))
+    assert(@p.ass(m))
+    assert_equal(nil,@o.ass(m))
   end
 
   def test_check_passwd
-    raise NotImplementedError, 'Need to write test_check_passwd'
+    assert_equal(true, @p.check_passwd("tyche"))
+    assert_equal(false, @p.check_passwd("blah"))
   end
 
   def test_color
-    raise NotImplementedError, 'Need to write test_color'
+    assert_equal(false,@p.color)
   end
 
   def test_color_equals
-    raise NotImplementedError, 'Need to write test_color_equals'
+    assert_equal(true,@p.color=true)
   end
 
   def test_disconnect
-    raise NotImplementedError, 'Need to write test_disconnect'
+    assert(@p.disconnect)
   end
 
   def test_parse
-    raise NotImplementedError, 'Need to write test_parse'
+    m = FlexMock.new
+    assert_equal(false,@p.parse(m))
   end
 
   def test_sendto
-    raise NotImplementedError, 'Need to write test_sendto'
+    assert_equal(5,@p.session=5)
+    assert(@p.sendto("Hello"))
   end
 
   def test_session
-    raise NotImplementedError, 'Need to write test_session'
+    assert_equal(nil,@p.session)
   end
 
   def test_session_equals
-    raise NotImplementedError, 'Need to write test_session_equals'
+    assert_equal(5,@p.session=5)
   end
 
   def test_update
-    raise NotImplementedError, 'Need to write test_update'
+    m = FlexMock.new
+    assert_equal(nil,@p.update(m))
   end
 end
 
-# Number of errors detected: 1

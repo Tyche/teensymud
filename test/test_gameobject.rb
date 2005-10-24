@@ -2,92 +2,152 @@
 #                 classname: asrt / meth =  ratio%
 #                GameObject:    0 /   13 =   0.00%
 
-require 'test/unit' unless defined? $ZENTEST and $ZENTEST
+unless defined? $ZENTEST and $ZENTEST
+require 'test/unit'
+require 'db/gameobject'
+require 'db/player'
+require 'db/room'
+require 'flexmock'
+require 'ostruct'
+end
 
 class TestGameObject < Test::Unit::TestCase
+  def setup
+    @id = 0
+    $engine = FlexMock.new
+    $engine.mock_handle(:world) {$engine}
+    $engine.mock_handle(:options) {$engine}
+    $engine.mock_handle(:db) {$engine}
+    $engine.mock_handle(:getid) {@id += 1}
+    $engine.mock_handle(:add_event) {|e| true}
+    $engine.mock_handle(:ocmds) {$engine}
+    $engine.mock_handle(:find) {[]}
+    $engine.mock_handle(:home) {1}
+    @r = Room.new("Here")
+    @r.oid = 1
+    $engine.mock_handle(:get) {|oid| oid == 1 ? @r : @p}
+    @p = Player.new("Tyche","tyche",nil)
+    @p.oid = 9
+    @o = GameObject.new("Thing")
+  end
+
   def test_add_contents
-    raise NotImplementedError, 'Need to write test_add_contents'
+    assert_equal([17],@o.add_contents(17))
   end
 
   def test_add_trigger
-    raise NotImplementedError, 'Need to write test_add_trigger'
+    m = FlexMock.new
+    m.mock_handle(:event) {:describe}
+    assert_equal(m,@o.add_trigger(m))
   end
 
   def test_ass
-    raise NotImplementedError, 'Need to write test_ass'
+    k = [:describe,:get,:drop,:timer,:foobar]
+    m = FlexMock.new
+    m.mock_handle(:kind) {k.shift}
+    m.mock_handle(:from) {9}
+    assert(@o.ass(m))
+    assert(@o.ass(m))
+    assert(@o.ass(m))
+    assert(@o.ass(m))
+    assert_equal(nil,@o.ass(m))
   end
 
   def test_delete_contents
-    raise NotImplementedError, 'Need to write test_delete_contents'
+    assert_equal([7],@o.add_contents(7))
+    assert_equal(7,@o.delete_contents(7))
   end
 
   def test_delete_trigger
-    raise NotImplementedError, 'Need to write test_delete_trigger'
+    m = FlexMock.new
+    m.mock_handle(:event) {:describe}
+    assert_equal(m,@o.add_trigger(m))
+    assert_equal(m,@o.delete_trigger(:describe))
   end
 
   def test_desc
-    raise NotImplementedError, 'Need to write test_desc'
+    assert_equal("",@o.desc)
+    assert_equal("Foo",@o.desc="Foo")
+    assert_equal("Foo",@o.desc)
   end
 
   def test_desc_equals
-    raise NotImplementedError, 'Need to write test_desc_equals'
+    assert_equal("Bar",@o.desc="Bar")
   end
 
   def test_fart
-    raise NotImplementedError, 'Need to write test_fart'
+    m = FlexMock.new
+    m.mock_handle(:kind) {1}
+    assert(@o.fart(m))
   end
 
   def test_get_contents
-    raise NotImplementedError, 'Need to write test_get_contents'
+    assert_equal([7],@o.add_contents(7))
+    assert_equal([7],@o.get_contents)
   end
 
   def test_get_trigger
-    raise NotImplementedError, 'Need to write test_get_trigger'
+    m = FlexMock.new
+    m.mock_handle(:event) {:describe}
+    assert_equal(m,@o.add_trigger(m))
+    assert_equal(m,@o.get_trigger("describe"))
   end
 
   def test_get_triggers
-    raise NotImplementedError, 'Need to write test_get_triggers'
+    assert_equal([],@o.get_triggers)
+    m = FlexMock.new
+    m.mock_handle(:event) {:describe}
+    assert_equal(m,@o.add_trigger(m))
+    assert_equal([m],@o.get_triggers)
   end
 
   def test_location
-    raise NotImplementedError, 'Need to write test_location'
+    assert_equal(nil,@o.location)
+    assert_equal(2,@o.location=2)
+    assert_equal(2,@o.location)
   end
 
   def test_location_equals
-    raise NotImplementedError, 'Need to write test_location_equals'
+    assert_equal(1,@o.location=1)
+  end
+
+  def test_name
+    assert_equal("Thing",@o.name)
+    assert_equal("That",@o.name="That")
+    assert_equal("That",@o.name)
   end
 
   def test_name_equals
-    raise NotImplementedError, 'Need to write test_name_equals'
+    assert_equal("This",@o.name="This")
   end
 
   def test_objects
-    raise NotImplementedError, 'Need to write test_objects'
+    assert(@o.objects)
   end
 
   def test_oid
-    raise NotImplementedError, 'Need to write test_oid'
+    assert_equal(3,@o.oid)
   end
 
   def test_oid_equals
-    raise NotImplementedError, 'Need to write test_oid_equals'
+    assert_equal(2,@o.oid=2)
   end
 
   def test_parse
-    raise NotImplementedError, 'Need to write test_parse'
+    m = FlexMock.new
+    assert_equal(false,@o.parse(m))
   end
 
   def test_players
-    raise NotImplementedError, 'Need to write test_players'
+    assert(@o.players)
   end
 
   def test_powered
-    raise NotImplementedError, 'Need to write test_powered'
+    assert_equal(false,@o.powered)
   end
 
   def test_powered_equals
-    raise NotImplementedError, 'Need to write test_powered_equals'
+    assert_equal(true,@o.powered=true)
   end
 end
 
-# Number of errors detected: 1
