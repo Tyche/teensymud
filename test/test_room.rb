@@ -17,13 +17,16 @@ class TestRoom < Test::Unit::TestCase
     $engine.mock_handle(:db) {$engine}
     $engine.mock_handle(:getid) {@id += 1}
     $engine.mock_handle(:add_event) {|e| true}
+    $engine.mock_handle(:ocmds) {$engine}
+    $engine.mock_handle(:find) {[]}
     @r = Room.new("Here")
     @r2 = Room.new("There")
     $engine.mock_handle(:get) {|oid| @r2}
   end
 
   def test_ass
-    k = [:describe,:describe_exits,:leave,:arrive,:get,:drop,:timer,:foobar]
+    k = [:describe,:describe,:describe_exits,:describe_exits,:leave,:leave,
+      :arrive,:arrive,:get,:get,:get,:drop,:drop,:drop,:timer,:timer,:timer,:foobar]
     m = FlexMock.new
     m.mock_handle(:kind) {k.shift}
     m.mock_handle(:from) {1}
@@ -35,7 +38,7 @@ class TestRoom < Test::Unit::TestCase
     assert(@r.ass(m))
     assert(@r.ass(m))
     assert(@r.ass(m))
-    assert_equal(nil,@o.ass(m))
+    assert_equal(nil,@r.ass(m))
   end
 
   def test_exits

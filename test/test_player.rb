@@ -34,16 +34,18 @@ class TestPlayer < Test::Unit::TestCase
   end
 
   def test_ass
-    k = [:describe,:show,:get,:drop,:timer,:foobar]
+    k = [:describe,:describe,:show,:show,:get,:get,:get,
+      :drop,:drop,:drop,:timer,:timer,:timer,:foobar]
     m = FlexMock.new
     m.mock_handle(:kind) {k.shift}
     m.mock_handle(:from) {9}
+    m.mock_handle(:msg) {}
     assert(@p.ass(m))
     assert(@p.ass(m))
     assert(@p.ass(m))
     assert(@p.ass(m))
     assert(@p.ass(m))
-    assert_equal(nil,@o.ass(m))
+    assert_equal(nil,@p.ass(m))
   end
 
   def test_check_passwd
@@ -60,17 +62,15 @@ class TestPlayer < Test::Unit::TestCase
   end
 
   def test_disconnect
-    assert(@p.disconnect)
+    assert_equal(nil,@p.disconnect)
   end
 
   def test_parse
-    m = FlexMock.new
-    assert_equal(false,@p.parse(m))
+    assert_equal(nil,@p.parse("hello"))
   end
 
   def test_sendto
-    assert_equal(5,@p.session=5)
-    assert(@p.sendto("Hello"))
+    assert_equal(nil,@p.sendto("hello"))
   end
 
   def test_session

@@ -42,7 +42,7 @@ class TestGameObject < Test::Unit::TestCase
   end
 
   def test_ass
-    k = [:describe,:get,:drop,:timer,:foobar]
+    k = [:describe,:describe,:get,:get,:drop,:drop,:timer,:timer,:foobar]
     m = FlexMock.new
     m.mock_handle(:kind) {k.shift}
     m.mock_handle(:from) {9}

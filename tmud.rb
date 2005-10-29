@@ -44,15 +44,33 @@ BANNER=<<-EOH
 EOH
 =end
 
+LOGO=<<EOH
+\e[0;31m
+#######                                           #      ##  #     ##  ######
+  ##                                              ##    ###  #     ##  #    ##
+  ##                                              ##    ###  #     ##  #     #
+  ##     #####   #####   ######   ###### ##    #  ###   ###  #     ##  #     ##
+  ##    ##   ##  ##  ##  ###  ##  #   ##  #   ##  ###  ####  #     ##  #     ##
+  ##    #    ## ##    #  ##   ##  ##      ##  #   # #  ####  #     ##  #     ##
+  ##    ####### #######  ##   ##   ####   ## ##   # #### ##  #     ##  #     ##
+  ##    #       ##       ##   ##      ##   ####   # #### ##  #     ##  #    ##
+  ##    ##   #   #   ##  ##   ##  #    #   ###    #  ##  ##  ##   ##   #    ##
+  ##     #####   #####   ##   ##  ######    ##    #  ##  ##   #####    ######
+                                           ##
+                                           ##
+                                         ###
+\e[m
+EOH
+
 # Displayed upon connecting
 BANNER=<<-EOH
 [cursave][home 1,1][clear][currest]
+#{LOGO}
 
+                      This is TeensyMUD version #{Version}
 
-            This is TeensyMUD version #{Version}
-
-          Copyright (C) 2005 by Jon A. Lambert
- Released under the terms of the TeensyMUD Public License
+                    Copyright (C) 2005 by Jon A. Lambert
+           Released under the terms of the TeensyMUD Public License
 
 
 EOH
