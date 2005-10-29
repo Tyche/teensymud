@@ -97,11 +97,11 @@ maintain separate lists of subscribers for each one.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000203">publish</a>&nbsp;&nbsp;
-      <a href="#M000199">subscribe</a>&nbsp;&nbsp;
-      <a href="#M000202">subscriber_count</a>&nbsp;&nbsp;
-      <a href="#M000200">unsubscribe</a>&nbsp;&nbsp;
-      <a href="#M000201">unsubscribe_all</a>&nbsp;&nbsp;
+      <a href="#M000207">publish</a>&nbsp;&nbsp;
+      <a href="#M000203">subscribe</a>&nbsp;&nbsp;
+      <a href="#M000206">subscriber_count</a>&nbsp;&nbsp;
+      <a href="#M000204">unsubscribe</a>&nbsp;&nbsp;
+      <a href="#M000205">unsubscribe_all</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -123,11 +123,11 @@ maintain separate lists of subscribers for each one.
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000203" class="method-detail">
-        <a name="M000203"></a>
+      <div id="method-M000207" class="method-detail">
+        <a name="M000207"></a>
 
         <div class="method-heading">
-          <a href="#M000203" class="method-signature">
+          <a href="#M000207" class="method-signature">
           <span class="method-name">publish</span><span class="method-args">(*arg)</span>
           </a>
         </div>
@@ -139,8 +139,8 @@ method in each currently associated subscriber in turn, passing it the
 given arguments. The changed state is then set to <tt>false</tt>.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000203-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000203-source">
+            onclick="toggleCode('M000207-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000207-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/publisher.rb, line 49</span>
 49:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">publish</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">arg</span>)
@@ -153,11 +153,11 @@ given arguments. The changed state is then set to <tt>false</tt>.
         </div>
       </div>
 
-      <div id="method-M000199" class="method-detail">
-        <a name="M000199"></a>
+      <div id="method-M000203" class="method-detail">
+        <a name="M000203"></a>
 
         <div class="method-heading">
-          <a href="#M000199" class="method-signature">
+          <a href="#M000203" class="method-signature">
           <span class="method-name">subscribe</span><span class="method-args">(subscriber)</span>
           </a>
         </div>
@@ -168,8 +168,8 @@ Add <tt>subscriber</tt> as an subscriber on this object.
 <tt>subscriber</tt> will now receive notifications.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000199-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000199-source">
+            onclick="toggleCode('M000203-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000203-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/publisher.rb, line 14</span>
 14:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">subscribe</span>(<span class="ruby-identifier">subscriber</span>)
@@ -184,11 +184,11 @@ Add <tt>subscriber</tt> as an subscriber on this object.
         </div>
       </div>
 
-      <div id="method-M000202" class="method-detail">
-        <a name="M000202"></a>
+      <div id="method-M000206" class="method-detail">
+        <a name="M000206"></a>
 
         <div class="method-heading">
-          <a href="#M000202" class="method-signature">
+          <a href="#M000206" class="method-signature">
           <span class="method-name">subscriber_count</span><span class="method-args">()</span>
           </a>
         </div>
@@ -198,8 +198,8 @@ Add <tt>subscriber</tt> as an subscriber on this object.
 Count of subscribers to this object.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000202-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000202-source">
+            onclick="toggleCode('M000206-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000206-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/publisher.rb, line 40</span>
 40:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">subscriber_count</span>
@@ -210,11 +210,11 @@ Count of subscribers to this object.
         </div>
       </div>
 
-      <div id="method-M000200" class="method-detail">
-        <a name="M000200"></a>
+      <div id="method-M000204" class="method-detail">
+        <a name="M000204"></a>
 
         <div class="method-heading">
-          <a href="#M000200" class="method-signature">
+          <a href="#M000204" class="method-signature">
           <span class="method-name">unsubscribe</span><span class="method-args">(subscriber)</span>
           </a>
         </div>
@@ -225,8 +225,8 @@ Delete <tt>subscriber</tt> as a subscriber on this object. It will no
 longer receive notifications.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000200-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000200-source">
+            onclick="toggleCode('M000204-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000204-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/publisher.rb, line 26</span>
 26:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unsubscribe</span>(<span class="ruby-identifier">subscriber</span>)
@@ -237,11 +237,11 @@ longer receive notifications.
         </div>
       </div>
 
-      <div id="method-M000201" class="method-detail">
-        <a name="M000201"></a>
+      <div id="method-M000205" class="method-detail">
+        <a name="M000205"></a>
 
         <div class="method-heading">
-          <a href="#M000201" class="method-signature">
+          <a href="#M000205" class="method-signature">
           <span class="method-name">unsubscribe_all</span><span class="method-args">()</span>
           </a>
         </div>
@@ -251,8 +251,8 @@ longer receive notifications.
 Delete all subscribers associated with this object.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000201-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000201-source">
+            onclick="toggleCode('M000205-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000205-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/publisher.rb, line 33</span>
 33:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unsubscribe_all</span>

@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../files/tmud_rb.html">
-                tmud.rb
+                <a href="../files/lib/event/event_rb.html">
+                lib/event/event.rb
                 </a>
         <br />
             </td>
@@ -79,15 +79,9 @@
   <div id="contextContent">
     <div id="diagram">
       <map id="map" name="map">
-  <area shape="RECT" coords="7,17,79,65"      href="Engine.html" alt="Engine">
-  <area shape="RECT" coords="103,113,175,161"      href="Hamster.html" alt="Hamster">
-  <area shape="RECT" coords="199,17,271,65"      href="World.html" alt="World">
-  <area shape="RECT" coords="295,17,367,65"      href="Event.html" alt="Event">
-  <area shape="RECT" coords="391,113,463,161"      href="Incoming.html" alt="Incoming">
-  <area shape="RECT" coords="103,17,175,65"      href="Thread.html" alt="Thread">
-  <area shape="RECT" coords="391,17,463,65"      href="Publisher.html" alt="Publisher">
+  <area shape="RECT" coords="21,17,93,65"      href="Event.html" alt="Event">
 </map>
-<img src="../dot/f_3.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_34.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -105,7 +99,7 @@ that is to be propagated to another object.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000118">new</a>&nbsp;&nbsp;
+      <a href="#M000110">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -155,11 +149,11 @@ that is to be propagated to another object.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000118" class="method-detail">
-        <a name="M000118"></a>
+      <div id="method-M000110" class="method-detail">
+        <a name="M000110"></a>
 
         <div class="method-heading">
-          <a href="#M000118" class="method-signature">
+          <a href="#M000110" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(from,to,kind,msg=nil)</span>
           </a>
         </div>
@@ -186,13 +180,13 @@ Constructor for an <a href="Event.html">Event</a>.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000118-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000118-source">
+            onclick="toggleCode('M000110-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000110-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 104</span>
-104:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">from</span>,<span class="ruby-identifier">to</span>,<span class="ruby-identifier">kind</span>,<span class="ruby-identifier">msg</span>=<span class="ruby-keyword kw">nil</span>)
-105:     <span class="ruby-ivar">@from</span>,<span class="ruby-ivar">@to</span>,<span class="ruby-ivar">@kind</span>,<span class="ruby-ivar">@msg</span>=<span class="ruby-identifier">from</span>,<span class="ruby-identifier">to</span>,<span class="ruby-identifier">kind</span>,<span class="ruby-identifier">msg</span>
-106:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/event/event.rb, line 25</span>
+25:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">from</span>,<span class="ruby-identifier">to</span>,<span class="ruby-identifier">kind</span>,<span class="ruby-identifier">msg</span>=<span class="ruby-keyword kw">nil</span>)
+26:     <span class="ruby-ivar">@from</span>,<span class="ruby-ivar">@to</span>,<span class="ruby-ivar">@kind</span>,<span class="ruby-ivar">@msg</span>=<span class="ruby-identifier">from</span>,<span class="ruby-identifier">to</span>,<span class="ruby-identifier">kind</span>,<span class="ruby-identifier">msg</span>
+27:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

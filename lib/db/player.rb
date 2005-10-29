@@ -65,13 +65,13 @@ class Player < GameObject
       @session = nil
       unsubscribe_all
       $engine.world.db.players_connected(@oid).each do |p|
-        $engine.world.add_event(@oid,p.oid,:show,"#{@name} has quit.")
+        $engine.world.eventmgr.add_event(@oid,p.oid,:show,"#{@name} has quit.")
       end
     when :disconnected
       @session = nil
       unsubscribe_all
       $engine.world.db.players_connected(@oid).each do |p|
-        $engine.world.add_event(@oid,p.oid,:show,"#{@name} has disconnected.")
+        $engine.world.eventmgr.add_event(@oid,p.oid,:show,"#{@name} has disconnected.")
       end
     when String
       parse(msg)
@@ -145,7 +145,7 @@ class Player < GameObject
     case e.kind
     when :describe
       msg = "[COLOR=cyan]#{@name} is here.[/COLOR]"
-      $engine.world.add_event(@oid,e.from,:show,msg)
+      $engine.world.eventmgr.add_event(@oid,e.from,:show,msg)
       fart(e)
     when :show
       sendto(e.msg)

@@ -20,7 +20,7 @@ module Cmd
     else
       sendto("You #{args}.")
       $engine.world.db.get(@location).players(@oid).each do |p|
-        $engine.world.add_event(@oid,p.oid,:show,"#{@name} #{args}.")
+        $engine.world.eventmgr.add_event(@oid,p.oid,:show,"#{@name} #{args}.")
       end
     end
   end

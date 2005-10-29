@@ -15,7 +15,7 @@ module Cmd
   # gets all objects in the room into your inventory
   def cmd_get(args)
     $engine.world.db.get(@location).objects.each do |q|
-      $engine.world.add_event(@oid,q.oid,:get)
+      $engine.world.eventmgr.add_event(@oid,q.oid,:get)
     end
   end
 

@@ -97,10 +97,10 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000094">conmsg</a>&nbsp;&nbsp;
-      <a href="#M000093">new</a>&nbsp;&nbsp;
-      <a href="#M000096">run</a>&nbsp;&nbsp;
-      <a href="#M000095">update</a>&nbsp;&nbsp;
+      <a href="#M000100">conmsg</a>&nbsp;&nbsp;
+      <a href="#M000099">new</a>&nbsp;&nbsp;
+      <a href="#M000102">run</a>&nbsp;&nbsp;
+      <a href="#M000101">update</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -122,25 +122,25 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000093" class="method-detail">
-        <a name="M000093"></a>
+      <div id="method-M000099" class="method-detail">
+        <a name="M000099"></a>
 
         <div class="method-heading">
-          <a href="#M000093" class="method-signature">
+          <a href="#M000099" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(opts)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000093-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000093-source">
+            onclick="toggleCode('M000099-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000099-source">
 <pre>
-     <span class="ruby-comment cmt"># File tclient.rb, line 138</span>
-138:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>)
-139:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">opts</span>)
-140:     <span class="ruby-identifier">system</span>(<span class="ruby-value str">'stty cbreak -echo'</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">win32</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">echo</span>
-141:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tclient.rb, line 142</span>
+142:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>)
+143:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">opts</span>)
+144:     <span class="ruby-identifier">system</span>(<span class="ruby-value str">'stty cbreak -echo'</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">win32</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">echo</span>
+145:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -148,160 +148,160 @@
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000094" class="method-detail">
-        <a name="M000094"></a>
+      <div id="method-M000100" class="method-detail">
+        <a name="M000100"></a>
 
         <div class="method-heading">
-          <a href="#M000094" class="method-signature">
+          <a href="#M000100" class="method-signature">
           <span class="method-name">conmsg</span><span class="method-args">(msg)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000094-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000094-source">
+            onclick="toggleCode('M000100-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000100-source">
 <pre>
-     <span class="ruby-comment cmt"># File tclient.rb, line 143</span>
-143:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">conmsg</span> <span class="ruby-identifier">msg</span>
-144:     <span class="ruby-identifier">puts</span> <span class="ruby-identifier">msg</span>
-145:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tclient.rb, line 147</span>
+147:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">conmsg</span> <span class="ruby-identifier">msg</span>
+148:     <span class="ruby-identifier">puts</span> <span class="ruby-identifier">msg</span>
+149:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000096" class="method-detail">
-        <a name="M000096"></a>
+      <div id="method-M000102" class="method-detail">
+        <a name="M000102"></a>
 
         <div class="method-heading">
-          <a href="#M000096" class="method-signature">
+          <a href="#M000102" class="method-signature">
           <span class="method-name">run</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000096-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000096-source">
+            onclick="toggleCode('M000102-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000102-source">
 <pre>
-     <span class="ruby-comment cmt"># File tclient.rb, line 163</span>
-163:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>
-164:     <span class="ruby-identifier">shutdown</span> = <span class="ruby-keyword kw">false</span>
-165:     <span class="ruby-identifier">connection</span> = <span class="ruby-constant">Reactor</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">port</span>, <span class="ruby-identifier">$connopts</span>, <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">address</span>)
-166:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Unable to start TeensyClient&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">start</span>(<span class="ruby-keyword kw">self</span>)
-167:     <span class="ruby-identifier">conmsg</span> <span class="ruby-node">&quot;Connected to #{@opts.address}:#{@opts.port}.  Use CTL-C to QUIT&quot;</span>
-168:     <span class="ruby-keyword kw">until</span> <span class="ruby-identifier">shutdown</span>
-169:       <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">poll</span>(<span class="ruby-value">0</span><span class="ruby-value">.1</span>)
-170:       <span class="ruby-identifier">c</span> = <span class="ruby-identifier">getkey</span>
-171:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">c</span>
-172:       <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>
-173:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">32</span><span class="ruby-operator">..</span><span class="ruby-value">127</span>
-174:         <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">chr</span>)
-175:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">13</span>
-176:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\n&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">win32</span>
-177:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">10</span>
-178:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\n&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">win32</span>
-179:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">315</span>
-180:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[11~&quot;</span>)
-181:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">316</span>
-182:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[12~&quot;</span>)
-183:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">317</span>
-184:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[13~&quot;</span>)
-185:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">318</span>
-186:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[14~&quot;</span>)
-187:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">319</span>
-188:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[15~&quot;</span>)
-189:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">320</span>
-190:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[17~&quot;</span>)
-191:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">321</span>
-192:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[18~&quot;</span>)
-193:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">322</span>
-194:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[19~&quot;</span>)
-195:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">323</span>
-196:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[20~&quot;</span>)
-197:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">324</span> <span class="ruby-comment cmt"># Windows F10</span>
-198:         <span class="ruby-identifier">conmsg</span> <span class="ruby-value str">&quot;Quitting...&quot;</span>
-199:         <span class="ruby-identifier">shutdown</span> = <span class="ruby-keyword kw">true</span>
-200: <span class="ruby-comment cmt">#      when 27 # xterm F10</span>
-201: <span class="ruby-comment cmt">#        if getkey == 91 &amp;&amp; getkey == 50 &amp;&amp; getkey == 49 &amp;&amp; getkey == 126</span>
-202: <span class="ruby-comment cmt">#          conmsg &quot;Quitting...&quot;</span>
-203: <span class="ruby-comment cmt">#          shutdown = true</span>
-204: <span class="ruby-comment cmt">#        end</span>
-205: 
-206:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">338</span>  <span class="ruby-comment cmt"># INS</span>
-207:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[2~&quot;</span>)
-208:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">339</span>  <span class="ruby-comment cmt"># DEL</span>
-209:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\010&quot;</span>)
-210:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">327</span>  <span class="ruby-comment cmt"># HOME</span>
-211:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[7~&quot;</span>)
-212:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">335</span>  <span class="ruby-comment cmt"># END</span>
-213:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[8~&quot;</span>)
-214:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">329</span>  <span class="ruby-comment cmt"># PAGEUP</span>
-215:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[5~&quot;</span>)
-216:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">337</span>  <span class="ruby-comment cmt"># PAGEDOWN</span>
-217:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[6~&quot;</span>)
-218:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">328</span>  <span class="ruby-comment cmt"># UP</span>
-219:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[A&quot;</span>)
-220:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">336</span>  <span class="ruby-comment cmt"># DOWN</span>
-221:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[B&quot;</span>)
-222:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">333</span>  <span class="ruby-comment cmt"># RIGHT</span>
-223:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[C&quot;</span>)
-224:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">331</span>  <span class="ruby-comment cmt"># LEFT</span>
-225:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[D&quot;</span>)
-226: 
-227: 
-228:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">256</span><span class="ruby-operator">..</span><span class="ruby-value">512</span>
-229:         <span class="ruby-identifier">conmsg</span> <span class="ruby-node">&quot;Unknown key hit code - #{c.inspect}&quot;</span>
-230:       <span class="ruby-keyword kw">else</span>
-231:         <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">chr</span>)
-232: <span class="ruby-comment cmt">#        conmsg &quot;Unknown key hit code - #{c.inspect}&quot;</span>
-233:       <span class="ruby-keyword kw">end</span>
-234:     <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># until</span>
-235:     <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">stop</span>
-236:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SystemExit</span>, <span class="ruby-constant">Interrupt</span>
-237:     <span class="ruby-identifier">conmsg</span> <span class="ruby-value str">&quot;\nConnection closed exiting&quot;</span>
-238:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-239:     <span class="ruby-identifier">conmsg</span> <span class="ruby-value str">&quot;\nException caught error in client: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$!</span>
-240:     <span class="ruby-identifier">conmsg</span> <span class="ruby-identifier">$@</span>
-241:   <span class="ruby-keyword kw">ensure</span>
-242:     <span class="ruby-identifier">system</span>(<span class="ruby-value str">'stty -cbreak echo'</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">win32</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">echo</span>
-243:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tclient.rb, line 167</span>
+167:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>
+168:     <span class="ruby-identifier">shutdown</span> = <span class="ruby-keyword kw">false</span>
+169:     <span class="ruby-identifier">connection</span> = <span class="ruby-constant">Reactor</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">port</span>, <span class="ruby-identifier">$connopts</span>, <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">address</span>)
+170:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Unable to start TeensyClient&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">start</span>(<span class="ruby-keyword kw">self</span>)
+171:     <span class="ruby-identifier">conmsg</span> <span class="ruby-node">&quot;Connected to #{@opts.address}:#{@opts.port}.  Use CTL-C to QUIT&quot;</span>
+172:     <span class="ruby-keyword kw">until</span> <span class="ruby-identifier">shutdown</span>
+173:       <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">poll</span>(<span class="ruby-value">0</span><span class="ruby-value">.1</span>)
+174:       <span class="ruby-identifier">c</span> = <span class="ruby-identifier">getkey</span>
+175:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">c</span>
+176:       <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>
+177:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">32</span><span class="ruby-operator">..</span><span class="ruby-value">127</span>
+178:         <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">chr</span>)
+179:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">13</span>
+180:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\n&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">win32</span>
+181:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">10</span>
+182:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\n&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">win32</span>
+183:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">315</span>
+184:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[11~&quot;</span>)
+185:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">316</span>
+186:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[12~&quot;</span>)
+187:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">317</span>
+188:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[13~&quot;</span>)
+189:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">318</span>
+190:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[14~&quot;</span>)
+191:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">319</span>
+192:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[15~&quot;</span>)
+193:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">320</span>
+194:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[17~&quot;</span>)
+195:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">321</span>
+196:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[18~&quot;</span>)
+197:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">322</span>
+198:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[19~&quot;</span>)
+199:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">323</span>
+200:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[20~&quot;</span>)
+201:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">324</span> <span class="ruby-comment cmt"># Windows F10</span>
+202:         <span class="ruby-identifier">conmsg</span> <span class="ruby-value str">&quot;Quitting...&quot;</span>
+203:         <span class="ruby-identifier">shutdown</span> = <span class="ruby-keyword kw">true</span>
+204: <span class="ruby-comment cmt">#      when 27 # xterm F10</span>
+205: <span class="ruby-comment cmt">#        if getkey == 91 &amp;&amp; getkey == 50 &amp;&amp; getkey == 49 &amp;&amp; getkey == 126</span>
+206: <span class="ruby-comment cmt">#          conmsg &quot;Quitting...&quot;</span>
+207: <span class="ruby-comment cmt">#          shutdown = true</span>
+208: <span class="ruby-comment cmt">#        end</span>
+209: 
+210:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">338</span>  <span class="ruby-comment cmt"># INS</span>
+211:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[2~&quot;</span>)
+212:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">339</span>  <span class="ruby-comment cmt"># DEL</span>
+213:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\010&quot;</span>)
+214:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">327</span>  <span class="ruby-comment cmt"># HOME</span>
+215:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[7~&quot;</span>)
+216:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">335</span>  <span class="ruby-comment cmt"># END</span>
+217:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[8~&quot;</span>)
+218:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">329</span>  <span class="ruby-comment cmt"># PAGEUP</span>
+219:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[5~&quot;</span>)
+220:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">337</span>  <span class="ruby-comment cmt"># PAGEDOWN</span>
+221:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[6~&quot;</span>)
+222:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">328</span>  <span class="ruby-comment cmt"># UP</span>
+223:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[A&quot;</span>)
+224:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">336</span>  <span class="ruby-comment cmt"># DOWN</span>
+225:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[B&quot;</span>)
+226:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">333</span>  <span class="ruby-comment cmt"># RIGHT</span>
+227:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[C&quot;</span>)
+228:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">331</span>  <span class="ruby-comment cmt"># LEFT</span>
+229:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\e[D&quot;</span>)
+230: 
+231: 
+232:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">256</span><span class="ruby-operator">..</span><span class="ruby-value">512</span>
+233:         <span class="ruby-identifier">conmsg</span> <span class="ruby-node">&quot;Unknown key hit code - #{c.inspect}&quot;</span>
+234:       <span class="ruby-keyword kw">else</span>
+235:         <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">chr</span>)
+236: <span class="ruby-comment cmt">#        conmsg &quot;Unknown key hit code - #{c.inspect}&quot;</span>
+237:       <span class="ruby-keyword kw">end</span>
+238:     <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># until</span>
+239:     <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">stop</span>
+240:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SystemExit</span>, <span class="ruby-constant">Interrupt</span>
+241:     <span class="ruby-identifier">conmsg</span> <span class="ruby-value str">&quot;\nConnection closed exiting&quot;</span>
+242:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+243:     <span class="ruby-identifier">conmsg</span> <span class="ruby-value str">&quot;\nException caught error in client: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$!</span>
+244:     <span class="ruby-identifier">conmsg</span> <span class="ruby-identifier">$@</span>
+245:   <span class="ruby-keyword kw">ensure</span>
+246:     <span class="ruby-identifier">system</span>(<span class="ruby-value str">'stty -cbreak echo'</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">win32</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">echo</span>
+247:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000095" class="method-detail">
-        <a name="M000095"></a>
+      <div id="method-M000101" class="method-detail">
+        <a name="M000101"></a>
 
         <div class="method-heading">
-          <a href="#M000095" class="method-signature">
+          <a href="#M000101" class="method-signature">
           <span class="method-name">update</span><span class="method-args">(msg)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000095-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000095-source">
+            onclick="toggleCode('M000101-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000101-source">
 <pre>
-     <span class="ruby-comment cmt"># File tclient.rb, line 147</span>
-147:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)
-148:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>
-149:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Connection</span>, <span class="ruby-identifier">:initdone</span>
-150:       <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">msg</span>)
-151:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:logged_out</span>, <span class="ruby-identifier">:disconnected</span>
-152:       <span class="ruby-identifier">unsubscribe_all</span>
-153:       <span class="ruby-identifier">$shutdown</span> = <span class="ruby-keyword kw">true</span>
-154:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Disconnected.&quot;</span>
-155:       <span class="ruby-identifier">exit</span>
-156:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
-157:       <span class="ruby-identifier">print</span> <span class="ruby-identifier">msg</span>
-158:     <span class="ruby-keyword kw">else</span>
-159:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Unknown msg - #{msg.inspect}&quot;</span>
-160:     <span class="ruby-keyword kw">end</span>
-161:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tclient.rb, line 151</span>
+151:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)
+152:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>
+153:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Connection</span>, <span class="ruby-identifier">:initdone</span>
+154:       <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">msg</span>)
+155:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:logged_out</span>, <span class="ruby-identifier">:disconnected</span>
+156:       <span class="ruby-identifier">unsubscribe_all</span>
+157:       <span class="ruby-identifier">$shutdown</span> = <span class="ruby-keyword kw">true</span>
+158:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Disconnected.&quot;</span>
+159:       <span class="ruby-identifier">exit</span>
+160:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+161:       <span class="ruby-identifier">print</span> <span class="ruby-identifier">msg</span>
+162:     <span class="ruby-keyword kw">else</span>
+163:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Unknown msg - #{msg.inspect}&quot;</span>
+164:     <span class="ruby-keyword kw">end</span>
+165:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

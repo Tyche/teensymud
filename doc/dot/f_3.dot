@@ -19,15 +19,6 @@ digraph TopLevel {
         label = "Engine"
     ]
 
-    Hamster [
-        fontcolor = black,
-        URL = "classes/Hamster.html",
-        shape = ellipse,
-        color = palegoldenrod,
-        style = filled,
-        label = "Hamster"
-    ]
-
     World [
         fontcolor = black,
         URL = "classes/World.html",
@@ -35,43 +26,6 @@ digraph TopLevel {
         color = palegoldenrod,
         style = filled,
         label = "World"
-    ]
-
-    Event [
-        fontcolor = black,
-        URL = "classes/Event.html",
-        shape = ellipse,
-        color = palegoldenrod,
-        style = filled,
-        label = "Event"
-    ]
-
-    Incoming [
-        fontcolor = black,
-        URL = "classes/Incoming.html",
-        shape = ellipse,
-        color = palegoldenrod,
-        style = filled,
-        label = "Incoming"
-    ]
-
-    Thread [
-        URL = "classes/Thread.html",
-        label = "Thread"
-    ]
-
-    Thread -> Hamster [
-
-    ]
-
-    Publisher [
-        URL = "classes/Publisher.html",
-        shape = box,
-        label = "Publisher"
-    ]
-
-    Publisher -> Incoming [
-
     ]
 
 }

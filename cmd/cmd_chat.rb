@@ -20,7 +20,7 @@ module Cmd
     else
       sendto("[COLOR=magenta]You chat, \"#{args}\".[/COLOR]")
       $engine.world.db.players_connected(@oid).each do |p|
-        $engine.world.add_event(@oid,p.oid,:show,
+        $engine.world.eventmgr.add_event(@oid,p.oid,:show,
           "[COLOR=magenta]#{@name} chats, \"#{args}\".[/COLOR]")
       end
     end

@@ -15,7 +15,7 @@ module Cmd
   # The inventory command
   def cmd_inv(args)
     objects.each do |x|
-      $engine.world.add_event(@oid,x.oid,:describe)
+      $engine.world.eventmgr.add_event(@oid,x.oid,:describe)
     end
   end
 

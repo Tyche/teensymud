@@ -32,8 +32,8 @@ Rake::RDocTask.new do |rd|
 #  rd.template = 'kilmer'
 #  rd.template = './rdoctemplate.rb'
   rd.rdoc_files.include('README', 'farts.grammar', 'TML', 'tmud.rb', 'tclient.rb',
-    'lib/*.rb', 'lib/net/*.rb', 'lib/farts/*.rb', 'lib/protocol/*.rb', 'lib/db/*.rb',
-    'cmd/*.rb')
+    'lib/*.rb', 'lib/net/*.rb', 'lib/farts/*.rb', 'lib/protocol/*.rb', 
+    'lib/db/*.rb', 'lib/event/*.rb', 'cmd/*.rb')
   rd.options << '-dSN -I gif' 
 end
 

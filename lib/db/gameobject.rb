@@ -147,7 +147,7 @@ class GameObject
     case e.kind
     when :describe
       msg = "[COLOR=yellow]A #{name} is here[/COLOR]"
-      $engine.world.add_event(@oid,e.from,:show,msg)
+      $engine.world.eventmgr.add_event(@oid,e.from,:show,msg)
       fart(e)
     when :get
       plyr = $engine.world.db.get(e.from)
@@ -157,7 +157,7 @@ class GameObject
       # add it
       plyr.add_contents(@oid)
       @location = plyr.oid
-      $engine.world.add_event(@oid,e.from,:show,"You get the #{@name}")
+      $engine.world.eventmgr.add_event(@oid,e.from,:show,"You get the #{@name}")
       fart(e)
     when :drop
       plyr = $engine.world.db.get(e.from)
@@ -167,7 +167,7 @@ class GameObject
       # add it
       place.add_contents(@oid)
       @location = place.oid
-      $engine.world.add_event(@oid,e.from,:show,"You drop the #{@name}")
+      $engine.world.eventmgr.add_event(@oid,e.from,:show,"You drop the #{@name}")
       fart(e)
     when :timer
       fart(e)

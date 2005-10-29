@@ -19,7 +19,7 @@ module ObjCmd
       false
     when /(\d+) (.*)/
       $engine.world.db.get($1.to_i).players(@oid).each do |p|
-        $engine.world.add_event(@oid,p.oid,:show,$2)
+        $engine.world.eventmgr.add_event(@oid,p.oid,:show,$2)
       end
       true
     else

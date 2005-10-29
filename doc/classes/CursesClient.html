@@ -136,18 +136,20 @@
             onclick="toggleCode('M000017-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000017-source">
 <pre>
-    <span class="ruby-comment cmt"># File tclient.rb, line 67</span>
-67:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>)
-68:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">opts</span>)
-69:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">init_screen</span>
-70:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">cbreak</span>
-71:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">noecho</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">echo</span>
-72:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">nl</span>
-73:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">stdscr</span>.<span class="ruby-identifier">keypad</span>(<span class="ruby-keyword kw">true</span>)
-74:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">stdscr</span>.<span class="ruby-identifier">scrollok</span>(<span class="ruby-keyword kw">true</span>)
-75:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">timeout</span> = <span class="ruby-value">0</span>
-76:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">start_color</span>
-77:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tclient.rb, line 69</span>
+69:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>)
+70:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">opts</span>)
+71:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">init_screen</span>
+72:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">cbreak</span>
+73:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">noecho</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">echo</span>
+74:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">nl</span>
+75:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">stdscr</span>.<span class="ruby-identifier">scrollok</span>(<span class="ruby-keyword kw">true</span>)
+76:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">$opts</span>.<span class="ruby-identifier">win32</span>  <span class="ruby-comment cmt"># Need workaround for these</span>
+77:       <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">stdscr</span>.<span class="ruby-identifier">keypad</span>(<span class="ruby-keyword kw">true</span>)
+78:       <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">timeout</span> = <span class="ruby-value">0</span>
+79:     <span class="ruby-keyword kw">end</span>
+80:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">start_color</span>
+81:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -169,11 +171,11 @@
             onclick="toggleCode('M000018-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000018-source">
 <pre>
-    <span class="ruby-comment cmt"># File tclient.rb, line 79</span>
-79:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">conmsg</span> <span class="ruby-identifier">msg</span>
-80:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">addstr</span>(<span class="ruby-identifier">msg</span>)
-81:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">refresh</span>
-82:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tclient.rb, line 83</span>
+83:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">conmsg</span> <span class="ruby-identifier">msg</span>
+84:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">addstr</span>(<span class="ruby-identifier">msg</span>)
+85:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">refresh</span>
+86:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -193,40 +195,40 @@
             onclick="toggleCode('M000020-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000020-source">
 <pre>
-     <span class="ruby-comment cmt"># File tclient.rb, line 101</span>
-101:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>
-102:     <span class="ruby-identifier">shutdown</span> = <span class="ruby-keyword kw">false</span>
-103:     <span class="ruby-identifier">connection</span> = <span class="ruby-constant">Reactor</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">port</span>, <span class="ruby-identifier">$connopts</span>, <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">address</span>)
-104:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Unable to start TeensyClient&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">start</span>(<span class="ruby-keyword kw">self</span>)
-105:     <span class="ruby-identifier">conmsg</span> <span class="ruby-node">&quot;Connected to #{@opts.address}:#{@opts.port}.  Use F10 to QUIT&quot;</span>
-106:     <span class="ruby-keyword kw">until</span> <span class="ruby-identifier">shutdown</span>
-107:       <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">poll</span>(<span class="ruby-value">0</span><span class="ruby-value">.1</span>)
-108:       <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">refresh</span>
-109:       <span class="ruby-identifier">c</span> = <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">getch</span>
-110:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">c</span>
-111:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">32</span><span class="ruby-operator">..</span><span class="ruby-value">127</span>
-112:         <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">chr</span>)
-113:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Curses</span><span class="ruby-operator">::</span><span class="ruby-constant">KEY_ENTER</span>
-114:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\r\n&quot;</span>)
-115:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">10</span>
-116:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
-117:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">4294967295</span> <span class="ruby-comment cmt"># Error Timeout. This is -1 in Bignum format</span>
-118:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Curses</span><span class="ruby-operator">::</span><span class="ruby-constant">KEY_F10</span>
-119:         <span class="ruby-identifier">conmsg</span> <span class="ruby-value str">&quot;Quitting...&quot;</span>
-120:         <span class="ruby-identifier">shutdown</span> = <span class="ruby-keyword kw">true</span>
-121:       <span class="ruby-keyword kw">else</span>
-122:         <span class="ruby-identifier">conmsg</span> <span class="ruby-node">&quot;Unknown key hit code - #{c.inspect}&quot;</span>
-123:       <span class="ruby-keyword kw">end</span>
-124:     <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># until</span>
-125:     <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">stop</span>
-126:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SystemExit</span>, <span class="ruby-constant">Interrupt</span>
-127:     <span class="ruby-identifier">conmsg</span> <span class="ruby-value str">&quot;\nConnection closed exiting&quot;</span>
-128:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-129:     <span class="ruby-identifier">conmsg</span> <span class="ruby-value str">&quot;\nException caught error in client: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$!</span>
-130:     <span class="ruby-identifier">conmsg</span> <span class="ruby-identifier">$@</span>
-131:   <span class="ruby-keyword kw">ensure</span>
-132:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">close_screen</span>
-133:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tclient.rb, line 105</span>
+105:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>
+106:     <span class="ruby-identifier">shutdown</span> = <span class="ruby-keyword kw">false</span>
+107:     <span class="ruby-identifier">connection</span> = <span class="ruby-constant">Reactor</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">port</span>, <span class="ruby-identifier">$connopts</span>, <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">address</span>)
+108:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Unable to start TeensyClient&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">start</span>(<span class="ruby-keyword kw">self</span>)
+109:     <span class="ruby-identifier">conmsg</span> <span class="ruby-node">&quot;Connected to #{@opts.address}:#{@opts.port}.  Use F10 to QUIT&quot;</span>
+110:     <span class="ruby-keyword kw">until</span> <span class="ruby-identifier">shutdown</span>
+111:       <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">poll</span>(<span class="ruby-value">0</span><span class="ruby-value">.1</span>)
+112:       <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">refresh</span>
+113:       <span class="ruby-identifier">c</span> = <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">getch</span>
+114:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">c</span>
+115:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">32</span><span class="ruby-operator">..</span><span class="ruby-value">127</span>
+116:         <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">chr</span>)
+117:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Curses</span><span class="ruby-operator">::</span><span class="ruby-constant">KEY_ENTER</span>
+118:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\r\n&quot;</span>)
+119:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">10</span>
+120:         <span class="ruby-identifier">publish</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+121:       <span class="ruby-keyword kw">when</span> <span class="ruby-value">4294967295</span> <span class="ruby-comment cmt"># Error Timeout. This is -1 in Bignum format</span>
+122:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Curses</span><span class="ruby-operator">::</span><span class="ruby-constant">KEY_F10</span>
+123:         <span class="ruby-identifier">conmsg</span> <span class="ruby-value str">&quot;Quitting...&quot;</span>
+124:         <span class="ruby-identifier">shutdown</span> = <span class="ruby-keyword kw">true</span>
+125:       <span class="ruby-keyword kw">else</span>
+126:         <span class="ruby-identifier">conmsg</span> <span class="ruby-node">&quot;Unknown key hit code - #{c.inspect}&quot;</span>
+127:       <span class="ruby-keyword kw">end</span>
+128:     <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># until</span>
+129:     <span class="ruby-identifier">connection</span>.<span class="ruby-identifier">stop</span>
+130:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SystemExit</span>, <span class="ruby-constant">Interrupt</span>
+131:     <span class="ruby-identifier">conmsg</span> <span class="ruby-value str">&quot;\nConnection closed exiting&quot;</span>
+132:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+133:     <span class="ruby-identifier">conmsg</span> <span class="ruby-value str">&quot;\nException caught error in client: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$!</span>
+134:     <span class="ruby-identifier">conmsg</span> <span class="ruby-identifier">$@</span>
+135:   <span class="ruby-keyword kw">ensure</span>
+136:     <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">close_screen</span>
+137:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -246,23 +248,23 @@
             onclick="toggleCode('M000019-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000019-source">
 <pre>
-    <span class="ruby-comment cmt"># File tclient.rb, line 84</span>
-84:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)
-85:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>
-86:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Connection</span>, <span class="ruby-identifier">:initdone</span>
-87:       <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">msg</span>)
-88:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:logged_out</span>, <span class="ruby-identifier">:disconnected</span>
-89:       <span class="ruby-identifier">unsubscribe_all</span>
-90:       <span class="ruby-identifier">$shutdown</span> = <span class="ruby-keyword kw">true</span>
-91:       <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">addstr</span> <span class="ruby-value str">&quot;Disconnected.&quot;</span>
-92:       <span class="ruby-identifier">exit</span>
-93:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
-94:       <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">addstr</span>(<span class="ruby-identifier">msg</span>)
-95:       <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">refresh</span>
-96:     <span class="ruby-keyword kw">else</span>
-97:       <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">addstr</span> <span class="ruby-node">&quot;Unknown msg - #{msg.inspect}&quot;</span>
-98:     <span class="ruby-keyword kw">end</span>
-99:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File tclient.rb, line 88</span>
+ 88:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)
+ 89:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>
+ 90:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Connection</span>, <span class="ruby-identifier">:initdone</span>
+ 91:       <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">msg</span>)
+ 92:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:logged_out</span>, <span class="ruby-identifier">:disconnected</span>
+ 93:       <span class="ruby-identifier">unsubscribe_all</span>
+ 94:       <span class="ruby-identifier">$shutdown</span> = <span class="ruby-keyword kw">true</span>
+ 95:       <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">addstr</span> <span class="ruby-value str">&quot;Disconnected.&quot;</span>
+ 96:       <span class="ruby-identifier">exit</span>
+ 97:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+ 98:       <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">addstr</span>(<span class="ruby-identifier">msg</span>)
+ 99:       <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">refresh</span>
+100:     <span class="ruby-keyword kw">else</span>
+101:       <span class="ruby-constant">Curses</span>.<span class="ruby-identifier">addstr</span> <span class="ruby-node">&quot;Unknown msg - #{msg.inspect}&quot;</span>
+102:     <span class="ruby-keyword kw">end</span>
+103:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

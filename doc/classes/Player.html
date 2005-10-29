@@ -85,7 +85,7 @@
   <area shape="RECT" coords="7,17,79,65"      href="Publisher.html" alt="Publisher">
   <area shape="RECT" coords="103,17,191,65"      href="GameObject.html" alt="GameObject">
 </map>
-<img src="../dot/f_30.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_32.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -204,11 +204,7 @@ Create a new <a href="Player.html">Player</a> object
 36: 
 37:     <span class="ruby-comment cmt"># session related - only color settable</span>
 38:     <span class="ruby-ivar">@color</span> = <span class="ruby-keyword kw">false</span>
-39:     <span class="ruby-ivar">@echo</span> = <span class="ruby-keyword kw">false</span>
-40:     <span class="ruby-ivar">@zmp</span> = <span class="ruby-keyword kw">false</span>
-41:     <span class="ruby-ivar">@termsize</span> = [<span class="ruby-value">80</span>,<span class="ruby-value">43</span>]
-42:     <span class="ruby-ivar">@terminal</span> = <span class="ruby-value str">&quot;unknown&quot;</span>
-43:   <span class="ruby-keyword kw">end</span>
+39:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -241,20 +237,20 @@ Create a new <a href="Player.html">Player</a> object
             onclick="toggleCode('M000016-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000016-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/db/player.rb, line 173</span>
-173:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ass</span>(<span class="ruby-identifier">e</span>)
-174:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">kind</span>
-175:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:describe</span>
-176:       <span class="ruby-identifier">msg</span> = <span class="ruby-node">&quot;[COLOR=cyan]#{@name} is here.[/COLOR]&quot;</span>
-177:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-identifier">msg</span>)
-178:       <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
-179:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:show</span>
-180:       <span class="ruby-identifier">sendto</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">msg</span>)
-181:       <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
-182:     <span class="ruby-keyword kw">else</span>
-183:       <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">e</span>)
-184:     <span class="ruby-keyword kw">end</span>
-185:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/db/player.rb, line 144</span>
+144:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ass</span>(<span class="ruby-identifier">e</span>)
+145:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">kind</span>
+146:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:describe</span>
+147:       <span class="ruby-identifier">msg</span> = <span class="ruby-node">&quot;[COLOR=cyan]#{@name} is here.[/COLOR]&quot;</span>
+148:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">eventmgr</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">e</span>.<span class="ruby-identifier">from</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-identifier">msg</span>)
+149:       <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
+150:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:show</span>
+151:       <span class="ruby-identifier">sendto</span>(<span class="ruby-identifier">e</span>.<span class="ruby-identifier">msg</span>)
+152:       <span class="ruby-identifier">fart</span>(<span class="ruby-identifier">e</span>)
+153:     <span class="ruby-keyword kw">else</span>
+154:       <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">e</span>)
+155:     <span class="ruby-keyword kw">end</span>
+156:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -285,10 +281,10 @@ Compares the password with the players
             onclick="toggleCode('M000013-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000013-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/db/player.rb, line 115</span>
-115:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_passwd</span>(<span class="ruby-identifier">p</span>)
-116:     <span class="ruby-ivar">@passwd</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">crypt</span>(<span class="ruby-ivar">@passwd</span>)
-117:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/db/player.rb, line 86</span>
+86:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_passwd</span>(<span class="ruby-identifier">p</span>)
+87:     <span class="ruby-ivar">@passwd</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">crypt</span>(<span class="ruby-ivar">@passwd</span>)
+88:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -311,12 +307,12 @@ Disconnects this player
             onclick="toggleCode('M000014-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000014-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/db/player.rb, line 120</span>
-120:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">disconnect</span>
-121:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:logged_out</span>)
-122:     <span class="ruby-identifier">unsubscribe_all</span>
-123:     <span class="ruby-ivar">@session</span> = <span class="ruby-keyword kw">nil</span>
-124:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/db/player.rb, line 91</span>
+91:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">disconnect</span>
+92:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:logged_out</span>)
+93:     <span class="ruby-identifier">unsubscribe_all</span>
+94:     <span class="ruby-ivar">@session</span> = <span class="ruby-keyword kw">nil</span>
+95:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -347,47 +343,47 @@ All command input routed through here and parsed.
             onclick="toggleCode('M000015-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000015-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/db/player.rb, line 129</span>
-129:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">m</span>)
-130:     <span class="ruby-comment cmt"># match legal command</span>
-131:     <span class="ruby-identifier">m</span><span class="ruby-operator">=~</span><span class="ruby-regexp re">/([A-Za-z0-9_@?&quot;'#!\]\[]+)(.*)/</span>
-132:     <span class="ruby-identifier">cmd</span>=<span class="ruby-identifier">$1</span>
-133:     <span class="ruby-identifier">arg</span>=<span class="ruby-identifier">$2</span>
-134:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">strip!</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">arg</span>
-135:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">cmd</span>
-136:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Huh?&quot;</span>)
-137:       <span class="ruby-keyword kw">return</span>
+     <span class="ruby-comment cmt"># File lib/db/player.rb, line 100</span>
+100:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">m</span>)
+101:     <span class="ruby-comment cmt"># match legal command</span>
+102:     <span class="ruby-identifier">m</span><span class="ruby-operator">=~</span><span class="ruby-regexp re">/([A-Za-z0-9_@?&quot;'#!\]\[]+)(.*)/</span>
+103:     <span class="ruby-identifier">cmd</span>=<span class="ruby-identifier">$1</span>
+104:     <span class="ruby-identifier">arg</span>=<span class="ruby-identifier">$2</span>
+105:     <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">strip!</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">arg</span>
+106:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">cmd</span>
+107:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Huh?&quot;</span>)
+108:       <span class="ruby-keyword kw">return</span>
+109:     <span class="ruby-keyword kw">end</span>
+110: 
+111:     <span class="ruby-comment cmt"># look for a command in our spanking new table</span>
+112:     <span class="ruby-identifier">c</span> = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">cmds</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">cmd</span>)
+113: 
+114:     <span class="ruby-comment cmt"># add any exits to our command list</span>
+115:     <span class="ruby-comment cmt"># escape certain characters in cmd</span>
+116:     <span class="ruby-identifier">check</span> = <span class="ruby-identifier">cmd</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\?/</span>,<span class="ruby-value str">&quot;\\?&quot;</span>)
+117:     <span class="ruby-identifier">check</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\#/</span>,<span class="ruby-value str">&quot;\\#&quot;</span>)
+118:     <span class="ruby-identifier">check</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\[/</span>,<span class="ruby-value str">&quot;\\[&quot;</span>)
+119:     <span class="ruby-identifier">check</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\]/</span>,<span class="ruby-value str">&quot;\\]&quot;</span>)
+120:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">exits</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">grep</span>(<span class="ruby-node">/^#{check}/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ex</span><span class="ruby-operator">|</span>
+121:       <span class="ruby-identifier">c</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Command</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:cmd_go</span>,<span class="ruby-node">&quot;go #{ex}&quot;</span>,<span class="ruby-keyword kw">nil</span>)
+122:       <span class="ruby-identifier">arg</span> = <span class="ruby-identifier">ex</span>
+123:     <span class="ruby-keyword kw">end</span>
+124: 
+125:     <span class="ruby-comment cmt"># there are three possibilities here</span>
+126:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">size</span>
+127:     <span class="ruby-keyword kw">when</span> <span class="ruby-value">0</span>   <span class="ruby-comment cmt"># no commands found</span>
+128:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Huh?&quot;</span>)
+129:     <span class="ruby-keyword kw">when</span> <span class="ruby-value">1</span>   <span class="ruby-comment cmt"># command found</span>
+130:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">c</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">cmd</span>, <span class="ruby-identifier">arg</span>)
+131:     <span class="ruby-keyword kw">else</span>     <span class="ruby-comment cmt"># ambiguous command - tell luser about them.</span>
+132:       <span class="ruby-identifier">ln</span> = <span class="ruby-value str">&quot;Which did you mean, &quot;</span>
+133:       <span class="ruby-identifier">c</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+134:         <span class="ruby-identifier">ln</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;\'&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\'&quot;</span>
+135:         <span class="ruby-identifier">x</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">name</span> <span class="ruby-value">? </span><span class="ruby-identifier">ln</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;?&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">ln</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot; or &quot;</span>
+136:       <span class="ruby-keyword kw">end</span>
+137:       <span class="ruby-identifier">sendto</span>(<span class="ruby-identifier">ln</span>)
 138:     <span class="ruby-keyword kw">end</span>
-139: 
-140:     <span class="ruby-comment cmt"># look for a command in our spanking new table</span>
-141:     <span class="ruby-identifier">c</span> = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">cmds</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">cmd</span>)
-142: 
-143:     <span class="ruby-comment cmt"># add any exits to our command list</span>
-144:     <span class="ruby-comment cmt"># escape certain characters in cmd</span>
-145:     <span class="ruby-identifier">check</span> = <span class="ruby-identifier">cmd</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\?/</span>,<span class="ruby-value str">&quot;\\?&quot;</span>)
-146:     <span class="ruby-identifier">check</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\#/</span>,<span class="ruby-value str">&quot;\\#&quot;</span>)
-147:     <span class="ruby-identifier">check</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\[/</span>,<span class="ruby-value str">&quot;\\[&quot;</span>)
-148:     <span class="ruby-identifier">check</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\]/</span>,<span class="ruby-value str">&quot;\\]&quot;</span>)
-149:     <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@location</span>).<span class="ruby-identifier">exits</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">grep</span>(<span class="ruby-node">/^#{check}/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ex</span><span class="ruby-operator">|</span>
-150:       <span class="ruby-identifier">c</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Command</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:cmd_go</span>,<span class="ruby-node">&quot;go #{ex}&quot;</span>,<span class="ruby-keyword kw">nil</span>)
-151:       <span class="ruby-identifier">arg</span> = <span class="ruby-identifier">ex</span>
-152:     <span class="ruby-keyword kw">end</span>
-153: 
-154:     <span class="ruby-comment cmt"># there are three possibilities here</span>
-155:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">size</span>
-156:     <span class="ruby-keyword kw">when</span> <span class="ruby-value">0</span>   <span class="ruby-comment cmt"># no commands found</span>
-157:       <span class="ruby-identifier">sendto</span>(<span class="ruby-value str">&quot;Huh?&quot;</span>)
-158:     <span class="ruby-keyword kw">when</span> <span class="ruby-value">1</span>   <span class="ruby-comment cmt"># command found</span>
-159:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">c</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">cmd</span>, <span class="ruby-identifier">arg</span>)
-160:     <span class="ruby-keyword kw">else</span>     <span class="ruby-comment cmt"># ambiguous command - tell luser about them.</span>
-161:       <span class="ruby-identifier">ln</span> = <span class="ruby-value str">&quot;Which did you mean, &quot;</span>
-162:       <span class="ruby-identifier">c</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
-163:         <span class="ruby-identifier">ln</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;\'&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\'&quot;</span>
-164:         <span class="ruby-identifier">x</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">name</span> <span class="ruby-value">? </span><span class="ruby-identifier">ln</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;?&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">ln</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot; or &quot;</span>
-165:       <span class="ruby-keyword kw">end</span>
-166:       <span class="ruby-identifier">sendto</span>(<span class="ruby-identifier">ln</span>)
-167:     <span class="ruby-keyword kw">end</span>
-168:   <span class="ruby-keyword kw">end</span>
+139:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -418,10 +414,10 @@ Sends a message to the player if they are connected.
             onclick="toggleCode('M000011-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000011-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/db/player.rb, line 48</span>
-48:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sendto</span>(<span class="ruby-identifier">s</span>)
-49:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">s</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot;\n&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@session</span>
-50:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/db/player.rb, line 44</span>
+44:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sendto</span>(<span class="ruby-identifier">s</span>)
+45:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">s</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot;\n&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@session</span>
+46:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -468,69 +464,32 @@ href="Session.html">Session</a> and we
   send it to Player#parse.
 </pre>
 </dd>
-<dt>Array</dt><dd>- An Array is assumed to be the return value of a query we
-
-<pre>
-  issued to the Connection.
-</pre>
-<p>
-&lt;pre&gt; us -&gt; <a href="Connection.html">Connection</a>
-</p>
-<pre>
-    query :color
-</pre>
-<p>
-<a href="Connection.html">Connection</a> -&gt; us
-</p>
-<pre>
-    [:color, true]
-</pre>
-<p>
-&lt;/pre&gt;
-</p>
-</dd>
 </dl>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000012-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000012-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/db/player.rb, line 75</span>
- 75:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)
- 76:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>
- 77:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:logged_out</span>
- 78:       <span class="ruby-ivar">@session</span> = <span class="ruby-keyword kw">nil</span>
- 79:       <span class="ruby-identifier">unsubscribe_all</span>
- 80:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">players_connected</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
- 81:         <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;#{@name} has quit.&quot;</span>)
- 82:       <span class="ruby-keyword kw">end</span>
- 83:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:disconnected</span>
- 84:       <span class="ruby-ivar">@session</span> = <span class="ruby-keyword kw">nil</span>
- 85:       <span class="ruby-identifier">unsubscribe_all</span>
- 86:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">players_connected</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
- 87:         <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;#{@name} has disconnected.&quot;</span>)
- 88:       <span class="ruby-keyword kw">end</span>
- 89:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span>
- 90:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Player#update query return - #{msg.inspect}&quot;</span>
- 91:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>[<span class="ruby-value">0</span>]
- 92:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:terminal</span>
- 93:         <span class="ruby-ivar">@terminal</span> = <span class="ruby-identifier">msg</span>[<span class="ruby-value">1</span>]
- 94:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:termsize</span>
- 95:         <span class="ruby-ivar">@termsize</span> = <span class="ruby-identifier">msg</span>[<span class="ruby-value">1</span>]
- 96:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:color</span>
- 97:         <span class="ruby-ivar">@color</span> = <span class="ruby-identifier">msg</span>[<span class="ruby-value">1</span>]
- 98:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:zmp</span>
- 99:         <span class="ruby-ivar">@zmp</span> = <span class="ruby-identifier">msg</span>[<span class="ruby-value">1</span>]
-100:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:echo</span>
-101:         <span class="ruby-ivar">@echo</span> = <span class="ruby-identifier">msg</span>[<span class="ruby-value">1</span>]
-102:       <span class="ruby-keyword kw">else</span>
-103:         <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;Player#update unknown message - #{msg.inspect}&quot;</span>
-104:       <span class="ruby-keyword kw">end</span>
-105:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
-106:       <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">msg</span>)
-107:     <span class="ruby-keyword kw">else</span>
-108:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;Player#update unknown message - #{msg.inspect}&quot;</span>
-109:     <span class="ruby-keyword kw">end</span>
-110:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/db/player.rb, line 62</span>
+62:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)
+63:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>
+64:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:logged_out</span>
+65:       <span class="ruby-ivar">@session</span> = <span class="ruby-keyword kw">nil</span>
+66:       <span class="ruby-identifier">unsubscribe_all</span>
+67:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">players_connected</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+68:         <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">eventmgr</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;#{@name} has quit.&quot;</span>)
+69:       <span class="ruby-keyword kw">end</span>
+70:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:disconnected</span>
+71:       <span class="ruby-ivar">@session</span> = <span class="ruby-keyword kw">nil</span>
+72:       <span class="ruby-identifier">unsubscribe_all</span>
+73:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">players_connected</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+74:         <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">eventmgr</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-node">&quot;#{@name} has disconnected.&quot;</span>)
+75:       <span class="ruby-keyword kw">end</span>
+76:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+77:       <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">msg</span>)
+78:     <span class="ruby-keyword kw">else</span>
+79:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;Player#update unknown message - #{msg.inspect}&quot;</span>
+80:     <span class="ruby-keyword kw">end</span>
+81:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

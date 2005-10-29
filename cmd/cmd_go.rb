@@ -27,7 +27,7 @@ module Cmd
         ln += "?"
         sendto(ln)
       else
-        $engine.world.add_event(@oid,@location,:leave,ex[0])
+        $engine.world.eventmgr.add_event(@oid,@location,:leave,ex[0])
       end
     end
   end

@@ -81,7 +81,7 @@
       <map id="map" name="map">
   <area shape="RECT" coords="36,17,129,65"      href="ProtocolStack.html" alt="ProtocolStack">
 </map>
-<img src="../dot/f_23.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_24.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -105,10 +105,10 @@ variables that are shared amongst filters. It keeps its own log.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000127">filter_call</a>&nbsp;&nbsp;
-      <a href="#M000126">new</a>&nbsp;&nbsp;
-      <a href="#M000128">query</a>&nbsp;&nbsp;
-      <a href="#M000129">set</a>&nbsp;&nbsp;
+      <a href="#M000133">filter_call</a>&nbsp;&nbsp;
+      <a href="#M000132">new</a>&nbsp;&nbsp;
+      <a href="#M000134">query</a>&nbsp;&nbsp;
+      <a href="#M000135">set</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -193,11 +193,11 @@ variables that are shared amongst filters. It keeps its own log.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000126" class="method-detail">
-        <a name="M000126"></a>
+      <div id="method-M000132" class="method-detail">
+        <a name="M000132"></a>
 
         <div class="method-heading">
-          <a href="#M000126" class="method-signature">
+          <a href="#M000132" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(conn, opts)</span>
           </a>
         </div>
@@ -212,8 +212,8 @@ Construct a <a href="ProtocolStack.html">ProtocolStack</a>
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000126-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000126-source">
+            onclick="toggleCode('M000132-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000132-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/protocol/protocolstack.rb, line 38</span>
 38:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">conn</span>, <span class="ruby-identifier">opts</span>)
@@ -266,11 +266,11 @@ Construct a <a href="ProtocolStack.html">ProtocolStack</a>
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000127" class="method-detail">
-        <a name="M000127"></a>
+      <div id="method-M000133" class="method-detail">
+        <a name="M000133"></a>
 
         <div class="method-heading">
-          <a href="#M000127" class="method-signature">
+          <a href="#M000133" class="method-signature">
           <span class="method-name">filter_call</span><span class="method-args">(method, args)</span>
           </a>
         </div>
@@ -283,8 +283,8 @@ A method is called on each filter in the stack in order.
 [<tt>method</tt>] [<tt>args</tt>]
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000127-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000127-source">
+            onclick="toggleCode('M000133-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000133-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/protocolstack.rb, line 86</span>
  86:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_call</span>(<span class="ruby-identifier">method</span>, <span class="ruby-identifier">args</span>)
@@ -309,11 +309,11 @@ A method is called on each filter in the stack in order.
         </div>
       </div>
 
-      <div id="method-M000128" class="method-detail">
-        <a name="M000128"></a>
+      <div id="method-M000134" class="method-detail">
+        <a name="M000134"></a>
 
         <div class="method-heading">
-          <a href="#M000128" class="method-signature">
+          <a href="#M000134" class="method-signature">
           <span class="method-name">query</span><span class="method-args">(attr)</span>
           </a>
         </div>
@@ -331,28 +331,28 @@ The filter_query method returns state information for the filter.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000128-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000128-source">
+            onclick="toggleCode('M000134-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000134-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/protocolstack.rb, line 107</span>
 107:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">query</span>(<span class="ruby-identifier">attr</span>)
 108:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">attr</span>
 109:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:terminal</span>
-110:       <span class="ruby-identifier">retval</span> =  [<span class="ruby-identifier">:terminal</span>, <span class="ruby-ivar">@terminal</span>]
+110:       <span class="ruby-identifier">retval</span> =  <span class="ruby-ivar">@terminal</span>
 111:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:termsize</span>
-112:       <span class="ruby-identifier">retval</span> =  [<span class="ruby-identifier">:termsize</span>, [<span class="ruby-ivar">@twidth</span>, <span class="ruby-ivar">@theight</span>]]
+112:       <span class="ruby-identifier">retval</span> =  [<span class="ruby-ivar">@twidth</span>, <span class="ruby-ivar">@theight</span>]
 113:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:color</span>
-114:       <span class="ruby-identifier">retval</span> =  [<span class="ruby-identifier">:color</span>, <span class="ruby-ivar">@color_on</span>]
+114:       <span class="ruby-identifier">retval</span> =  <span class="ruby-ivar">@color_on</span>
 115:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:zmp</span>
-116:       <span class="ruby-identifier">retval</span> =  [<span class="ruby-identifier">:zmp</span>, <span class="ruby-ivar">@zmp_on</span>]
+116:       <span class="ruby-identifier">retval</span> =  <span class="ruby-ivar">@zmp_on</span>
 117:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:echo</span>
-118:       <span class="ruby-identifier">retval</span> =  [<span class="ruby-identifier">:echo</span>, <span class="ruby-ivar">@echo_on</span>]
+118:       <span class="ruby-identifier">retval</span> =  <span class="ruby-ivar">@echo_on</span>
 119:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:binary</span>
-120:       <span class="ruby-identifier">retval</span> =  [<span class="ruby-identifier">:binary</span>, <span class="ruby-ivar">@binary_on</span>]
+120:       <span class="ruby-identifier">retval</span> =  <span class="ruby-ivar">@binary_on</span>
 121:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:urgent</span>
-122:       <span class="ruby-identifier">retval</span> =  [<span class="ruby-identifier">:urgent</span>, <span class="ruby-ivar">@urgent_on</span>]
+122:       <span class="ruby-identifier">retval</span> =  <span class="ruby-ivar">@urgent_on</span>
 123:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hide</span>
-124:       <span class="ruby-identifier">retval</span> =  [<span class="ruby-identifier">:hide</span>, <span class="ruby-ivar">@hide_on</span>]
+124:       <span class="ruby-identifier">retval</span> =  <span class="ruby-ivar">@hide_on</span>
 125:     <span class="ruby-keyword kw">else</span>
 126:       <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) ProtocolStack#query unknown setting '#{pair.inspect}'&quot;</span>
 127:       <span class="ruby-identifier">retval</span> = <span class="ruby-keyword kw">false</span>
@@ -365,11 +365,11 @@ The filter_query method returns state information for the filter.
         </div>
       </div>
 
-      <div id="method-M000129" class="method-detail">
-        <a name="M000129"></a>
+      <div id="method-M000135" class="method-detail">
+        <a name="M000135"></a>
 
         <div class="method-heading">
-          <a href="#M000129" class="method-signature">
+          <a href="#M000135" class="method-signature">
           <span class="method-name">set</span><span class="method-args">(attr, value)</span>
           </a>
         </div>
@@ -387,8 +387,8 @@ The filter_set method sets state information on the filter.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000129-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000129-source">
+            onclick="toggleCode('M000135-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000135-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/protocol/protocolstack.rb, line 136</span>
 136:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-identifier">value</span>)

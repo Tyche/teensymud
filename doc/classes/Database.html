@@ -81,7 +81,7 @@
       <map id="map" name="map">
   <area shape="RECT" coords="21,17,96,65"      href="Database.html" alt="Database">
 </map>
-<img src="../dot/f_28.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_30.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -205,7 +205,7 @@ The minimal database will be used in the absence of detecting one.
 
         <div class="method-heading">
           <a href="#M000067" class="method-signature">
-          <span class="method-name">delete</span><span class="method-args">(obj)</span>
+          <span class="method-name">delete</span><span class="method-args">(oid)</span>
           </a>
         </div>
       
@@ -214,7 +214,7 @@ The minimal database will be used in the absence of detecting one.
 Deletes an object from the database.
 </p>
 <dl>
-<dt><tt>obj</tt></dt><dd>is a reference to object to be deleted.
+<dt><tt>oid</tt></dt><dd>is the oid to to be deleted.
 
 </dd>
 <dt><tt>return</tt></dt><dd>Undefined.
@@ -226,8 +226,8 @@ Deletes an object from the database.
           <div class="method-source-code" id="M000067-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/db/database.rb, line 79</span>
-79:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">obj</span>)
-80:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">obj</span>)
+79:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">oid</span>)
+80:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">oid</span>)
 81:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>

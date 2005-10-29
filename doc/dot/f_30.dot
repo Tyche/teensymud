@@ -3,39 +3,20 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/db/player.rb"
+    label = "lib/db/database.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    Player [
+    Database [
         fontcolor = black,
-        URL = "classes/Player.html",
+        URL = "classes/Database.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Player"
-    ]
-
-    Publisher [
-        URL = "classes/Publisher.html",
-        shape = box,
-        label = "Publisher"
-    ]
-
-    Publisher -> Player [
-
-    ]
-
-    GameObject [
-        URL = "classes/GameObject.html",
-        label = "GameObject"
-    ]
-
-    GameObject -> Player [
-
+        label = "Database"
     ]
 
 }
