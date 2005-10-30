@@ -65,8 +65,10 @@ task :stats do
     ["Main", ".", /^tmud.rb$|^tclient.rb$/], 
     ["Library", "lib", /.*\.rb$/], 
     ["Database", "lib/db", /.*\.rb$/], 
-    ["Network", "lib/net", /.*\.rb$/], 
+    ["Event", "lib/event", /.*\.rb$/], 
     ["Farts", "lib/farts", /.*\.rb$/], 
+    ["Game", "lib/game", /.*\.rb$/], 
+    ["Network", "lib/net", /.*\.rb$/], 
     ["Protocol", "lib/protocol", /.*\.rb$/], 
     ["Commands", "cmd", /.*\.rb$/],
     ["Tests", "test", /.*\.rb$/]
