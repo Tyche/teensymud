@@ -67,7 +67,6 @@ task :stats do
     ["Database", "lib/db", /.*\.rb$/], 
     ["Event", "lib/event", /.*\.rb$/], 
     ["Farts", "lib/farts", /.*\.rb$/], 
-    ["Game", "lib/game", /.*\.rb$/], 
     ["Network", "lib/net", /.*\.rb$/], 
     ["Protocol", "lib/protocol", /.*\.rb$/], 
     ["Commands", "cmd", /.*\.rb$/],
