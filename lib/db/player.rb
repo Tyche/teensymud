@@ -21,7 +21,8 @@ class Player < GameObject
   include Publisher
 
   # The Session object this player is connected on or nil if not connected.
-  attr_accessor :session, :color
+  attr_accessor :session
+  property :color, :passwd
 
   # Create a new Player object
   # [+name+]    The displayed name of the player.
@@ -30,12 +31,12 @@ class Player < GameObject
   # [+return+]  A handle to the new Player.
   def initialize(name,passwd,session)
     @session = session
-    @passwd = encrypt(passwd)
+    self.passwd = encrypt(passwd)
     super(name,$engine.world.options.home)
-    @powered = true
+    self.powered = true
 
     # session related - only color settable
-    @color = false
+    self.color = false
   end
 
   # Sends a message to the player if they are connected.
@@ -64,14 +65,14 @@ class Player < GameObject
     when :logged_out
       @session = nil
       unsubscribe_all
-      $engine.world.db.players_connected(@oid).each do |p|
-        $engine.world.eventmgr.add_event(@oid,p.oid,:show,"#{@name} has quit.")
+      $engine.world.db.players_connected(id).each do |p|
+        $engine.world.eventmgr.add_event(id,p.id,:show,"#{name} has quit.")
       end
     when :disconnected
       @session = nil
       unsubscribe_all
-      $engine.world.db.players_connected(@oid).each do |p|
-        $engine.world.eventmgr.add_event(@oid,p.oid,:show,"#{@name} has disconnected.")
+      $engine.world.db.players_connected(id).each do |p|
+        $engine.world.eventmgr.add_event(id,p.id,:show,"#{name} has disconnected.")
       end
     when String
       parse(msg)
@@ -84,7 +85,7 @@ class Player < GameObject
   # [+p+] The string passed as password in clear text
   # [+return+] true if they are equal, false if not
   def check_passwd(p)
-    @passwd == p.crypt(@passwd)
+    passwd == p.crypt(passwd)
   end
 
   # Disconnects this player
@@ -117,7 +118,7 @@ class Player < GameObject
     check.gsub!(/\#/,"\\#")
     check.gsub!(/\[/,"\\[")
     check.gsub!(/\]/,"\\]")
-    $engine.world.db.get(@location).exits.keys.grep(/^#{check}/).each do |ex|
+    $engine.world.db.get(location).exits.keys.grep(/^#{check}/).each do |ex|
       c << Command.new(:cmd_go,"go #{ex}",nil)
       arg = ex
     end
@@ -144,8 +145,8 @@ class Player < GameObject
   def ass(e)
     case e.kind
     when :describe
-      msg = "[COLOR=cyan]#{@name} is here.[/COLOR]"
-      $engine.world.eventmgr.add_event(@oid,e.from,:show,msg)
+      msg = "[COLOR=cyan]#{name} is here.[/COLOR]"
+      $engine.world.eventmgr.add_event(id,e.from,:show,msg)
       fart(e)
     when :show
       sendto(e.msg)

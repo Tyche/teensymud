@@ -7,6 +7,7 @@ require 'test/unit'
 require 'db/database'
 require 'flexmock'
 require 'ostruct'
+require 'db/properties'
 require 'db/player'
 require 'db/room'
 end
@@ -38,9 +39,9 @@ class TestDatabase < Test::Unit::TestCase
   def test_delete
     assert_equal(@r, @db.put(@r))
     assert_equal(@o, @db.put(@o))
-    assert_equal(@r, @db.delete(@r.oid))
-    assert_equal(@o, @db.delete(@o.oid))
-    assert_equal(nil, @db.delete(@p.oid))
+    assert_equal(@r, @db.delete(@r.id))
+    assert_equal(@o, @db.delete(@o.id))
+    assert_equal(nil, @db.delete(@p.id))
   end
 
   def test_find_player_by_name
@@ -52,9 +53,9 @@ class TestDatabase < Test::Unit::TestCase
   def test_get
     assert_equal(@r, @db.put(@r))
     assert_equal(@o, @db.put(@o))
-    assert_equal(@r, @db.get(@r.oid))
-    assert_equal(@o, @db.get(@o.oid))
-    assert_equal(nil, @db.get(@p.oid))
+    assert_equal(@r, @db.get(@r.id))
+    assert_equal(@o, @db.get(@o.id))
+    assert_equal(nil, @db.get(@p.id))
   end
 
   def test_getid

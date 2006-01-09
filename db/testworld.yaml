@@ -1,41 +1,44 @@
 --- 
 - !ruby/object:Room 
-  contents: []
-  desc: This is the starting home.
-  exits: 
-    up: 2
-    dungeon: 3
-  farts: 
-    :arrive: !ruby/object:Farts::FartTrigger 
-      event: :arrive
-      fname: arrival
-      prog: 
-  location: 
-  name: Home
-  oid: 1
-  powered: false
+  props: 
+    :contents: []
+    :desc: This is the starting home.
+    :exits: 
+      up: 2
+      dungeon: 3
+    :farts: 
+      :arrive: !ruby/object:Farts::FartTrigger 
+        event: :arrive
+        fname: arrival
+        prog: 
+    :location: 
+    :name: Home
+    :id: 1
+    :powered: false
 - !ruby/object:Room 
-  contents: []
-  desc: "You are flying!!!"
-  exits: 
-    down: 1
-  farts: {}
-  location: 
-  name: Up in the Air
-  oid: 2
-  powered: false
+  props: 
+    :contents: []
+    :desc: "You are flying!!!"
+    :exits: 
+      down: 1
+    :farts: {}
+    :location: 
+    :name: Up in the Air
+    :id: 2
+    :powered: false
 - !ruby/object:Room 
-  contents: []
-  desc: "There is a hamster running on a large metal wheel that's connected to some sort
-    of fancy electromagnetic servo mechanism."
-  exits: 
-    up: 1
-  farts: 
-    :timer: !ruby/object:Farts::FartTrigger 
-      event: :timer
-      fname: ticktock
-      prog: 
-  location: 
-  name: The Dungeon
-  oid: 3
-  powered: true
+  props: 
+    :contents: []
+    :desc: "There is a hamster running on a large metal wheel that's connected to some sort
+      of fancy electromagnetic servo mechanism."
+    :exits: 
+      up: 1
+    :farts: 
+      :timer: !ruby/object:Farts::FartTrigger 
+        event: :timer
+        fname: ticktock
+        prog: 
+    :location: 
+    :name: The Dungeon
+    :id: 3
+    :powered: true  

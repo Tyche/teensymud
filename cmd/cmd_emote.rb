@@ -19,8 +19,8 @@ module Cmd
       sendto("What are you trying to emote?")
     else
       sendto("You #{args}.")
-      $engine.world.db.get(@location).players(@oid).each do |p|
-        $engine.world.eventmgr.add_event(@oid,p.oid,:show,"#{@name} #{args}.")
+      $engine.world.db.get(location).players(id).each do |p|
+        $engine.world.eventmgr.add_event(id,p.id,:show,"#{name} #{args}.")
       end
     end
   end

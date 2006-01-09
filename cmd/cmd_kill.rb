@@ -25,15 +25,15 @@ module Cmd
       end
       if rand < 0.3
         sendto("You kill #{d.name}.")
-        $engine.world.db.players_connected(@oid).each {|p|
-          $engine.world.eventmgr.add_event(@oid,p.oid,:show,"#{@name} kills #{d.name}.")
+        $engine.world.db.players_connected(id).each {|p|
+          $engine.world.eventmgr.add_event(id,p.id,:show,"#{name} kills #{d.name}.")
         }
         d.disconnect
         # $engine.world.db.delete(d)  Dont delete player, it's annoying
       else
         sendto("You attacks and misses #{d.name}.")
-        $engine.world.db.players_connected(@oid).each {|p|
-          $engine.world.eventmgr.add_event(@oid,p.oid,:show,"#{@name} attacks and misses #{d.name}.")
+        $engine.world.db.players_connected(id).each {|p|
+          $engine.world.eventmgr.add_event(id,p.id,:show,"#{name} attacks and misses #{d.name}.")
         }
       end
     end

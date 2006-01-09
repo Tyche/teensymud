@@ -14,59 +14,59 @@
 # The GameObject class is the mother of all objects.
 #
 class GameObject
-  # The unique database id of the object
-  attr_accessor :oid
   # The displayed name of the object
-  attr_accessor :name
+  property :name
   # The object that holds this object or nil if none
-  attr_accessor :location
+  property :location
   # The displayed description of the object
-  attr_accessor :desc
+  property :desc
   # Flag indicating whether this object is interested in timer events
-  attr_accessor :powered
+  property :powered
+  property :contents, :farts
 
   # Create a new Object
   # [+name+]     Every object needs a name
-  # [+location+] The object oid containing this object or nil.
+  # [+location+] The object id containing this object or nil.
   # [+return+]   A handle to the new Object
   def initialize(name,location=nil)
-    @name,@location,@oid=name,location,$engine.world.db.getid
-    @contents = []
-    @farts = {}
-    @desc = ""
-    @powered = false
-    $engine.world.db.get(@location).add_contents(@oid) if @location
+    self.name,self.location = name,location
+    self.id  # reference to trigger database to poulate it.
+    self.contents = []
+    self.farts = {}
+    self.desc = ""
+    self.powered = false
+    $engine.world.db.get(location).add_contents(id) if location
   end
 
   # Add an object to the contents of this object
   # [+oid+] The object id to add
   def add_contents(oid)
-    @contents << oid
+    contents << oid
   end
 
   # Deletes an object from the contents of this object
   # [+oid+] The object id to delete
   def delete_contents(oid)
-    @contents.delete(oid)
+    contents.delete(oid)
   end
 
   # Returns the contents of the object
   # [+return+] An array of object ids
   def get_contents
-    @contents
+    contents
   end
 
   # Add a trigger to this object
   # [+t+] The trigger to add
   def add_trigger(t)
-    @farts[t.event] = t
+    farts[t.event] = t
   end
 
   # Deletes a trigger from this object
   # [+event+] The trigger event type to delete
   def delete_trigger(event)
     event = event.intern if event.respond_to?(:to_str)
-    @farts.delete(event)
+    farts.delete(event)
   end
 
   # Returns a specific trigger from the object
@@ -74,13 +74,13 @@ class GameObject
   # [+return+] A trigger or nil
   def get_trigger(event)
     event = event.intern if event.respond_to?(:to_str)
-    @farts[event]
+    farts[event]
   end
 
   # Returns the triggers on the object
   # [+return+] An array of triggers
   def get_triggers
-    @farts.values
+    farts.values
   end
 
   # Fart handler
@@ -98,7 +98,7 @@ class GameObject
   # Finds all objects contained in this object
   # [+return+] Handle to a array of the objects.
   def objects
-    ary = @contents.collect do |oid|
+    ary = contents.collect do |oid|
       o = $engine.world.db.get(oid)
       o.class == GameObject ? o : nil
     end
@@ -106,10 +106,10 @@ class GameObject
   end
 
   # Finds all the players contained in this object except the passed player.
-  # [+exempt+]  The player oid exempted from the list.
+  # [+exempt+]  The player id exempted from the list.
   # [+return+] Handle to a list of the Player objects.
   def players(exempt=nil)
-    ary = @contents.collect do |oid|
+    ary = contents.collect do |oid|
       o = $engine.world.db.get(oid)
       (o.class == Player && oid != exempt && o.session) ? o : nil
     end
@@ -147,27 +147,27 @@ class GameObject
     case e.kind
     when :describe
       msg = "[COLOR=yellow]A #{name} is here[/COLOR]"
-      $engine.world.eventmgr.add_event(@oid,e.from,:show,msg)
+      $engine.world.eventmgr.add_event(id,e.from,:show,msg)
       fart(e)
     when :get
       plyr = $engine.world.db.get(e.from)
-      place = $engine.world.db.get(@location)
+      place = $engine.world.db.get(location)
       # remove it
-      place.delete_contents(@oid)
+      place.delete_contents(id)
       # add it
-      plyr.add_contents(@oid)
-      @location = plyr.oid
-      $engine.world.eventmgr.add_event(@oid,e.from,:show,"You get the #{@name}")
+      plyr.add_contents(id)
+      self.location = plyr.id
+      $engine.world.eventmgr.add_event(id,e.from,:show,"You get the #{name}")
       fart(e)
     when :drop
       plyr = $engine.world.db.get(e.from)
       place = $engine.world.db.get(plyr.location)
       # remove it
-      plyr.delete_contents(@oid)
+      plyr.delete_contents(id)
       # add it
-      place.add_contents(@oid)
-      @location = place.oid
-      $engine.world.eventmgr.add_event(@oid,e.from,:show,"You drop the #{@name}")
+      place.add_contents(id)
+      self.location = place.id
+      $engine.world.eventmgr.add_event(id,e.from,:show,"You drop the #{name}")
       fart(e)
     when :timer
       fart(e)

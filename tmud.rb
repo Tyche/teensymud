@@ -22,6 +22,7 @@ require 'publisher'
 require 'net/reactor'
 require 'command'
 require 'db/database'
+require 'db/properties'
 require 'db/gameobject'
 require 'db/player'
 require 'db/room'
@@ -125,6 +126,8 @@ class Engine
   def initialize(options)
     @log = Logger.new('logs/engine_log', 'daily')
     @log.datetime_format = "%Y-%m-%d %H:%M:%S "
+    # Display options
+    @log.info options.inspect
     # Create the world an object containing most everything.
     @world = World.new(@log, options)
     @log.info "Booting server on port #{options.port}"

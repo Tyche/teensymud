@@ -14,8 +14,8 @@ module Cmd
 
   # sets the description or timer for an object
   # Syntax:
-  #   @set desc #<oid> <description>
-  #   @set timer #<oid> <on|off>
+  #   @set desc #<id> <description>
+  #   @set timer #<id> <on|off>
   # (ex. @set desc #1 A beautiful rose.)
   def cmd_set(args)
     case args

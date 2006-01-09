@@ -17,8 +17,8 @@ class Event
   attr_accessor :from, :to, :kind, :msg
 
   # Constructor for an Event.
-  # [+from+]   The oid of the issuer of the event.
-  # [+to+]     The oid of the target of the event.
+  # [+from+]   The id of the issuer of the event.
+  # [+to+]     The id of the target of the event.
   # [+kind+]   The symbol that defines the kind of event.
   # [+msg+]    Optional information needed to process the event.
   # [+return+] A reference to the Event.

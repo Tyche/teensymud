@@ -150,8 +150,8 @@ private
     @player.subscribe(@conn)
 
     @player.sendto("\nWelcome #{@login_name}@#{@conn.sock.peeraddr[2]}!")
-    $engine.world.db.players_connected(@player.oid).each {|p|
-      $engine.world.eventmgr.add_event(@oid,p.oid,:show,"#{@player.name} has connected.")
+    $engine.world.db.players_connected(@player.id).each {|p|
+      $engine.world.eventmgr.add_event(@player.id,p.id,:show,"#{@player.name} has connected.")
     }
 
 

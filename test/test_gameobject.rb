@@ -4,6 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
+require 'db/properties'
 require 'db/gameobject'
 require 'db/player'
 require 'db/room'
@@ -25,10 +26,10 @@ class TestGameObject < Test::Unit::TestCase
     $engine.mock_handle(:find) {[]}
     $engine.mock_handle(:home) {1}
     @r = Room.new("Here")
-    @r.oid = 1
+#    @r.id = 1
     $engine.mock_handle(:get) {|oid| oid == 1 ? @r : @p}
     @p = Player.new("Tyche","tyche",nil)
-    @p.oid = 9
+#    @p.id = 9
     @o = GameObject.new("Thing")
   end
 
@@ -126,12 +127,8 @@ class TestGameObject < Test::Unit::TestCase
     assert(@o.objects)
   end
 
-  def test_oid
-    assert_equal(3,@o.oid)
-  end
-
-  def test_oid_equals
-    assert_equal(2,@o.oid=2)
+  def test_id
+    assert_equal(3,@o.id)
   end
 
   def test_parse

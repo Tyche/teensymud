@@ -4,6 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
+require 'db/properties'
 require 'db/player'
 require 'db/room'
 require 'flexmock'

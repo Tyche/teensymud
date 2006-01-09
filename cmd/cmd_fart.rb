@@ -14,9 +14,9 @@ module Cmd
 
   # adds or deletes a farts trigger to an object
   # Syntax:
-  #   @fart add #<oid> <progname> <eventtype>
-  #   @fart del #<oid> <eventtype>
-  #   @fart show #<oid>
+  #   @fart add #<id> <progname> <eventtype>
+  #   @fart del #<id> <eventtype>
+  #   @fart show #<id>
   # (ex. @fart add #1 myprog arrive)
   def cmd_fart(args)
     case args

@@ -15,7 +15,7 @@
 # The Database class manages all object storage.
 #
 # [+db+] is a handle to the database implementation (in this iteration a hash).
-# [+dbtop+] stores the highest oid used in the database.
+# [+dbtop+] stores the highest id used in the database.
 # [+dbname+] stores the file name of the database.
 class Database
 
@@ -23,13 +23,15 @@ class Database
 MINIMAL_DB=<<EOH
 ---
 - !ruby/object:Room
-  exits: {}
-  farts: {}
-  contents: []
-  location:
-  desc: "This is home."
-  name: Home
-  oid: 1
+  props:
+    :location:
+    :powered: false
+    :id: 1
+    :desc: "This is home."
+    :contents: []
+    :exits: {}
+    :farts: {}
+    :name: Home
 EOH
 
   def initialize(log, opts)
@@ -47,14 +49,15 @@ EOH
     tmp = YAML::load_file(@dbname)
     # calculate the dbtop
     tmp.each do |o|
-      @dbtop = o.oid if o.oid > @dbtop
-      @db[o.oid]=o
+      @dbtop = o.id if o.id > @dbtop
+      @db[o.id]=o
     end
-    @log.info "Done database loaded...top oid=#{@dbtop}."
+    @log.info "Done database loaded...top id=#{@dbtop}."
+#    @log.debug @db.inspect
   end
 
-  # Fetch the next available oid.
-  # [+return+] An oid.
+  # Fetch the next available id.
+  # [+return+] An id.
   def getid
     @dbtop+=1
   end
@@ -69,18 +72,18 @@ EOH
   # [+obj+] is a reference to object to be added
   # [+return+] Undefined.
   def put(obj)
-    @db[obj.oid] = obj
+    @db[obj.id] = obj
   end
 
   # Deletes an object from the database.
-  # [+oid+] is the oid to to be deleted.
+  # [+oid+] is the id to to be deleted.
   # [+return+] Undefined.
   def delete(oid)
     @db.delete(oid)
   end
 
-  # Finds an object in the database by its oid.
-  # [+oid+] is the oid to use in the search.
+  # Finds an object in the database by its id.
+  # [+oid+] is the id to use in the search.
   # [+return+] Handle to the object or nil.
   def get(oid)
     @db[oid]
@@ -94,10 +97,10 @@ EOH
   end
 
   # Finds all connected players
-  # [+exempt+] The oid of a player to be exempt from the returned array.
+  # [+exempt+] The id of a player to be exempt from the returned array.
   # [+return+] An array of  connected players
   def players_connected(exempt=nil)
-    @db.values.find_all{|o| o.class == Player && o.oid != exempt && o.session}
+    @db.values.find_all{|o| o.class == Player && o.id != exempt && o.session}
   end
 
   # Iterate through all objects

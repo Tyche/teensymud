@@ -19,8 +19,8 @@ module Cmd
     when /(.*) (.*) (.*)/
       d=Room.new($1)
       $engine.world.db.put(d)
-      $engine.world.db.get(@location).exits[$2]=d.oid
-      d.exits[$3]=$engine.world.db.get(@location).oid
+      $engine.world.db.get(location).exits[$2]=d.id
+      d.exits[$3]=$engine.world.db.get(location).id
       sendto("Ok.")
     else
       sendto("say what??")

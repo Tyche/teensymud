@@ -53,7 +53,7 @@ class Hamster < Thread
       sleep @time
       @mutex.synchronize do
         @interested.each do |o|
-          @world.eventmgr.add_event(nil, o.oid, @eventtype, nil)
+          @world.eventmgr.add_event(nil, o.id, @eventtype, nil)
         end
       end
     end

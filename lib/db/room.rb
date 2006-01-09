@@ -17,14 +17,14 @@ require 'db/gameobject'
 #
 class Room < GameObject
   # The hash of exits for this room, where the key is the displayed name
-  # of the exit and the value is the room oid at the end of the exit.
-  attr_accessor :exits
+  # of the exit and the value is the room id at the end of the exit.
+  property :exits
 
   # Create a new Room object
   # [+name+]   The displayed name of the room
   # [+return+] A handle to the new Room.
   def initialize(name)
-    @exits={}
+    self.exits={}
     super(name)
   end
 
@@ -34,17 +34,17 @@ class Room < GameObject
   def ass(e)
     case e.kind
     when :describe
-      msg = "[COLOR=green](#{@oid.to_s}) #{name}[/COLOR]\n#{desc}\n"
-      $engine.world.eventmgr.add_event(@oid,e.from,:show,msg)
+      msg = "[COLOR=green](#{id.to_s}) #{name}[/COLOR]\n#{desc}\n"
+      $engine.world.eventmgr.add_event(id,e.from,:show,msg)
       fart(e)
     when :describe_exits
       msg = "[COLOR=red]Exits:\n"
-      s = @exits.size
+      s = exits.size
       if s == 0
         msg << "None.[/COLOR]"
       else
         i = 0
-        @exits.keys.each do |ex|
+        exits.keys.each do |ex|
           msg << ex
           i += 1
           case s - i
@@ -56,25 +56,25 @@ class Room < GameObject
         end
         msg << "[/COLOR]"
       end
-      $engine.world.eventmgr.add_event(@oid,e.from,:show,msg)
+      $engine.world.eventmgr.add_event(id,e.from,:show,msg)
       fart(e)
     when :leave
       plyr = $engine.world.db.get(e.from)
       players(e.from).each do |x|
-        $engine.world.eventmgr.add_event(@oid,x.oid,:show, plyr.name + " has left #{e.msg}.") if x.session
+        $engine.world.eventmgr.add_event(id,x.id,:show, plyr.name + " has left #{e.msg}.") if x.session
       end
       # remove player
-      delete_contents(plyr.oid)
+      delete_contents(plyr.id)
       plyr.location = nil
-      $engine.world.eventmgr.add_event(@oid,@exits[e.msg],:arrive,plyr.oid)
+      $engine.world.eventmgr.add_event(id,exits[e.msg],:arrive,plyr.id)
       fart(e)
     when :arrive
       plyr = $engine.world.db.get(e.msg)
       # add player
-      add_contents(plyr.oid)
-      plyr.location = @oid
+      add_contents(plyr.id)
+      plyr.location = id
       players(e.msg).each do |x|
-        $engine.world.eventmgr.add_event(@oid,x.oid,:show, plyr.name+" has arrived.") if x.session
+        $engine.world.eventmgr.add_event(id,x.id,:show, plyr.name+" has arrived.") if x.session
       end
       plyr.parse('look')
       fart(e)
