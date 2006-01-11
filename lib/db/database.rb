@@ -18,6 +18,7 @@
 # [+dbtop+] stores the highest id used in the database.
 # [+dbname+] stores the file name of the database.
 class Database
+  logger 'DEBUG'
 
 # The minimal database will be used in the absence of detecting one.
 MINIMAL_DB=<<EOH
@@ -34,16 +35,17 @@ MINIMAL_DB=<<EOH
     :name: Home
 EOH
 
-  def initialize(log, opts)
-    @log, @dbname = log, opts.dbname
+
+  def initialize(opts)
+    @dbname = opts.dbname
     if !test(?e,@dbname)
-      @log.info "Building minimal world database..."
+      log.info "Building minimal world database..."
       File.open(@dbname,'w') do |f|
         f.write(MINIMAL_DB)
       end
-      @log.info "Done."
+      log.info "Done."
     end
-    @log.info "Loading world..."
+    log.info "Loading world..."
     @dbtop = 0
     @db = {}
     tmp = YAML::load_file(@dbname)
@@ -52,8 +54,8 @@ EOH
       @dbtop = o.id if o.id > @dbtop
       @db[o.id]=o
     end
-    @log.info "Done database loaded...top id=#{@dbtop}."
-#    @log.debug @db.inspect
+    log.info "Done database loaded...top id=#{@dbtop}."
+#    log.debug @db.inspect
   end
 
   # Fetch the next available id.

@@ -11,8 +11,6 @@
 # See LICENSE file for additional information.
 #
 
-require 'logger'
-
 require 'protocol/filter'
 require 'protocol/telnetfilter'
 require 'protocol/debugfilter'
@@ -22,7 +20,7 @@ require 'protocol/terminalfilter'
 
 # The ProtocolStack class implements a stack of input and output filters.
 # It also maintains some interesting state variables that are shared
-# amongst filters.  It keeps its own log.
+# amongst filters.
 #
 # Remarks:: This should have its own configuration file.
 #
@@ -30,20 +28,13 @@ class ProtocolStack
   attr_accessor :echo_on, :binary_on, :zmp_on, :color_on, :urgent_on, :hide_on
   attr_accessor :terminal, :twidth, :theight
   attr :conn
-  attr :log
+  logger 'DEBUG'
 
   # Construct a ProtocolStack
   #
   # [+conn+] The connection associated with this filter
   def initialize(conn, opts)
     @conn,@opts = conn,opts
-    if @opts.include? :client
-      @log = Logger.new('logs/protocol_client_log', 'daily')
-      @log.datetime_format = "%Y-%m-%d %H:%M:%S "
-    else
-      @log = Logger.new('logs/protocol_log', 'daily')
-      @log.datetime_format = "%Y-%m-%d %H:%M:%S "
-    end
     @filters = []  # Filter order is critical as lowest level protocol is first.
     if @opts.include? :debugfilter
       @filters << DebugFilter.new(self)

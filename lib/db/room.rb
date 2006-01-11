@@ -19,6 +19,7 @@ class Room < GameObject
   # The hash of exits for this room, where the key is the displayed name
   # of the exit and the value is the room id at the end of the exit.
   property :exits
+  logger 'DEBUG'
 
   # Create a new Room object
   # [+name+]   The displayed name of the room

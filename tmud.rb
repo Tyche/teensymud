@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -w
+#!/usr/bin/env ruby
 #
 # file::    tmud.rb
 # author::  Jon A. Lambert
@@ -12,12 +12,12 @@
 # See LICENSE file for additional information.
 #
 require 'yaml'
-require 'logger'
 require 'pp'
 
 $:.unshift "lib"
 $:.unshift "vendor"
 
+require 'log'
 require 'publisher'
 require 'net/reactor'
 require 'command'
@@ -88,26 +88,25 @@ EOH
 # [+tits+] is a handle to the tits event queue (an array).
 # [+options+] is a handle to the configuration options structure.
 class World
-
   attr_accessor :cmds, :ocmds, :eventmgr, :hamster
   attr_reader :options, :db
-
+  logger 'DEBUG'
 
   # Create the World.  This loads or creates the database depending on
   # whether it finds it.
   # [+return+] A handle to the World object.
-  def initialize(log, options)
-    @log, @options = log, options
-    @db = Database.new(@log, @options)
-    @log.info "Loading commands..."
+  def initialize(options)
+    @options = options
+    @db = Database.new(@options)
+    log.info "Loading commands..."
     @cmds = Command.load("commands.yaml", Player, :Cmd)
     @ocmds = Command.load("obj_cmds.yaml", GameObject, :ObjCmd)
-    @log.info "Done."
-    @eventmgr = EventManager.new(@log, @options)
-    @log.info "Releasing Hamster..."
+    log.info "Done."
+    @eventmgr = EventManager.new(@options)
+    log.info "Releasing Hamster..."
     @hamster = Hamster.new(self, 2.0, :timer)
     @db.objects {|obj| @hamster.register(obj) if obj.powered}
-    @log.info "World initialized."
+    log.info "World initialized."
   end
 
 end
@@ -118,19 +117,18 @@ end
 # acceptor for incoming connections.
 class Engine
   attr_accessor :shutdown
-  attr_reader :log, :world
+  attr_reader :world
+  logger 'DEBUG'
 
   # Create the an engine.
   # [+port+]   The port passed to create a reactor.
   # [+return+] A handle to the engine.
   def initialize(options)
-    @log = Logger.new('logs/engine_log', 'daily')
-    @log.datetime_format = "%Y-%m-%d %H:%M:%S "
     # Display options
-    @log.info options.inspect
+    log.info options.inspect
     # Create the world an object containing most everything.
-    @world = World.new(@log, options)
-    @log.info "Booting server on port #{options.port}"
+    @world = World.new(options)
+    log.info "Booting server on port #{options.port}"
     @server = Reactor.new(options.port)
     @incoming = []
     @shutdown = false
@@ -140,7 +138,7 @@ class Engine
   # note:: @shutdown never set by anyone yet
   def run
     raise "Unable to start server" unless @server.start(self)
-    @log.info "TMUD is ready"
+    log.info "TMUD is ready"
     until @shutdown
       @server.poll(0.2)
       while e = @world.eventmgr.get_event

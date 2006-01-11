@@ -18,6 +18,8 @@ require 'publisher'
 class Account
   include Publisher
 
+  logger 'DEBUG'
+
   # Create an Account connection.  This is a temporary object that handles
   # login for player and gets them connected.
   # [+conn+]   The session associated with this Account connection.
@@ -120,7 +122,7 @@ class Account
         end
       end
     else
-      $engine.log.error "Account#update unknown message - #{msg.inspect}"
+      log.error "Account#update unknown message - #{msg.inspect}"
     end
   end
 

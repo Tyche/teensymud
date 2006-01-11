@@ -4,6 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
+require 'log'
 require 'db/properties'
 require 'db/player'
 require 'db/room'
@@ -12,20 +13,14 @@ end
 
 class TestPlayer < Test::Unit::TestCase
   def setup
-    @log = FlexMock.new
-    @log.mock_handle(:info) { |msg| puts msg }
-    @log.mock_handle(:debug) { |msg| puts msg }
-    @log.mock_handle(:warn) { |msg| puts msg }
-    @log.mock_handle(:error) { |msg| puts msg }
     @id = 0
     $engine = FlexMock.new
     $engine.mock_handle(:world) {$engine}
     $engine.mock_handle(:options) {$engine}
-    $engine.mock_handle(:log) {@log}
     $engine.mock_handle(:home) {1}
     $engine.mock_handle(:db) {$engine}
     $engine.mock_handle(:getid) {@id += 1}
-    $engine.mock_handle(:add_event) {|e| true}
+    $engine.mock_handle(:add_event) {|*e| true}
     $engine.mock_handle(:eventmgr) {$engine}
     $engine.mock_handle(:ocmds) {$engine}
     $engine.mock_handle(:cmds) {$engine}
@@ -85,7 +80,7 @@ class TestPlayer < Test::Unit::TestCase
 
   def test_update
     m = FlexMock.new
-    assert_equal(nil,@p.update(m))
+    assert(@p.update(m))
   end
 end
 

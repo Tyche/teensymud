@@ -19,6 +19,7 @@ require 'net/connection'
 # The acceptor class handles client connection requests for a reactor
 #
 class Acceptor < Session
+  logger 'DEBUG'
 
   # Create a new acceptor object
   # [+server+]  The reactor this acceptor is associated with.
@@ -44,8 +45,8 @@ class Acceptor < Session
     @server.register(self)
     true
   rescue Exception
-    @server.log.error "Acceptor#init"
-    @server.log.error $!
+    log.error "Acceptor#init"
+    log.error $!
     false
   end
 
@@ -60,15 +61,15 @@ class Acceptor < Session
       end
       c = Connection.new(@server, sckt, @opts)
       if c.init
-        @server.log.info "(#{c.object_id}) Connection accepted."
+        log.info "(#{c.object_id}) Connection accepted."
         publish(c)
       end
     else
       raise "Error in accepting connection."
     end
   rescue Exception
-    @server.log.error "Acceptor#handle_input"
-    @server.log.error $!
+    log.error "Acceptor#handle_input"
+    log.error $!
   end
 
   # handle_close is called when a close event occurs for this acceptor.
@@ -77,8 +78,8 @@ class Acceptor < Session
     @server.unregister(self)
     @sock.close
   rescue Exception
-    @server.log.error "Acceptor#handle_close"
-    @server.log.error $!
+    log.error "Acceptor#handle_close"
+    log.error $!
   end
 
 end

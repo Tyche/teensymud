@@ -19,6 +19,7 @@ require 'net/connection'
 # The Connector class handles outgoing connections
 #
 class Connector < Session
+  logger 'DEBUG'
 
   # Create a new Connector object
   # [+server+]  The reactor this Connector is associated with.
@@ -44,15 +45,15 @@ class Connector < Session
     end
     c = Connection.new(@server, @sock, @opts)
     if c.init
-      @server.log.info "(#{c.object_id}) Connection made."
+      log.info "(#{c.object_id}) Connection made."
       publish(c)
       true
     else
       false
     end
   rescue Exception
-    @server.log.error "Connector#init"
-    @server.log.error $!
+    log.error "Connector#init"
+    log.error $!
     false
   end
 
@@ -60,8 +61,8 @@ class Connector < Session
   def handle_close
     @sock.close
   rescue Exception
-    @server.log.error "Connector#handle_close"
-    @server.log.error $!
+    log.error "Connector#handle_close"
+    log.error $!
   end
 
 end

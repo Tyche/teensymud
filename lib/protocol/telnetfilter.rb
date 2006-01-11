@@ -25,6 +25,8 @@ class TelnetFilter < Filter
   include ASCIICodes
   include TelnetCodes
 
+  logger 'DEBUG'
+
   # Initialize state of filter
   #
   # [+pstack+] The ProtocolStack associated with this filter
@@ -74,7 +76,7 @@ class TelnetFilter < Filter
 
       # OOB sync data
       if @pstack.urgent_on || b[0] == DM
-        @pstack.log.debug("(#{@pstack.conn.object_id}) Sync mode on")
+        log.debug("(#{@pstack.conn.object_id}) Sync mode on")
         @pstack.urgent_on = false
         @synch = true
         break
@@ -99,7 +101,7 @@ class TelnetFilter < Filter
             buf << b
             echo(b)
           else
-            @pstack.log.error("(#{@pstack.conn.object_id}) unexpected NUL found in stream")
+            log.error("(#{@pstack.conn.object_id}) unexpected NUL found in stream")
           end
         when BS, DEL
           next if @synch
@@ -113,7 +115,7 @@ class TelnetFilter < Filter
             buf << b
             echo(b)
           else
-            @pstack.log.error("(#{@pstack.conn.object_id}) unexpected 8-bit byte found in stream '#{b[0]}'")
+            log.error("(#{@pstack.conn.object_id}) unexpected 8-bit byte found in stream '#{b[0]}'")
           end
         end
       when :cr
@@ -143,11 +145,11 @@ class TelnetFilter < Filter
           buf << IAC.chr
           set_mode(:normal)
         when AYT
-          @pstack.log.debug("(#{@pstack.conn.object_id}) AYT sent - Msg returned")
+          log.debug("(#{@pstack.conn.object_id}) AYT sent - Msg returned")
           @pstack.conn.sock.send("TeensyMUD is here.\n",0)
           set_mode(:normal)
         when AO
-          @pstack.log.debug("(#{@pstack.conn.object_id}) AO sent - Synch returned")
+          log.debug("(#{@pstack.conn.object_id}) AO sent - Synch returned")
           @pstack.conn.sockio.write_flush
           @pstack.conn.sock.send(IAC.chr + DM.chr, 0)
           @pstack.conn.sockio.write_urgent(DM.chr)
@@ -155,18 +157,18 @@ class TelnetFilter < Filter
         when IP
           @pstack.conn.sockio.read_flush
           @pstack.conn.sockio.write_flush
-          @pstack.log.debug("(#{@pstack.conn.object_id}) IP sent")
+          log.debug("(#{@pstack.conn.object_id}) IP sent")
           set_mode(:normal)
         when GA, NOP, BRK  # not implemented or ignored
-          @pstack.log.debug("(#{@pstack.conn.object_id}) GA, NOP or BRK sent")
+          log.debug("(#{@pstack.conn.object_id}) GA, NOP or BRK sent")
           set_mode(:normal)
         when DM
-          @pstack.log.debug("(#{@pstack.conn.object_id}) Synch mode off")
+          log.debug("(#{@pstack.conn.object_id}) Synch mode off")
           @synch = false
           set_mode(:normal)
         when EC
           next if @synch
-          @pstack.log.debug("(#{@pstack.conn.object_id}) EC sent")
+          log.debug("(#{@pstack.conn.object_id}) EC sent")
           if buf.size > 1
             buf.slice!(-1)
           elsif @pstack.conn.inbuffer.size > 0
@@ -175,7 +177,7 @@ class TelnetFilter < Filter
           set_mode(:normal)
         when EL
           next if @synch
-          @pstack.log.debug("(#{@pstack.conn.object_id}) EL sent")
+          log.debug("(#{@pstack.conn.object_id}) EL sent")
           p = buf.rindex("\n")
           if p
             buf.slice!(p+1..-1)
@@ -223,7 +225,7 @@ class TelnetFilter < Filter
           parse_subneg(opt[0],data)
           set_mode(:normal)
         else
-          @pstack.log.debug("(#{@pstack.conn.object_id}) Unknown Telnet command - #{b[0]}")
+          log.debug("(#{@pstack.conn.object_id}) Unknown Telnet command - #{b[0]}")
           set_mode(:normal)
         end
       end
@@ -285,7 +287,7 @@ class TelnetFilter < Filter
 
     @wopts.each_key do |opt|
       next if !@sneg_opts.include?(opt)
-#      @pstack.log.debug("(#{@pstack.conn.object_id}) Subnegotiation attempt for option #{opt}.")
+#      log.debug("(#{@pstack.conn.object_id}) Subnegotiation attempt for option #{opt}.")
       case opt
       when TTYPE
         who = :him
@@ -297,7 +299,7 @@ class TelnetFilter < Filter
         when TTYPE
           @pstack.conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 1.chr + IAC.chr + SE.chr)
         when ZMP
-          @pstack.log.info("(#{@pstack.conn.object_id}) ZMP successfully negotiated." )
+          log.info("(#{@pstack.conn.object_id}) ZMP successfully negotiated." )
           @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +
             "zmp.check#{NUL.chr}color.#{NUL.chr}" +
             "#{IAC.chr}#{SE.chr}")
@@ -316,7 +318,7 @@ class TelnetFilter < Filter
     end
 
     if @init_tries > 31
-      @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.")
+      log.debug("(#{@pstack.conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.")
       @sneg_opts = []
       @pstack.conn.set_initdone
     end
@@ -362,16 +364,16 @@ private
     when NAWS
       @pstack.twidth = data[0..1].unpack('n')[0]
       @pstack.theight = data[2..3].unpack('n')[0]
-      @pstack.log.debug("(#{@pstack.conn.object_id}) Terminal width #{@pstack.twidth} / height #{@pstack.theight}")
+      log.debug("(#{@pstack.conn.object_id}) Terminal width #{@pstack.twidth} / height #{@pstack.theight}")
     when TTYPE
       if data[0] == 0
-        @pstack.log.debug("(#{@pstack.conn.object_id}) Terminal type - #{data[1..-1]}")
+        log.debug("(#{@pstack.conn.object_id}) Terminal type - #{data[1..-1]}")
         if !@ttype.include?(data[1..-1])
           # short-circuit choice because of Windows telnet client
           if data[1..-1].downcase == 'vt100'
             @ttype << data[1..-1]
             @pstack.terminal = 'vt100'
-            @pstack.log.debug("(#{@pstack.conn.object_id}) Terminal choice - #{@pstack.terminal} in list #{@ttype.inspect}")
+            log.debug("(#{@pstack.conn.object_id}) Terminal choice - #{@pstack.terminal} in list #{@ttype.inspect}")
           end
           return if @pstack.terminal
           @ttype << data[1..-1]
@@ -414,7 +416,7 @@ private
       @pstack.terminal = 'dumb'
     end
 
-    @pstack.log.debug("(#{@pstack.conn.object_id}) Terminal choice - #{@pstack.terminal} in list #{@ttype.inspect}")
+    log.debug("(#{@pstack.conn.object_id}) Terminal choice - #{@pstack.terminal} in list #{@ttype.inspect}")
   end
 
   # Get current parse mode
@@ -445,7 +447,7 @@ private
   # [+opt+]   The option code
   # [+enable+] true for enable, false for disable
   def ask_him(opt, enable)
-    @pstack.log.debug("(#{@pstack.conn.object_id}) Requested Telnet option #{opt.to_s} set to #{enable.to_s}")
+    log.debug("(#{@pstack.conn.object_id}) Requested Telnet option #{opt.to_s} set to #{enable.to_s}")
     initiate(opt, enable, :him)
   end
 
@@ -454,7 +456,7 @@ private
   # [+opt+]   The option code
   # [+enable+] true for enable, false for disable
   def offer_us(opt, enable)
-    @pstack.log.debug("(#{@pstack.conn.object_id}) Offered Telnet option #{opt.to_s} set to #{enable.to_s}")
+    log.debug("(#{@pstack.conn.object_id}) Offered Telnet option #{opt.to_s} set to #{enable.to_s}")
     initiate(opt, enable, :us)
   end
 
@@ -486,12 +488,12 @@ private
         @pstack.conn.sendmsg(IAC.chr + willdo + opt.chr)
       else
         # Error already disabled
-        @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already disabled")
+        log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already disabled")
       end
     when :yes
       if enable
         # Error already enabled
-        @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already enabled")
+        log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already enabled")
       else
         @state[opt].send("#{who}=", :wantno)
         @pstack.conn.sendmsg(IAC.chr + wontdont + opt.chr)
@@ -503,13 +505,13 @@ private
           @state[opt].send("#{whoq}=", :opposite)
         when :opposite
           # Error already queued enable request
-          @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already queued enable request")
+          log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already queued enable request")
         end
       else
         case @state[opt].send(whoq)
         when :empty
           # Error already negotiating for disable
-          @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already negotiating for disable")
+          log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already negotiating for disable")
         when :opposite
           @state[opt].send("#{whoq}=", :empty)
         end
@@ -519,7 +521,7 @@ private
         case @state[opt].send(whoq)
         when :empty
           #Error already negotiating for enable
-          @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already negotiating for enable")
+          log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already negotiating for enable")
         when :opposite
           @state[opt].send("#{whoq}=", :empty)
         end
@@ -529,7 +531,7 @@ private
           @state[opt].send("#{whoq}=", :opposite)
         when :opposite
           #Error already queued for disable request
-          @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already queued for disable request")
+          log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} already queued for disable request")
         end
       end
     end
@@ -540,7 +542,7 @@ private
   # [+opt+]   The option code
   # [+enable+] true for WILL answer, false for WONT answer
   def replies_him(opt, enable)
-    @pstack.log.debug("(#{@pstack.conn.object_id}) Client replies to Telnet option #{opt.to_s} set to #{enable.to_s}")
+    log.debug("(#{@pstack.conn.object_id}) Client replies to Telnet option #{opt.to_s} set to #{enable.to_s}")
     response(opt, enable, :him)
   end
 
@@ -549,7 +551,7 @@ private
   # [+opt+]   The option code
   # [+enable+] true for DO request, false for DONT request
   def requests_us(opt, enable)
-    @pstack.log.debug("(#{@pstack.conn.object_id}) Client requests Telnet option #{opt.to_s} set to #{enable.to_s}")
+    log.debug("(#{@pstack.conn.object_id}) Client requests Telnet option #{opt.to_s} set to #{enable.to_s}")
     response(opt, enable, :us)
   end
 
@@ -581,11 +583,11 @@ private
         # If we agree
           @state[opt].send("#{who}=", :yes)
           @pstack.conn.sendmsg(IAC.chr + willdo + opt.chr)
-          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to enable option #{opt}")
+          log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to enable option #{opt}")
         else
         # If we disagree
           @pstack.conn.sendmsg(IAC.chr + wontdont + opt.chr)
-          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: disagreed to enable option #{opt}")
+          log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: disagreed to enable option #{opt}")
         end
       else
         # Ignore
@@ -608,12 +610,12 @@ private
           @state[opt].send("#{who}=", :yes)
           @state[opt].send("#{whoq}=", :empty)
         end
-        @pstack.log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} DONT/WONT answered by WILL/DO")
+        log.error("(#{@pstack.conn.object_id}) Telnet negotiation: option #{opt.to_s} DONT/WONT answered by WILL/DO")
       else
         case @state[opt].send(whoq)
         when :empty
           @state[opt].send("#{who}=", :no)
-          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to disable option #{opt}")
+          log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to disable option #{opt}")
         when :opposite
           @state[opt].send("#{who}=", :wantyes)
           @state[opt].send("#{whoq}=", :empty)
@@ -625,7 +627,7 @@ private
         case @state[opt].send(whoq)
         when :empty
           @state[opt].send("#{who}=", :yes)
-          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to enable option #{opt}")
+          log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to enable option #{opt}")
         when :opposite
           @state[opt].send("#{who}=", :wantno)
           @state[opt].send("#{whoq}=", :empty)
@@ -635,7 +637,7 @@ private
         case @state[opt].send(whoq)
         when :empty
           @state[opt].send("#{who}=", :no)
-          @pstack.log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to disable option #{opt}")
+          log.debug("(#{@pstack.conn.object_id}) Telnet negotiation: agreed to disable option #{opt}")
         when :opposite
           @state[opt].send("#{who}=", :no)
           @state[opt].send("#{whoq}=", :empty)
@@ -645,7 +647,7 @@ private
   end
 
   def handle_zmp(cmd,args)
-    @pstack.log.debug("(#{@pstack.conn.object_id}) ZMP command recieved - '#{cmd}' args: #{args.inspect}" )
+    log.debug("(#{@pstack.conn.object_id}) ZMP command recieved - '#{cmd}' args: #{args.inspect}" )
     case cmd
     when "zmp.ping"
       @pstack.conn.sendmsg("#{IAC.chr}#{SB.chr}#{ZMP.chr}" +

@@ -20,6 +20,8 @@ require 'db/gameobject'
 class Player < GameObject
   include Publisher
 
+  logger 'DEBUG'
+
   # The Session object this player is connected on or nil if not connected.
   attr_accessor :session
   property :color, :passwd
@@ -77,7 +79,7 @@ class Player < GameObject
     when String
       parse(msg)
     else
-      $engine.log.error "Player#update unknown message - #{msg.inspect}"
+      log.error "Player#update unknown message - #{msg.inspect}"
     end
   end
 

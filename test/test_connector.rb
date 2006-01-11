@@ -4,19 +4,14 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
+require 'log'
 require 'net/connector'
 require 'flexmock'
 end
 
 class TestConnector < Test::Unit::TestCase
   def setup
-    @log = FlexMock.new
-    @log.mock_handle(:info) { |msg| puts msg }
-    @log.mock_handle(:debug) { |msg| puts msg }
-    @log.mock_handle(:warn) { |msg| puts msg }
-    @log.mock_handle(:error) { |msg| puts msg }
     @serv = FlexMock.new
-    @serv.mock_handle(:log) { @log }
     @serv.mock_handle(:register) { true }
     @connector = Connector.new(@serv,80,[:client, :filter, :sockio],'google.com')
   end

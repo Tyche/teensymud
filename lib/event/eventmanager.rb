@@ -15,8 +15,8 @@ require 'event/event'
 
 class EventManager
 
-  def initialize(log, options)
-    @log, @options = log, options
+  def initialize(options)
+    @options = options
     @tits = []
     @bra = Mutex.new
   end

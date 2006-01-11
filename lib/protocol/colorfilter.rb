@@ -18,6 +18,7 @@ require 'vendor/bbcode'
 #
 # A Filter can keep state and partial data
 class ColorFilter < Filter
+  logger 'DEBUG'
 
   # Construct filter
   #

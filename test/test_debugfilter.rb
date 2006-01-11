@@ -4,19 +4,14 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
+require 'log'
 require 'protocol/debugfilter'
 require 'flexmock'
 end
 
 class TestDebugFilter < Test::Unit::TestCase
   def setup
-    @log = FlexMock.new
-    @log.mock_handle(:info) { |msg| puts msg }
-    @log.mock_handle(:debug) { |msg| puts msg }
-    @log.mock_handle(:warn) { |msg| puts msg }
-    @log.mock_handle(:error) { |msg| puts msg }
     @pstack = FlexMock.new
-    @pstack.mock_handle(:log) { @log }
     @pstack.mock_handle(:conn) { 1 }
     @filter = DebugFilter.new(@pstack)
   end

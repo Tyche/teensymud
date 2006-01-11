@@ -21,6 +21,7 @@ require 'protocol/protocolstack'
 # reactor and handles all events dispatched by the reactor.
 #
 class Connection < Session
+  logger 'DEBUG'
   attr :server
   attr :initdone
   attr :pstack
@@ -57,12 +58,12 @@ class Connection < Session
     @addr = @sock.peeraddr[2]
     @connected = true
     @server.register(self)
-    @server.log.info "(#{self.object_id}) New Connection on '#{@addr}'"
+    log.info "(#{self.object_id}) New Connection on '#{@addr}'"
     @pstack.filter_call(:init,nil)
     true
   rescue Exception
-    @server.log.error "(#{self.object_id}) Connection#init"
-    @server.log.error $!
+    log.error "(#{self.object_id}) Connection#init"
+    log.error $!
     false
   end
 
@@ -92,14 +93,14 @@ class Connection < Session
     @closing = true
     publish(:logged_out)
     unsubscribe_all
-    @server.log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
-    @server.log.error $!
+    log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
+    log.error $!
   rescue Exception
     @closing = true
     publish(:disconnected)
     unsubscribe_all
-    @server.log.error "(#{self.object_id}) Connection#handle_input"
-    @server.log.error $!
+    log.error "(#{self.object_id}) Connection#handle_input"
+    log.error $!
   end
 
   # handle_output is called to order a connection to process any output
@@ -117,13 +118,13 @@ class Connection < Session
     @closing = true
     publish(:logged_out)
     unsubscribe_all
-    @server.log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
+    log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
   rescue Exception
     @closing = true
     publish(:disconnected)
     unsubscribe_all
-    @server.log.error "(#{self.object_id}) Connection#handle_output"
-    @server.log.error $!
+    log.error "(#{self.object_id}) Connection#handle_output"
+    log.error $!
   end
 
   # handle_close is called to when an close event occurs for this session.
@@ -131,25 +132,25 @@ class Connection < Session
     @connected = false
     publish(:logged_out)
     unsubscribe_all
-    @server.log.info "(#{self.object_id}) Connection '#{@addr}' closing"
+    log.info "(#{self.object_id}) Connection '#{@addr}' closing"
     @server.unregister(self)
 #    @sock.shutdown   # odd errors thrown with this
     @sock.close
   rescue Exception
-    @server.log.error "(#{self.object_id}) Connection#handle_close"
-    @server.log.error $!
+    log.error "(#{self.object_id}) Connection#handle_close"
+    log.error $!
   end
 
   # handle_oob is called when an out of band data event occurs for this
   # session.
   def handle_oob
     buf = @sockio.read_urgent
-    @server.log.debug "(#{self.object_id}) Connection urgent data received - '#{buf[0]}'"
+    log.debug "(#{self.object_id}) Connection urgent data received - '#{buf[0]}'"
     @pstack.set(:urgent, true)
     buf = @pstack.filter_call(:filter_in,buf)
   rescue Exception
-    @server.log.error "(#{self.object_id}) Connection#handle_oob"
-    @server.log.error $!
+    log.error "(#{self.object_id}) Connection#handle_oob"
+    log.error $!
   end
 
   # This is called from TelnetFilter when we are done with negotiations.
@@ -180,14 +181,14 @@ class Connection < Session
       @closing = true
     when :reconnecting
       unsubscribe_all
-      @server.log.info "(#{self.object_id}) Connection '#{@addr}' closing for reconnection"
+      log.info "(#{self.object_id}) Connection '#{@addr}' closing for reconnection"
       @server.unregister(self)
   #    @sock.shutdown   # odd errors thrown with this
       @sock.close
     when String
       sendmsg(msg)
     else
-      @server.log.error "(#{self.object_id}) Connection#update - unknown message '#{@msg.inspect}'"
+      log.error "(#{self.object_id}) Connection#update - unknown message '#{@msg.inspect}'"
     end
   end
 

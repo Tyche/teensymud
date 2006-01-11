@@ -4,21 +4,16 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
+require 'log'
 require 'protocol/terminalfilter'
 require 'flexmock'
 end
 
 class TestTerminalFilter < Test::Unit::TestCase
   def setup
-    @log = FlexMock.new
-    @log.mock_handle(:info) { |msg| puts msg }
-    @log.mock_handle(:debug) { |msg| puts msg }
-    @log.mock_handle(:warn) { |msg| puts msg }
-    @log.mock_handle(:error) { |msg| puts msg }
     @conn = FlexMock.new
     @conn.mock_handle(:sendmsg) { true }
     @pstack = FlexMock.new
-    @pstack.mock_handle(:log) { @log }
     @pstack.mock_handle(:conn) { @conn }
     @pstack.mock_handle(:echo_on) { false }
     @filter = TerminalFilter.new(@pstack)

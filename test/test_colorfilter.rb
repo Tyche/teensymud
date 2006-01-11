@@ -4,6 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
+require 'log'
 require 'protocol/colorfilter'
 require 'flexmock'
 end
@@ -11,13 +12,7 @@ end
 class TestColorFilter < Test::Unit::TestCase
   def setup
     @color = false
-    @log = FlexMock.new
-    @log.mock_handle(:info) { |msg| puts msg }
-    @log.mock_handle(:debug) { |msg| puts msg }
-    @log.mock_handle(:warn) { |msg| puts msg }
-    @log.mock_handle(:error) { |msg| puts msg }
     @pstack = FlexMock.new
-    @pstack.mock_handle(:log) { @log }
     @pstack.mock_handle(:color_on) { @color = !@color }
     @filter = ColorFilter.new(@pstack)
   end

@@ -4,6 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
+require 'log'
 require 'protocol/telnetfilter'
 require 'flexmock'
 require 'ostruct'
@@ -13,11 +14,6 @@ end
 
 class TestTelnetFilter < Test::Unit::TestCase
   def setup
-    @log = FlexMock.new
-    @log.mock_handle(:info) { |msg| puts msg }
-    @log.mock_handle(:debug) { |msg| puts msg }
-    @log.mock_handle(:warn) { |msg| puts msg }
-    @log.mock_handle(:error) { |msg| puts msg }
     @sock = MockSocket.new("hello world\r\nfoobar")
     @sockio = SockIO.new(@sock, 5)
     @conn = FlexMock.new
@@ -25,7 +21,6 @@ class TestTelnetFilter < Test::Unit::TestCase
     @conn.mock_handle(:sock) { @sock }
     @conn.mock_handle(:sockio) { @sockio }
     @pstack = FlexMock.new
-    @pstack.mock_handle(:log) { @log }
     @pstack.mock_handle(:conn) { @conn }
     @pstack.mock_handle(:echo_on) { false }
     @pstack.mock_handle(:binary_on) { false }

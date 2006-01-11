@@ -11,7 +11,7 @@
 # See LICENSE file for additional information.
 #
 
-require 'logger'
+require 'log'
 
 require 'net/acceptor'
 require 'net/connector'
@@ -26,7 +26,7 @@ require 'net/connector'
 # may be found at http://citeseer.ist.psu.edu/schmidt97acceptor.html
 # for an idea of how all these classes are supposed to interelate.
 class Reactor
-  attr :log
+  logger 'DEBUG'
 
   # Constructor for Reactor
   # [+port+] The port the server will listen on/client will connect to.
@@ -68,22 +68,18 @@ class Reactor
   def start(engine)
     # Create an acceptor to listen for this server.
     if @opts.include? :client
-      @log = Logger.new('logs/net_client_log', 'daily')
-      @log.datetime_format = "%Y-%m-%d %H:%M:%S "
       @connector = Connector.new(self, @port, @opts, @address)
       @connector.subscribe(engine)
       return false if !@connector.init
     else
-      @log = Logger.new('logs/net_log', 'daily')
-      @log.datetime_format = "%Y-%m-%d %H:%M:%S "
       @acceptor = Acceptor.new(self, @port, @opts)
       return false if !@acceptor.init
       @acceptor.subscribe(engine)
     end
     true
   rescue
-    @log.error "Reactor#start"
-    @log.error $!
+    log.error "Reactor#start"
+    log.error $!
     false
   end
 
@@ -94,8 +90,8 @@ class Reactor
     @registry.each {|s| s.closing = true}
     @acceptor.unsubscribe_all if @acceptor
     @connector.unsubscribe_all if @connector
-    @log.info "Reactor#shutdown: Reactor shutting down"
-    @log.close
+    log.info "Reactor#shutdown: Reactor shutting down"
+    log.close
   end
 
   # poll starts the Reactor running to process incoming connection, input and
@@ -129,8 +125,8 @@ class Reactor
       end
     end
   rescue
-    @log.error "Reactor#poll"
-    @log.error $!
+    log.error "Reactor#poll"
+    log.error $!
     stop
     raise
   end

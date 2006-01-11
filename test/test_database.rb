@@ -4,6 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
+require 'log'
 require 'db/database'
 require 'flexmock'
 require 'ostruct'
@@ -14,14 +15,9 @@ end
 
 class TestDatabase < Test::Unit::TestCase
   def setup
-    @log = FlexMock.new
-    @log.mock_handle(:info) { |msg| puts msg }
-    @log.mock_handle(:debug) { |msg| puts msg }
-    @log.mock_handle(:warn) { |msg| puts msg }
-    @log.mock_handle(:error) { |msg| puts msg }
     myopts = OpenStruct.new
     myopts.dbname = "testdb"
-    @db = Database.new(@log, myopts)
+    @db = Database.new(myopts)
     $engine = FlexMock.new
     $engine.mock_handle(:world) {$engine}
     $engine.mock_handle(:options) {$engine}

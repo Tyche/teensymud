@@ -23,6 +23,7 @@ class GameObject
   # Flag indicating whether this object is interested in timer events
   property :powered
   property :contents, :farts
+  logger 'DEBUG'
 
   # Create a new Object
   # [+name+]     Every object needs a name

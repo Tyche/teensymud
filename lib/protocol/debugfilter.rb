@@ -16,6 +16,8 @@ require 'protocol/filter'
 # The DebugFilter class simply logs all that passes through it
 #
 class DebugFilter < Filter
+  logger 'DEBUG'
+
   # Construct filter
   #
   # [+pstack+] The ProtocolStack associated with this filter
@@ -28,7 +30,7 @@ class DebugFilter < Filter
   # [+return+] The filtered data
   def filter_in(str)
     return "" if str.nil? || str.empty?
-    @pstack.log.debug("(#{@pstack.conn.object_id}) INPUT #{str.inspect}" )
+    log.debug("(#{@pstack.conn.object_id}) INPUT #{str.inspect}" )
     str
   end
 
@@ -37,7 +39,7 @@ class DebugFilter < Filter
   # [+return+] The filtered data
   def filter_out(str)
     return "" if str.nil? || str.empty?
-    @pstack.log.debug("(#{@pstack.conn.object_id}) OUTPUT #{str.inspect}" )
+    log.debug("(#{@pstack.conn.object_id}) OUTPUT #{str.inspect}" )
     str
   end
 

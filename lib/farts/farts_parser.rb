@@ -31,7 +31,7 @@ module Farts
 
   class Parser < Racc::Parser
 
-module_eval <<'..end lib/farts/farts_parser.y modeval..id706bb9d227', 'lib/farts/farts_parser.y', 106
+module_eval <<'..end lib/farts/farts_parser.y modeval..ide6cade7707', 'lib/farts/farts_parser.y', 106
 
   def initialize
     @scope = {}
@@ -51,7 +51,7 @@ module_eval <<'..end lib/farts/farts_parser.y modeval..id706bb9d227', 'lib/farts
     raise Racc::ParseError, "Error: #{@sc.lineno}:#{@sc.tokenpos} syntax error at '#{val}'"
   end
 
-..end lib/farts/farts_parser.y modeval..id706bb9d227
+..end lib/farts/farts_parser.y modeval..ide6cade7707
 
 ##### racc 1.4.4 generates ###
 
@@ -789,6 +789,7 @@ module Farts
   end
 
   class FartTrigger
+    logger 'DEBUG'
     attr_accessor :fname, :event, :prog
     
     def initialize(fname,event)
@@ -802,15 +803,15 @@ module Farts
       File.open("farts/#{@fname}.fart") {|f|
         str = f.read
       }
-      $engine.log.info "Load of FART program - #{@fname}"
+      log.info "Load of FART program - #{@fname}"
       @prog = Parser.new.parse( str )
       true
     rescue Racc::ParseError
-      $engine.log.error $!
+      log.error $!
       @prog = nil
       false
     rescue Exception
-      $engine.log.error $!
+      log.error $!
       @prog = nil
       false
     end
@@ -828,9 +829,9 @@ module Farts
       load if !@prog
       retval = @prog.execute(vars) if @prog
     rescue WetFartsError
-      $engine.log.error $!
+      log.error $!
     rescue Exception
-      $engine.log.error $!
+      log.error $!
     ensure
       retval
     end
@@ -856,7 +857,7 @@ if $0 == __FILE__
     fart.execute(vars)
     
   rescue Racc::ParseError, Exception
-    $engine.log.error $!
+    log.error $!
     exit 
   end
 end

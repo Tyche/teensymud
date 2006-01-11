@@ -21,6 +21,8 @@ class TerminalFilter < Filter
   include ASCIICodes
   include VT100Codes
 
+  logger 'DEBUG'
+
   # Construct filter
   #
   # [+pstack+] The ProtocolStack associated with this filter
@@ -49,14 +51,14 @@ class TerminalFilter < Filter
         when 0x20..0x7e
           buf << b.chr
         when ESC
-          @pstack.log.debug("(#{@pstack.conn.object_id}) ESC found")
+          log.debug("(#{@pstack.conn.object_id}) ESC found")
           @collect = ""
           set_mode :escape
         # These cause immediate execution no matter what mode
         when ENQ, BEL, BS, TAB, VT, FF, SO, SI, DC1, DC3, CAN, SUB, DEL
           case b
           when BS, DEL
-            @pstack.log.debug("(#{@pstack.conn.object_id}) BS, DEL found")
+            log.debug("(#{@pstack.conn.object_id}) BS, DEL found")
             # slice local buffer or connection buffer
             buf.slice!(-1) || @pstack.conn.inbuffer.slice!(-1)
           when CAN, SUB
@@ -71,19 +73,19 @@ class TerminalFilter < Filter
       when :escape
         case b
         when ?[
-          @pstack.log.debug("(#{@pstack.conn.object_id}) CSI sequence found")
+          log.debug("(#{@pstack.conn.object_id}) CSI sequence found")
           set_mode :csi
         when ?]
-          @pstack.log.debug("(#{@pstack.conn.object_id}) OSC/XTERM sequence found")
+          log.debug("(#{@pstack.conn.object_id}) OSC/XTERM sequence found")
           set_mode :xterm
         when ?P
-          @pstack.log.debug("(#{@pstack.conn.object_id}) DCS sequence found")
+          log.debug("(#{@pstack.conn.object_id}) DCS sequence found")
           set_mode :dcs
         when ?O
-          @pstack.log.debug("(#{@pstack.conn.object_id}) SS3 sequence found")
+          log.debug("(#{@pstack.conn.object_id}) SS3 sequence found")
           set_mode :ss3
         when ?X, ?^, ?_
-          @pstack.log.debug("(#{@pstack.conn.object_id}) SOS/PM/APC sequence found")
+          log.debug("(#{@pstack.conn.object_id}) SOS/PM/APC sequence found")
           set_mode :sospmapc
         when ?D
           buf << "[SCROLLDOWN]"
@@ -114,7 +116,7 @@ class TerminalFilter < Filter
         when ENQ, BEL, BS, TAB, VT, FF, SO, SI, DC1, DC3, CAN, SUB, DEL
           case b
           when BS, DEL
-            @pstack.log.debug("(#{@pstack.conn.object_id}) BS, DEL found")
+            log.debug("(#{@pstack.conn.object_id}) BS, DEL found")
             # slice local buffer or connection buffer
             buf.slice!(-1) || @pstack.conn.inbuffer.slice!(-1)
           when CAN, SUB
@@ -242,7 +244,7 @@ class TerminalFilter < Filter
           when 2
             buf << "[INSERT]"
           when 3  # delete
-            @pstack.log.debug("(#{@pstack.conn.object_id}) BS, DEL found")
+            log.debug("(#{@pstack.conn.object_id}) BS, DEL found")
             buf.slice!(-1) || @pstack.conn.inbuffer.slice!(-1)
             echo(BS.chr)
           when 4, 8
@@ -277,7 +279,7 @@ class TerminalFilter < Filter
         when ENQ, BEL, BS, TAB, VT, FF, SO, SI, DC1, DC3, CAN, SUB, DEL
           case b
           when BS, DEL
-            @pstack.log.debug("(#{@pstack.conn.object_id}) BS, DEL found")
+            log.debug("(#{@pstack.conn.object_id}) BS, DEL found")
             # slice local buffer or connection buffer
             buf.slice!(-1) || @pstack.conn.inbuffer.slice!(-1)
           when CAN, SUB
@@ -315,7 +317,7 @@ class TerminalFilter < Filter
         when ENQ, BEL, BS, TAB, VT, FF, SO, SI, DC1, DC3, CAN, SUB, DEL
           case b
           when BS, DEL
-            @pstack.log.debug("(#{@pstack.conn.object_id}) BS, DEL found")
+            log.debug("(#{@pstack.conn.object_id}) BS, DEL found")
             # slice local buffer or connection buffer
             buf.slice!(-1) || @pstack.conn.inbuffer.slice!(-1)
           when CAN, SUB
@@ -375,7 +377,7 @@ class TerminalFilter < Filter
     when VT, FF
       "[UP 1]"
     when TAB
-      @pstack.log.debug("(#{@pstack.conn.object_id}) TAB found")
+      log.debug("(#{@pstack.conn.object_id}) TAB found")
       "[TAB]"
     when BEL
       "[BELL]"

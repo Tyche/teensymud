@@ -4,6 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
+require 'log'
 require 'protocol/protocolstack'
 require 'flexmock'
 end
@@ -52,10 +53,6 @@ class TestProtocolStack < Test::Unit::TestCase
 
   def test_hide_on_equals
     assert_equal(true, @ps.hide_on = true)
-  end
-
-  def test_log
-    assert_respond_to(@ps, :log)
   end
 
   def test_query
