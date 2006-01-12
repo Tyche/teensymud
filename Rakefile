@@ -2,6 +2,9 @@ require 'rake/rdoctask'
 require 'rake/testtask'
 require 'rake/packagetask'
 
+# get version 
+require 'lib/version'
+
 # files to distribute
 PKG_FILES = FileList[
   'tmud.rb', 'tclient.rb',
@@ -17,18 +20,11 @@ PKG_FILES = FileList[
   'doc/**/*'
 ]
 
-# get version from source code
-if File.read('tmud.rb') =~ /Version\s+=\s+"(\d+\.\d+\.\d+)"/
-  TMUDV = $1
-else
-  TMUDV = "0.0.0"
-end
-
 # make documentation
 Rake::RDocTask.new do |rd|
   rd.rdoc_dir = 'tmp'
   rd.main = 'README'
-  rd.title = "TeensyMUD #{TMUDV} Mud Server"
+  rd.title = "TeensyMUD #{Version} Mud Server"
 #  rd.template = 'kilmer'
 #  rd.template = './rdoctemplate.rb'
   rd.rdoc_files.include('README', 'farts.grammar', 'TML', 'tmud.rb', 'tclient.rb',
@@ -48,10 +44,11 @@ Rake::TestTask.new do |t|
   #t.pattern = 'test/test*.rb'  # default 'test/test*.rb'
   t.test_files = FileList['test/test*.rb']
   t.verbose = true
+  t.options = "-c test/test_config.yaml"
 end
 
 # package up a distribution
-Rake::PackageTask.new("tmud", TMUDV) do |p|
+Rake::PackageTask.new("tmud", Version) do |p|
     p.need_tar_gz = true
     p.need_zip = true
     p.package_files.include(PKG_FILES)
@@ -76,11 +73,11 @@ end
   
 task :release do
   baseurl = "http://sourcery.dyndns.org/svn/teensymud"
-  sh "cp pkg/tmud-#{TMUDV}.* ../release"
-  sh "cp pkg/tmud-#{TMUDV}.* /c/ftp/pub/mud/teensymud"
-  sh "svn add ../release/tmud-#{TMUDV}.*"
-  sh "svn ci .. -m 'create new packages for #{TMUDV}'"
-  sh "svn cp -m 'tagged release #{TMUDV}' #{baseurl}/trunk #{baseurl}/release/tmud-#{TMUDV}"
+  sh "cp pkg/tmud-#{Version}.* ../release"
+  sh "cp pkg/tmud-#{Version}.* /c/ftp/pub/mud/teensymud"
+  sh "svn add ../release/tmud-#{Version}.*"
+  sh "svn ci .. -m 'create new packages for #{Version}'"
+  sh "svn cp -m 'tagged release #{Version}' #{baseurl}/trunk #{baseurl}/release/tmud-#{Version}"
 end
 
 task :farts do

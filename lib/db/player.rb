@@ -20,6 +20,7 @@ require 'db/gameobject'
 class Player < GameObject
   include Publisher
 
+  configuration
   logger 'DEBUG'
 
   # The Session object this player is connected on or nil if not connected.
@@ -34,7 +35,7 @@ class Player < GameObject
   def initialize(name,passwd,session)
     @session = session
     self.passwd = encrypt(passwd)
-    super(name,$engine.world.options.home)
+    super(name, options['home'] || 1)
     self.powered = true
 
     # session related - only color settable

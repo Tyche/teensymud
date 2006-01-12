@@ -17,6 +17,7 @@ require 'pp'
 $:.unshift "lib"
 $:.unshift "vendor"
 
+require 'configuration'
 require 'log'
 require 'publisher'
 require 'net/reactor'
@@ -31,23 +32,9 @@ require 'event/hamster'
 require 'event/eventmanager'
 require 'farts/farts_parser'
 
-Version = "2.6.0"
 
-=begin
 # Displayed upon connecting
-BANNER=<<-EOH
-
-
-            This is TeensyMUD version #{Version}
-
-          Copyright (C) 2005 by Jon A. Lambert
- Released under the terms of the TeensyMUD Public License
-
-
-EOH
-=end
-
-LOGO=<<EOH
+LOGO=<<EOD
 \e[0;31m
 #######                                           #      ##  #     ##  ######
   ##                                              ##    ###  #     ##  #    ##
@@ -63,20 +50,8 @@ LOGO=<<EOH
                                            ##
                                          ###
 \e[m
-EOH
+EOD
 
-# Displayed upon connecting
-BANNER=<<-EOH
-[cursave][home 1,1][clear][currest]
-#{LOGO}
-
-                      This is TeensyMUD version #{Version}
-
-                    Copyright (C) 2005 by Jon A. Lambert
-           Released under the terms of the TeensyMUD Public License
-
-
-EOH
 
 # The World class is the mother of all worlds.
 #
@@ -89,20 +64,20 @@ EOH
 # [+options+] is a handle to the configuration options structure.
 class World
   attr_accessor :cmds, :ocmds, :eventmgr, :hamster
-  attr_reader :options, :db
+  attr_reader :db
+  configuration
   logger 'DEBUG'
 
   # Create the World.  This loads or creates the database depending on
   # whether it finds it.
   # [+return+] A handle to the World object.
-  def initialize(options)
-    @options = options
-    @db = Database.new(@options)
+  def initialize
+    @db = Database.new
     log.info "Loading commands..."
     @cmds = Command.load("commands.yaml", Player, :Cmd)
     @ocmds = Command.load("obj_cmds.yaml", GameObject, :ObjCmd)
     log.info "Done."
-    @eventmgr = EventManager.new(@options)
+    @eventmgr = EventManager.new
     log.info "Releasing Hamster..."
     @hamster = Hamster.new(self, 2.0, :timer)
     @db.objects {|obj| @hamster.register(obj) if obj.powered}
@@ -118,25 +93,41 @@ end
 class Engine
   attr_accessor :shutdown
   attr_reader :world
+  configuration
   logger 'DEBUG'
 
   # Create the an engine.
   # [+port+]   The port passed to create a reactor.
   # [+return+] A handle to the engine.
-  def initialize(options)
+  def initialize
     # Display options
-    log.info options.inspect
+    log.info options
     # Create the world an object containing most everything.
-    @world = World.new(options)
-    log.info "Booting server on port #{options.port}"
-    @server = Reactor.new(options.port)
+    @world = World.new
+    log.info "Booting server on port #{options['port'] || 4000}"
+    @server = Reactor.new(options['port'] || 4000)
     @incoming = []
     @shutdown = false
+    if options['trace']
+      set_trace_func proc { |event, file, line, id, binding, classname|
+        if file !~ /\/usr\/lib\/ruby/
+          printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
+        end
+      }
+    end
+  rescue
+    log.fatal "Engine initialization failed"
+    log.fatal $!
+    log.fatal $@
   end
 
   # main loop to run engine.
   # note:: @shutdown never set by anyone yet
   def run
+    Signal.trap("INT", method(:handle_signal))
+    Signal.trap("TERM", method(:handle_signal))
+    Signal.trap("KILL", method(:handle_signal))
+
     raise "Unable to start server" unless @server.start(self)
     log.info "TMUD is ready"
     until @shutdown
@@ -146,6 +137,10 @@ class Engine
       end
     end # until
     @server.stop
+  rescue
+    log.fatal "Engine failed in run"
+    log.fatal $!
+    log.fatal $@
   end
 
   # Update is called by an acceptor passing us a new session.  We create
@@ -156,6 +151,18 @@ class Engine
     newconn.subscribe(inc)
     inc.subscribe(newconn)
   end
+
+  # Setup traps - invoke one of these signals to shut down the mud
+  def handle_signal(sig)
+    log.warn "Signal caught request to shutdown."
+    log.info "Saving world..."
+    @world.db.players_connected.each{|plr|plr.disconnect if plr.session}
+    # clear compiled progs out before saving
+    @world.db.objects {|o| o.get_triggers.each {|t| t.prog = nil }}
+    @world.db.save
+    exit
+  end
+
 end
 
 
@@ -163,101 +170,10 @@ end
 # This is start of the main driver.
 ###########################################################################
 
-#
-# Processes command line arguments
-#
-require 'optparse'
-require 'ostruct'
-def get_options
-  # parse options
-  begin
-    # The myopts specified on the command line will be collected in *myopts*.
-    # We set default values here.
-    myopts = OpenStruct.new
-    myopts.port = 4000
-    myopts.home = 1
-    myopts.dbname = "db/world.yaml"
-    myopts.verbose = false
-    myopts.trace = false
-
-    opts = OptionParser.new do |opts|
-      opts.banner = BANNER
-      opts.separator ""
-      opts.separator "Usage: ruby #{$0} [options]"
-      opts.separator ""
-      opts.on("-p", "--port PORT", Integer,
-        "Select the port the mud will run on",
-        "  (defaults to 4000)") {|myopts.port|}
-      opts.on("-d", "--database DBNAME", String,
-        "Select the name of the database the mud will use",
-        "  (defaults to \'db/world.yaml\')") {|myopts.dbname|}
-      opts.on("-h", "--home LOCATIONID", Integer,
-        "Select the object id where new players will start",
-        "  (defaults to 1)") {|myopts.home|}
-      opts.on("-t", "--[no-]trace", "Trace execution") {|myopts.trace|}
-      opts.on("-v", "--[no-]verbose", "Run verbosely") {|myopts.verbose|}
-      opts.on_tail("-h", "--help", "Show this message") do
-        $stdout.puts opts.help
-        exit
-      end
-      opts.on_tail("--version", "Show version") do
-        $stdout.puts "TeensyMud #{Version}"
-        exit
-      end
-    end
-
-    opts.parse!(ARGV)
-
-    return myopts
-  rescue OptionParser::ParseError
-    $stderr.puts "ERROR - #{$!}"
-    $stderr.puts "For help..."
-    $stderr.puts " ruby #{$0} --help"
-    exit
-  end
-end
-
-
-# Setup traps - invoke one of these signals to shut down the mud
-def handle_signal(sig)
-  if $engine
-    $engine.log.warn "Signal caught request to shutdown."
-    $engine.log.info "Saving world..."
-    $engine.world.db.players_connected.each{|plr|plr.disconnect if plr.session}
-    # clear compiled progs out before saving
-    $engine.world.db.objects {|o| o.get_triggers.each {|t| t.prog = nil }}
-    $engine.world.db.save
-  else
-    $stderr.log.warn "Signal caught request to shutdown."
-    $stderr.log.info "Saving world..."
-  end
-  exit
-end
-
-
 if $0 == __FILE__
-  Signal.trap("INT", method(:handle_signal))
-  Signal.trap("TERM", method(:handle_signal))
-  Signal.trap("KILL", method(:handle_signal))
-
   begin
-    $engine = Engine.new(get_options)
-    if $engine.world.options.trace
-      set_trace_func proc { |event, file, line, id, binding, classname|
-        if file !~ /\/usr\/lib\/ruby/
-          printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
-        end
-      }
-    end
+    $engine = Engine.new
     $engine.run
-  rescue => e
-    if $engine
-      $engine.log.error $!
-    else
-      $stderr.puts "Exception caught error in server: " + $!
-      $stderr.puts $@
-    end
-    exit
   end
 end
 

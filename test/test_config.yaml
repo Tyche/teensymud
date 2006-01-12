@@ -1,0 +1,34 @@
+# 
+# TeensyMud configuration file
+#
+# Note that command line options will override the same named option
+# in this configuration file.  The default configuration is named
+# 'config.yaml' and can only be overridden on the command line.
+# 
+
+###
+### Storage configuration section
+###
+
+dbfile: dbtest.yaml
+home: 1
+
+###
+### Network configuration section
+###
+
+# The port to use for the telnet interface to the game
+port: 4000
+
+###
+### Engine configuration section
+###
+
+verbose: false
+trace: false
+
+###
+### Utility configuration section
+###
+
+logfile: logs/test.log

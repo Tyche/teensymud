@@ -16,7 +16,6 @@ class TestPlayer < Test::Unit::TestCase
     @id = 0
     $engine = FlexMock.new
     $engine.mock_handle(:world) {$engine}
-    $engine.mock_handle(:options) {$engine}
     $engine.mock_handle(:home) {1}
     $engine.mock_handle(:db) {$engine}
     $engine.mock_handle(:getid) {@id += 1}

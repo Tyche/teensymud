@@ -13,28 +13,31 @@
 
 require 'singleton'
 require 'log4r'
+require 'configuration'
 
 # The Log class is a singleton that handles logging at the class level
 #
 class Log
   include Singleton
   include Log4r
+  configuration
 
   # Load logger configuration
   def initialize
     Logger['global'].level = DEBUG
     fmt = PatternFormatter.new(:pattern => "%d [%5l] (%c) %M",
                                :date_pattern => "%y-%m-%d %H:%M:%S")
-    @stderr = StderrOutputter.new('stderr', :level => DEBUG, :formatter => fmt)
-    @server = FileOutputter.new('server', :level => DEBUG, :formatter => fmt,
-                       :filename => 'logs/server.log' , :trunc => 'false')
+    StderrOutputter.new('stderr', :level => DEBUG, :formatter => fmt)
+    FileOutputter.new('server', :level => DEBUG, :formatter => fmt,
+         :filename => options['logfile'] || 'logs/server.log' ,
+         :trunc => 'false')
   end
 
   # Access a logger class
   # [+logname+]  The name of the logger
   # [+loglevel+] the level of logging to do
-  def loginit(logname, loglevel='DEBUG')
-    Logger.new(logname, Log4r.const_get(loglevel)).outputters = @stderr, @server
+  def loginit(logname, loglevel='DEBUG', logout=['stderr','server'])
+    Logger.new(logname, Log4r.const_get(loglevel)).outputters = logout
     Logger[logname]
   end
 

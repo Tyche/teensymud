@@ -16,8 +16,8 @@
 #
 # [+db+] is a handle to the database implementation (in this iteration a hash).
 # [+dbtop+] stores the highest id used in the database.
-# [+dbname+] stores the file name of the database.
 class Database
+  configuration
   logger 'DEBUG'
 
 # The minimal database will be used in the absence of detecting one.
@@ -36,11 +36,10 @@ MINIMAL_DB=<<EOH
 EOH
 
 
-  def initialize(opts)
-    @dbname = opts.dbname
-    if !test(?e,@dbname)
+  def initialize
+    if !test(?e, options['dbfile'])
       log.info "Building minimal world database..."
-      File.open(@dbname,'w') do |f|
+      File.open(options['dbfile'],'w') do |f|
         f.write(MINIMAL_DB)
       end
       log.info "Done."
@@ -48,7 +47,7 @@ EOH
     log.info "Loading world..."
     @dbtop = 0
     @db = {}
-    tmp = YAML::load_file(@dbname)
+    tmp = YAML::load_file(options['dbfile'])
     # calculate the dbtop
     tmp.each do |o|
       @dbtop = o.id if o.id > @dbtop
@@ -67,7 +66,7 @@ EOH
   # Save the world
   # [+return+] Undefined.
   def save
-    File.open(@dbname,'w'){|f|YAML::dump(@db.values,f)}
+    File.open(options['dbfile'],'w'){|f|YAML::dump(@db.values,f)}
   end
 
   # Adds a new object to the database.
