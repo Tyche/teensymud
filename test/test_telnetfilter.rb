@@ -14,6 +14,11 @@ end
 
 class TestTelnetFilter < Test::Unit::TestCase
   def setup
+    @serv = FlexMock.new
+    @serv.mock_handle(:service_type) { :server }
+    @serv.mock_handle(:service_io) { :sockio }
+    @serv.mock_handle(:service_filters) { [:telnetfilter, :debugfilter] }
+    @serv.mock_handle(:service_negotiation) { [:supga, :zmp, :echo] }
     @sock = MockSocket.new("hello world\r\nfoobar")
     @sockio = SockIO.new(@sock, 5)
     @conn = FlexMock.new
@@ -25,7 +30,7 @@ class TestTelnetFilter < Test::Unit::TestCase
     @pstack.mock_handle(:echo_on) { false }
     @pstack.mock_handle(:binary_on) { false }
     @pstack.mock_handle(:urgent_on) { false }
-    @filter = TelnetFilter.new(@pstack, [:server, :filter, :echo, :zmp])
+    @filter = TelnetFilter.new(@pstack, @serv)
   end
 
   def test_desired_eh

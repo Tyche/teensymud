@@ -53,7 +53,7 @@ private
         opts.separator "Usage: ruby #{$0} [options]"
         opts.separator ""
         opts.on("-p", "--port PORT", Integer,
-          "Select the port the mud will run on") {|myopts['port']|}
+          "Select the port the mud will run on") {|myopts['server_port']|}
         opts.on("-d", "--dbfile DBFILE", String,
           "Select the name of the database file",
           "  (default is 'db/world.yaml')") {|myopts['dbfile']|}

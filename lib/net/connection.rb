@@ -32,24 +32,24 @@ class Connection < Session
   # [+server+]  The reactor this connection is associated with.
   # [+sock+]    The socket for this connection.
   # [+returns+] A connection object.
-  def initialize(server, sock, opts)
+  def initialize(server, sock)
     super(server, sock)
-    @opts = opts
-    if @opts.include? :lineio
+    case @server.service_io
+    when :lineio
       @sockio = LineIO.new(@sock)
-    elsif @opts.include? :packetio
+    when :packetio
       @sockio = PacketIO.new(@sock)
     else
       @sockio = SockIO.new(@sock)
     end
     @inbuffer = ""              # buffer lines waiting to be processed
     @outbuffer = ""             # buffer lines waiting to be output
-    if @opts.include? :telnetfilter
+    if @server.service_filters.include? :telnetfilter
       @initdone = false           # keeps silent until we're done with negotiations
     else
       @initdone = true
     end
-    @pstack = ProtocolStack.new(self, @opts)
+    @pstack = ProtocolStack.new(self)
   end
 
   # init is called before using the connection.
@@ -77,7 +77,8 @@ class Connection < Session
     buf = @sockio.read
     return if buf.nil?
     buf = @pstack.filter_call(:filter_in,buf)
-    if @opts.include?(:packetio) || @opts.include?(:client)
+    if @server.service_io == :packetio ||
+       @server.service_type == :client
       publish(buf)
     else
       @inbuffer << buf

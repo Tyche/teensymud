@@ -9,7 +9,6 @@ require 'db/gameobject'
 require 'db/player'
 require 'db/room'
 require 'flexmock'
-require 'ostruct'
 end
 
 class TestGameObject < Test::Unit::TestCase

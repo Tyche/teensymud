@@ -13,7 +13,11 @@ class TestConnector < Test::Unit::TestCase
   def setup
     @serv = FlexMock.new
     @serv.mock_handle(:register) { true }
-    @connector = Connector.new(@serv,80,[:client, :filter, :sockio],'google.com')
+    @serv.mock_handle(:service_io) { :sockio }
+    @serv.mock_handle(:service_filters) { [:colorfilter, :debugfilter] }
+    @serv.mock_handle(:service_negotiation) { [:supga, :zmp, :echo] }
+    @serv.mock_handle(:port) { 80 }
+    @connector = Connector.new(@serv,'google.com')
   end
 
   def test_handle_close

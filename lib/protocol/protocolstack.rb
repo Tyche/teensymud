@@ -33,22 +33,23 @@ class ProtocolStack
   # Construct a ProtocolStack
   #
   # [+conn+] The connection associated with this filter
-  def initialize(conn, opts)
-    @conn,@opts = conn,opts
+  def initialize(conn)
+    @conn = conn
+    @server = @conn.server
     @filters = []  # Filter order is critical as lowest level protocol is first.
-    if @opts.include? :debugfilter
+    if @server.service_filters.include? :debugfilter
       @filters << DebugFilter.new(self)
     end
-    if @opts.include? :telnetfilter
-      @filters << TelnetFilter.new(self,@opts)
+    if @server.service_filters.include? :telnetfilter
+      @filters << TelnetFilter.new(self,@server)
     end
-    if @opts.include? :terminalfilter
+    if @server.service_filters.include? :terminalfilter
       @filters << TerminalFilter.new(self)
     end
-    if @opts.include? :colorfilter
+    if @server.service_filters.include? :colorfilter
       @filters << ColorFilter.new(self)
     end
-    if @opts.include? :filter
+    if @server.service_filters.include? :filter
       @filters << Filter.new(self)
     end
 
@@ -61,11 +62,11 @@ class ProtocolStack
     @urgent_on = false
     @hide_on = false
     # This is a hack as set(:terminal, "vt100") is too late from client session.
-    if @opts.include? :vt100
-      @terminal = "vt100"
-    else
+#    if @opts.include? :vt100
+#      @terminal = "vt100"
+#    else
       @terminal = nil
-    end
+#    end
     @twidth = 80
     @theight = 23
   end
@@ -142,8 +143,8 @@ class ProtocolStack
       @twidth = value[0]
       @theight = value[1]
       # telnet filter always first except when debugfilter on
-      if @opts.include? :telnetfilter
-        if @opts.include? :debugfilter
+      if @server.service_filters.include? :telnetfilter
+        if @server.service_filters.include? :debugfilter
           @filters[1].send_naws
         else
           @filters[0].send_naws
@@ -152,8 +153,8 @@ class ProtocolStack
       true
     when :init_subneg
       # telnet filter always first except when debugfilter on
-      if @opts.include? :telnetfilter
-        if @opts.include? :debugfilter
+      if @server.service_filters.include? :telnetfilter
+        if @server.service_filters.include? :debugfilter
           @filters[1].init_subneg
         else
           @filters[0].init_subneg

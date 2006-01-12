@@ -56,7 +56,7 @@ Rake::PackageTask.new("tmud", Version) do |p|
 end
   
 desc "Report code statistics (KLOCs, etc) from the application"
-task :stats do
+task :stats do |t|
   require 'code_statistics'
   CodeStatistics.new(
     ["Main", ".", /^tmud.rb$|^tclient.rb$/], 
@@ -70,7 +70,8 @@ task :stats do
     ["Tests", "test", /.*\.rb$/]
   ).to_s
 end
-  
+
+desc "Make a code release"
 task :release do
   baseurl = "http://sourcery.dyndns.org/svn/teensymud"
   sh "cp pkg/tmud-#{Version}.* ../release"
@@ -80,6 +81,7 @@ task :release do
   sh "svn cp -m 'tagged release #{Version}' #{baseurl}/trunk #{baseurl}/release/tmud-#{Version}"
 end
 
+desc "Rebuild the FARTS interpreter"
 task :farts do
   sh "racc -o lib/farts/farts_parser.rb lib/farts/farts_parser.y"
 end

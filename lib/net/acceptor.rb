@@ -23,11 +23,8 @@ class Acceptor < Session
 
   # Create a new acceptor object
   # [+server+]  The reactor this acceptor is associated with.
-  # [+port+]    The port this acceptor will listen on.
   # [+returns+] An acceptor object
-  def initialize(server, port, opts)
-    @port = port
-    @opts = opts
+  def initialize(server)
     super(server)
   end
 
@@ -35,7 +32,7 @@ class Acceptor < Session
   # [+returns+] true is acceptor is properly initialized
   def init
     # Open a socket for the server to listen on.
-    @sock = TCPServer.new('0.0.0.0', @port)
+    @sock = TCPServer.new('0.0.0.0', @server.port)
     #@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
     #@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_LINGER, 0)
     unless RUBY_PLATFORM =~ /win32/
@@ -45,8 +42,7 @@ class Acceptor < Session
     @server.register(self)
     true
   rescue Exception
-    log.error "Acceptor#init"
-    log.error $!
+    log.fatal $!
     false
   end
 
@@ -59,7 +55,7 @@ class Acceptor < Session
       unless RUBY_PLATFORM =~ /win32/
         sckt.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK)
       end
-      c = Connection.new(@server, sckt, @opts)
+      c = Connection.new(@server, sckt)
       if c.init
         log.info "(#{c.object_id}) Connection accepted."
         publish(c)
@@ -68,7 +64,6 @@ class Acceptor < Session
       raise "Error in accepting connection."
     end
   rescue Exception
-    log.error "Acceptor#handle_input"
     log.error $!
   end
 
@@ -78,7 +73,6 @@ class Acceptor < Session
     @server.unregister(self)
     @sock.close
   rescue Exception
-    log.error "Acceptor#handle_close"
     log.error $!
   end
 

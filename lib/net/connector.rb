@@ -23,12 +23,9 @@ class Connector < Session
 
   # Create a new Connector object
   # [+server+]  The reactor this Connector is associated with.
-  # [+port+]    The port this Connector will listen on.
   # [+address+] The address to connect to.
   # [+returns+] An Connector object
-  def initialize(server, port, opts, address)
-    @port = port
-    @opts = opts
+  def initialize(server, address)
     @address = address
     super(server)
   end
@@ -37,13 +34,13 @@ class Connector < Session
   # [+returns+] true is acceptor is properly initialized
   def init
     # Open a socket for the server to connect on.
-    @sock = TCPSocket.new(@address , @port)
+    @sock = TCPSocket.new(@address , @server.port)
     #@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
     #@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_LINGER, 0)
     unless RUBY_PLATFORM =~ /win32/
       @sock.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK)
     end
-    c = Connection.new(@server, @sock, @opts)
+    c = Connection.new(@server, @sock)
     if c.init
       log.info "(#{c.object_id}) Connection made."
       publish(c)

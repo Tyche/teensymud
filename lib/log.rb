@@ -27,7 +27,7 @@ class Log
     Logger['global'].level = DEBUG
     fmt = PatternFormatter.new(:pattern => "%d [%5l] (%c) %M",
                                :date_pattern => "%y-%m-%d %H:%M:%S")
-    StderrOutputter.new('stderr', :level => DEBUG, :formatter => fmt)
+    StderrOutputter.new('stderr', :level => INFO, :formatter => fmt)
     FileOutputter.new('server', :level => DEBUG, :formatter => fmt,
          :filename => options['logfile'] || 'logs/server.log' ,
          :trunc => 'false')
@@ -36,8 +36,8 @@ class Log
   # Access a logger class
   # [+logname+]  The name of the logger
   # [+loglevel+] the level of logging to do
-  def loginit(logname, loglevel='DEBUG', logout=['stderr','server'])
-    Logger.new(logname, Log4r.const_get(loglevel)).outputters = logout
+  def loginit(logname, loglevel, logto)
+    Logger.new(logname, Log4r.const_get(loglevel)).outputters = logto
     Logger[logname]
   end
 
@@ -48,9 +48,9 @@ class Module
 # logger defines a named log and log method for the class
 #
 # [+loglevel+] the level of logging to do
-  def logger(loglevel='DEBUG')
+  def logger(loglevel='DEBUG', logto=['stderr','server'])
     class_eval <<-EOD
-      @log = Log.instance.loginit(self.name, "#{loglevel}")
+      @log = Log.instance.loginit(self.name, "#{loglevel}", #{logto.inspect})
       def log
         self.class.instance_variable_get :@log
       end

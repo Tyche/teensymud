@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -w
+#!/usr/bin/env ruby
 #
 # file::    tclient.rb
 # author::  Jon A. Lambert
@@ -103,7 +103,8 @@ class CursesClient < Client
 
   def run
     shutdown = false
-    connection = Reactor.new(@opts.port, $connopts, @opts.address)
+    connection = Reactor.new(@opts.port, $conntype, $connio, $connopts,
+       $connfilters, @opts.address)
     raise "Unable to start TeensyClient" unless connection.start(self)
     conmsg "Connected to #{@opts.address}:#{@opts.port}.  Use F10 to QUIT"
     until shutdown
@@ -165,7 +166,8 @@ class ConsoleClient < Client
 
   def run
     shutdown = false
-    connection = Reactor.new(@opts.port, $connopts, @opts.address)
+    connection = Reactor.new(@opts.port, $conntype, $connio, $connopts,
+       $connfilters, @opts.address)
     raise "Unable to start TeensyClient" unless connection.start(self)
     conmsg "Connected to #{@opts.address}:#{@opts.port}.  Use CTL-C to QUIT"
     until shutdown
@@ -305,7 +307,10 @@ end
 
 if $0 == __FILE__
 
-  $connopts = [:client, :sockio, :zmp, :telnetfilter, :ttype, :naws, :debugfilter, :vt100] #, :terminalfilter]
+  $conntype = :client
+  $connio = :sockio
+  $connopts = [:zmp, :ttype, :naws]
+  $connfilters = [:telnetfilter, :debugfilter] #, :terminalfilter]
   $opts = get_options
 
   if $opts.echo

@@ -18,6 +18,7 @@ require 'ternarytrie'
 # The Command class encapsulates a TeensyMud command
 class Command
   attr_reader :cmd, :name, :help
+  logger
 
   # Create a command
   def initialize(cmd, name, help)
@@ -38,8 +39,7 @@ class Command
     forclass.send(:include,const_get(mname))
     cmdtable
   rescue Exception
-    puts $!
-    puts $@
+    log.error $!
   end
 
 end

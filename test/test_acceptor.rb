@@ -13,7 +13,8 @@ class TestAcceptor < Test::Unit::TestCase
   def setup
     @serv = FlexMock.new
     @serv.mock_handle(:register) { true }
-    @acceptor = Acceptor.new(@serv,4000,[:server, :filter, :sockio])
+    @serv.mock_handle(:port) { 80 }
+    @acceptor = Acceptor.new(@serv)
   end
 
   def test_handle_close

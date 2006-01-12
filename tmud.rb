@@ -104,8 +104,11 @@ class Engine
     log.info options
     # Create the world an object containing most everything.
     @world = World.new
-    log.info "Booting server on port #{options['port'] || 4000}"
-    @server = Reactor.new(options['port'] || 4000)
+    log.info "Booting server on port #{options['server_port'] || 4000}"
+    @server = Reactor.new(options['server_port'] || 4000,
+      options['server_type'], options['server_io'],
+      options['server_negotiation'], options['server_filters'],
+      address=nil)
     @incoming = []
     @shutdown = false
     if options['trace']
@@ -118,7 +121,6 @@ class Engine
   rescue
     log.fatal "Engine initialization failed"
     log.fatal $!
-    log.fatal $@
   end
 
   # main loop to run engine.
@@ -140,7 +142,6 @@ class Engine
   rescue
     log.fatal "Engine failed in run"
     log.fatal $!
-    log.fatal $@
   end
 
   # Update is called by an acceptor passing us a new session.  We create

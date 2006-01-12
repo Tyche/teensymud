@@ -11,8 +11,13 @@ end
 
 class TestProtocolStack < Test::Unit::TestCase
   def setup
+    @serv = FlexMock.new
+    @serv.mock_handle(:service_io) { :sockio }
+    @serv.mock_handle(:service_filters) { [:telnetfilter, :debugfilter] }
+    @serv.mock_handle(:service_negotiation) { [:supga, :zmp, :echo] }
     @conn = FlexMock.new
-    @ps = ProtocolStack.new(@conn, [:server, :filter])
+    @conn.mock_handle(:server) {@serv}
+    @ps = ProtocolStack.new(@conn)
   end
 
   def test_binary_on

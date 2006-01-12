@@ -6,29 +6,86 @@
 # 'config.yaml' and can only be overridden on the command line.
 # 
 
-###
+###########################################################
 ### Storage configuration section
-###
+###########################################################
 
 dbfile: dbtest.yaml
-home: 1
 
-###
+###########################################################
 ### Network configuration section
-###
+###########################################################
+
+## Main server configuration
 
 # The port to use for the telnet interface to the game
-port: 4000
+server_port: 4000
 
-###
+# Type of service 
+#
+# Valid values are
+#     :server  - run reactor as server (default)
+#     :client  - run reactor as client
+server_type: server
+
+# Service io handler
+#
+# Valid values are
+#     :sockio  - use sockio as io handler (default)
+#     :lineio  - use lineio as io handler
+#     :packetio  - use packetio as io handler
+server_io: :sockio
+
+# Filters to use on this service
+#
+# Valid values are
+#
+#     :filter  - attach dummy filter
+#     :debugfilter - attach debug filter (default)
+#     :telnetfilter - attach telnet filter (default)
+#     :colorfilter - attach color filter (default)
+#     :terminalfilter - attach terminal filter
+server_filters:  
+  - :debugfilter
+  - :telnetfilter
+  - :terminalfilter
+  - :colorfilter
+
+# Desired negotiation for the service
+#
+# Valid values are
+#
+#     :sga - suppress go ahead
+#     :echo - server will do echoing
+#     :naws - negotiate about window size
+#     :ttype - negotiate terminal type
+#     :zmp - negotiate zmp protocol
+#     :binary - binary stream
+server_negotiation:
+  - :sga
+  - :echo
+  - :naws
+  - :ttype
+  - :zmp
+
+###########################################################
 ### Engine configuration section
-###
+###########################################################
 
+# not used - should set $VERBOSE?
 verbose: false
+
+# tracing on - sllooooow
 trace: false
 
-###
+# starting location for players
+home: 1
+
+###########################################################
 ### Utility configuration section
-###
+###########################################################
 
 logfile: logs/test.log
+
+
+###########################################################

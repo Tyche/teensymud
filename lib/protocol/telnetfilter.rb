@@ -12,6 +12,7 @@
 #
 
 require 'strscan'
+require 'ostruct'
 require 'protocol/filter'
 require 'protocol/telnetcodes'
 require 'protocol/asciicodes'
@@ -30,12 +31,12 @@ class TelnetFilter < Filter
   # Initialize state of filter
   #
   # [+pstack+] The ProtocolStack associated with this filter
-  # [+opts+] An optional hash of desired initial options
-  def initialize(pstack, wopts=[])
+  # [+server+] An optional hash of desired initial options
+  def initialize(pstack, server)
     super(pstack)
-    @opts = wopts
+    @server = server
     @wopts = {}
-    getopts(wopts)
+    getopts(@server.service_negotiation)
     @mode = :normal #  Parse mode :normal, :cmd, :cr
     @state = {}
     @sc = nil
@@ -50,7 +51,7 @@ class TelnetFilter < Filter
   #
   # [+args+] Optional initial options
   def init(args)
-    return true if @opts.include? :client  # let server offer and ask for client
+    return true if @server.service_type == :client  # let server offer and ask for client
     # severl sorts of options here - server offer, ask client or both
     @wopts.each do |key,val|
       case key

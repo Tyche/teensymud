@@ -18,6 +18,7 @@ require 'net/sockio'
 # in network byte order.
 #
 class PacketIO < SockIO
+  logger
 
   # Creates a new PackIO object
   # [+sock+]    The socket which will be used
@@ -48,7 +49,7 @@ class PacketIO < SockIO
           @inbuffer = ""
           @packet_size = 0
           @prefix_found = false
-          puts "Discarding packet: Buffer size exceeded (PACKETSIZE=#{@packet_size} STRING='#{sizest}')"
+          log.warn "Discarding packet: Buffer size exceeded (PACKETSIZE=#{@packet_size} STRING='#{sizest}')"
           return nil
         end
       else

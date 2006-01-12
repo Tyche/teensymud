@@ -10,8 +10,12 @@ end
 
 class TestConnection < Test::Unit::TestCase
   def setup
+    @serv = FlexMock.new
+    @serv.mock_handle(:service_io) { :sockio }
+    @serv.mock_handle(:service_filters) { [:colorfilter, :debugfilter] }
+    @serv.mock_handle(:service_negotiation) { [:supga, :zmp, :echo] }
     @sock = MockSocket.new("hello world\r\nfoobar")
-    @conn = Connection.new("foo",@sock,[:sockio])
+    @conn = Connection.new(@serv,@sock)
   end
 
   def test_handle_close

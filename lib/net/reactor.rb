@@ -26,39 +26,44 @@ require 'net/connector'
 # may be found at http://citeseer.ist.psu.edu/schmidt97acceptor.html
 # for an idea of how all these classes are supposed to interelate.
 class Reactor
+  attr_reader :port, :service_type, :service_io, :service_negotiation,
+    :service_filters
+
   logger 'DEBUG'
 
   # Constructor for Reactor
-  # [+port+] The port the server will listen on/client will connect to.
-  # [+opts+] Optional array of options passed to all participants.
+  # [+service_port+] The port the server will listen on or client will
+  #                  connect to.
+  # [+service_type+] The type of service (:server or :client)
+  # [+service_io+] The service io handler (:sockio, :lineio, or :packetio)
+  # [+service_negotiation+] An array of telnet options the service will try
+  #                         to negotiate
   #   Valid options are
-  #     :server  - run reactor as server (default)
-  #     :client  - run reactor as client
-  #     :sockio  - use sockio as io handler (default)
-  #     :lineio  - use lineio as io handler
-  #     :packetio  - use packetio as io handler
+  #        :sga, :echo, :naws, :ttype, :zmp (negotiate default)
+  #        :binary
+  # [+service_filters+] An array of io filters the service will use.
+  #   Valid options are
   #     :filter  - attach dummy filter
   #     :debugfilter - attach debug filter (default)
   #     :telnetfilter - attach telnet filter (default)
-  #        :sga, :echo, :naws, :ttype, :zmp (negotiate default)
-  #        :binary
   #     :colorfilter - attach color filter (default)
   #     :terminalfilter - attach terminal filter
-  #
   # [+address+] Optional address for outgoing connection.
   #
-  def initialize(port, opts=[:server, :sockio, :debugfilter,
-                             :telnetfilter, :terminalfilter,
-                               :sga, :echo, :naws, :ttype, :zmp,
-                             :colorfilter],
-                             address=nil)
-    @port = port       # port server will listen on
+  def initialize(service_port, service_type, service_io, service_negotiation,
+                 service_filters, address=nil)
+    @port = service_port      # port server will listen on
     @shutdown = false  # Flag to indicate that server is shutting down.
     @acceptor = nil    # Listening socket for incoming connections.
     @connector = nil   # Connecting socket for outgoing connections.
     @registry = []     # list of sessions
-    @opts = opts       # array of options - symbols
     @address = address # Address for Connector.
+
+    @service_type = service_type
+    @service_io = service_io
+    @service_negotiation = service_negotiation
+    @service_filters = service_filters
+    log.debug self.inspect
   end
 
   # Start initializes the reactor and gets it ready to accept incoming
@@ -67,12 +72,12 @@ class Reactor
   # [+return+'] true if server boots correctly, false if an error occurs.
   def start(engine)
     # Create an acceptor to listen for this server.
-    if @opts.include? :client
-      @connector = Connector.new(self, @port, @opts, @address)
+    if @service_type == :client
+      @connector = Connector.new(self, @address)
       @connector.subscribe(engine)
       return false if !@connector.init
     else
-      @acceptor = Acceptor.new(self, @port, @opts)
+      @acceptor = Acceptor.new(self)
       return false if !@acceptor.init
       @acceptor.subscribe(engine)
     end
@@ -120,14 +125,14 @@ class Reactor
       s.handle_input if infds && infds.include?(s.sock)
       s.handle_close if s.closing
       # special handling for Telnet initialization
-      if @opts.include?(:telnetfilter) && s.respond_to?(:initdone) && !s.initdone
+      if @service_filters.include?(:telnetfilter) &&
+            s.respond_to?(:initdone) && !s.initdone
         s.pstack.set(:init_subneg, true)
       end
     end
   rescue
     log.error "Reactor#poll"
     log.error $!
-    stop
     raise
   end
 

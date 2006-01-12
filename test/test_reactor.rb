@@ -9,7 +9,7 @@ end
 
 class TestReactor < Test::Unit::TestCase
   def setup
-    @reactor = Reactor.new(4000)
+    @reactor = Reactor.new(4000, :server, :sockio, [:sga, :echo], [:filter])
   end
 
   def test_log
