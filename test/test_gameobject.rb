@@ -23,11 +23,9 @@ class TestGameObject < Test::Unit::TestCase
     $engine.mock_handle(:ocmds) {$engine}
     $engine.mock_handle(:find) {[]}
     $engine.mock_handle(:home) {1}
-    @r = Room.new("Here")
-#    @r.id = 1
     $engine.mock_handle(:get) {|oid| oid == 1 ? @r : @p}
+    @r = Room.new("Here")
     @p = Player.new("Tyche","tyche",nil)
-#    @p.id = 9
     @o = GameObject.new("Thing")
   end
 

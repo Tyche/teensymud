@@ -18,6 +18,11 @@ module Cmd
     case args
     when /(.*) (.*) (.*)/
       d=Room.new($1)
+      if d.nil?
+        log.error "Unable to create room."
+        sendto "System error: unable to create room."
+        return
+      end
       $engine.world.db.put(d)
       $engine.world.db.get(location).exits[$2]=d.id
       d.exits[$3]=$engine.world.db.get(location).id

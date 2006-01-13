@@ -22,10 +22,7 @@ require 'protocol/protocolstack'
 #
 class Connection < Session
   logger 'DEBUG'
-  attr :server
-  attr :initdone
-  attr :pstack
-  attr :sockio
+  attr_reader :server, :initdone, :pstack, :sockio, :addr, :host
   attr_accessor :inbuffer, :outbuffer # filters need to this in charmode
 
   # Create a new connection object
@@ -55,10 +52,10 @@ class Connection < Session
   # init is called before using the connection.
   # [+returns+] true is connection is properly initialized
   def init
-    @addr = @sock.peeraddr[2]
+    @host, @addr = @sock.peeraddr.slice(2..3)
     @connected = true
     @server.register(self)
-    log.info "(#{self.object_id}) New Connection on '#{@addr}'"
+    log.info "(#{self.object_id}) New Connection on '#{@host}(#{@addr})'"
     @pstack.filter_call(:init,nil)
     true
   rescue Exception
@@ -94,7 +91,7 @@ class Connection < Session
     @closing = true
     publish(:logged_out)
     unsubscribe_all
-    log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
+    log.info "(#{self.object_id}) Connection '#{@host}(#{@addr})' disconnecting"
     log.error $!
   rescue Exception
     @closing = true
@@ -119,7 +116,7 @@ class Connection < Session
     @closing = true
     publish(:logged_out)
     unsubscribe_all
-    log.info "(#{self.object_id}) Connection '#{@addr}' disconnecting"
+    log.info "(#{self.object_id}) Connection '#{@host}(#{@addr})' disconnecting"
   rescue Exception
     @closing = true
     publish(:disconnected)
@@ -133,7 +130,7 @@ class Connection < Session
     @connected = false
     publish(:logged_out)
     unsubscribe_all
-    log.info "(#{self.object_id}) Connection '#{@addr}' closing"
+    log.info "(#{self.object_id}) Connection '#{@host}(#{@addr})' closing"
     @server.unregister(self)
 #    @sock.shutdown   # odd errors thrown with this
     @sock.close
@@ -182,7 +179,7 @@ class Connection < Session
       @closing = true
     when :reconnecting
       unsubscribe_all
-      log.info "(#{self.object_id}) Connection '#{@addr}' closing for reconnection"
+      log.info "(#{self.object_id}) Connection '#{@host}(#{@addr})' closing for reconnection"
       @server.unregister(self)
   #    @sock.shutdown   # odd errors thrown with this
       @sock.close

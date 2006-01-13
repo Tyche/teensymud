@@ -10,7 +10,14 @@
 ### Storage configuration section
 ###########################################################
 
-dbfile: db/world.yaml
+# Name of the database without extension 'dbtype' will determine it.
+dbfile: db/world
+
+# Type of database
+#
+# Valid values are: :yaml, :gdbm, :sdbm, :dbm
+#
+dbtype: :gdbm
 
 ###########################################################
 ### Network configuration section
@@ -80,6 +87,13 @@ trace: false
 
 # starting location for players
 home: 1
+
+# command interfaces to load (in order)
+player_interface:
+  - teensy
+
+object_interface:
+  - objects
 
 ###########################################################
 ### Utility configuration section

@@ -10,6 +10,7 @@
 # Released under the terms of the TeensyMUD Public License
 # See LICENSE file for additional information.
 #
+require 'log'
 
 # The GameObject class is the mother of all objects.
 #
@@ -36,25 +37,47 @@ class GameObject
     self.farts = {}
     self.desc = ""
     self.powered = false
-    $engine.world.db.get(location).add_contents(id) if location
+  end
+
+  # Clone an object
+  # This does a deepcopy then assign a new database id
+  #
+  # [+return+]   A handle to the new Object
+  def clone
+    newobj = Marshal.load(Marshal.dump(self))
+    props = newobj.instance_variable_get(:@props)
+    props[:id] = $engine.world.db.getid
+    $engine.world.db.put(newobj)
+    newobj
+  rescue
+    log.error "Clone failed"
+    nil
   end
 
   # Add an object to the contents of this object
   # [+oid+] The object id to add
   def add_contents(oid)
-    contents << oid
+    if contents.include? oid
+      log.error "Object #{oid} already in contents of #{id}"
+    else
+      contents << oid
+    end
   end
 
   # Deletes an object from the contents of this object
   # [+oid+] The object id to delete
   def delete_contents(oid)
-    contents.delete(oid)
+    d = contents.delete(oid)
+    if d.nil?
+      log.error "Object #{oid} not in contents of #{id}"
+    end
+    d
   end
 
   # Returns the contents of the object
   # [+return+] An array of object ids
   def get_contents
-    contents
+    contents || []
   end
 
   # Add a trigger to this object

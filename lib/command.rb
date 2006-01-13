@@ -13,12 +13,15 @@
 
 require 'yaml'
 require 'ternarytrie'
+require 'configuration'
+require 'log'
 
 
 # The Command class encapsulates a TeensyMud command
 class Command
   attr_reader :cmd, :name, :help
   logger
+  configuration
 
   # Create a command
   def initialize(cmd, name, help)
@@ -26,20 +29,51 @@ class Command
   end
 
   # load builds a command lookup trie from the commands listed in a yaml
-  # config file and in the and then defines/redefines them on the Player
-  # class.
+  # config file and in the and then defines/redefines them on the GameObject
+  # classes.
   # [+return+] A trie of commands (see TernaryTrie class)
-  def self.load(fname,forclass,mname)
-    cmds = YAML::load_file("cmd/" + fname)
-    cmdtable = TernaryTrie.new
-    cmds.each do |c|
-      Kernel::load("cmd/" + c.cmd.to_s + ".rb")
-      cmdtable.insert(c.name, c)
+  def self.load
+    @log.info "Loading commands..."
+
+    # first load the commands for objects
+    ocmdtable = TernaryTrie.new
+    if options['object_interface'] && !options['object_interface'].empty?
+      options['object_interface'].each do |i|
+        cmds = YAML::load_file("cmd/#{i}.yaml")
+        cmds.each do |c|
+          Kernel::load("cmd/#{i}/#{c.cmd}.rb")
+          ocmdtable.insert(c.name, c)
+        end
+        GameObject.send(:include,ObjCmd)
+      end
+    else
+      @log.warn "No command interfaces for GameObject"
     end
-    forclass.send(:include,const_get(mname))
-    cmdtable
+
+    # now load the commands for players
+    cmdtable = TernaryTrie.new
+    if options['player_interface'] && !options['player_interface'].empty?
+      options['player_interface'].each do |i|
+        cmds = YAML::load_file("cmd/#{i}.yaml")
+        cmds.each do |c|
+          Kernel::load("cmd/#{i}/#{c.cmd}.rb")
+          cmdtable.insert(c.name, c)
+        end
+        Player.send(:include,Cmd)
+      end
+    else
+      @log.error "No command interfaces for Player"
+    end
+
+    @log.info "Done."
+    return cmdtable, ocmdtable
   rescue Exception
-    log.error $!
+    @log.error $!
+  end
+
+  # We need options at class level
+  def self.options
+    Configuration.instance.options
   end
 
 end

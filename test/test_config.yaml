@@ -10,13 +10,20 @@
 ### Storage configuration section
 ###########################################################
 
-dbfile: dbtest.yaml
+# Name of the database
+dbfile: test/testdb
+
+# Type of database
+#
+# Valid values are: :yaml, :gdbm, :sdbm, :dbm
+#
+dbtype: :dbm
 
 ###########################################################
 ### Network configuration section
 ###########################################################
 
-## Main server configuration
+### Main server configuration
 
 # The port to use for the telnet interface to the game
 server_port: 4000
@@ -26,7 +33,7 @@ server_port: 4000
 # Valid values are
 #     :server  - run reactor as server (default)
 #     :client  - run reactor as client
-server_type: server
+server_type: :server
 
 # Service io handler
 #
@@ -80,6 +87,13 @@ trace: false
 
 # starting location for players
 home: 1
+
+# command interfaces to load (in order)
+player_interface:
+  - teensy
+
+object_interface:
+  - objects
 
 ###########################################################
 ### Utility configuration section

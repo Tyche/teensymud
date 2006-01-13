@@ -73,14 +73,12 @@ class World
   # [+return+] A handle to the World object.
   def initialize
     @db = Database.new
-    log.info "Loading commands..."
-    @cmds = Command.load("commands.yaml", Player, :Cmd)
-    @ocmds = Command.load("obj_cmds.yaml", GameObject, :ObjCmd)
-    log.info "Done."
+    @cmds, @ocmds = Command.load
     @eventmgr = EventManager.new
     log.info "Releasing Hamster..."
     @hamster = Hamster.new(self, 2.0, :timer)
     @db.objects {|obj| @hamster.register(obj) if obj.powered}
+    log.info "Reticulating spleens..."
     log.info "World initialized."
   end
 
@@ -97,11 +95,10 @@ class Engine
   logger 'DEBUG'
 
   # Create the an engine.
-  # [+port+]   The port passed to create a reactor.
   # [+return+] A handle to the engine.
   def initialize
     # Display options
-    log.info options
+    log.debug "Configuration: #{options}"
     # Create the world an object containing most everything.
     @world = World.new
     log.info "Booting server on port #{options['server_port'] || 4000}"

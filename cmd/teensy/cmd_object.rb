@@ -16,8 +16,15 @@ module Cmd
   def cmd_object(args)
     case args
     when /(.*)/
-      $engine.world.db.put(GameObject.new($1,location))
-      sendto("Ok.")
+      newobj = GameObject.new($1,location)
+      if newobj.nil?
+        log.error "Unable to create object."
+        sendto "System error: unable to create object."
+        return
+      end
+      $engine.world.db.put(newobj)
+      $engine.world.db.get(location).add_contents(newobj.id)
+      sendto "Ok."
     else
       sendto("What!!?")
     end

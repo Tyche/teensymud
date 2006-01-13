@@ -23,8 +23,8 @@ class TestPlayer < Test::Unit::TestCase
     $engine.mock_handle(:ocmds) {$engine}
     $engine.mock_handle(:cmds) {$engine}
     $engine.mock_handle(:find) {[]}
-    @r = Room.new("Here")
     $engine.mock_handle(:get) {@r}
+    @r = Room.new("Here")
     @p = Player.new("Tyche","tyche",nil)
   end
 

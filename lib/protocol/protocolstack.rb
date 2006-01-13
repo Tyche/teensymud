@@ -114,6 +114,10 @@ class ProtocolStack
       retval =  @urgent_on
     when :hide
       retval =  @hide_on
+    when :ip
+      retval =  @conn.addr
+    when :host
+      retval =  @conn.host
     else
       log.error "(#{self.object_id}) ProtocolStack#query unknown setting '#{pair.inspect}'"
       retval = false

@@ -4,15 +4,20 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
+require 'flexmock'
 require 'command'
+require 'db/properties'
+require 'db/player'
 end
 
 class TestCommand < Test::Unit::TestCase
-  class A
-  end
-
   def setup
     @c = Command.new(:cmd, "name", "help")
+    @nextid = 0
+    $engine = FlexMock.new
+    $engine.mock_handle(:world) {$engine}
+    $engine.mock_handle(:db) {$engine}
+    $engine.mock_handle(:getid) {@nextid += 1}
   end
 
   def test_cmd
@@ -28,9 +33,9 @@ class TestCommand < Test::Unit::TestCase
   end
 
   def test_singleton_Command_load
-    c = Command.load("obj_cmds.yaml", A, :ObjCmd)
-    assert(true,c)
-    a = A.new
+    c, o = Command.load
+    assert(true,c && o)
+    a = GameObject.new("testthing")
     assert_respond_to(a,:ocmd_echoat)
     assert(true, c.insert(@c.name, @c))
     assert_equal(@c, c.find_exact(@c.name))

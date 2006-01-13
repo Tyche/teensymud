@@ -19,6 +19,7 @@ class Account
   include Publisher
 
   logger 'DEBUG'
+  configuration
 
   # Create an Account connection.  This is a temporary object that handles
   # login for player and gets them connected.
@@ -113,8 +114,16 @@ class Account
         when :new
           if msg =~ /^[Yy]/
             @player = Player.new(@login_name,@login_passwd,@conn)
-            $engine.world.db.put(@player)
-            login
+            if @player.nil?
+              log.error "Unable to create player"
+              prompt "System error: unable to create player."
+              @state = :name
+              prompt("login> ")
+            else
+              $engine.world.db.put(@player)
+              $engine.world.db.get(options['home'] || 1).add_contents(@player.id)
+              login
+            end
           else
             @state = :name
             prompt("login> ")
@@ -140,7 +149,7 @@ private
     if @player.subscriber_count > 0
       @player.publish(:reconnecting)
       @player.unsubscribe_all
-      @player.sendto("\nWelcome reconnecting #{@login_name}@#{@conn.sock.peeraddr[2]}!")
+      @player.sendto("\nWelcome reconnecting #{@login_name}@#{@conn.query(:host)}!")
     end
 
     # deregister all observers here and on connection
@@ -151,7 +160,7 @@ private
     @conn.subscribe(@player)
     @player.subscribe(@conn)
 
-    @player.sendto("\nWelcome #{@login_name}@#{@conn.sock.peeraddr[2]}!")
+    @player.sendto("\nWelcome #{@login_name}@#{@conn.query(:host)}!")
     $engine.world.db.players_connected(@player.id).each {|p|
       $engine.world.eventmgr.add_event(@player.id,p.id,:show,"#{@player.name} has connected.")
     }

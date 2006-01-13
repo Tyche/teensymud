@@ -27,7 +27,17 @@ class TestDatabase < Test::Unit::TestCase
   end
 
   def teardown
-    File.delete(options['dbfile'])
+    case options['dbtype']
+    when :yaml
+      File.delete("#{options['dbfile']}.yaml")
+    when :sdbm
+      File.delete("#{options['dbfile']}.dir")
+      File.delete("#{options['dbfile']}.pag")
+    when :gdbm
+      File.delete("#{options['dbfile']}.gdbm")
+    when :dbm
+      File.delete("#{options['dbfile']}.db")
+    end
   end
 
   def test_delete

@@ -1,8 +1,8 @@
 #
 # file::    database.rb
 # author::  Jon A. Lambert
-# version:: 2.6.0
-# date::    10/12/2005
+# version:: 2.7.0
+# date::    1/12/2006
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -37,24 +37,94 @@ EOH
 
 
   def initialize
-    if !test(?e, options['dbfile'])
-      log.info "Building minimal world database..."
-      File.open(options['dbfile'],'w') do |f|
-        f.write(MINIMAL_DB)
+    require 'yaml'
+    case options['dbtype']
+    when :yaml
+      if !test(?e, "#{options['dbfile']}.yaml")
+        log.info "Building minimal world database..."
+        File.open("#{options['dbfile']}.yaml",'w') do |f|
+          f.write(MINIMAL_DB)
+        end
       end
-      log.info "Done."
+    when :gdbm
+      require 'gdbm'
+      if !test(?e, "#{options['dbfile']}.gdbm")
+        log.info "Building minimal world database..."
+        tmp = YAML::load(MINIMAL_DB)
+        GDBM.open("#{options['dbfile']}.gdbm", 0666) do |db|
+          tmp.each do |o|
+            db[o.id.to_s] = YAML::dump(o)
+          end
+        end
+      end
+    when :sdbm
+      require 'sdbm'
+      if !test(?e, "#{options['dbfile']}.pag")
+        log.info "Building minimal world database..."
+        tmp = YAML::load(MINIMAL_DB)
+        SDBM.open(options['dbfile'], 0666) do |db|
+          tmp.each do |o|
+            db[o.id.to_s] = YAML::dump(o)
+          end
+        end
+      end
+    when :dbm
+      require 'dbm'
+      if !test(?e, "#{options['dbfile']}.db")
+        log.info "Building minimal world database..."
+        tmp = YAML::load(MINIMAL_DB)
+        DBM.open(options['dbfile'], 0666) do |db|
+          tmp.each do |o|
+            db[o.id.to_s] = YAML::dump(o)
+          end
+        end
+      end
+    else
+      raise "Unable to load database module for #{options['dbtype']}"
     end
+
     log.info "Loading world..."
     @dbtop = 0
     @db = {}
-    tmp = YAML::load_file(options['dbfile'])
-    # calculate the dbtop
-    tmp.each do |o|
-      @dbtop = o.id if o.id > @dbtop
-      @db[o.id]=o
+
+    case options['dbtype']
+    when :yaml
+      YAML::load_file("#{options['dbfile']}.yaml").each do |o|
+        @dbtop = o.id if o.id > @dbtop
+        @db[o.id]=o
+      end
+    when :gdbm
+      GDBM.open("#{options['dbfile']}.gdbm", 0666) do |db|
+        db.each_value do |v|
+          o = YAML::load(v)
+          @dbtop = o.id if o.id > @dbtop
+          @db[o.id]=o
+        end
+      end
+    when :sdbm
+      SDBM.open(options['dbfile'], 0666) do |db|
+        db.each_value do |v|
+          o = YAML::load(v)
+          @dbtop = o.id if o.id > @dbtop
+          @db[o.id]=o
+        end
+      end
+    when :dbm
+      DBM.open(options['dbfile'], 0666) do |db|
+        db.each_value do |v|
+          o = YAML::load(v)
+          @dbtop = o.id if o.id > @dbtop
+          @db[o.id]=o
+        end
+      end
     end
+
+    # calculate the dbtop
     log.info "Done database loaded...top id=#{@dbtop}."
 #    log.debug @db.inspect
+  rescue
+    log.fatal $!
+    raise
   end
 
   # Fetch the next available id.
@@ -66,7 +136,30 @@ EOH
   # Save the world
   # [+return+] Undefined.
   def save
-    File.open(options['dbfile'],'w'){|f|YAML::dump(@db.values,f)}
+    case options['dbtype']
+    when :yaml
+      File.open("#{options['dbfile']}.yaml",'w') do |f|
+        YAML::dump(@db.values,f)
+      end
+    when :gdbm
+      GDBM.open("#{options['dbfile']}.gdbm", 0666) do |db|
+        @db.each do |k,v|
+          db[k.to_s] = YAML::dump(v)
+        end
+      end
+    when :sdbm
+      SDBM.open(options['dbfile'], 0666) do |db|
+        @db.each do |k,v|
+          db[k.to_s] = YAML::dump(v)
+        end
+      end
+    when :dbm
+      DBM.open(options['dbfile'], 0666) do |db|
+        @db.each do |k,v|
+          db[k.to_s] = YAML::dump(v)
+        end
+      end
+    end
   end
 
   # Adds a new object to the database.
