@@ -29,6 +29,8 @@ class Module
         def #{s}=(val)
           @props ||= {}
           @props[:#{s}] = val
+          $engine.world.db.put(self) if $engine.world.db.check(id)
+          @props[:#{s}]
         end
       EOD
     end

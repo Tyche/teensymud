@@ -25,6 +25,7 @@ class TestProperties < Test::Unit::TestCase
     $engine = FlexMock.new
     $engine.mock_handle(:world) {$engine}
     $engine.mock_handle(:db) {$engine}
+    $engine.mock_handle(:check) {false}
     $engine.mock_handle(:getid) {@nextid += 1}
   end
 

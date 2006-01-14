@@ -72,19 +72,19 @@ class Account
       @initdone = true
       publish(BANNER)
       ts = @conn.query(:termsize)
- # ansi test
-      publish("[cursave]")
-      15.times do
-        publish("[home #{rand(ts[1])+1},#{rand(ts[0])+1}]*")
-      end
-      publish("[currest]")
+ # ansi test COMMENTED OUT as this screws up some clients
+#      publish("[cursave]")
+#      15.times do
+#        publish("[home #{rand(ts[1])+1},#{rand(ts[0])+1}]*")
+#      end
+#      publish("[currest]")
       prompt("login> ")
     when String
       if @initdone
         case @state
         when :name
           @login_name = msg
-          @player = $engine.world.db.find_player_by_name(@login_name)
+          @player = $engine.world.find_player_by_name(@login_name)
           prompt("password> ")
           @conn.set(:hide, true)
           @state = :password
@@ -161,7 +161,7 @@ private
     @player.subscribe(@conn)
 
     @player.sendto("\nWelcome #{@login_name}@#{@conn.query(:host)}!")
-    $engine.world.db.players_connected(@player.id).each {|p|
+    $engine.world.players_connected(@player.id).each {|p|
       $engine.world.eventmgr.add_event(@player.id,p.id,:show,"#{@player.name} has connected.")
     }
 

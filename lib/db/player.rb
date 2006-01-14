@@ -68,13 +68,13 @@ class Player < GameObject
     when :logged_out
       @session = nil
       unsubscribe_all
-      $engine.world.db.players_connected(id).each do |p|
+      $engine.world.players_connected(id).each do |p|
         $engine.world.eventmgr.add_event(id,p.id,:show,"#{name} has quit.")
       end
     when :disconnected
       @session = nil
       unsubscribe_all
-      $engine.world.db.players_connected(id).each do |p|
+      $engine.world.players_connected(id).each do |p|
         $engine.world.eventmgr.add_event(id,p.id,:show,"#{name} has disconnected.")
       end
     when String

@@ -98,6 +98,10 @@
   help: "displays a statistical report of the database"
   name: '@stats'
 - !ruby/object:Command 
+  cmd: :cmd_memstats
+  help: "displays a report on memory statistics"
+  name: '@memstats'
+- !ruby/object:Command 
   cmd: :cmd_go
   help: "go through the exit specified (ex. go west)"
   name: 'go'

@@ -1,8 +1,8 @@
 #
 # file::    cmd_stats.rb
 # author::  Jon A. Lambert
-# version:: 2.4.0
-# date::    09/07/2005
+# version:: 2.7.0
+# date::    01/13/2006
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -12,7 +12,7 @@
 #
 module Cmd
 
-  # The inventory command
+  # The database stats command
   def cmd_stats(args)
     sendto($engine.world.db.stats)
   end

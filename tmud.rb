@@ -22,7 +22,7 @@ require 'log'
 require 'publisher'
 require 'net/reactor'
 require 'command'
-require 'db/database'
+require 'db/yamlstore'
 require 'db/properties'
 require 'db/gameobject'
 require 'db/player'
@@ -72,14 +72,86 @@ class World
   # whether it finds it.
   # [+return+] A handle to the World object.
   def initialize
-    @db = Database.new
+    case options['dbtype']
+    when :yaml
+      @db = YamlStore.new(options['dbfile'])
+    when :gdbm
+      @db = GdbmStore.new(options['dbfile'])
+    when :sdbm
+      @db = SGdbmStore.new(options['dbfile'])
+    when :dbm
+      @db = DbmStore.new(options['dbfile'])
+    end
     @cmds, @ocmds = Command.load
     @eventmgr = EventManager.new
     log.info "Releasing Hamster..."
     @hamster = Hamster.new(self, 2.0, :timer)
-    @db.objects {|obj| @hamster.register(obj) if obj.powered}
+    @db.each {|obj| @hamster.register(obj) if obj.powered}
     log.info "Reticulating spleens..."
     log.info "World initialized."
+  end
+
+  # Finds a Player object in the database by name.
+  # [+nm+] is the string to use in the search.
+  # [+return+] Handle to the Player object or nil.
+  def find_player_by_name(nm)
+    @db.each do |o|
+      return o if Player == o.class && nm == o.name
+    end
+    nil
+  end
+
+  # Finds all connected players
+  # [+exempt+] The id of a player to be exempt from the returned array.
+  # [+return+] An array of  connected players
+  def players_connected(exempt=nil)
+    ary = []
+    @db.each do |o|
+       ary << o if Player == o.class && o.session && exempt != o.id
+    end
+    ary
+  end
+
+  # memstats scans all objects in memory and produces a report
+  # [+return+] a string
+  def memstats
+    # initialize all counters
+    rooms = objs = players = strcount = strsize = ocount = 0
+
+    # scan the ObjectSpace counting things
+    ObjectSpace.each_object do |x|
+      case x
+      when String
+        strcount += 1
+        strsize += x.size
+      when Player
+        players += 1
+      when Room
+        rooms += 1
+      when GameObject
+        objs += 1
+      else
+        ocount += 1
+      end
+    end
+
+    # our report  :
+    # :NOTE: sprintf would be better
+    memstats=<<EOD
+[COLOR=cyan]
+----* Memory Statistics *----
+  Rooms   - #{rooms}
+  Players - #{players}
+  Objects - #{objs}
+-----------------------------
+  Strings - #{strcount}
+     size - #{strsize} bytes
+  Other   - #{ocount}
+-----------------------------
+  Total Objects - #{rooms+objs+players+strcount+ocount}
+----*                   *----
+[/COLOR]
+EOD
   end
 
 end
@@ -154,10 +226,11 @@ class Engine
   def handle_signal(sig)
     log.warn "Signal caught request to shutdown."
     log.info "Saving world..."
-    @world.db.players_connected.each{|plr|plr.disconnect if plr.session}
+    @world.players_connected.each{|plr|plr.disconnect if plr.session}
     # clear compiled progs out before saving
-    @world.db.objects {|o| o.get_triggers.each {|t| t.prog = nil }}
+    @world.db.each {|o| o.get_triggers.each {|t| t.prog = nil }}
     @world.db.save
+    @world.db.close
     exit
   end
 

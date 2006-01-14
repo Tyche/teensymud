@@ -1,8 +1,8 @@
 #
-# file::    cmd_who.rb
+# file::    cmd_memstats.rb
 # author::  Jon A. Lambert
-# version:: 2.3.0
-# date::    08/31/2005
+# version:: 2.7.0
+# date::    01/13/2006
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -12,9 +12,9 @@
 #
 module Cmd
 
-  # shows a list of all connected players
-  def cmd_who(args)
-    $engine.world.players_connected.each {|p| sendto(p.name)}
+  # The memory stats command
+  def cmd_memstats(args)
+    sendto($engine.world.memstats)
   end
 
 end

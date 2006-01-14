@@ -11,13 +11,17 @@
 ###########################################################
 
 # Name of the database
-dbfile: test/testdb
+dbfile: dbtest
 
 # Type of database
 #
 # Valid values are: :yaml, :gdbm, :sdbm, :dbm
 #
-dbtype: :dbm
+dbtype: :yaml
+
+# Cache sizes for dbm type databases
+cache_width: 23
+cache_depth: 7
 
 ###########################################################
 ### Network configuration section
