@@ -63,6 +63,11 @@ class TestGdbmStore < Test::Unit::TestCase
     assert(!@db.check(@r.id))
   end
 
+  def test_mark
+#    pp @r, @o, @p
+    assert(@db.mark(@r.id))
+  end
+
   def test_getid
     assert_equal(5,@db.getid)
   end
@@ -109,11 +114,12 @@ class TestGdbmStore < Test::Unit::TestCase
 [/COLOR]
 [COLOR=cyan]
 ----------* Cache Statistics *----------
-  writes  - 3  reads - 2
-  dbwrites  - 3  dbreads - 0  read fails - 1
-  read hits - 1  active hits - 1
+  writes  - 3  reads - 6
+  dbwrites  - 3  dbreads - 1  read fails - 1
+  marks - 22  mark fails - 22
+  read hits - 4  active hits - 4
   write hits to dirty cache - 0
-  deletes  - 0  resets - 0
+  deletes  - 0  resets - 1
   syncs - 2  objects - 161
 ----------*                  *----------
 [/COLOR]

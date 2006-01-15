@@ -31,6 +31,14 @@ class TestDbmStore < Test::Unit::TestCase
     File.delete("#{options['dbfile']}.db")
   end
 
+  def test_objectids
+    @db.put(@r)
+    assert_equal(@r.object_id,@db.get(@r.id).object_id)
+    cnt = 0
+    @db.each {cnt += 1}
+    assert_equal(@r.object_id,@db.get(@r.id).object_id)
+  end
+
   def test_delete
 #    pp @r, @o, @p
 #    pp @db
@@ -61,6 +69,11 @@ class TestDbmStore < Test::Unit::TestCase
   def test_check
 #    pp @r, @o, @p
     assert(!@db.check(@r.id))
+  end
+
+  def test_mark
+#    pp @r, @o, @p
+    assert(@db.mark(@r.id))
   end
 
   def test_getid
@@ -109,11 +122,12 @@ class TestDbmStore < Test::Unit::TestCase
 [/COLOR]
 [COLOR=cyan]
 ----------* Cache Statistics *----------
-  writes  - 3  reads - 2
-  dbwrites  - 3  dbreads - 0  read fails - 1
-  read hits - 1  active hits - 1
+  writes  - 3  reads - 6
+  dbwrites  - 3  dbreads - 1  read fails - 1
+  marks - 22  mark fails - 22
+  read hits - 4  active hits - 4
   write hits to dirty cache - 0
-  deletes  - 0  resets - 0
+  deletes  - 0  resets - 1
   syncs - 2  objects - 161
 ----------*                  *----------
 [/COLOR]
