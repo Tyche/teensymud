@@ -22,7 +22,6 @@ require 'log'
 require 'publisher'
 require 'net/reactor'
 require 'command'
-require 'db/yamlstore'
 require 'db/properties'
 require 'db/gameobject'
 require 'db/player'
@@ -74,20 +73,22 @@ class World
   def initialize
     case options['dbtype']
     when :yaml
+require 'db/yamlstore'
       @db = YamlStore.new(options['dbfile'])
     when :gdbm
+require 'db/gdbmstore'
       @db = GdbmStore.new(options['dbfile'])
     when :sdbm
-      @db = SGdbmStore.new(options['dbfile'])
+require 'db/sdbmstore'
+      @db = SdbmStore.new(options['dbfile'])
     when :dbm
+require 'db/dbmstore'
       @db = DbmStore.new(options['dbfile'])
     end
     @cmds, @ocmds = Command.load
     @eventmgr = EventManager.new
     log.info "Releasing Hamster..."
     @hamster = Hamster.new(self, 2.0, :timer)
-    @db.each {|obj| @hamster.register(obj) if obj.powered}
-    log.info "Reticulating spleens..."
     log.info "World initialized."
   end
 
@@ -170,7 +171,7 @@ class Engine
   # [+return+] A handle to the engine.
   def initialize
     # Display options
-    log.debug "Configuration: #{options}"
+    log.debug "Configuration: #{options.inspect}"
     # Create the world an object containing most everything.
     @world = World.new
     log.info "Booting server on port #{options['server_port'] || 4000}"
@@ -200,6 +201,8 @@ class Engine
     Signal.trap("KILL", method(:handle_signal))
 
     raise "Unable to start server" unless @server.start(self)
+    log.info "Registering objects with hamster..."
+    @world.db.each {|obj| @world.hamster.register(obj) if obj.powered}
     log.info "TMUD is ready"
     until @shutdown
       @server.poll(0.2)
@@ -237,12 +240,70 @@ class Engine
 end
 
 
+#
+# Processes command line arguments
+#
+def get_options
+  # parse options
+  begin
+    # The myopts specified on the command line will be collected in *myopts*.
+    # We set default values here.
+    myopts = {}
+
+    opts = OptionParser.new do |opts|
+      opts.banner = BANNER
+      opts.separator ""
+      opts.separator "Usage: ruby #{$0} [options]"
+      opts.separator ""
+      opts.on("-p", "--port PORT", Integer,
+        "Select the port the mud will run on") {|myopts['server_port']|}
+      opts.on("-d", "--dbfile DBFILE", String,
+        "Select the name of the database file",
+        "  (default is 'db/world.yaml')") {|myopts['dbfile']|}
+      opts.on("-c", "--config CONFIGFILE", String,
+        "Select the name of the configuration file",
+        "  (default is 'config.yaml')") {|myopts['configfile']|}
+      opts.on("-l", "--logfile LOGFILE", String,
+        "Select the name of the log file",
+        "  (default is 'logs/server.log')") {|myopts['logfile']|}
+      opts.on("-h", "--home LOCATIONID", Integer,
+        "Select the object id where new players will start") {|myopts['home']|}
+      opts.on("-t", "--[no-]trace", "Trace execution") {|myopts['trace']|}
+      opts.on("-v", "--[no-]verbose", "Run verbosely") {|myopts['verbose']|}
+      opts.on_tail("-h", "--help", "Show this message") do
+        $stdout.puts opts.help
+        exit
+      end
+      opts.on_tail("--version", "Show version") do
+        $stdout.puts "TeensyMud #{Version}"
+        exit
+      end
+    end
+
+    opts.parse!(ARGV)
+
+    return myopts
+  rescue OptionParser::ParseError
+    $stderr.puts "ERROR - #{$!}"
+    $stderr.puts "For help..."
+    $stderr.puts " ruby #{$0} --help"
+    exit
+  end
+end
+
+
+
 ###########################################################################
 # This is start of the main driver.
 ###########################################################################
 
 if $0 == __FILE__
   begin
+    $cmdopts = get_options
+    $cmdopts.each do |key,val|
+      Configuration.instance.options[key] = val
+    end
+
     $engine = Engine.new
     $engine.run
   end
