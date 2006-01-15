@@ -14,8 +14,7 @@ module Cmd
 
   # This reloads the commands
   def cmd_reload(args)
-    $engine.world.cmds = Command.load("commands.yaml", Player, :Cmd)
-    $engine.world.ocmds = Command.load("obj_cmds.yaml", GameObject, :ObjCmd)
+    $engine.world.cmds, $engine.world.ocmds = Command.load
     sendto("Command table reloaded.")
   end
 

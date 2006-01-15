@@ -14,6 +14,7 @@ module Cmd
 
   # The inventory command
   def cmd_inv(args)
+    sendto("=== Inventory ===")
     objects.each do |x|
       $engine.world.eventmgr.add_event(id,x.id,:describe)
     end
