@@ -117,3 +117,7 @@
   cmd: :cmd_status
   help: "displays session information"
   name: '@status'
+- !ruby/object:Command 
+  cmd: :cmd_dumpcache
+  help: "displays the contents of the store cache"
+  name: '@dumpcache'
