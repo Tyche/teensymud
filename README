@@ -1,5 +1,5 @@
 = TeensyMUD Server
-= v2.6.0
+= v2.7.0
 
 ---
 == Introduction
@@ -10,11 +10,12 @@ This server was initially created in response to an Aprils Fool's joke posted by
 Does TeensyMUD have a future?  Who knows?  I don't.
 
 == Download
-The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud or checked out of http://sourcery.dyndns.org/svn/teensymud/release
+The latest release can be found at http://teensymud.kicks-ass.org
 
 == System Dependencies
 === Required
 [Ruby 1.8.2] Can be obtained at the home of Ruby, http://www.ruby-lang.org.  It runs on most platforms.
+[Log4r] All logging done through this now. Install from Ruby Gems, or http://log4r.sourceforge.net/ 
 
 === Optional
 [RubyGems] To install rake and various things.  See - http://rubyforge.org/projects/rubygems
@@ -51,6 +52,13 @@ The latest release can be found at ftp://sourcery.dyndns.org/pub/mud/teensymud o
 * TeensyClient a barebones client that runs as console or curses application.
 * VT100 support
 * Exhaustive regression testing.
+* Database backends, DBM, GDBM and SDBM.
+* Object cacheing support
+* Object ownership
+* New logging system controlled at the class level
+* Configuration support.  Configuration information stored in easily readable file.
+* Object properties.  Properties define attributes that are persistent.  Set them and forget them. 
+
 
 ---
 == Installation
@@ -100,9 +108,11 @@ That's it.  It will boot on port 4000 and build an initial database in the db di
 - ?          - displays help
 - inventory  - displays player inventory
 - drop       - drops all objects in your inventory into the room
-- @stats     - displays a statistical report of the database
+- @stats     - displays a statistical report of the database and cache if present
 - @color     - toggles colors on or off
 - @status    - displays session information
+- @memstats  - displays the memory statistics by scanning ruby's object space
+- @dumpcache - inspects the cache (for debugging).
 
 ---
 == Contributors

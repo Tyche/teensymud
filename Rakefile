@@ -7,7 +7,7 @@ require 'lib/version'
 
 # files to distribute
 PKG_FILES = FileList[
-  'tmud.rb', 'tclient.rb',
+  'tmud.rb', 'tclient.rb', 'dbload.rb', 'dbdump.rb', 'config.yaml',
   'LICENSE', 'CONTRIBUTORS', 'CHANGELOG', 'README', 'TML',
   'farts.grammar', 'Rakefile', 
   'db', 'db/README', 'db/testworld.yaml',
@@ -28,6 +28,7 @@ Rake::RDocTask.new do |rd|
 #  rd.template = 'kilmer'
 #  rd.template = './rdoctemplate.rb'
   rd.rdoc_files.include('README', 'farts.grammar', 'TML', 'tmud.rb', 'tclient.rb',
+    'dbload.rb', 'dbdump.rb',  'config.yaml',
     'lib/*.rb', 'lib/net/*.rb', 'lib/farts/*.rb', 'lib/protocol/*.rb', 
     'lib/db/*.rb', 'lib/event/*.rb', 'cmd/*.rb')
   rd.options << '-dSN -I gif' 

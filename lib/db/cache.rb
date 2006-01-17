@@ -148,6 +148,7 @@ class CacheManager
   # [+oid+] - integer object id to retrieve
   # [+return+] - a reference to the object or nil if none exists
   def get(oid)
+    return nil if oid.nil?
     @st.inc(:reads)
     hv = hash(oid)
 
@@ -199,6 +200,7 @@ class CacheManager
   # [+obj+] - The integer object id to retrieve
   # [+return+] - undefined
   def put(obj)
+    return nil if obj.nil?
     @st.inc(:writes)
     hv = hash(obj.id)
 
@@ -249,6 +251,7 @@ class CacheManager
 
   # delete an object
   def delete(oid)
+    return nil if oid.nil?
     @st.inc(:deletes)
     hv = hash(oid)
 
@@ -265,6 +268,7 @@ class CacheManager
   # deliberately mark an object in the cache as dirty
   # see properties.
   def mark(oid)
+    return nil if oid.nil?
     @st.inc(:cache_marks)
     hv = hash(oid)
 
@@ -310,6 +314,7 @@ class CacheManager
 
   # deliberately mark an object in the cache as nonswappable
   def makenoswap(oid)
+    return nil if oid.nil?
     @st.inc(:cache_noswap)
     hv = hash(oid)
 
@@ -327,6 +332,7 @@ class CacheManager
 
   # deliberately mark an object in the cache as swappable
   def makeswap(oid)
+    return nil if oid.nil?
     @st.inc(:cache_swap)
     hv = hash(oid)
 
