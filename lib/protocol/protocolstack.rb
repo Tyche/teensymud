@@ -28,7 +28,7 @@ class ProtocolStack
   attr_accessor :echo_on, :binary_on, :zmp_on, :color_on, :urgent_on, :hide_on
   attr_accessor :terminal, :twidth, :theight
   attr :conn
-  logger 'DEBUG'
+  logger 'INFO'
 
   # Construct a ProtocolStack
   #

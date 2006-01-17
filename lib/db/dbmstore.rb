@@ -58,6 +58,12 @@ class DbmStore < Store
     @db.close
   end
 
+  # inspect the store cache (only for caches)
+  # [+return+] string
+  def inspect
+    @cache.inspect
+  end
+
   # Adds a new object to the database.
   # [+obj+] is a reference to object to be added
   # [+return+] Undefined.
@@ -80,13 +86,44 @@ class DbmStore < Store
     @cache.get(oid)
   end
 
-  # Iterate through all objects this needs to go directly to database
-  # so we must sync the cache first.  Then we reset the cache.
+  # Check if an object is in the database by its id.
+  # [+oid+] is the id to use in the search.
+  # [+return+] true or false
+  def check(oid)
+    @db.has_key? oid.to_s
+  end
+
+  # Marks an object dirty
+  # [+oid+] is the id to use in the search.
+  # [+return+] true or false
+  def mark(oid)
+    @cache.mark(oid)
+  end
+
+  # Marks an object nonswappable
+  # [+oid+] is the object id
+  # [+return+] true or false
+  def makenoswap(oid)
+    @cache.makenoswap(oid)
+  end
+
+  # Marks an object swappable
+  # [+oid+] is the object id
+  # [+return+] true or false
+  def makeswap(oid)
+    @cache.makeswap(oid)
+  end
+
+  # Iterate through all objects
+  # This needs to have all the possible keys first.
+  # So we need to fetch them from the cache and from the database and
+  # and produce a list of unique keys.
   # [+yield+] Each object in database to block of caller.
   def each
-    @cache.sync
-    @db.each_value{|obj| yield(YAML::load(obj))}
-    @cache.reset
+    kys = @cache.keys
+    @db.each_key {|k| kys << k.to_i}
+    kys.uniq!
+    kys.each {|k| yield @cache.get(k)}
   end
 
   # produces a statistical report of the database
@@ -101,7 +138,7 @@ private
   # Checks that the database exists and builds one if not
   # Will raise an exception if something goes wrong.
   def build_database
-    if !test(?e, @dbfile)
+    if !test(?e, "#{@dbfile}.db")
       log.info "Building minimal world database..."
       DBM.open(@dbfile, 0666) do |db|
         YAML::load(MINIMAL_DB).each do |o|

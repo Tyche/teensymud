@@ -65,7 +65,7 @@ class Loader
     myopts.dbtype = nil
 
     opts = OptionParser.new do |opts|
-      opts.banner = "Database Dumper #{VERSION}"
+      opts.banner = "Database Loader #{VERSION}"
       opts.separator ""
       opts.separator "Usage: ruby #{$0} [options]"
       opts.separator ""
@@ -85,7 +85,7 @@ class Loader
         exit
       end
       opts.on_tail("-v", "--version", "Show version") do
-        puts "Database Dumper #{VERSION}"
+        puts "Database Loader #{VERSION}"
         exit
       end
     end

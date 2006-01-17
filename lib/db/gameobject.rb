@@ -11,47 +11,25 @@
 # See LICENSE file for additional information.
 #
 require 'log'
+require 'db/root'
 
-# The GameObject class is the mother of all objects.
+# The GameObject class is no longer the mother of all objects.
 #
-class GameObject
-  # The displayed name of the object
-  property :name
-  # The object that holds this object or nil if none
-  property :location
-  # The displayed description of the object
-  property :desc
-  # Flag indicating whether this object is interested in timer events
-  property :powered
-  property :contents, :farts
+class GameObject < Root
+  property :location, :powered, :contents, :farts
   logger 'DEBUG'
 
   # Create a new Object
   # [+name+]     Every object needs a name
+  # [+owner+]    The owner id of this object
   # [+location+] The object id containing this object or nil.
   # [+return+]   A handle to the new Object
-  def initialize(name,location=nil)
-    self.name,self.location = name,location
-    self.id  # reference to trigger database to poulate it.
+  def initialize(name, owner, location=nil)
+    super(name, owner)
+    self.location = location    # The location of this object or nil if none
     self.contents = []
     self.farts = {}
-    self.desc = ""
-    self.powered = false
-  end
-
-  # Clone an object
-  # This does a deepcopy then assign a new database id
-  #
-  # [+return+]   A handle to the new Object
-  def clone
-    newobj = Marshal.load(Marshal.dump(self))
-    props = newobj.instance_variable_get(:@props)
-    props[:id] = $engine.world.db.getid
-    $engine.world.db.put(newobj)
-    newobj
-  rescue
-    log.error "Clone failed"
-    nil
+    self.powered = false        # Flag if object is interested in timer events
   end
 
   # Add an object to the contents of this object

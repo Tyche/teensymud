@@ -13,8 +13,6 @@
 
 require 'singleton'
 require 'yaml'
-require 'optparse'
-require 'version'
 
 # The Config class is a singleton that allows class level configuration
 #
@@ -23,16 +21,25 @@ class Configuration
   attr_reader :options
 
   def initialize
-    if $cmdopts && $cmdopts['configfile']
-      @options = YAML::load_file($cmdopts['configfile'])
-    else
-      @options = YAML::load_file('config.yaml')
-    end
+    $cmdopts = get_options
+    @options = YAML::load_file($cmdopts['configfile'] || 'config.yaml')
   rescue
     $stderr.puts "WARNING - configuration file not found"
     @options = {}
   end
 
+  # only process configuration file option from command line
+  def get_options
+    myopts = {}
+    ARGV.each_with_index do |arg,i|
+      if (arg == '-c' || arg == '--config') && ARGV[i+1]
+        myopts['configfile'] = ARGV[i+1]
+        ARGV.delete_at(i+1)
+        ARGV.delete_at(i)
+      end
+    end
+    myopts
+  end
 end
 
 class Module

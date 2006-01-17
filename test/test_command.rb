@@ -36,7 +36,7 @@ class TestCommand < Test::Unit::TestCase
   def test_singleton_Command_load
     c, o = Command.load
     assert(true,c && o)
-    a = GameObject.new("testthing")
+    a = GameObject.new("testthing",0)
     assert_respond_to(a,:ocmd_echoat)
     assert(true, c.insert(@c.name, @c))
     assert_equal(@c, c.find_exact(@c.name))

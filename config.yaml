@@ -17,11 +17,18 @@ dbfile: db/world
 #
 # Valid values are: :yaml, :gdbm, :sdbm, :dbm
 #
-dbtype: :yaml
+dbtype: :dbm
 
 # Cache sizes for dbm type databases
 cache_width: 23
 cache_depth: 7
+
+# If you change this to false you must explicitly mark objects as
+# changed when you use read accessors that modify the object. Write
+# accessors are automatically safe.  No affect with yaml store.
+#
+# Ex. Player.name.capitalize! - uses read accessor but modifies receiver
+safe_read: true
 
 ###########################################################
 ### Network configuration section
@@ -57,7 +64,7 @@ server_io: :sockio
 #     :colorfilter - attach color filter (default)
 #     :terminalfilter - attach terminal filter
 server_filters:  
-  - :debugfilter
+#  - :debugfilter
   - :telnetfilter
   - :terminalfilter
   - :colorfilter

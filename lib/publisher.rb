@@ -13,7 +13,7 @@ module Publisher
   #
   def subscribe(subscriber)
     @subscribers ||= []
-    unless subscriber.respond_to? :update
+    if !subscriber.respond_to?(:to_int) && !subscriber.respond_to?(:update)
       raise NoMethodError, "subscriber needs to respond to 'update'"
     end
     @subscribers.push subscriber
@@ -48,7 +48,13 @@ module Publisher
   #
   def publish(*arg)
     if defined? @subscribers
-      @subscribers.dup.each {|s| s.update(*arg)}
+      @subscribers.dup.each do |s|
+        if s.respond_to?(:to_int)
+          $engine.world.db.get(s).update(*arg)
+        else
+          s.update(*arg)
+        end
+      end
     end
   end
 

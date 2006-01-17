@@ -19,8 +19,6 @@ require 'db/gameobject'
 #
 class Player < GameObject
   include Publisher
-
-  configuration
   logger 'DEBUG'
 
   # The Session object this player is connected on or nil if not connected.
@@ -28,14 +26,16 @@ class Player < GameObject
   property :color, :passwd
 
   # Create a new Player object
+  # IMPORTANT :Player objects must be marked nonswappable while connected!!!
+  #       Otherwise we risk losing the contants of @session
   # [+name+]    The displayed name of the player.
   # [+passwd+]  The player password in clear text.
   # [+session+] The session object this player is connecting on.
   # [+return+]  A handle to the new Player.
   def initialize(name,passwd,session)
+    super(name, nil, options['home'] || 1)
     @session = session
     self.passwd = encrypt(passwd)
-    super(name, options['home'] || 1)
     self.powered = true
 
     # session related - only color settable
@@ -64,6 +64,7 @@ class Player < GameObject
   #            send it to Player#parse.
   #
   def update(msg)
+    log.debug "Player#update - #{msg.inspect}"
     case msg
     when :logged_out
       @session = nil
@@ -71,12 +72,14 @@ class Player < GameObject
       $engine.world.players_connected(id).each do |p|
         $engine.world.eventmgr.add_event(id,p.id,:show,"#{name} has quit.")
       end
+      $engine.world.db.makeswap(id)
     when :disconnected
       @session = nil
       unsubscribe_all
       $engine.world.players_connected(id).each do |p|
         $engine.world.eventmgr.add_event(id,p.id,:show,"#{name} has disconnected.")
       end
+      $engine.world.db.makeswap(id)
     when String
       parse(msg)
     else
@@ -94,8 +97,6 @@ class Player < GameObject
   # Disconnects this player
   def disconnect
     publish(:logged_out)
-    unsubscribe_all
-    @session = nil
   end
 
   # All command input routed through here and parsed.
@@ -115,6 +116,7 @@ class Player < GameObject
     # look for a command in our spanking new table
     c = $engine.world.cmds.find(cmd)
 
+
     # add any exits to our command list
     # escape certain characters in cmd
     check = cmd.gsub(/\?/,"\\?")
@@ -125,6 +127,7 @@ class Player < GameObject
       c << Command.new(:cmd_go,"go #{ex}",nil)
       arg = ex
     end
+    log.debug "parse commands - '#{c.inspect}', arguments - '#{arg}'"
 
     # there are three possibilities here
     case c.size

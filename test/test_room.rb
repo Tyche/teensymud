@@ -21,8 +21,8 @@ class TestRoom < Test::Unit::TestCase
     $engine.mock_handle(:add_event) {|*e| true}
     $engine.mock_handle(:ocmds) {$engine}
     $engine.mock_handle(:find) {[]}
-    @r = Room.new("Here")
-    @r2 = Room.new("There")
+    @r = Room.new("Here",0)
+    @r2 = Room.new("There",0)
     $engine.mock_handle(:get) {|oid| @r2}
   end
 

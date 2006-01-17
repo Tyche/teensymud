@@ -13,10 +13,12 @@
 #
 require 'yaml'
 require 'pp'
+require 'optparse'
 
 $:.unshift "lib"
 $:.unshift "vendor"
 
+require 'version'
 require 'configuration'
 require 'log'
 require 'publisher'

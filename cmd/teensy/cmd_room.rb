@@ -17,7 +17,7 @@ module Cmd
   def cmd_room(args)
     case args
     when /(.*) (.*) (.*)/
-      d=Room.new($1)
+      d=Room.new($1, id)
       if d.nil?
         log.error "Unable to create room."
         sendto "System error: unable to create room."

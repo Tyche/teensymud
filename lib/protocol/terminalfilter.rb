@@ -21,7 +21,7 @@ class TerminalFilter < Filter
   include ASCIICodes
   include VT100Codes
 
-  logger 'DEBUG'
+  logger 'INFO'
 
   # Construct filter
   #

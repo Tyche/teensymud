@@ -24,13 +24,15 @@ class Module
       class_eval <<-EOD
         def #{s}
           @props ||= {}
+          if options['safe_read'] && !@props[:#{s}].kind_of?(Numeric)
+            $engine.world.db.mark(self.id)
+          end
           @props[:#{s}]
         end
         def #{s}=(val)
           @props ||= {}
+          $engine.world.db.mark(self.id)
           @props[:#{s}] = val
-          $engine.world.db.put(self) if $engine.world.db.check(id)
-          @props[:#{s}]
         end
       EOD
     end

@@ -18,6 +18,7 @@ MINIMAL_DB=<<EOH
   props:
     :location:
     :powered: false
+    :owner: 0
     :id: 1
     :desc: "This is home."
     :contents: []
@@ -44,9 +45,10 @@ class Store
   def close
   end
 
-  # Reset the store
+  # inspect the store cache (only for caches)
   # [+return+] Undefined.
-  def reset
+  def inspect
+    ""
   end
 
   # Save or flush the store to disk
@@ -72,6 +74,12 @@ class Store
   # [+return+] true or false
   def check(oid)
     false
+  end
+
+  # Marks an object dirty
+  # [+oid+] is the id to use in the search.
+  # [+return+] true or false
+  def mark(oid)
   end
 
   # Adds a new object to the database.

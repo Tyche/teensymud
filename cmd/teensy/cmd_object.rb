@@ -16,7 +16,7 @@ module Cmd
   def cmd_object(args)
     case args
     when /(.*)/
-      newobj = GameObject.new($1,location)
+      newobj = GameObject.new($1, id, location)
       if newobj.nil?
         log.error "Unable to create object."
         sendto "System error: unable to create object."

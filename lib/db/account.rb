@@ -143,6 +143,8 @@ private
 
   # Called on successful login
   def login
+    # make the player non-swappable so we dont lose session
+    $engine.world.db.makenoswap(@player.id)
     @conn.set(:color, @player.color)
 
     # Check if this player already logged in
@@ -157,7 +159,7 @@ private
     @conn.unsubscribe_all
 
     # reregister all observers to @player
-    @conn.subscribe(@player)
+    @conn.subscribe(@player.id)
     @player.subscribe(@conn)
 
     @player.sendto("\nWelcome #{@login_name}@#{@conn.query(:host)}!")

@@ -35,7 +35,7 @@ class Hamster < Thread
   # [+obj+]     The interval time for events in flaoting point seconds.
   def register(obj)
     @mutex.synchronize do
-      @interested << obj
+      @interested << obj.id
     end
   end
 
@@ -43,7 +43,7 @@ class Hamster < Thread
   # [+obj+]     The interval time for events in flaoting point seconds.
   def unregister(obj)
     @mutex.synchronize do
-      @interested.delete(obj)
+      @interested.delete(obj.id)
     end
   end
 
@@ -52,8 +52,8 @@ class Hamster < Thread
     while true
       sleep @time
       @mutex.synchronize do
-        @interested.each do |o|
-          @world.eventmgr.add_event(nil, o.id, @eventtype, nil)
+        @interested.each do |oid|
+          @world.eventmgr.add_event(nil, oid, @eventtype, nil)
         end
       end
     end

@@ -21,8 +21,8 @@ class TestYamlStore < Test::Unit::TestCase
     $engine = FlexMock.new
     $engine.mock_handle(:world) {$engine}
     $engine.mock_handle(:db) {@db}
-    @r = Room.new("Here")
-    @o = GameObject.new("Thing")
+    @r = Room.new("Here",0)
+    @o = GameObject.new("Thing",0)
     @p = Player.new("Tyche", "tyche", nil)
   end
 

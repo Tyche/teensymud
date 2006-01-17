@@ -37,4 +37,8 @@ class EventManager
     end
   end
 
+  def contents
+    @tits.inspect
+  end
+
 end

@@ -23,6 +23,13 @@ dbtype: :yaml
 cache_width: 23
 cache_depth: 7
 
+# If you change this to false you must explicitly mark objects as
+# changed when you use read accessors that modify the object. Write
+# accessors are automatically safe.  No affect with yaml store.
+#
+# Ex. Player.name.capitalize! - uses read accessor but modifies receiver
+safe_read: true
+
 ###########################################################
 ### Network configuration section
 ###########################################################

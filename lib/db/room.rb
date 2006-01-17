@@ -16,17 +16,18 @@ require 'db/gameobject'
 # The Room class is the mother of all rooms.
 #
 class Room < GameObject
-  # The hash of exits for this room, where the key is the displayed name
-  # of the exit and the value is the room id at the end of the exit.
   property :exits
   logger 'DEBUG'
 
   # Create a new Room object
   # [+name+]   The displayed name of the room
+  # [+owner+]    The owner id of this room
   # [+return+] A handle to the new Room.
-  def initialize(name)
-    self.exits={}
-    super(name)
+  def initialize(name, owner)
+    super(name, owner)
+    self.exits={}               # The hash of exits for this room, where the
+                                # key is the displayed name of the exit and the
+                                # value is the room id at the end of the exit.
   end
 
   # Event handler

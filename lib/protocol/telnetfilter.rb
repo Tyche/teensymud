@@ -26,7 +26,7 @@ class TelnetFilter < Filter
   include ASCIICodes
   include TelnetCodes
 
-  logger 'DEBUG'
+  logger 'INFO'
 
   # Initialize state of filter
   #

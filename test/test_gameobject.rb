@@ -25,9 +25,9 @@ class TestGameObject < Test::Unit::TestCase
     $engine.mock_handle(:find) {[]}
     $engine.mock_handle(:home) {1}
     $engine.mock_handle(:get) {|oid| oid == 1 ? @r : @p}
-    @r = Room.new("Here")
+    @r = Room.new("Here",0)
     @p = Player.new("Tyche","tyche",nil)
-    @o = GameObject.new("Thing")
+    @o = GameObject.new("Thing",0)
   end
 
   def test_add_contents
