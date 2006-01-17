@@ -84,7 +84,7 @@
   <area shape="RECT" coords="24,113,106,161"      href="Connection.html" alt="Connection">
   <area shape="RECT" coords="29,17,101,65"      href="Session.html" alt="Session">
 </map>
-<img src="../dot/f_9.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_14.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -102,17 +102,17 @@ handles all events dispatched by the reactor.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000117">handle_close</a>&nbsp;&nbsp;
-      <a href="#M000115">handle_input</a>&nbsp;&nbsp;
-      <a href="#M000118">handle_oob</a>&nbsp;&nbsp;
-      <a href="#M000116">handle_output</a>&nbsp;&nbsp;
-      <a href="#M000114">init</a>&nbsp;&nbsp;
-      <a href="#M000113">new</a>&nbsp;&nbsp;
-      <a href="#M000121">query</a>&nbsp;&nbsp;
-      <a href="#M000123">sendmsg</a>&nbsp;&nbsp;
-      <a href="#M000122">set</a>&nbsp;&nbsp;
-      <a href="#M000119">set_initdone</a>&nbsp;&nbsp;
-      <a href="#M000120">update</a>&nbsp;&nbsp;
+      <a href="#M000194">handle_close</a>&nbsp;&nbsp;
+      <a href="#M000192">handle_input</a>&nbsp;&nbsp;
+      <a href="#M000195">handle_oob</a>&nbsp;&nbsp;
+      <a href="#M000193">handle_output</a>&nbsp;&nbsp;
+      <a href="#M000191">init</a>&nbsp;&nbsp;
+      <a href="#M000190">new</a>&nbsp;&nbsp;
+      <a href="#M000198">query</a>&nbsp;&nbsp;
+      <a href="#M000200">sendmsg</a>&nbsp;&nbsp;
+      <a href="#M000199">set</a>&nbsp;&nbsp;
+      <a href="#M000196">set_initdone</a>&nbsp;&nbsp;
+      <a href="#M000197">update</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -132,6 +132,16 @@ handles all events dispatched by the reactor.
 
       <div class="name-list">
         <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">addr</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">host</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">inbuffer</td>
           <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
@@ -172,12 +182,12 @@ handles all events dispatched by the reactor.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000113" class="method-detail">
-        <a name="M000113"></a>
+      <div id="method-M000190" class="method-detail">
+        <a name="M000190"></a>
 
         <div class="method-heading">
-          <a href="#M000113" class="method-signature">
-          <span class="method-name">new</span><span class="method-args">(server, sock, opts)</span>
+          <a href="#M000190" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(server, sock)</span>
           </a>
         </div>
       
@@ -197,29 +207,29 @@ Create a new connection object
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000113-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000113-source">
+            onclick="toggleCode('M000190-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000190-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net/connection.rb, line 34</span>
-34:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">sock</span>, <span class="ruby-identifier">opts</span>)
-35:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">sock</span>)
-36:     <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">opts</span>
-37:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">:lineio</span>
-38:       <span class="ruby-ivar">@sockio</span> = <span class="ruby-constant">LineIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@sock</span>)
-39:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">:packetio</span>
-40:       <span class="ruby-ivar">@sockio</span> = <span class="ruby-constant">PacketIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@sock</span>)
-41:     <span class="ruby-keyword kw">else</span>
-42:       <span class="ruby-ivar">@sockio</span> = <span class="ruby-constant">SockIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@sock</span>)
-43:     <span class="ruby-keyword kw">end</span>
-44:     <span class="ruby-ivar">@inbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>              <span class="ruby-comment cmt"># buffer lines waiting to be processed</span>
-45:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>             <span class="ruby-comment cmt"># buffer lines waiting to be output</span>
-46:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">:telnetfilter</span>
-47:       <span class="ruby-ivar">@initdone</span> = <span class="ruby-keyword kw">false</span>           <span class="ruby-comment cmt"># keeps silent until we're done with negotiations</span>
-48:     <span class="ruby-keyword kw">else</span>
-49:       <span class="ruby-ivar">@initdone</span> = <span class="ruby-keyword kw">true</span>
-50:     <span class="ruby-keyword kw">end</span>
-51:     <span class="ruby-ivar">@pstack</span> = <span class="ruby-constant">ProtocolStack</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-ivar">@opts</span>)
-52:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net/connection.rb, line 32</span>
+32:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">sock</span>)
+33:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">sock</span>)
+34:     <span class="ruby-keyword kw">case</span> <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">service_io</span>
+35:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:lineio</span>
+36:       <span class="ruby-ivar">@sockio</span> = <span class="ruby-constant">LineIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@sock</span>)
+37:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:packetio</span>
+38:       <span class="ruby-ivar">@sockio</span> = <span class="ruby-constant">PacketIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@sock</span>)
+39:     <span class="ruby-keyword kw">else</span>
+40:       <span class="ruby-ivar">@sockio</span> = <span class="ruby-constant">SockIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@sock</span>)
+41:     <span class="ruby-keyword kw">end</span>
+42:     <span class="ruby-ivar">@inbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>              <span class="ruby-comment cmt"># buffer lines waiting to be processed</span>
+43:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>             <span class="ruby-comment cmt"># buffer lines waiting to be output</span>
+44:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">service_filters</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">:telnetfilter</span>
+45:       <span class="ruby-ivar">@initdone</span> = <span class="ruby-keyword kw">false</span>           <span class="ruby-comment cmt"># keeps silent until we're done with negotiations</span>
+46:     <span class="ruby-keyword kw">else</span>
+47:       <span class="ruby-ivar">@initdone</span> = <span class="ruby-keyword kw">true</span>
+48:     <span class="ruby-keyword kw">end</span>
+49:     <span class="ruby-ivar">@pstack</span> = <span class="ruby-constant">ProtocolStack</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>)
+50:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -227,54 +237,54 @@ Create a new connection object
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000117" class="method-detail">
-        <a name="M000117"></a>
+      <div id="method-M000194" class="method-detail">
+        <a name="M000194"></a>
 
         <div class="method-heading">
-          <a href="#M000117" class="method-signature">
+          <a href="#M000194" class="method-signature">
           <span class="method-name">handle_close</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Connection.html#M000117">handle_close</a> is called to when an
+<a href="Connection.html#M000194">handle_close</a> is called to when an
 close event occurs for this session.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000117-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000117-source">
+            onclick="toggleCode('M000194-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000194-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 130</span>
-130:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
-131:     <span class="ruby-ivar">@connected</span> = <span class="ruby-keyword kw">false</span>
-132:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:logged_out</span>)
-133:     <span class="ruby-identifier">unsubscribe_all</span>
-134:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection '#{@addr}' closing&quot;</span>
-135:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">unregister</span>(<span class="ruby-keyword kw">self</span>)
-136: <span class="ruby-comment cmt">#    @sock.shutdown   # odd errors thrown with this</span>
-137:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">close</span>
-138:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-139:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#handle_close&quot;</span>
-140:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-141:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 129</span>
+129:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
+130:     <span class="ruby-ivar">@connected</span> = <span class="ruby-keyword kw">false</span>
+131:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:logged_out</span>)
+132:     <span class="ruby-identifier">unsubscribe_all</span>
+133:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection '#{@host}(#{@addr})' closing&quot;</span>
+134:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">unregister</span>(<span class="ruby-keyword kw">self</span>)
+135: <span class="ruby-comment cmt">#    @sock.shutdown   # odd errors thrown with this</span>
+136:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">close</span>
+137:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+138:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#handle_close&quot;</span>
+139:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+140:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000115" class="method-detail">
-        <a name="M000115"></a>
+      <div id="method-M000192" class="method-detail">
+        <a name="M000192"></a>
 
         <div class="method-heading">
-          <a href="#M000115" class="method-signature">
+          <a href="#M000192" class="method-signature">
           <span class="method-name">handle_input</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Connection.html#M000115">handle_input</a> is called to order a
+<a href="Connection.html#M000192">handle_input</a> is called to order a
 connection to process any input waiting on its socket. Input is parsed into
 lines based on the occurance of the CRLF terminator and pushed into a
 buffer which is a list of lines. The buffer expands dynamically as input is
@@ -282,127 +292,128 @@ processed. Input that has yet to see a CRLF terminator is left in the
 connection&#8217;s inbuffer.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000115-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000115-source">
+            onclick="toggleCode('M000192-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000192-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 75</span>
- 75:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_input</span>
- 76:     <span class="ruby-identifier">buf</span> = <span class="ruby-ivar">@sockio</span>.<span class="ruby-identifier">read</span>
- 77:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">nil?</span>
- 78:     <span class="ruby-identifier">buf</span> = <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">filter_call</span>(<span class="ruby-identifier">:filter_in</span>,<span class="ruby-identifier">buf</span>)
- 79:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:packetio</span>) <span class="ruby-operator">||</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:client</span>)
- 80:       <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">buf</span>)
- 81:     <span class="ruby-keyword kw">else</span>
- 82:       <span class="ruby-ivar">@inbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">buf</span>
- 83:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@initdone</span>  <span class="ruby-comment cmt"># Just let buffer fill until we indicate we're done</span>
- 84:                     <span class="ruby-comment cmt"># negotiating.  Set by calling initdone from TelnetFilter</span>
- 85:         <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">p</span> = <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">index</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
- 86:           <span class="ruby-identifier">ln</span> = <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">p</span>).<span class="ruby-identifier">chop</span>
- 87:           <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">ln</span>)
- 88:         <span class="ruby-keyword kw">end</span>
- 89:       <span class="ruby-keyword kw">end</span>
- 90:     <span class="ruby-keyword kw">end</span>
- 91:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">EOFError</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ECONNRESET</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ECONNABORTED</span>
- 92:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
- 93:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:logged_out</span>)
- 94:     <span class="ruby-identifier">unsubscribe_all</span>
- 95:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection '#{@addr}' disconnecting&quot;</span>
- 96:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
- 97:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
- 98:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
- 99:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:disconnected</span>)
-100:     <span class="ruby-identifier">unsubscribe_all</span>
-101:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#handle_input&quot;</span>
-102:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-103:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 73</span>
+ 73:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_input</span>
+ 74:     <span class="ruby-identifier">buf</span> = <span class="ruby-ivar">@sockio</span>.<span class="ruby-identifier">read</span>
+ 75:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">nil?</span>
+ 76:     <span class="ruby-identifier">buf</span> = <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">filter_call</span>(<span class="ruby-identifier">:filter_in</span>,<span class="ruby-identifier">buf</span>)
+ 77:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">service_io</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:packetio</span> <span class="ruby-operator">||</span>
+ 78:        <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">service_type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:client</span>
+ 79:       <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">buf</span>)
+ 80:     <span class="ruby-keyword kw">else</span>
+ 81:       <span class="ruby-ivar">@inbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">buf</span>
+ 82:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@initdone</span>  <span class="ruby-comment cmt"># Just let buffer fill until we indicate we're done</span>
+ 83:                     <span class="ruby-comment cmt"># negotiating.  Set by calling initdone from TelnetFilter</span>
+ 84:         <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">p</span> = <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">index</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+ 85:           <span class="ruby-identifier">ln</span> = <span class="ruby-ivar">@inbuffer</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">p</span>).<span class="ruby-identifier">chop</span>
+ 86:           <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">ln</span>)
+ 87:         <span class="ruby-keyword kw">end</span>
+ 88:       <span class="ruby-keyword kw">end</span>
+ 89:     <span class="ruby-keyword kw">end</span>
+ 90:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">EOFError</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ECONNRESET</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ECONNABORTED</span>
+ 91:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
+ 92:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:logged_out</span>)
+ 93:     <span class="ruby-identifier">unsubscribe_all</span>
+ 94:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection '#{@host}(#{@addr})' disconnecting&quot;</span>
+ 95:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+ 96:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+ 97:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
+ 98:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:disconnected</span>)
+ 99:     <span class="ruby-identifier">unsubscribe_all</span>
+100:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#handle_input&quot;</span>
+101:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+102:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000118" class="method-detail">
-        <a name="M000118"></a>
+      <div id="method-M000195" class="method-detail">
+        <a name="M000195"></a>
 
         <div class="method-heading">
-          <a href="#M000118" class="method-signature">
+          <a href="#M000195" class="method-signature">
           <span class="method-name">handle_oob</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Connection.html#M000118">handle_oob</a> is called when an out of
+<a href="Connection.html#M000195">handle_oob</a> is called when an out of
 band data event occurs for this session.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000118-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000118-source">
+            onclick="toggleCode('M000195-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000195-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 145</span>
-145:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_oob</span>
-146:     <span class="ruby-identifier">buf</span> = <span class="ruby-ivar">@sockio</span>.<span class="ruby-identifier">read_urgent</span>
-147:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection urgent data received - '#{buf[0]}'&quot;</span>
-148:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">set</span>(<span class="ruby-identifier">:urgent</span>, <span class="ruby-keyword kw">true</span>)
-149:     <span class="ruby-identifier">buf</span> = <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">filter_call</span>(<span class="ruby-identifier">:filter_in</span>,<span class="ruby-identifier">buf</span>)
-150:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-151:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#handle_oob&quot;</span>
-152:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-153:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 144</span>
+144:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_oob</span>
+145:     <span class="ruby-identifier">buf</span> = <span class="ruby-ivar">@sockio</span>.<span class="ruby-identifier">read_urgent</span>
+146:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection urgent data received - '#{buf[0]}'&quot;</span>
+147:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">set</span>(<span class="ruby-identifier">:urgent</span>, <span class="ruby-keyword kw">true</span>)
+148:     <span class="ruby-identifier">buf</span> = <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">filter_call</span>(<span class="ruby-identifier">:filter_in</span>,<span class="ruby-identifier">buf</span>)
+149:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+150:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#handle_oob&quot;</span>
+151:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+152:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000116" class="method-detail">
-        <a name="M000116"></a>
+      <div id="method-M000193" class="method-detail">
+        <a name="M000193"></a>
 
         <div class="method-heading">
-          <a href="#M000116" class="method-signature">
+          <a href="#M000193" class="method-signature">
           <span class="method-name">handle_output</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Connection.html#M000116">handle_output</a> is called to order a
+<a href="Connection.html#M000193">handle_output</a> is called to order a
 connection to process any output waiting on its socket.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000116-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000116-source">
+            onclick="toggleCode('M000193-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000193-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 107</span>
-107:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_output</span>
-108:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">filter_call</span>(<span class="ruby-identifier">:filter_out</span>,<span class="ruby-ivar">@outbuffer</span>)
-109:     <span class="ruby-identifier">done</span> = <span class="ruby-ivar">@sockio</span>.<span class="ruby-identifier">write</span>(<span class="ruby-ivar">@outbuffer</span>)
-110:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
-111:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">done</span>
-112:       <span class="ruby-ivar">@write_blocked</span> = <span class="ruby-keyword kw">false</span>
-113:     <span class="ruby-keyword kw">else</span>
-114:       <span class="ruby-ivar">@write_blocked</span> = <span class="ruby-keyword kw">true</span>
-115:     <span class="ruby-keyword kw">end</span>
-116:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">EOFError</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ECONNABORTED</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ECONNRESET</span>
-117:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
-118:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:logged_out</span>)
-119:     <span class="ruby-identifier">unsubscribe_all</span>
-120:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection '#{@addr}' disconnecting&quot;</span>
-121:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-122:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
-123:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:disconnected</span>)
-124:     <span class="ruby-identifier">unsubscribe_all</span>
-125:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#handle_output&quot;</span>
-126:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-127:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 106</span>
+106:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_output</span>
+107:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">filter_call</span>(<span class="ruby-identifier">:filter_out</span>,<span class="ruby-ivar">@outbuffer</span>)
+108:     <span class="ruby-identifier">done</span> = <span class="ruby-ivar">@sockio</span>.<span class="ruby-identifier">write</span>(<span class="ruby-ivar">@outbuffer</span>)
+109:     <span class="ruby-ivar">@outbuffer</span> = <span class="ruby-value str">&quot;&quot;</span>
+110:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">done</span>
+111:       <span class="ruby-ivar">@write_blocked</span> = <span class="ruby-keyword kw">false</span>
+112:     <span class="ruby-keyword kw">else</span>
+113:       <span class="ruby-ivar">@write_blocked</span> = <span class="ruby-keyword kw">true</span>
+114:     <span class="ruby-keyword kw">end</span>
+115:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">EOFError</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ECONNABORTED</span>, <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ECONNRESET</span>
+116:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
+117:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:logged_out</span>)
+118:     <span class="ruby-identifier">unsubscribe_all</span>
+119:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection '#{@host}(#{@addr})' disconnecting&quot;</span>
+120:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+121:     <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
+122:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:disconnected</span>)
+123:     <span class="ruby-identifier">unsubscribe_all</span>
+124:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#handle_output&quot;</span>
+125:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+126:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000114" class="method-detail">
-        <a name="M000114"></a>
+      <div id="method-M000191" class="method-detail">
+        <a name="M000191"></a>
 
         <div class="method-heading">
-          <a href="#M000114" class="method-signature">
+          <a href="#M000191" class="method-signature">
           <span class="method-name">init</span><span class="method-args">()</span>
           </a>
         </div>
@@ -417,32 +428,32 @@ init is called before using the connection.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000114-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000114-source">
+            onclick="toggleCode('M000191-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000191-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net/connection.rb, line 56</span>
-56:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>
-57:     <span class="ruby-ivar">@addr</span> = <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">peeraddr</span>[<span class="ruby-value">2</span>]
-58:     <span class="ruby-ivar">@connected</span> = <span class="ruby-keyword kw">true</span>
-59:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">register</span>(<span class="ruby-keyword kw">self</span>)
-60:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) New Connection on '#{@addr}'&quot;</span>
-61:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">filter_call</span>(<span class="ruby-identifier">:init</span>,<span class="ruby-keyword kw">nil</span>)
-62:     <span class="ruby-keyword kw">true</span>
-63:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-64:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#init&quot;</span>
-65:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-66:     <span class="ruby-keyword kw">false</span>
-67:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net/connection.rb, line 54</span>
+54:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>
+55:     <span class="ruby-ivar">@host</span>, <span class="ruby-ivar">@addr</span> = <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">peeraddr</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">2</span><span class="ruby-operator">..</span><span class="ruby-value">3</span>)
+56:     <span class="ruby-ivar">@connected</span> = <span class="ruby-keyword kw">true</span>
+57:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">register</span>(<span class="ruby-keyword kw">self</span>)
+58:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) New Connection on '#{@host}(#{@addr})'&quot;</span>
+59:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">filter_call</span>(<span class="ruby-identifier">:init</span>,<span class="ruby-keyword kw">nil</span>)
+60:     <span class="ruby-keyword kw">true</span>
+61:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+62:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#init&quot;</span>
+63:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+64:     <span class="ruby-keyword kw">false</span>
+65:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000121" class="method-detail">
-        <a name="M000121"></a>
+      <div id="method-M000198" class="method-detail">
+        <a name="M000198"></a>
 
         <div class="method-heading">
-          <a href="#M000121" class="method-signature">
+          <a href="#M000198" class="method-signature">
           <span class="method-name">query</span><span class="method-args">(attrib)</span>
           </a>
         </div>
@@ -470,23 +481,23 @@ init is called before using the connection.
         &lt;/pre&gt;
 </pre>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000121-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000121-source">
+            onclick="toggleCode('M000198-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000198-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 210</span>
-210:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">query</span>(<span class="ruby-identifier">attrib</span>)
-211:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">query</span>(<span class="ruby-identifier">attrib</span>)
-212:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 209</span>
+209:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">query</span>(<span class="ruby-identifier">attrib</span>)
+210:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">query</span>(<span class="ruby-identifier">attrib</span>)
+211:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000123" class="method-detail">
-        <a name="M000123"></a>
+      <div id="method-M000200" class="method-detail">
+        <a name="M000200"></a>
 
         <div class="method-heading">
-          <a href="#M000123" class="method-signature">
+          <a href="#M000200" class="method-signature">
           <span class="method-name">sendmsg</span><span class="method-args">(msg)</span>
           </a>
         </div>
@@ -502,24 +513,24 @@ href="Connection.html">Connection</a>&#8217;s output buffer.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000123-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000123-source">
+            onclick="toggleCode('M000200-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000200-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 231</span>
-231:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">msg</span>)
-232:     <span class="ruby-ivar">@outbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">msg</span>
-233:     <span class="ruby-ivar">@write_blocked</span> = <span class="ruby-keyword kw">true</span>  <span class="ruby-comment cmt"># change status to write_blocked</span>
-234:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 230</span>
+230:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">msg</span>)
+231:     <span class="ruby-ivar">@outbuffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">msg</span>
+232:     <span class="ruby-ivar">@write_blocked</span> = <span class="ruby-keyword kw">true</span>  <span class="ruby-comment cmt"># change status to write_blocked</span>
+233:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000122" class="method-detail">
-        <a name="M000122"></a>
+      <div id="method-M000199" class="method-detail">
+        <a name="M000199"></a>
 
         <div class="method-heading">
-          <a href="#M000122" class="method-signature">
+          <a href="#M000199" class="method-signature">
           <span class="method-name">set</span><span class="method-args">(attrib, val)</span>
           </a>
         </div>
@@ -541,23 +552,23 @@ href="Connection.html">Connection</a>&#8217;s output buffer.
         &lt;/pre&gt;
 </pre>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000122-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000122-source">
+            onclick="toggleCode('M000199-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000199-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 224</span>
-224:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">attrib</span>, <span class="ruby-identifier">val</span>)
-225:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">set</span>(<span class="ruby-identifier">attrib</span>, <span class="ruby-identifier">val</span>)
-226:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 223</span>
+223:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">attrib</span>, <span class="ruby-identifier">val</span>)
+224:     <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">set</span>(<span class="ruby-identifier">attrib</span>, <span class="ruby-identifier">val</span>)
+225:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000119" class="method-detail">
-        <a name="M000119"></a>
+      <div id="method-M000196" class="method-detail">
+        <a name="M000196"></a>
 
         <div class="method-heading">
-          <a href="#M000119" class="method-signature">
+          <a href="#M000196" class="method-signature">
           <span class="method-name">set_initdone</span><span class="method-args">()</span>
           </a>
         </div>
@@ -569,24 +580,24 @@ are done with negotiations. The event :initdone wakens observer to begin
 user activity
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000119-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000119-source">
+            onclick="toggleCode('M000196-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000196-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 157</span>
-157:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_initdone</span>
-158:     <span class="ruby-ivar">@initdone</span> = <span class="ruby-keyword kw">true</span>
-159:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:initdone</span>)
-160:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 156</span>
+156:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_initdone</span>
+157:     <span class="ruby-ivar">@initdone</span> = <span class="ruby-keyword kw">true</span>
+158:     <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">:initdone</span>)
+159:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000120" class="method-detail">
-        <a name="M000120"></a>
+      <div id="method-M000197" class="method-detail">
+        <a name="M000197"></a>
 
         <div class="method-heading">
-          <a href="#M000120" class="method-signature">
+          <a href="#M000197" class="method-signature">
           <span class="method-name">update</span><span class="method-args">(msg)</span>
           </a>
         </div>
@@ -617,26 +628,26 @@ href="Connection.html">Connection</a>. It is handled here.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000120-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000120-source">
+            onclick="toggleCode('M000197-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000197-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 177</span>
-177:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)
-178:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>
-179:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:logged_out</span>
-180:       <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
-181:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:reconnecting</span>
-182:       <span class="ruby-identifier">unsubscribe_all</span>
-183:       <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection '#{@addr}' closing for reconnection&quot;</span>
-184:       <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">unregister</span>(<span class="ruby-keyword kw">self</span>)
-185:   <span class="ruby-comment cmt">#    @sock.shutdown   # odd errors thrown with this</span>
-186:       <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">close</span>
-187:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
-188:       <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">msg</span>)
-189:     <span class="ruby-keyword kw">else</span>
-190:       <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#update - unknown message '#{@msg.inspect}'&quot;</span>
-191:     <span class="ruby-keyword kw">end</span>
-192:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/net/connection.rb, line 176</span>
+176:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">msg</span>)
+177:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">msg</span>
+178:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:logged_out</span>
+179:       <span class="ruby-ivar">@closing</span> = <span class="ruby-keyword kw">true</span>
+180:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:reconnecting</span>
+181:       <span class="ruby-identifier">unsubscribe_all</span>
+182:       <span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection '#{@host}(#{@addr})' closing for reconnection&quot;</span>
+183:       <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">unregister</span>(<span class="ruby-keyword kw">self</span>)
+184:   <span class="ruby-comment cmt">#    @sock.shutdown   # odd errors thrown with this</span>
+185:       <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">close</span>
+186:     <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+187:       <span class="ruby-identifier">sendmsg</span>(<span class="ruby-identifier">msg</span>)
+188:     <span class="ruby-keyword kw">else</span>
+189:       <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;(#{self.object_id}) Connection#update - unknown message '#{@msg.inspect}'&quot;</span>
+190:     <span class="ruby-keyword kw">end</span>
+191:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

@@ -3,40 +3,20 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/protocol/telnetfilter.rb"
+    label = "lib/protocol/colorfilter.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    TelnetFilter [
+    ColorFilter [
         fontcolor = black,
-        URL = "classes/TelnetFilter.html",
+        URL = "classes/ColorFilter.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "TelnetFilter"
-    ]
-
-    ASCIICodes [
-        URL = "classes/ASCIICodes.html",
-        shape = box,
-        label = "ASCIICodes"
-    ]
-
-    ASCIICodes -> TelnetFilter [
-
-    ]
-
-    TelnetCodes [
-        URL = "classes/TelnetCodes.html",
-        shape = box,
-        label = "TelnetCodes"
-    ]
-
-    TelnetCodes -> TelnetFilter [
-
+        label = "ColorFilter"
     ]
 
     Filter [
@@ -44,7 +24,7 @@ digraph TopLevel {
         label = "Filter"
     ]
 
-    Filter -> TelnetFilter [
+    Filter -> ColorFilter [
 
     ]
 

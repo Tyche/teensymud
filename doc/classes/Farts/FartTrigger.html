@@ -100,7 +100,7 @@
   <area shape="RECT" coords="28,113,100,161"      href="Lib.html" alt="Lib">
   <area shape="RECT" coords="17,91,1305,268"      href="../Farts.html" alt="Farts">
 </map>
-<img src="../../dot/m_18_0.gif" usemap="#map" border=0 alt="Module: Farts">
+<img src="../../dot/m_23_0.gif" usemap="#map" border=0 alt="Module: Farts">
     </div>
 
 
@@ -111,9 +111,9 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000159">execute</a>&nbsp;&nbsp;
-      <a href="#M000158">load</a>&nbsp;&nbsp;
-      <a href="#M000157">new</a>&nbsp;&nbsp;
+      <a href="#M000258">execute</a>&nbsp;&nbsp;
+      <a href="#M000257">load</a>&nbsp;&nbsp;
+      <a href="#M000256">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -158,26 +158,26 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000157" class="method-detail">
-        <a name="M000157"></a>
+      <div id="method-M000256" class="method-detail">
+        <a name="M000256"></a>
 
         <div class="method-heading">
-          <a href="#M000157" class="method-signature">
+          <a href="#M000256" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(fname,event)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000157-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000157-source">
+            onclick="toggleCode('M000256-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000256-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/farts/farts_parser.rb, line 828</span>
-828:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">fname</span>,<span class="ruby-identifier">event</span>)
-829:       <span class="ruby-ivar">@fname</span>,<span class="ruby-ivar">@event</span> = <span class="ruby-identifier">fname</span>,<span class="ruby-identifier">event</span>
-830:       <span class="ruby-ivar">@event</span> = <span class="ruby-identifier">event</span>.<span class="ruby-identifier">intern</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">event</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">to_str</span>)
-831:       <span class="ruby-ivar">@prog</span> = <span class="ruby-keyword kw">nil</span>
-832:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/farts/farts_parser.rb, line 829</span>
+829:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">fname</span>,<span class="ruby-identifier">event</span>)
+830:       <span class="ruby-ivar">@fname</span>,<span class="ruby-ivar">@event</span> = <span class="ruby-identifier">fname</span>,<span class="ruby-identifier">event</span>
+831:       <span class="ruby-ivar">@event</span> = <span class="ruby-identifier">event</span>.<span class="ruby-identifier">intern</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">event</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">to_str</span>)
+832:       <span class="ruby-ivar">@prog</span> = <span class="ruby-keyword kw">nil</span>
+833:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -185,77 +185,77 @@
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000159" class="method-detail">
-        <a name="M000159"></a>
+      <div id="method-M000258" class="method-detail">
+        <a name="M000258"></a>
 
         <div class="method-heading">
-          <a href="#M000159" class="method-signature">
+          <a href="#M000258" class="method-signature">
           <span class="method-name">execute</span><span class="method-args">(ev)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000159-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000159-source">
+            onclick="toggleCode('M000258-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000258-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/farts/farts_parser.rb, line 852</span>
-852:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">ev</span>)
-853:       <span class="ruby-identifier">retval</span> = <span class="ruby-keyword kw">true</span>
-854:       <span class="ruby-identifier">vars</span> = {}
-855:       <span class="ruby-identifier">vars</span>[<span class="ruby-value str">'actor'</span>] = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">ev</span>.<span class="ruby-identifier">from</span>)
-856:       <span class="ruby-identifier">vars</span>[<span class="ruby-value str">'this'</span>] = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">ev</span>.<span class="ruby-identifier">to</span>)
-857:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ev</span>.<span class="ruby-identifier">msg</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">GameObject</span>)
-858:         <span class="ruby-identifier">vars</span>[<span class="ruby-value str">'args'</span>] = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">ev</span>.<span class="ruby-identifier">msg</span>)
-859:       <span class="ruby-keyword kw">else</span>
-860:         <span class="ruby-identifier">vars</span>[<span class="ruby-value str">'args'</span>] = <span class="ruby-identifier">ev</span>.<span class="ruby-identifier">msg</span>
-861:       <span class="ruby-keyword kw">end</span>  
-862:       <span class="ruby-identifier">load</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@prog</span>
-863:       <span class="ruby-identifier">retval</span> = <span class="ruby-ivar">@prog</span>.<span class="ruby-identifier">execute</span>(<span class="ruby-identifier">vars</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@prog</span>
-864:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">WetFartsError</span>
-865:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-866:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-867:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-868:     <span class="ruby-keyword kw">ensure</span>
-869:       <span class="ruby-identifier">retval</span>
-870:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/farts/farts_parser.rb, line 853</span>
+853:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">ev</span>)
+854:       <span class="ruby-identifier">retval</span> = <span class="ruby-keyword kw">true</span>
+855:       <span class="ruby-identifier">vars</span> = {}
+856:       <span class="ruby-identifier">vars</span>[<span class="ruby-value str">'actor'</span>] = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">ev</span>.<span class="ruby-identifier">from</span>)
+857:       <span class="ruby-identifier">vars</span>[<span class="ruby-value str">'this'</span>] = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">ev</span>.<span class="ruby-identifier">to</span>)
+858:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ev</span>.<span class="ruby-identifier">msg</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">GameObject</span>)
+859:         <span class="ruby-identifier">vars</span>[<span class="ruby-value str">'args'</span>] = <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">ev</span>.<span class="ruby-identifier">msg</span>)
+860:       <span class="ruby-keyword kw">else</span>
+861:         <span class="ruby-identifier">vars</span>[<span class="ruby-value str">'args'</span>] = <span class="ruby-identifier">ev</span>.<span class="ruby-identifier">msg</span>
+862:       <span class="ruby-keyword kw">end</span>  
+863:       <span class="ruby-identifier">load</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@prog</span>
+864:       <span class="ruby-identifier">retval</span> = <span class="ruby-ivar">@prog</span>.<span class="ruby-identifier">execute</span>(<span class="ruby-identifier">vars</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@prog</span>
+865:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">WetFartsError</span>
+866:       <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+867:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+868:       <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+869:     <span class="ruby-keyword kw">ensure</span>
+870:       <span class="ruby-identifier">retval</span>
+871:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000158" class="method-detail">
-        <a name="M000158"></a>
+      <div id="method-M000257" class="method-detail">
+        <a name="M000257"></a>
 
         <div class="method-heading">
-          <a href="#M000158" class="method-signature">
+          <a href="#M000257" class="method-signature">
           <span class="method-name">load</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000158-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000158-source">
+            onclick="toggleCode('M000257-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000257-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/farts/farts_parser.rb, line 834</span>
-834:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load</span>
-835:       <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;&quot;</span>
-836:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;farts/#{@fname}.fart&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
-837:         <span class="ruby-identifier">str</span> = <span class="ruby-identifier">f</span>.<span class="ruby-identifier">read</span>
-838:       }
-839:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;Load of FART program - #{@fname}&quot;</span>
-840:       <span class="ruby-ivar">@prog</span> = <span class="ruby-constant">Parser</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">parse</span>( <span class="ruby-identifier">str</span> )
-841:       <span class="ruby-keyword kw">true</span>
-842:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Racc</span><span class="ruby-operator">::</span><span class="ruby-constant">ParseError</span>
-843:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-844:       <span class="ruby-ivar">@prog</span> = <span class="ruby-keyword kw">nil</span>
-845:       <span class="ruby-keyword kw">false</span>
-846:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-847:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-848:       <span class="ruby-ivar">@prog</span> = <span class="ruby-keyword kw">nil</span>
-849:       <span class="ruby-keyword kw">false</span>
-850:     <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/farts/farts_parser.rb, line 835</span>
+835:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load</span>
+836:       <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;&quot;</span>
+837:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;farts/#{@fname}.fart&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+838:         <span class="ruby-identifier">str</span> = <span class="ruby-identifier">f</span>.<span class="ruby-identifier">read</span>
+839:       }
+840:       <span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;Load of FART program - #{@fname}&quot;</span>
+841:       <span class="ruby-ivar">@prog</span> = <span class="ruby-constant">Parser</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">parse</span>( <span class="ruby-identifier">str</span> )
+842:       <span class="ruby-keyword kw">true</span>
+843:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Racc</span><span class="ruby-operator">::</span><span class="ruby-constant">ParseError</span>
+844:       <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+845:       <span class="ruby-ivar">@prog</span> = <span class="ruby-keyword kw">nil</span>
+846:       <span class="ruby-keyword kw">false</span>
+847:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+848:       <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+849:       <span class="ruby-ivar">@prog</span> = <span class="ruby-keyword kw">nil</span>
+850:       <span class="ruby-keyword kw">false</span>
+851:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

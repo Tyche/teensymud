@@ -3,29 +3,28 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/net/session.rb"
+    label = "lib/net/connection.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    Session [
+    Connection [
         fontcolor = black,
-        URL = "classes/Session.html",
+        URL = "classes/Connection.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
+        label = "Connection"
+    ]
+
+    Session [
+        URL = "classes/Session.html",
         label = "Session"
     ]
 
-    Publisher [
-        URL = "classes/Publisher.html",
-        shape = box,
-        label = "Publisher"
-    ]
-
-    Publisher -> Session [
+    Session -> Connection [
 
     ]
 

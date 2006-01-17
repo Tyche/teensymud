@@ -84,7 +84,7 @@
   <area shape="RECT" coords="33,113,111,161"      href="ColorFilter.html" alt="ColorFilter">
   <area shape="RECT" coords="36,17,108,65"      href="Filter.html" alt="Filter">
 </map>
-<img src="../dot/f_21.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_26.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -105,8 +105,8 @@ A <a href="Filter.html">Filter</a> can keep state and partial data
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000137">filter_out</a>&nbsp;&nbsp;
-      <a href="#M000136">new</a>&nbsp;&nbsp;
+      <a href="#M000236">filter_out</a>&nbsp;&nbsp;
+      <a href="#M000235">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -128,11 +128,11 @@ A <a href="Filter.html">Filter</a> can keep state and partial data
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000136" class="method-detail">
-        <a name="M000136"></a>
+      <div id="method-M000235" class="method-detail">
+        <a name="M000235"></a>
 
         <div class="method-heading">
-          <a href="#M000136" class="method-signature">
+          <a href="#M000235" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(pstack)</span>
           </a>
         </div>
@@ -148,13 +148,13 @@ filter
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000136-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000136-source">
+            onclick="toggleCode('M000235-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000235-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/protocol/colorfilter.rb, line 25</span>
-25:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">pstack</span>)
-26:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">pstack</span>)
-27:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/protocol/colorfilter.rb, line 26</span>
+26:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">pstack</span>)
+27:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">pstack</span>)
+28:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -162,18 +162,18 @@ filter
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000137" class="method-detail">
-        <a name="M000137"></a>
+      <div id="method-M000236" class="method-detail">
+        <a name="M000236"></a>
 
         <div class="method-heading">
-          <a href="#M000137" class="method-signature">
+          <a href="#M000236" class="method-signature">
           <span class="method-name">filter_out</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-The <a href="ColorFilter.html#M000137">filter_out</a> method filters output
+The <a href="ColorFilter.html#M000236">filter_out</a> method filters output
 data
 </p>
 <dl>
@@ -185,19 +185,19 @@ data
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000137-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000137-source">
+            onclick="toggleCode('M000236-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000236-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/protocol/colorfilter.rb, line 32</span>
-32:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_out</span>(<span class="ruby-identifier">str</span>)
-33:     <span class="ruby-keyword kw">return</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>
-34:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">color_on</span>
-35:       <span class="ruby-identifier">s</span> = <span class="ruby-constant">BBCode</span>.<span class="ruby-identifier">bbcode_to_ansi</span>(<span class="ruby-identifier">str</span>)
-36:     <span class="ruby-keyword kw">else</span>
-37:       <span class="ruby-identifier">s</span> = <span class="ruby-constant">BBCode</span>.<span class="ruby-identifier">strip_bbcode</span>(<span class="ruby-identifier">str</span>)
-38:     <span class="ruby-keyword kw">end</span>
-39:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>
-40:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/protocol/colorfilter.rb, line 33</span>
+33:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filter_out</span>(<span class="ruby-identifier">str</span>)
+34:     <span class="ruby-keyword kw">return</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>
+35:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@pstack</span>.<span class="ruby-identifier">color_on</span>
+36:       <span class="ruby-identifier">s</span> = <span class="ruby-constant">BBCode</span>.<span class="ruby-identifier">bbcode_to_ansi</span>(<span class="ruby-identifier">str</span>)
+37:     <span class="ruby-keyword kw">else</span>
+38:       <span class="ruby-identifier">s</span> = <span class="ruby-constant">BBCode</span>.<span class="ruby-identifier">strip_bbcode</span>(<span class="ruby-identifier">str</span>)
+39:     <span class="ruby-keyword kw">end</span>
+40:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>
+41:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

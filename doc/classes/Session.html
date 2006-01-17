@@ -82,7 +82,7 @@
   <area shape="RECT" coords="21,113,93,161"      href="Session.html" alt="Session">
   <area shape="RECT" coords="21,17,93,65"      href="Publisher.html" alt="Publisher">
 </map>
-<img src="../dot/f_14.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_19.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -100,14 +100,14 @@ to reasonably maintain a socket session with a client.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000053">handle_close</a>&nbsp;&nbsp;
-      <a href="#M000051">handle_input</a>&nbsp;&nbsp;
-      <a href="#M000054">handle_oob</a>&nbsp;&nbsp;
-      <a href="#M000052">handle_output</a>&nbsp;&nbsp;
-      <a href="#M000050">init</a>&nbsp;&nbsp;
-      <a href="#M000055">is_readable?</a>&nbsp;&nbsp;
-      <a href="#M000056">is_writable?</a>&nbsp;&nbsp;
-      <a href="#M000049">new</a>&nbsp;&nbsp;
+      <a href="#M000098">handle_close</a>&nbsp;&nbsp;
+      <a href="#M000096">handle_input</a>&nbsp;&nbsp;
+      <a href="#M000099">handle_oob</a>&nbsp;&nbsp;
+      <a href="#M000097">handle_output</a>&nbsp;&nbsp;
+      <a href="#M000095">init</a>&nbsp;&nbsp;
+      <a href="#M000100">is_readable?</a>&nbsp;&nbsp;
+      <a href="#M000101">is_writable?</a>&nbsp;&nbsp;
+      <a href="#M000094">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -169,11 +169,11 @@ to reasonably maintain a socket session with a client.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000049" class="method-detail">
-        <a name="M000049"></a>
+      <div id="method-M000094" class="method-detail">
+        <a name="M000094"></a>
 
         <div class="method-heading">
-          <a href="#M000049" class="method-signature">
+          <a href="#M000094" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(server, sock=nil)</span>
           </a>
         </div>
@@ -195,8 +195,8 @@ connection.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000049-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000049-source">
+            onclick="toggleCode('M000094-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000094-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/net/session.rb, line 30</span>
 30:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">sock</span>=<span class="ruby-keyword kw">nil</span>)
@@ -212,23 +212,23 @@ connection.
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000053" class="method-detail">
-        <a name="M000053"></a>
+      <div id="method-M000098" class="method-detail">
+        <a name="M000098"></a>
 
         <div class="method-heading">
-          <a href="#M000053" class="method-signature">
+          <a href="#M000098" class="method-signature">
           <span class="method-name">handle_close</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Session.html#M000053">handle_close</a> is called when a close
+<a href="Session.html#M000098">handle_close</a> is called when a close
 event occurs for this session.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000053-source">
+            onclick="toggleCode('M000098-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000098-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/net/session.rb, line 52</span>
 52:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
@@ -238,23 +238,23 @@ event occurs for this session.
         </div>
       </div>
 
-      <div id="method-M000051" class="method-detail">
-        <a name="M000051"></a>
+      <div id="method-M000096" class="method-detail">
+        <a name="M000096"></a>
 
         <div class="method-heading">
-          <a href="#M000051" class="method-signature">
+          <a href="#M000096" class="method-signature">
           <span class="method-name">handle_input</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Session.html#M000051">handle_input</a> is called when an input
+<a href="Session.html#M000096">handle_input</a> is called when an input
 event occurs for this session.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000051-source">
+            onclick="toggleCode('M000096-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000096-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/net/session.rb, line 44</span>
 44:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_input</span>
@@ -264,23 +264,23 @@ event occurs for this session.
         </div>
       </div>
 
-      <div id="method-M000054" class="method-detail">
-        <a name="M000054"></a>
+      <div id="method-M000099" class="method-detail">
+        <a name="M000099"></a>
 
         <div class="method-heading">
-          <a href="#M000054" class="method-signature">
+          <a href="#M000099" class="method-signature">
           <span class="method-name">handle_oob</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Session.html#M000054">handle_oob</a> is called when an out of band
+<a href="Session.html#M000099">handle_oob</a> is called when an out of band
 data event occurs for this session.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000054-source">
+            onclick="toggleCode('M000099-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000099-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/net/session.rb, line 57</span>
 57:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_oob</span>
@@ -290,23 +290,23 @@ data event occurs for this session.
         </div>
       </div>
 
-      <div id="method-M000052" class="method-detail">
-        <a name="M000052"></a>
+      <div id="method-M000097" class="method-detail">
+        <a name="M000097"></a>
 
         <div class="method-heading">
-          <a href="#M000052" class="method-signature">
+          <a href="#M000097" class="method-signature">
           <span class="method-name">handle_output</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Session.html#M000052">handle_output</a> is called when an output
+<a href="Session.html#M000097">handle_output</a> is called when an output
 event occurs for this session.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000052-source">
+            onclick="toggleCode('M000097-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000097-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/net/session.rb, line 48</span>
 48:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_output</span>
@@ -316,11 +316,11 @@ event occurs for this session.
         </div>
       </div>
 
-      <div id="method-M000050" class="method-detail">
-        <a name="M000050"></a>
+      <div id="method-M000095" class="method-detail">
+        <a name="M000095"></a>
 
         <div class="method-heading">
-          <a href="#M000050" class="method-signature">
+          <a href="#M000095" class="method-signature">
           <span class="method-name">init</span><span class="method-args">()</span>
           </a>
         </div>
@@ -335,8 +335,8 @@ init is called before using the session.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000050-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000050-source">
+            onclick="toggleCode('M000095-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000095-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/net/session.rb, line 39</span>
 39:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>
@@ -347,23 +347,23 @@ init is called before using the session.
         </div>
       </div>
 
-      <div id="method-M000055" class="method-detail">
-        <a name="M000055"></a>
+      <div id="method-M000100" class="method-detail">
+        <a name="M000100"></a>
 
         <div class="method-heading">
-          <a href="#M000055" class="method-signature">
+          <a href="#M000100" class="method-signature">
           <span class="method-name">is_readable?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Session.html#M000055">is_readable?</a> tests if the socket is a
+<a href="Session.html#M000100">is_readable?</a> tests if the socket is a
 candidate for select read {<tt>return</tt>] true if so, false if not
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000055-source">
+            onclick="toggleCode('M000100-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000100-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/net/session.rb, line 62</span>
 62:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_readable?</span>
@@ -374,23 +374,23 @@ candidate for select read {<tt>return</tt>] true if so, false if not
         </div>
       </div>
 
-      <div id="method-M000056" class="method-detail">
-        <a name="M000056"></a>
+      <div id="method-M000101" class="method-detail">
+        <a name="M000101"></a>
 
         <div class="method-heading">
-          <a href="#M000056" class="method-signature">
+          <a href="#M000101" class="method-signature">
           <span class="method-name">is_writable?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Session.html#M000056">is_writable?</a> tests if the socket is a
+<a href="Session.html#M000101">is_writable?</a> tests if the socket is a
 candidate for select write {<tt>return</tt>] true if so, false if not
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000056-source">
+            onclick="toggleCode('M000101-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000101-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/net/session.rb, line 68</span>
 68:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_writable?</span>

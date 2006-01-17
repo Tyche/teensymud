@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Sat Oct 15 17:50:55 GMT-5:00 2005</td>
+      <td>Mon Jan 16 23:36:05 GMT-5:00 2006</td>
     </tr>
     </table>
   </div>
@@ -75,7 +75,7 @@
 
     <div id="description">
       <h1>TeensyMUD Server</h1>
-<h1>v2.6.0</h1>
+<h1>v2.7.0</h1>
 <hr size="1"></hr><h2>Introduction</h2>
 <p>
 TeensyMUD is a very simple mud server written in Ruby. It uses a
@@ -96,9 +96,7 @@ Does TeensyMUD have a future? Who knows? I don&#8217;t.
 <h2>Download</h2>
 <p>
 The latest release can be found at <a
-href="ftp://sourcery.dyndns.org/pub/mud/teensymud">sourcery.dyndns.org/pub/mud/teensymud</a>
-or checked out of <a
-href="http://sourcery.dyndns.org/svn/teensymud/release">sourcery.dyndns.org/svn/teensymud/release</a>
+href="http://teensymud.kicks-ass.org">teensymud.kicks-ass.org</a>
 </p>
 <h2>System Dependencies</h2>
 <h3>Required</h3>
@@ -106,6 +104,10 @@ href="http://sourcery.dyndns.org/svn/teensymud/release">sourcery.dyndns.org/svn/
 <dt>Ruby 1.8.2</dt><dd>Can be obtained at the home of Ruby, <a
 href="http://www.ruby-lang.org">www.ruby-lang.org</a>. It runs on most
 platforms.
+
+</dd>
+<dt>Log4r</dt><dd>All logging done through this now. Install from Ruby Gems, or <a
+href="http://log4r.sourceforge.net">log4r.sourceforge.net</a>/
 
 </dd>
 </dl>
@@ -231,6 +233,27 @@ options.
 <li>Exhaustive regression testing.
 
 </li>
+<li>Database backends, DBM, GDBM and SDBM.
+
+</li>
+<li>Object cacheing support
+
+</li>
+<li>Object ownership
+
+</li>
+<li>New logging system controlled at the class level
+
+</li>
+<li><a href="../classes/Configuration.html">Configuration</a> support. <a
+href="../classes/Configuration.html">Configuration</a> information stored
+in easily readable file.
+
+</li>
+<li>Object properties. Properties define attributes that are persistent. Set
+them and forget them.
+
+</li>
 </ul>
 <hr size="1"></hr><h2>Installation</h2>
 <ol>
@@ -348,13 +371,20 @@ provided.
 <li>drop - drops all objects in your inventory into the room
 
 </li>
-<li>@stats - displays a statistical report of the database
+<li>@stats - displays a statistical report of the database and cache if present
 
 </li>
 <li>@color - toggles colors on or off
 
 </li>
 <li>@status - displays session information
+
+</li>
+<li>@memstats - displays the memory statistics by scanning ruby&#8217;s object
+space
+
+</li>
+<li>@dumpcache - inspects the cache (for debugging).
 
 </li>
 </ul>

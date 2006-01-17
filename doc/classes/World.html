@@ -117,7 +117,10 @@ big global thing.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000106">new</a>&nbsp;&nbsp;
+      <a href="#M000180">find_player_by_name</a>&nbsp;&nbsp;
+      <a href="#M000182">memstats</a>&nbsp;&nbsp;
+      <a href="#M000179">new</a>&nbsp;&nbsp;
+      <a href="#M000181">players_connected</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -162,11 +165,6 @@ big global thing.
           <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
           <td class="context-item-desc"></td>
         </tr>
-        <tr class="top-aligned-row context-row">
-          <td class="context-item-name">options</td>
-          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
-          <td class="context-item-desc"></td>
-        </tr>
         </table>
       </div>
     </div>
@@ -177,12 +175,12 @@ big global thing.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000106" class="method-detail">
-        <a name="M000106"></a>
+      <div id="method-M000179" class="method-detail">
+        <a name="M000179"></a>
 
         <div class="method-heading">
-          <a href="#M000106" class="method-signature">
-          <span class="method-name">new</span><span class="method-args">(log, options)</span>
+          <a href="#M000179" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">()</span>
           </a>
         </div>
       
@@ -197,23 +195,161 @@ database depending on whether it finds it.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000106-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000106-source">
+            onclick="toggleCode('M000179-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000179-source">
 <pre>
-     <span class="ruby-comment cmt"># File tmud.rb, line 100</span>
-100:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">log</span>, <span class="ruby-identifier">options</span>)
-101:     <span class="ruby-ivar">@log</span>, <span class="ruby-ivar">@options</span> = <span class="ruby-identifier">log</span>, <span class="ruby-identifier">options</span>
-102:     <span class="ruby-ivar">@db</span> = <span class="ruby-constant">Database</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@log</span>, <span class="ruby-ivar">@options</span>)
-103:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Loading commands...&quot;</span>
-104:     <span class="ruby-ivar">@cmds</span> = <span class="ruby-constant">Command</span>.<span class="ruby-identifier">load</span>(<span class="ruby-value str">&quot;commands.yaml&quot;</span>, <span class="ruby-constant">Player</span>, <span class="ruby-identifier">:Cmd</span>)
-105:     <span class="ruby-ivar">@ocmds</span> = <span class="ruby-constant">Command</span>.<span class="ruby-identifier">load</span>(<span class="ruby-value str">&quot;obj_cmds.yaml&quot;</span>, <span class="ruby-constant">GameObject</span>, <span class="ruby-identifier">:ObjCmd</span>)
-106:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Done.&quot;</span>
-107:     <span class="ruby-ivar">@eventmgr</span> = <span class="ruby-constant">EventManager</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@log</span>, <span class="ruby-ivar">@options</span>)
-108:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Releasing Hamster...&quot;</span>
-109:     <span class="ruby-ivar">@hamster</span> = <span class="ruby-constant">Hamster</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-value">2.0</span>, <span class="ruby-identifier">:timer</span>)
-110:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">objects</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">obj</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@hamster</span>.<span class="ruby-identifier">register</span>(<span class="ruby-identifier">obj</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">powered</span>}
-111:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;World initialized.&quot;</span>
-112:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File tmud.rb, line 76</span>
+76:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>
+77:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">options</span>[<span class="ruby-value str">'dbtype'</span>]
+78:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:yaml</span>
+79: <span class="ruby-identifier">require</span> <span class="ruby-value str">'db/yamlstore'</span>
+80:       <span class="ruby-ivar">@db</span> = <span class="ruby-constant">YamlStore</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value str">'dbfile'</span>])
+81:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:gdbm</span>
+82: <span class="ruby-identifier">require</span> <span class="ruby-value str">'db/gdbmstore'</span>
+83:       <span class="ruby-ivar">@db</span> = <span class="ruby-constant">GdbmStore</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value str">'dbfile'</span>])
+84:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:sdbm</span>
+85: <span class="ruby-identifier">require</span> <span class="ruby-value str">'db/sdbmstore'</span>
+86:       <span class="ruby-ivar">@db</span> = <span class="ruby-constant">SdbmStore</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value str">'dbfile'</span>])
+87:     <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:dbm</span>
+88: <span class="ruby-identifier">require</span> <span class="ruby-value str">'db/dbmstore'</span>
+89:       <span class="ruby-ivar">@db</span> = <span class="ruby-constant">DbmStore</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value str">'dbfile'</span>])
+90:     <span class="ruby-keyword kw">end</span>
+91:     <span class="ruby-ivar">@cmds</span>, <span class="ruby-ivar">@ocmds</span> = <span class="ruby-constant">Command</span>.<span class="ruby-identifier">load</span>
+92:     <span class="ruby-ivar">@eventmgr</span> = <span class="ruby-constant">EventManager</span>.<span class="ruby-identifier">new</span>
+93:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Releasing Hamster...&quot;</span>
+94:     <span class="ruby-ivar">@hamster</span> = <span class="ruby-constant">Hamster</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-value">2.0</span>, <span class="ruby-identifier">:timer</span>)
+95:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;World initialized.&quot;</span>
+96:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000180" class="method-detail">
+        <a name="M000180"></a>
+
+        <div class="method-heading">
+          <a href="#M000180" class="method-signature">
+          <span class="method-name">find_player_by_name</span><span class="method-args">(nm)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Finds a <a href="Player.html">Player</a> object in the database by name.
+</p>
+<dl>
+<dt><tt>nm</tt></dt><dd>is the string to use in the search.
+
+</dd>
+<dt><tt>return</tt></dt><dd>Handle to the <a href="Player.html">Player</a> object or nil.
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000180-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000180-source">
+<pre>
+     <span class="ruby-comment cmt"># File tmud.rb, line 101</span>
+101:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_player_by_name</span>(<span class="ruby-identifier">nm</span>)
+102:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>
+103:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">o</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Player</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">nm</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">name</span>
+104:     <span class="ruby-keyword kw">end</span>
+105:     <span class="ruby-keyword kw">nil</span>
+106:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000182" class="method-detail">
+        <a name="M000182"></a>
+
+        <div class="method-heading">
+          <a href="#M000182" class="method-signature">
+          <span class="method-name">memstats</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+memstats scans all objects in memory and produces a report
+</p>
+<dl>
+<dt><tt>return</tt></dt><dd>a string
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000182-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000182-source">
+<pre>
+     <span class="ruby-comment cmt"># File tmud.rb, line 121</span>
+121:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">memstats</span>
+122:     <span class="ruby-comment cmt"># initialize all counters</span>
+123:     <span class="ruby-identifier">rooms</span> = <span class="ruby-identifier">objs</span> = <span class="ruby-identifier">players</span> = <span class="ruby-identifier">strcount</span> = <span class="ruby-identifier">strsize</span> = <span class="ruby-identifier">ocount</span> = <span class="ruby-value">0</span>
+124: 
+125:     <span class="ruby-comment cmt"># scan the ObjectSpace counting things</span>
+126:     <span class="ruby-constant">ObjectSpace</span>.<span class="ruby-identifier">each_object</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+127:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">x</span>
+128:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+129:         <span class="ruby-identifier">strcount</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+130:         <span class="ruby-identifier">strsize</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">size</span>
+131:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Player</span>
+132:         <span class="ruby-identifier">players</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+133:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Room</span>
+134:         <span class="ruby-identifier">rooms</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+135:       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">GameObject</span>
+136:         <span class="ruby-identifier">objs</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+137:       <span class="ruby-keyword kw">else</span>
+138:         <span class="ruby-identifier">ocount</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+139:       <span class="ruby-keyword kw">end</span>
+140:     <span class="ruby-keyword kw">end</span>
+141: 
+142:     <span class="ruby-comment cmt"># our report  :</span>
+143:     <span class="ruby-comment cmt"># :NOTE: sprintf would be better</span>
+144:     <span class="ruby-identifier">memstats</span>=<span class="ruby-value str">&quot;[COLOR=cyan]\n----* Memory Statistics *----\n  Rooms   - \#{rooms}\n  Players - \#{players}\n  Objects - \#{objs}\n-----------------------------\n  Strings - \#{strcount}\n     size - \#{strsize} bytes\n  Other   - \#{ocount}\n-----------------------------\n  Total Objects - \#{rooms+objs+players+strcount+ocount}\n----*                   *----\n[/COLOR]\n&quot;</span>
+145:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000181" class="method-detail">
+        <a name="M000181"></a>
+
+        <div class="method-heading">
+          <a href="#M000181" class="method-signature">
+          <span class="method-name">players_connected</span><span class="method-args">(exempt=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Finds all connected players
+</p>
+<dl>
+<dt><tt>exempt</tt></dt><dd>The id of a player to be exempt from the returned array.
+
+</dd>
+<dt><tt>return</tt></dt><dd>An array of connected players
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000181-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000181-source">
+<pre>
+     <span class="ruby-comment cmt"># File tmud.rb, line 111</span>
+111:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">players_connected</span>(<span class="ruby-identifier">exempt</span>=<span class="ruby-keyword kw">nil</span>)
+112:     <span class="ruby-identifier">ary</span> = []
+113:     <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>
+114:        <span class="ruby-identifier">ary</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">o</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Player</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">session</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">exempt</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">id</span>
+115:     <span class="ruby-keyword kw">end</span>
+116:     <span class="ruby-identifier">ary</span>
+117:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

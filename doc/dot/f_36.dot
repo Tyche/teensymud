@@ -3,28 +3,28 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/event/hamster.rb"
+    label = "lib/db/dbmstore.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    Hamster [
+    DbmStore [
         fontcolor = black,
-        URL = "classes/Hamster.html",
+        URL = "classes/DbmStore.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Hamster"
+        label = "DbmStore"
     ]
 
-    Thread [
-        URL = "classes/Thread.html",
-        label = "Thread"
+    Store [
+        URL = "classes/Store.html",
+        label = "Store"
     ]
 
-    Thread -> Hamster [
+    Store -> DbmStore [
 
     ]
 

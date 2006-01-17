@@ -81,7 +81,7 @@
       <map id="map" name="map">
   <area shape="RECT" coords="15,17,89,65"      href="Command.html" alt="Command">
 </map>
-<img src="../dot/f_5.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_7.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -99,8 +99,9 @@ command
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000058">load</a>&nbsp;&nbsp;
-      <a href="#M000057">new</a>&nbsp;&nbsp;
+      <a href="#M000107">load</a>&nbsp;&nbsp;
+      <a href="#M000106">new</a>&nbsp;&nbsp;
+      <a href="#M000108">options</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -145,12 +146,12 @@ command
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000058" class="method-detail">
-        <a name="M000058"></a>
+      <div id="method-M000107" class="method-detail">
+        <a name="M000107"></a>
 
         <div class="method-heading">
-          <a href="#M000058" class="method-signature">
-          <span class="method-name">load</span><span class="method-args">(fname,forclass,mname)</span>
+          <a href="#M000107" class="method-signature">
+          <span class="method-name">load</span><span class="method-args">()</span>
           </a>
         </div>
       
@@ -158,7 +159,7 @@ command
           <p>
 load builds a command lookup trie from the commands listed in a yaml config
 file and in the and then defines/redefines them on the <a
-href="Player.html">Player</a> class.
+href="GameObject.html">GameObject</a> classes.
 </p>
 <dl>
 <dt><tt>return</tt></dt><dd>A trie of commands (see <a href="TernaryTrie.html">TernaryTrie</a> class)
@@ -166,33 +167,58 @@ href="Player.html">Player</a> class.
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000058-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000058-source">
+            onclick="toggleCode('M000107-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000107-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/command.rb, line 31</span>
-31:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">fname</span>,<span class="ruby-identifier">forclass</span>,<span class="ruby-identifier">mname</span>)
-32:     <span class="ruby-identifier">cmds</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load_file</span>(<span class="ruby-value str">&quot;cmd/&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">fname</span>)
-33:     <span class="ruby-identifier">cmdtable</span> = <span class="ruby-constant">TernaryTrie</span>.<span class="ruby-identifier">new</span>
-34:     <span class="ruby-identifier">cmds</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
-35:       <span class="ruby-constant">Kernel</span><span class="ruby-operator">::</span><span class="ruby-identifier">load</span>(<span class="ruby-value str">&quot;cmd/&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">cmd</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;.rb&quot;</span>)
-36:       <span class="ruby-identifier">cmdtable</span>.<span class="ruby-identifier">insert</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">c</span>)
-37:     <span class="ruby-keyword kw">end</span>
-38:     <span class="ruby-identifier">forclass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:include</span>,<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">mname</span>))
-39:     <span class="ruby-identifier">cmdtable</span>
-40:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-41:     <span class="ruby-identifier">puts</span> <span class="ruby-identifier">$!</span>
-42:     <span class="ruby-identifier">puts</span> <span class="ruby-identifier">$@</span>
-43:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/command.rb, line 35</span>
+35:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load</span>
+36:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Loading commands...&quot;</span>
+37: 
+38:     <span class="ruby-comment cmt"># first load the commands for objects</span>
+39:     <span class="ruby-identifier">ocmdtable</span> = <span class="ruby-constant">TernaryTrie</span>.<span class="ruby-identifier">new</span>
+40:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value str">'object_interface'</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-value str">'object_interface'</span>].<span class="ruby-identifier">empty?</span>
+41:       <span class="ruby-identifier">options</span>[<span class="ruby-value str">'object_interface'</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+42:         <span class="ruby-identifier">cmds</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load_file</span>(<span class="ruby-node">&quot;cmd/#{i}.yaml&quot;</span>)
+43:         <span class="ruby-identifier">cmds</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+44:           <span class="ruby-constant">Kernel</span><span class="ruby-operator">::</span><span class="ruby-identifier">load</span>(<span class="ruby-node">&quot;cmd/#{i}/#{c.cmd}.rb&quot;</span>)
+45:           <span class="ruby-identifier">ocmdtable</span>.<span class="ruby-identifier">insert</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">c</span>)
+46:         <span class="ruby-keyword kw">end</span>
+47:         <span class="ruby-constant">GameObject</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:include</span>,<span class="ruby-constant">ObjCmd</span>)
+48:       <span class="ruby-keyword kw">end</span>
+49:     <span class="ruby-keyword kw">else</span>
+50:       <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">warn</span> <span class="ruby-value str">&quot;No command interfaces for GameObject&quot;</span>
+51:     <span class="ruby-keyword kw">end</span>
+52: 
+53:     <span class="ruby-comment cmt"># now load the commands for players</span>
+54:     <span class="ruby-identifier">cmdtable</span> = <span class="ruby-constant">TernaryTrie</span>.<span class="ruby-identifier">new</span>
+55:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value str">'player_interface'</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-value str">'player_interface'</span>].<span class="ruby-identifier">empty?</span>
+56:       <span class="ruby-identifier">options</span>[<span class="ruby-value str">'player_interface'</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+57:         <span class="ruby-identifier">cmds</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load_file</span>(<span class="ruby-node">&quot;cmd/#{i}.yaml&quot;</span>)
+58:         <span class="ruby-identifier">cmds</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+59:           <span class="ruby-constant">Kernel</span><span class="ruby-operator">::</span><span class="ruby-identifier">load</span>(<span class="ruby-node">&quot;cmd/#{i}/#{c.cmd}.rb&quot;</span>)
+60:           <span class="ruby-identifier">cmdtable</span>.<span class="ruby-identifier">insert</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">c</span>)
+61:         <span class="ruby-keyword kw">end</span>
+62:         <span class="ruby-constant">Player</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:include</span>,<span class="ruby-constant">Cmd</span>)
+63:       <span class="ruby-keyword kw">end</span>
+64:     <span class="ruby-keyword kw">else</span>
+65:       <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;No command interfaces for Player&quot;</span>
+66:     <span class="ruby-keyword kw">end</span>
+67: 
+68:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">info</span> <span class="ruby-value str">&quot;Done.&quot;</span>
+69:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">cmdtable</span>, <span class="ruby-identifier">ocmdtable</span>
+70:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+71:     <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+72:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000057" class="method-detail">
-        <a name="M000057"></a>
+      <div id="method-M000106" class="method-detail">
+        <a name="M000106"></a>
 
         <div class="method-heading">
-          <a href="#M000057" class="method-signature">
+          <a href="#M000106" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(cmd, name, help)</span>
           </a>
         </div>
@@ -202,13 +228,39 @@ href="Player.html">Player</a> class.
 Create a command
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000057-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000057-source">
+            onclick="toggleCode('M000106-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000106-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/command.rb, line 23</span>
-23:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">cmd</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">help</span>)
-24:     <span class="ruby-ivar">@cmd</span>,<span class="ruby-ivar">@name</span>,<span class="ruby-ivar">@help</span>=<span class="ruby-identifier">cmd</span>,<span class="ruby-identifier">name</span>,<span class="ruby-identifier">help</span>
-25:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/command.rb, line 27</span>
+27:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">cmd</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">help</span>)
+28:     <span class="ruby-ivar">@cmd</span>,<span class="ruby-ivar">@name</span>,<span class="ruby-ivar">@help</span>=<span class="ruby-identifier">cmd</span>,<span class="ruby-identifier">name</span>,<span class="ruby-identifier">help</span>
+29:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000108" class="method-detail">
+        <a name="M000108"></a>
+
+        <div class="method-heading">
+          <a href="#M000108" class="method-signature">
+          <span class="method-name">options</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+We need options at class level
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000108-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000108-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/command.rb, line 75</span>
+75:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">options</span>
+76:     <span class="ruby-constant">Configuration</span>.<span class="ruby-identifier">instance</span>.<span class="ruby-identifier">options</span>
+77:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

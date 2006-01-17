@@ -84,7 +84,7 @@
   <area shape="RECT" coords="24,113,101,161"      href="Connector.html" alt="Connector">
   <area shape="RECT" coords="27,17,99,65"      href="Session.html" alt="Session">
 </map>
-<img src="../dot/f_10.gif" usemap="#map" border=0 alt="TopLevel">
+<img src="../dot/f_15.gif" usemap="#map" border=0 alt="TopLevel">
     </div>
 
     <div id="description">
@@ -102,9 +102,9 @@ connections
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000098">handle_close</a>&nbsp;&nbsp;
-      <a href="#M000097">init</a>&nbsp;&nbsp;
-      <a href="#M000096">new</a>&nbsp;&nbsp;
+      <a href="#M000145">handle_close</a>&nbsp;&nbsp;
+      <a href="#M000144">init</a>&nbsp;&nbsp;
+      <a href="#M000143">new</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -126,12 +126,12 @@ connections
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000096" class="method-detail">
-        <a name="M000096"></a>
+      <div id="method-M000143" class="method-detail">
+        <a name="M000143"></a>
 
         <div class="method-heading">
-          <a href="#M000096" class="method-signature">
-          <span class="method-name">new</span><span class="method-args">(server, port, opts, address)</span>
+          <a href="#M000143" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(server, address)</span>
           </a>
         </div>
       
@@ -143,9 +143,6 @@ Create a new <a href="Connector.html">Connector</a> object
 <dt><tt>server</tt></dt><dd>The reactor this <a href="Connector.html">Connector</a> is associated with.
 
 </dd>
-<dt><tt>port</tt></dt><dd>The port this <a href="Connector.html">Connector</a> will listen on.
-
-</dd>
 <dt><tt>address</tt></dt><dd>The address to connect to.
 
 </dd>
@@ -154,16 +151,14 @@ Create a new <a href="Connector.html">Connector</a> object
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000096-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000096-source">
+            onclick="toggleCode('M000143-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000143-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/net/connector.rb, line 28</span>
-28:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">port</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-identifier">address</span>)
-29:     <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>
-30:     <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">opts</span>
-31:     <span class="ruby-ivar">@address</span> = <span class="ruby-identifier">address</span>
-32:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">server</span>)
-33:   <span class="ruby-keyword kw">end</span>
+28:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">server</span>, <span class="ruby-identifier">address</span>)
+29:     <span class="ruby-ivar">@address</span> = <span class="ruby-identifier">address</span>
+30:     <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">server</span>)
+31:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
@@ -171,41 +166,41 @@ Create a new <a href="Connector.html">Connector</a> object
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000098" class="method-detail">
-        <a name="M000098"></a>
+      <div id="method-M000145" class="method-detail">
+        <a name="M000145"></a>
 
         <div class="method-heading">
-          <a href="#M000098" class="method-signature">
+          <a href="#M000145" class="method-signature">
           <span class="method-name">handle_close</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-<a href="Connector.html#M000098">handle_close</a> is called when a close
+<a href="Connector.html#M000145">handle_close</a> is called when a close
 event occurs for this <a href="Connector.html">Connector</a>.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000098-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000098-source">
+            onclick="toggleCode('M000145-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000145-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net/connector.rb, line 60</span>
-60:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
-61:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">close</span>
-62:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-63:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Connector#handle_close&quot;</span>
-64:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-65:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net/connector.rb, line 58</span>
+58:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_close</span>
+59:     <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">close</span>
+60:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+61:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Connector#handle_close&quot;</span>
+62:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+63:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000097" class="method-detail">
-        <a name="M000097"></a>
+      <div id="method-M000144" class="method-detail">
+        <a name="M000144"></a>
 
         <div class="method-heading">
-          <a href="#M000097" class="method-signature">
+          <a href="#M000144" class="method-signature">
           <span class="method-name">init</span><span class="method-args">()</span>
           </a>
         </div>
@@ -220,31 +215,31 @@ init is called before using the <a href="Connector.html">Connector</a>
 </dd>
 </dl>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000097-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000097-source">
+            onclick="toggleCode('M000144-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000144-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/net/connector.rb, line 37</span>
-37:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>
-38:     <span class="ruby-comment cmt"># Open a socket for the server to connect on.</span>
-39:     <span class="ruby-ivar">@sock</span> = <span class="ruby-constant">TCPSocket</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@address</span> , <span class="ruby-ivar">@port</span>)
-40:     <span class="ruby-comment cmt">#@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)</span>
-41:     <span class="ruby-comment cmt">#@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_LINGER, 0)</span>
-42:     <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">RUBY_PLATFORM</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/win32/</span>
-43:       <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">fcntl</span>(<span class="ruby-constant">Fcntl</span><span class="ruby-operator">::</span><span class="ruby-constant">F_SETFL</span>, <span class="ruby-constant">Fcntl</span><span class="ruby-operator">::</span><span class="ruby-constant">O_NONBLOCK</span>)
-44:     <span class="ruby-keyword kw">end</span>
-45:     <span class="ruby-identifier">c</span> = <span class="ruby-constant">Connection</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@server</span>, <span class="ruby-ivar">@sock</span>, <span class="ruby-ivar">@opts</span>)
-46:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">init</span>
-47:       <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{c.object_id}) Connection made.&quot;</span>
-48:       <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">c</span>)
-49:       <span class="ruby-keyword kw">true</span>
-50:     <span class="ruby-keyword kw">else</span>
-51:       <span class="ruby-keyword kw">false</span>
-52:     <span class="ruby-keyword kw">end</span>
-53:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
-54:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Connector#init&quot;</span>
-55:     <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
-56:     <span class="ruby-keyword kw">false</span>
-57:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/net/connector.rb, line 35</span>
+35:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>
+36:     <span class="ruby-comment cmt"># Open a socket for the server to connect on.</span>
+37:     <span class="ruby-ivar">@sock</span> = <span class="ruby-constant">TCPSocket</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@address</span> , <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">port</span>)
+38:     <span class="ruby-comment cmt">#@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)</span>
+39:     <span class="ruby-comment cmt">#@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_LINGER, 0)</span>
+40:     <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">RUBY_PLATFORM</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/win32/</span>
+41:       <span class="ruby-ivar">@sock</span>.<span class="ruby-identifier">fcntl</span>(<span class="ruby-constant">Fcntl</span><span class="ruby-operator">::</span><span class="ruby-constant">F_SETFL</span>, <span class="ruby-constant">Fcntl</span><span class="ruby-operator">::</span><span class="ruby-constant">O_NONBLOCK</span>)
+42:     <span class="ruby-keyword kw">end</span>
+43:     <span class="ruby-identifier">c</span> = <span class="ruby-constant">Connection</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@server</span>, <span class="ruby-ivar">@sock</span>)
+44:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">init</span>
+45:       <span class="ruby-identifier">log</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;(#{c.object_id}) Connection made.&quot;</span>
+46:       <span class="ruby-identifier">publish</span>(<span class="ruby-identifier">c</span>)
+47:       <span class="ruby-keyword kw">true</span>
+48:     <span class="ruby-keyword kw">else</span>
+49:       <span class="ruby-keyword kw">false</span>
+50:     <span class="ruby-keyword kw">end</span>
+51:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+52:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-value str">&quot;Connector#init&quot;</span>
+53:     <span class="ruby-identifier">log</span>.<span class="ruby-identifier">error</span> <span class="ruby-identifier">$!</span>
+54:     <span class="ruby-keyword kw">false</span>
+55:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
