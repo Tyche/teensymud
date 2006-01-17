@@ -10,14 +10,14 @@ digraph TopLevel {
         color = black
     ]
 
-    subgraph cluster_Cmd {
+    subgraph cluster_VT100Codes {
         fillcolor = palegreen1
-        URL = "classes/Cmd.html"
+        URL = "classes/VT100Codes.html"
         fontname = Arial
         color = blue
-        label = "Cmd"
+        label = "VT100Codes"
         style = filled
-        Cmd [
+        VT100Codes [
             shape = plaintext,
             height = 0.01,
             width = 0.75,

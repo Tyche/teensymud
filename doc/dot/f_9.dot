@@ -3,20 +3,20 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/log.rb"
+    label = "lib/configuration.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    Log [
+    Configuration [
         fontcolor = black,
-        URL = "classes/Log.html",
+        URL = "classes/Configuration.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Log"
+        label = "Configuration"
     ]
 
     Module [
@@ -34,17 +34,7 @@ digraph TopLevel {
         label = "Singleton"
     ]
 
-    Singleton -> Log [
-
-    ]
-
-    Log4r [
-        URL = "classes/Log4r.html",
-        shape = box,
-        label = "Log4r"
-    ]
-
-    Log4r -> Log [
+    Singleton -> Configuration [
 
     ]
 

@@ -10,14 +10,14 @@ digraph TopLevel {
         color = black
     ]
 
-    subgraph cluster_TelnetCodes {
+    subgraph cluster_ASCIICodes {
         fillcolor = palegreen1
-        URL = "classes/TelnetCodes.html"
+        URL = "classes/ASCIICodes.html"
         fontname = Arial
         color = blue
-        label = "TelnetCodes"
+        label = "ASCIICodes"
         style = filled
-        TelnetCodes [
+        ASCIICodes [
             shape = plaintext,
             height = 0.01,
             width = 0.75,

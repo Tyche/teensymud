@@ -3,29 +3,38 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/db/dbmstore.rb"
+    label = "lib/db/cache.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    DbmStore [
+    CacheStats [
         fontcolor = black,
-        URL = "classes/DbmStore.html",
+        URL = "classes/CacheStats.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "DbmStore"
+        label = "CacheStats"
     ]
 
-    Store [
-        URL = "classes/Store.html",
-        label = "Store"
+    CacheManager [
+        fontcolor = black,
+        URL = "classes/CacheManager.html",
+        shape = ellipse,
+        color = palegoldenrod,
+        style = filled,
+        label = "CacheManager"
     ]
 
-    Store -> DbmStore [
-
+    CacheEntry [
+        fontcolor = black,
+        URL = "classes/CacheEntry.html",
+        shape = ellipse,
+        color = palegoldenrod,
+        style = filled,
+        label = "CacheEntry"
     ]
 
 }

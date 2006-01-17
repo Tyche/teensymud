@@ -132,7 +132,7 @@ class CacheManager
       @cache[i].each_with_index do |ce,j|
         next if ce.dead?
         str << "cache map [#{i}][#{j}] => "
-        str << "oid #{ce.oid} object_id #{ce.obj.object_id} dirty? #{ce.dirty?}\n"
+        str << "oid #{ce.oid} object_id #{ce.obj.object_id} dirty? #{ce.dirty?}  noswap? #{ce.noswap?}\n"
       end
     end
     str

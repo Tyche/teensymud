@@ -3,20 +3,30 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/net/sockio.rb"
+    label = "lib/net/session.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    SockIO [
+    Session [
         fontcolor = black,
-        URL = "classes/SockIO.html",
+        URL = "classes/Session.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "SockIO"
+        label = "Session"
+    ]
+
+    Publisher [
+        URL = "classes/Publisher.html",
+        shape = box,
+        label = "Publisher"
+    ]
+
+    Publisher -> Session [
+
     ]
 
 }
