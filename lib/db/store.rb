@@ -99,6 +99,18 @@ class Store
   def each
   end
 
+  # Marks an object nonswappable
+  # [+oid+] is the object id
+  # [+return+] true or false
+  def makenoswap(oid)
+  end
+
+  # Marks an object swappable
+  # [+oid+] is the object id
+  # [+return+] true or false
+  def makeswap(oid)
+  end
+
   # produces a statistical report of the database
   # [+return+] a string containing the report
   def stats
