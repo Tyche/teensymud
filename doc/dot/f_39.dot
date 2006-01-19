@@ -3,28 +3,38 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/db/gdbmstore.rb"
+    label = "lib/db/player.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    GdbmStore [
+    Player [
         fontcolor = black,
-        URL = "classes/GdbmStore.html",
+        URL = "classes/Player.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "GdbmStore"
+        label = "Player"
     ]
 
-    Store [
-        URL = "classes/Store.html",
-        label = "Store"
+    Publisher [
+        URL = "classes/Publisher.html",
+        shape = box,
+        label = "Publisher"
     ]
 
-    Store -> GdbmStore [
+    Publisher -> Player [
+
+    ]
+
+    GameObject [
+        URL = "classes/GameObject.html",
+        label = "GameObject"
+    ]
+
+    GameObject -> Player [
 
     ]
 

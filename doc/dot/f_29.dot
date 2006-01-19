@@ -3,20 +3,20 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/protocol/filter.rb"
+    label = "lib/protocol/protocolstack.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    Filter [
+    ProtocolStack [
         fontcolor = black,
-        URL = "classes/Filter.html",
+        URL = "classes/ProtocolStack.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "Filter"
+        label = "ProtocolStack"
     ]
 
 }

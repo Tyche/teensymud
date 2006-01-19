@@ -3,20 +3,29 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/event/eventmanager.rb"
+    label = "lib/event/hamster.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    EventManager [
+    Hamster [
         fontcolor = black,
-        URL = "classes/EventManager.html",
+        URL = "classes/Hamster.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "EventManager"
+        label = "Hamster"
+    ]
+
+    Thread [
+        URL = "classes/Thread.html",
+        label = "Thread"
+    ]
+
+    Thread -> Hamster [
+
     ]
 
 }

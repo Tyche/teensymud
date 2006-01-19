@@ -3,7 +3,7 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "cmd/cmd_say.rb"
+    label = "cmd/teensy/cmd_dumpcache.rb"
     node [
         fontname = Arial,
         fontsize = 8,

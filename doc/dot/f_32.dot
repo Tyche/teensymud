@@ -3,20 +3,20 @@ digraph TopLevel {
     bgcolor = lightcyan1
     fontname = Arial
     fontsize = 8
-    label = "lib/protocol/telnetfilter.rb"
+    label = "lib/protocol/terminalfilter.rb"
     node [
         fontname = Arial,
         fontsize = 8,
         color = black
     ]
 
-    TelnetFilter [
+    TerminalFilter [
         fontcolor = black,
-        URL = "classes/TelnetFilter.html",
+        URL = "classes/TerminalFilter.html",
         shape = ellipse,
         color = palegoldenrod,
         style = filled,
-        label = "TelnetFilter"
+        label = "TerminalFilter"
     ]
 
     ASCIICodes [
@@ -25,17 +25,17 @@ digraph TopLevel {
         label = "ASCIICodes"
     ]
 
-    ASCIICodes -> TelnetFilter [
+    ASCIICodes -> TerminalFilter [
 
     ]
 
-    TelnetCodes [
-        URL = "classes/TelnetCodes.html",
+    VT100Codes [
+        URL = "classes/VT100Codes.html",
         shape = box,
-        label = "TelnetCodes"
+        label = "VT100Codes"
     ]
 
-    TelnetCodes -> TelnetFilter [
+    VT100Codes -> TerminalFilter [
 
     ]
 
@@ -44,7 +44,7 @@ digraph TopLevel {
         label = "Filter"
     ]
 
-    Filter -> TelnetFilter [
+    Filter -> TerminalFilter [
 
     ]
 

@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../files/cmd/ocmd_echoat_rb.html">
-                cmd/ocmd_echoat.rb
+                <a href="../files/cmd/objects/ocmd_echoat_rb.html">
+                cmd/objects/ocmd_echoat.rb
                 </a>
         <br />
             </td>
@@ -75,7 +75,7 @@
       <map id="map" name="map">
   <area shape="RECT" coords="17,17,111,61"      href="ObjCmd.html" alt="ObjCmd">
 </map>
-<img src="../dot/m_58_0.gif" usemap="#map" border=0 alt="Module: ObjCmd">
+<img src="../dot/m_49_0.gif" usemap="#map" border=0 alt="Module: ObjCmd">
     </div>
 
     <div id="description">
@@ -110,7 +110,7 @@ for additional information.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000181">ocmd_echoat</a>&nbsp;&nbsp;
+      <a href="#M000280">ocmd_echoat</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -132,11 +132,11 @@ for additional information.
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000181" class="method-detail">
-        <a name="M000181"></a>
+      <div id="method-M000280" class="method-detail">
+        <a name="M000280"></a>
 
         <div class="method-heading">
-          <a href="#M000181" class="method-signature">
+          <a href="#M000280" class="method-signature">
           <span class="method-name">ocmd_echoat</span><span class="method-args">(args)</span>
           </a>
         </div>
@@ -146,17 +146,17 @@ for additional information.
 This command echos input to location
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000181-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000181-source">
+            onclick="toggleCode('M000280-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000280-source">
 <pre>
-    <span class="ruby-comment cmt"># File cmd/ocmd_echoat.rb, line 16</span>
+    <span class="ruby-comment cmt"># File cmd/objects/ocmd_echoat.rb, line 16</span>
 16:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ocmd_echoat</span>(<span class="ruby-identifier">args</span>)
 17:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>
 18:     <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>, <span class="ruby-value str">&quot;&quot;</span>
 19:       <span class="ruby-keyword kw">false</span>
 20:     <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/(\d+) (.*)/</span>
-21:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_i</span>).<span class="ruby-identifier">players</span>(<span class="ruby-ivar">@oid</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
-22:         <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">eventmgr</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-ivar">@oid</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">oid</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-identifier">$2</span>)
+21:       <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">db</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_i</span>).<span class="ruby-identifier">players</span>(<span class="ruby-identifier">id</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+22:         <span class="ruby-identifier">$engine</span>.<span class="ruby-identifier">world</span>.<span class="ruby-identifier">eventmgr</span>.<span class="ruby-identifier">add_event</span>(<span class="ruby-identifier">id</span>,<span class="ruby-identifier">p</span>.<span class="ruby-identifier">id</span>,<span class="ruby-identifier">:show</span>,<span class="ruby-identifier">$2</span>)
 23:       <span class="ruby-keyword kw">end</span>
 24:       <span class="ruby-keyword kw">true</span>
 25:     <span class="ruby-keyword kw">else</span>
