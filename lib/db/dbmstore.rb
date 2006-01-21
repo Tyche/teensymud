@@ -95,21 +95,21 @@ class DbmStore < Store
 
   # Marks an object dirty
   # [+oid+] is the id to use in the search.
-  # [+return+] true or false
+  # [+return+] undefined
   def mark(oid)
     @cache.mark(oid)
   end
 
   # Marks an object nonswappable
   # [+oid+] is the object id
-  # [+return+] true or false
+  # [+return+] undefined
   def makenoswap(oid)
     @cache.makenoswap(oid)
   end
 
   # Marks an object swappable
   # [+oid+] is the object id
-  # [+return+] true or false
+  # [+return+] undefined
   def makeswap(oid)
     @cache.makeswap(oid)
   end

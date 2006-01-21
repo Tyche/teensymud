@@ -14,10 +14,18 @@
 # The minimal database will be used in the absence of detecting one.
 MINIMAL_DB=<<EOH
 ---
+- !ruby/object:World
+  props:
+    :owner: 0
+    :id: 0
+    :desc: "This is the World object."
+    :name: World
+    :connected_players: []
+    :all_players: []
+    :timer_list: []
 - !ruby/object:Room
   props:
     :location:
-    :powered: false
     :owner: 0
     :id: 1
     :desc: "This is home."
@@ -78,7 +86,7 @@ class Store
 
   # Marks an object dirty
   # [+oid+] is the id to use in the search.
-  # [+return+] true or false
+  # [+return+] undefined
   def mark(oid)
   end
 
@@ -101,13 +109,13 @@ class Store
 
   # Marks an object nonswappable
   # [+oid+] is the object id
-  # [+return+] true or false
+  # [+return+] undefined
   def makenoswap(oid)
   end
 
   # Marks an object swappable
   # [+oid+] is the object id
-  # [+return+] true or false
+  # [+return+] undefined
   def makeswap(oid)
   end
 
