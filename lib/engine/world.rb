@@ -19,13 +19,14 @@ require 'engine/timer'
 
 # The World class is the mother of all worlds.
 #
-# It contains the database and all manner of utility functions. It's a
-# big global thing.
+# It contains world state information, the world timer, utility functions,
+# and delegates to the Engine.
 #
-# [+db+] is a handle to the database.
-# [+cmds+] is a handle to the commands table (a ternary trie).
-# [+tits+] is a handle to the tits event queue (an array).
-# [+options+] is a handle to the configuration options structure.
+# [+cmds+] is a handle to the player commands table.
+# [+ocmds+] is a handle to the object commands table.
+# [+timer_list+] is a list of all installed timer objects (persistent)
+# [+all_players+] is a list of all players (persistent)
+# [+timer_list+] is a list of all connected players
 class World < Root
   configuration
   logger 'DEBUG'

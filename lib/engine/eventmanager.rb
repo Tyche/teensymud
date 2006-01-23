@@ -11,7 +11,7 @@
 # See LICENSE file for additional information.
 #
 
-require 'event/event'
+require 'engine/event'
 
 class EventManager
 
