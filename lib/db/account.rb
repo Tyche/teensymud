@@ -84,7 +84,10 @@ class Account
         case @state
         when :name
           @login_name = msg
-          @player = $engine.world.find_player_by_name(@login_name)
+          @player = Engine.instance.world.all_players.find {|pid|
+            @login_name == Engine.instance.db.get(pid).name
+          }
+          @player = Engine.instance.db.get(@player)
           prompt("password> ")
           @conn.set(:hide, true)
           @state = :password
@@ -120,8 +123,9 @@ class Account
               @state = :name
               prompt("login> ")
             else
-              $engine.world.db.put(@player)
-              $engine.world.db.get(options['home'] || 1).add_contents(@player.id)
+              Engine.instance.db.put(@player)
+              Engine.instance.db.get(options['home'] || 1).add_contents(@player.id)
+              Engine.instance.world.all_players << @player.id
               login
             end
           else
@@ -144,7 +148,8 @@ private
   # Called on successful login
   def login
     # make the player non-swappable so we dont lose session
-    $engine.world.db.makenoswap(@player.id)
+    Engine.instance.db.makenoswap(@player.id)
+    Engine.instance.world.connected_players << @player.id
     @conn.set(:color, @player.color)
 
     # Check if this player already logged in
@@ -163,9 +168,11 @@ private
     @player.subscribe(@conn)
 
     @player.sendto("\nWelcome #{@login_name}@#{@conn.query(:host)}!")
-    $engine.world.players_connected(@player.id).each {|p|
-      $engine.world.eventmgr.add_event(@player.id,p.id,:show,"#{@player.name} has connected.")
-    }
+    Engine.instance.world.connected_players.each do |pid|
+      if pid != @player.id
+        Engine.instance.eventmgr.add_event(@player.id,pid,:show,"#{@player.name} has connected.")
+      end
+    end
 
 
     @player.parse('look')

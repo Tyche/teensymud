@@ -18,8 +18,8 @@ module ObjCmd
     when nil, ""
       false
     when /(\d+) (.*)/
-      $engine.world.db.get($1.to_i).players(id).each do |p|
-        $engine.world.eventmgr.add_event(id,p.id,:show,$2)
+      get_object($1.to_i).players(id).each do |p|
+        add_event(id,p.id,:show,$2)
       end
       true
     else

@@ -312,7 +312,9 @@ class CacheManager
     end
   end
 
-  # deliberately mark an object in the cache as nonswappable
+  # Mark an object in the cache as nonswappable
+  # [+oid+] is the object id
+  # [+return+] undefined
   def makenoswap(oid)
     return nil if oid.nil?
     @st.inc(:cache_noswap)
@@ -330,7 +332,9 @@ class CacheManager
     log.debug "Marking object nonswappable before put - #{oid}"
   end
 
-  # deliberately mark an object in the cache as swappable
+  # Mark an object in the cache as swappable
+  # [+oid+] is the object id
+  # [+return+] undefined
   def makeswap(oid)
     return nil if oid.nil?
     @st.inc(:cache_swap)

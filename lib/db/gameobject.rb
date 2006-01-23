@@ -16,7 +16,7 @@ require 'db/root'
 # The GameObject class is no longer the mother of all objects.
 #
 class GameObject < Root
-  property :location, :powered, :contents, :farts
+  property :location, :contents, :farts
   logger 'DEBUG'
 
   # Create a new Object
@@ -29,7 +29,6 @@ class GameObject < Root
     self.location = location    # The location of this object or nil if none
     self.contents = []
     self.farts = {}
-    self.powered = false        # Flag if object is interested in timer events
   end
 
   # Add an object to the contents of this object
@@ -101,7 +100,7 @@ class GameObject < Root
   # [+return+] Handle to a array of the objects.
   def objects
     ary = contents.collect do |oid|
-      o = $engine.world.db.get(oid)
+      o = get_object(oid)
       o.class == GameObject ? o : nil
     end
     ary.compact
@@ -112,7 +111,7 @@ class GameObject < Root
   # [+return+] Handle to a list of the Player objects.
   def players(exempt=nil)
     ary = contents.collect do |oid|
-      o = $engine.world.db.get(oid)
+      o = get_object(oid)
       (o.class == Player && oid != exempt && o.session) ? o : nil
     end
     ary.compact
@@ -129,7 +128,7 @@ class GameObject < Root
     arg.strip! if arg
 
     # look for a command from our table for objects
-    c = $engine.world.ocmds.find(cmd)
+    c = world.ocmds.find(cmd)
 
     # there are three possibilities here
     case c.size
@@ -149,27 +148,27 @@ class GameObject < Root
     case e.kind
     when :describe
       msg = "[COLOR=yellow]A #{name} is here[/COLOR]"
-      $engine.world.eventmgr.add_event(id,e.from,:show,msg)
+      add_event(id,e.from,:show,msg)
       fart(e)
     when :get
-      plyr = $engine.world.db.get(e.from)
-      place = $engine.world.db.get(location)
+      plyr = get_object(e.from)
+      place = get_object(location)
       # remove it
       place.delete_contents(id)
       # add it
       plyr.add_contents(id)
       self.location = plyr.id
-      $engine.world.eventmgr.add_event(id,e.from,:show,"You get the #{name}")
+      add_event(id,e.from,:show,"You get the #{name}")
       fart(e)
     when :drop
-      plyr = $engine.world.db.get(e.from)
-      place = $engine.world.db.get(plyr.location)
+      plyr = get_object(e.from)
+      place = get_object(plyr.location)
       # remove it
       plyr.delete_contents(id)
       # add it
       place.add_contents(id)
       self.location = place.id
-      $engine.world.eventmgr.add_event(id,e.from,:show,"You drop the #{name}")
+      add_event(id,e.from,:show,"You drop the #{name}")
       fart(e)
     when :timer
       fart(e)

@@ -14,7 +14,7 @@ module Cmd
 
   # This reloads the commands
   def cmd_reload(args)
-    $engine.world.cmds, $engine.world.ocmds = Command.load
+    world.cmds, world.ocmds = Command.load
     sendto("Command table reloaded.")
   end
 

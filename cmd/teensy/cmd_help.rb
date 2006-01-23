@@ -17,11 +17,11 @@ module Cmd
     case args
     when nil, ""
       sendto("====================HELP=======================")
-      $engine.world.cmds.to_hash.values.each do |h|
+      world.cmds.to_hash.values.each do |h|
         sendto(sprintf("%-10s - %s", h.name, h.help))
       end
     else
-      q = $engine.world.cmds.find(args)
+      q = world.cmds.find(args)
       if q
         sendto("====================HELP=======================")
         q.each do |h|

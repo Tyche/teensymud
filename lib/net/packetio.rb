@@ -12,6 +12,7 @@
 #
 
 require 'net/sockio'
+require 'log'
 
 # The PacketIO class implements a mechanism to send and recv packets
 # delimited by a length prefix which is assumed to be a 4 bytes integer

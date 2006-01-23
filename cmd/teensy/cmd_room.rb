@@ -23,9 +23,9 @@ module Cmd
         sendto "System error: unable to create room."
         return
       end
-      $engine.world.db.put(d)
-      $engine.world.db.get(location).exits[$2]=d.id
-      d.exits[$3]=$engine.world.db.get(location).id
+      put_object(d)
+      get_object(location).exits[$2]=d.id
+      d.exits[$3] = get_object(location).id
       sendto("Ok.")
     else
       sendto("say what??")

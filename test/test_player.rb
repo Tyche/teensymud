@@ -31,7 +31,7 @@ class TestPlayer < Test::Unit::TestCase
 
   def test_ass
     k = [:describe,:describe,:show,:show,:get,:get,:get,
-      :drop,:drop,:drop,:timer,:timer,:timer,:foobar]
+      :drop,:drop,:drop,:timer,:timer,:foobar]
     m = FlexMock.new
     m.mock_handle(:kind) {k.shift}
     m.mock_handle(:from) {9}

@@ -14,7 +14,7 @@ module Cmd
 
   # The memory stats command
   def cmd_memstats(args)
-    sendto($engine.world.memstats)
+    sendto(world.memstats)
   end
 
 end

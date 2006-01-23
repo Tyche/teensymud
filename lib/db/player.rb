@@ -36,7 +36,6 @@ class Player < GameObject
     super(name, nil, options['home'] || 1)
     @session = session
     self.passwd = encrypt(passwd)
-    self.powered = true
 
     # session related - only color settable
     self.color = false
@@ -47,6 +46,10 @@ class Player < GameObject
   # [+return+] Undefined.
   def sendto(s)
     publish(s+"\n") if @session
+  end
+
+  def prompt
+    publish("[COLOR=red]@[COLOR=green]-,-[/COLOR]> ") if @session
   end
 
   # Receives messages from a Connection being observed and handles them
@@ -69,17 +72,19 @@ class Player < GameObject
     when :logged_out
       @session = nil
       unsubscribe_all
-      $engine.world.players_connected(id).each do |p|
-        $engine.world.eventmgr.add_event(id,p.id,:show,"#{name} has quit.")
+      world.connected_players.delete(id)
+      world.connected_players.each do |pid|
+        add_event(id,pid,:show,"#{name} has quit.")
       end
-      $engine.world.db.makeswap(id)
+      Engine.instance.db.makeswap(id)
     when :disconnected
       @session = nil
       unsubscribe_all
-      $engine.world.players_connected(id).each do |p|
-        $engine.world.eventmgr.add_event(id,p.id,:show,"#{name} has disconnected.")
+      world.connected_players.delete(id)
+      world.connected_players.each do |pid|
+        add_event(id,pid,:show,"#{name} has disconnected.")
       end
-      $engine.world.db.makeswap(id)
+      Engine.instance.db.makeswap(id)
     when String
       parse(msg)
     else
@@ -114,7 +119,7 @@ class Player < GameObject
     end
 
     # look for a command in our spanking new table
-    c = $engine.world.cmds.find(cmd)
+    c = world.cmds.find(cmd)
 
 
     # add any exits to our command list
@@ -123,7 +128,7 @@ class Player < GameObject
     check.gsub!(/\#/,"\\#")
     check.gsub!(/\[/,"\\[")
     check.gsub!(/\]/,"\\]")
-    $engine.world.db.get(location).exits.keys.grep(/^#{check}/).each do |ex|
+    get_object(location).exits.keys.grep(/^#{check}/).each do |ex|
       c << Command.new(:cmd_go,"go #{ex}",nil)
       arg = ex
     end
@@ -143,6 +148,8 @@ class Player < GameObject
       end
       sendto(ln)
     end
+    # prompt after every command
+    #prompt
   end
 
   # Event handler
@@ -152,10 +159,15 @@ class Player < GameObject
     case e.kind
     when :describe
       msg = "[COLOR=cyan]#{name} is here.[/COLOR]"
-      $engine.world.eventmgr.add_event(id,e.from,:show,msg)
+      add_event(id,e.from,:show,msg)
       fart(e)
     when :show
       sendto(e.msg)
+      fart(e)
+    when :timer
+      if e.msg == :prompt
+        prompt
+      end
       fart(e)
     else
       super(e)

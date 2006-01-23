@@ -23,7 +23,7 @@ module Cmd
     when nil, ""
       sendto("What??")
     when /del\s+#(\d+)\s+(\w+)/
-      o = $engine.world.db.get($1.to_i)
+      o = get_object($1.to_i)
       case o
       when nil, 0
         sendto("No object.")
@@ -37,7 +37,7 @@ module Cmd
         end
       end
     when /add\s+#(\d+)\s+(\w+)\s+(\w+)/
-      o = $engine.world.db.get($1.to_i)
+      o = get_object($1.to_i)
       case o
       when nil, 0
         sendto("No object.")
@@ -47,7 +47,7 @@ module Cmd
         sendto("Object #" + $1 + " fart trigger added.")
       end
     when /show\s+#(\d+)/
-      o = $engine.world.db.get($1.to_i)
+      o = get_object($1.to_i)
       case o
       when nil, 0
         sendto("No object.")

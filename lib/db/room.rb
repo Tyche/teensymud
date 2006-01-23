@@ -37,7 +37,7 @@ class Room < GameObject
     case e.kind
     when :describe
       msg = "[COLOR=green](#{id.to_s}) #{name}[/COLOR]\n#{desc}\n"
-      $engine.world.eventmgr.add_event(id,e.from,:show,msg)
+      add_event(id,e.from,:show,msg)
       fart(e)
     when :describe_exits
       msg = "[COLOR=red]Exits:\n"
@@ -58,25 +58,25 @@ class Room < GameObject
         end
         msg << "[/COLOR]"
       end
-      $engine.world.eventmgr.add_event(id,e.from,:show,msg)
+      add_event(id,e.from,:show,msg)
       fart(e)
     when :leave
-      plyr = $engine.world.db.get(e.from)
+      plyr = get_object(e.from)
       players(e.from).each do |x|
-        $engine.world.eventmgr.add_event(id,x.id,:show, plyr.name + " has left #{e.msg}.") if x.session
+        add_event(id,x.id,:show, plyr.name + " has left #{e.msg}.") if x.session
       end
       # remove player
       delete_contents(plyr.id)
       plyr.location = nil
-      $engine.world.eventmgr.add_event(id,exits[e.msg],:arrive,plyr.id)
+      add_event(id,exits[e.msg],:arrive,plyr.id)
       fart(e)
     when :arrive
-      plyr = $engine.world.db.get(e.msg)
+      plyr = get_object(e.msg)
       # add player
       add_contents(plyr.id)
       plyr.location = id
       players(e.msg).each do |x|
-        $engine.world.eventmgr.add_event(id,x.id,:show, plyr.name+" has arrived.") if x.session
+        add_event(id,x.id,:show, plyr.name+" has arrived.") if x.session
       end
       plyr.parse('look')
       fart(e)

@@ -14,7 +14,7 @@ module Cmd
 
   # The database stats command
   def cmd_stats(args)
-    sendto($engine.world.db.stats)
+    sendto(Engine.instance.db.stats)
   end
 
 end

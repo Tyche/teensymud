@@ -96,7 +96,7 @@ class Reactor
     @acceptor.unsubscribe_all if @acceptor
     @connector.unsubscribe_all if @connector
     log.info "Reactor#shutdown: Reactor shutting down"
-    log.close
+#    log.close
   end
 
   # poll starts the Reactor running to process incoming connection, input and

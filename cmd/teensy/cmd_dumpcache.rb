@@ -14,7 +14,7 @@ module Cmd
 
   # Look command displays the contents of a room
   def cmd_dumpcache(args)
-    sendto($engine.world.db.inspect)
+    sendto(Engine.instance.db.inspect)
   end
 
 end

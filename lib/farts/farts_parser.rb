@@ -31,7 +31,7 @@ module Farts
 
   class Parser < Racc::Parser
 
-module_eval <<'..end lib/farts/farts_parser.y modeval..id6957b6c58f', 'lib/farts/farts_parser.y', 106
+module_eval <<'..end lib/farts/farts_parser.y modeval..id252424a6e4', 'lib/farts/farts_parser.y', 106
 
   def initialize
     @scope = {}
@@ -39,7 +39,7 @@ module_eval <<'..end lib/farts/farts_parser.y modeval..id6957b6c58f', 'lib/farts
 
   def parse( str )
     @sc = Farts::Lexer.new(str)
-    @yydebug = true if $DEBUG              
+    @yydebug = true if $DEBUG
     do_parse
   end
 
@@ -51,7 +51,7 @@ module_eval <<'..end lib/farts/farts_parser.y modeval..id6957b6c58f', 'lib/farts
     raise Racc::ParseError, "Error: #{@sc.lineno}:#{@sc.tokenpos} syntax error at '#{val}'"
   end
 
-..end lib/farts/farts_parser.y modeval..id6957b6c58f
+..end lib/farts/farts_parser.y modeval..id252424a6e4
 
 ##### racc 1.4.4 generates ###
 
@@ -791,13 +791,13 @@ module Farts
   class FartTrigger
     logger 'DEBUG'
     attr_accessor :fname, :event, :prog
-    
+
     def initialize(fname,event)
       @fname,@event = fname,event
-      @event = event.intern if event.respond_to?(to_str)
+      @event = event.intern if event.respond_to?(:to_str)
       @prog = nil
     end
-    
+
     def load
       str = ""
       File.open("farts/#{@fname}.fart") {|f|
@@ -815,17 +815,17 @@ module Farts
       @prog = nil
       false
     end
-    
+
     def execute(ev)
       retval = true
       vars = {}
-      vars['actor'] = $engine.world.db.get(ev.from)
-      vars['this'] = $engine.world.db.get(ev.to)
+      vars['actor'] = Engine.instance.db.get(ev.from)
+      vars['this'] = Engine.instance.db.get(ev.to)
       if ev.msg.kind_of?(GameObject)
-        vars['args'] = $engine.world.db.get(ev.msg)
+        vars['args'] = Engine.instance.db.get(ev.msg)
       else
         vars['args'] = ev.msg
-      end  
+      end
       load if !@prog
       retval = @prog.execute(vars) if @prog
     rescue WetFartsError
@@ -835,7 +835,7 @@ module Farts
     ensure
       retval
     end
-    
+
   end
 end
 
@@ -855,10 +855,10 @@ if $0 == __FILE__
     pp fart
     vars = { "actor" => "foo", "this" => "bar"}
     fart.execute(vars)
-    
+
   rescue Racc::ParseError, Exception
     log.error $!
-    exit 
+    exit
   end
 end
 

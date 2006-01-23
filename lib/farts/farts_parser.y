@@ -371,10 +371,10 @@ module Farts
     def execute(ev)
       retval = true
       vars = {}
-      vars['actor'] = $engine.world.db.get(ev.from)
-      vars['this'] = $engine.world.db.get(ev.to)
+      vars['actor'] = Engine.instance.db.get(ev.from)
+      vars['this'] = Engine.instance.db.get(ev.to)
       if ev.msg.kind_of?(GameObject)
-        vars['args'] = $engine.world.db.get(ev.msg)
+        vars['args'] = Engine.instance.db.get(ev.msg)
       else
         vars['args'] = ev.msg
       end  

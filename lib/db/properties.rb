@@ -20,18 +20,29 @@ class Module
 #
 # [+sym+] an arrays of symbols representing the attributes on the object.
   def property(*sym)
+    if Configuration.instance.options['props_are_accessors_only']
+      attr_accessor(*sym)
+=begin
+      class_eval <<-EOD
+        def id
+          @id ||= Engine.instance.db.getid
+        end
+      EOD
+=end
+      return
+    end
     sym.each do |s|
       class_eval <<-EOD
         def #{s}
           @props ||= {}
           if options['safe_read'] && !@props[:#{s}].kind_of?(Numeric)
-            $engine.world.db.mark(self.id)
+            Engine.instance.db.mark(self.id)
           end
           @props[:#{s}]
         end
         def #{s}=(val)
           @props ||= {}
-          $engine.world.db.mark(self.id)
+          Engine.instance.db.mark(self.id)
           @props[:#{s}] = val
         end
       EOD
@@ -42,66 +53,10 @@ class Module
       end
       def id
         @props ||= {}
-        @props[:id] ||= $engine.world.db.getid
+        @props[:id] ||= Engine.instance.db.getid
       end
     EOD
   end
 
 end
 
-if $0 == __FILE__
-  require 'pp'
-  require 'yaml'
-
-  class A
-   property :a, :b
-   property :p, :q, :r
-
-   def initialize
-     @x = "string"
-   end
-  end
-
-  a = A.new
-  pp a
-  a.a = 1
-  pp a
-  y a
-  a.id
-  pp a
-  y a
-
-  pp a.to_yaml
-
-  p a.to_yaml_properties.inspect
-
-  puts "================="
-  class B < A
-   property :a, :y, :z
-   def initialize
-     super
-   end
-   def stuff
-     puts @q.inspect
-   end
-  end
-
-  b = B.new
-  b.q ="heya"
-  b.id
-  b.y = {1=>"one", 2=>"two"}
-  pp b
-
-
-  y b
-  p b.to_yaml_properties.inspect
-
-  b.stuff
-
-  $db = []
-  $db << a
-  $db << b
-
-  File.open("proptest.yaml",'w'){|f|YAML::dump($db,f)}
-
-end

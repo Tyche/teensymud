@@ -1,5 +1,5 @@
 #
-# file::    event.rb
+# file::    timer.rb
 # author::  Jon A. Lambert
 # version:: 2.8.0
 # date::    01/19/2006
@@ -11,19 +11,31 @@
 # See LICENSE file for additional information.
 #
 
-# The Event class is a temporally immediate message that is to be propagated
-# to another object.
-class Event
-  attr_accessor :from, :to, :kind, :msg
+# The Timer class defines the necessary data to keep track of timers for
+# objects
+#
+class Timer
+  attr_accessor :id, :name, :time
 
-  # Constructor for an Event.
+  # Constructor for a Timer object.
   # [+from+]   The id of the issuer of the event.
   # [+to+]     The id of the target of the event.
   # [+kind+]   The symbol that defines the kind of event.
   # [+msg+]    Optional information needed to process the event.
   # [+return+] A reference to the Event.
-  def initialize(from,to,kind,msg=nil)
-    @from,@to,@kind,@msg=from,to,kind,msg
+  def initialize(id,name,time)
+    @id,@name,@time,@counter=id,name,time,time
   end
+
+  def fire?
+    @counter -= 1
+    @counter < 1
+  end
+
+  def reset
+    @counter = @time
+  end
+
 end
+
 

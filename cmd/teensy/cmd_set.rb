@@ -22,7 +22,7 @@ module Cmd
     when nil, ""
       sendto("What??")
     when /desc\s+#(\d+)\s+(.*)/
-      o = $engine.world.db.get($1.to_i)
+      o = get_object($1.to_i)
       case o
       when nil, 0
         sendto("No object.")
@@ -30,20 +30,26 @@ module Cmd
         o.desc = $2
         sendto("Object #" + $1 + " description set.")
       end
-    when /timer\s+#(\d+)\s+(on|off)/
-      o = $engine.world.db.get($1.to_i)
+    when /timer\s+#(\d+)\s+(on|off)\s+(.*)/
+      o = get_object($1.to_i)
       case o
-      when nil, 0
+      when nil
         sendto("No object.")
       else
         if $2 == 'on'
-          o.powered = true
-          $engine.world.hamster.register(o)
-          sendto("Object #" + $1 + " registered with timer.")
+          if $3 =~ /(\w+)\s+(\d+)/
+            world.set_timer(o.id, $1.to_sym, $2.to_i)
+            sendto("Object ##{o.id} registered with timer.")
+          else
+            sendto("Bad symbol or missing time")
+          end
         else
-          o.powered = false
-          $engine.world.hamster.unregister(o)
-          sendto("Object #" + $1 + " unregistered with timer.")
+          if $3 =~ /(\w+)/
+            world.unset_timer(o.id, $1.to_sym)
+            sendto("Object ##{o.id} unregistered with timer.")
+          else
+            sendto("Bad symbol")
+          end
         end
       end
     else

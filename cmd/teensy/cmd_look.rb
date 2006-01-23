@@ -14,15 +14,15 @@ module Cmd
 
   # Look command displays the contents of a room
   def cmd_look(args)
-    place = $engine.world.db.get(location)
-    $engine.world.eventmgr.add_event(id,location,:describe)
+    place = get_object(location)
+    add_event(id,location,:describe)
     place.objects.each do |x|
-      $engine.world.eventmgr.add_event(id,x.id,:describe)
+      add_event(id,x.id,:describe)
     end
     place.players(id).each do |x|
-      $engine.world.eventmgr.add_event(id,x.id,:describe)
+      add_event(id,x.id,:describe)
     end
-    $engine.world.eventmgr.add_event(id,location,:describe_exits)
+    add_event(id,location,:describe_exits)
   end
 
 end

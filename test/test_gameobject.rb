@@ -137,12 +137,5 @@ class TestGameObject < Test::Unit::TestCase
     assert(@o.players)
   end
 
-  def test_powered
-    assert_equal(false,@o.powered)
-  end
-
-  def test_powered_equals
-    assert_equal(true,@o.powered=true)
-  end
 end
 

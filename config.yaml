@@ -17,7 +17,7 @@ dbfile: db/world
 #
 # Valid values are: :yaml, :gdbm, :sdbm, :dbm
 #
-dbtype: :dbm
+dbtype: :yaml
 
 # Cache sizes for dbm type databases
 cache_width: 23
@@ -29,6 +29,9 @@ cache_depth: 7
 #
 # Ex. Player.name.capitalize! - uses read accessor but modifies receiver
 safe_read: true
+
+# This turns property into attr_accessor 
+props_are_accessors_only: false
 
 ###########################################################
 ### Network configuration section
@@ -110,7 +113,8 @@ object_interface:
 ### Utility configuration section
 ###########################################################
 
+# Where the server log resides
 logfile: logs/server.log
 
-
+     
 ###########################################################

@@ -11,6 +11,8 @@
 # See LICENSE file for additional information.
 #
 require 'log'
+require 'db/properties'
+require 'farts/farts_parser'
 
 # The Root class is the mother of all objects.
 #
@@ -37,8 +39,8 @@ class Root
   def clone
     newobj = Marshal.load(Marshal.dump(self))
     props = newobj.instance_variable_get(:@props)
-    props[:id] = $engine.world.db.getid
-    $engine.world.db.put(newobj)
+    props[:id] = Engine.instance.db.getid
+    put_object(newobj)
     newobj
   rescue
     log.error "Clone failed"
@@ -56,6 +58,26 @@ class Root
   # [+e+]      The event
   # [+return+] Undefined
   def ass(e)
+  end
+
+  def world
+    Engine.instance.db.get(0)
+  end
+
+  def add_event(from,to,kind,msg=nil)
+    Engine.instance.eventmgr.add_event(from,to,kind,msg)
+  end
+
+  def get_object(oid)
+    Engine.instance.db.get(oid)
+  end
+
+  def put_object(obj)
+    Engine.instance.db.put(obj)
+  end
+
+  def delete_object(oid)
+    Engine.instance.db.delete(oid)
   end
 end
 

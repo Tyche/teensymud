@@ -22,8 +22,8 @@ module Cmd
         sendto "System error: unable to create object."
         return
       end
-      $engine.world.db.put(newobj)
-      $engine.world.db.get(location).add_contents(newobj.id)
+      put_object(newobj)
+      get_object(location).add_contents(newobj.id)
       sendto "Ok."
     else
       sendto("What!!?")

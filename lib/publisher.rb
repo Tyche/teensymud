@@ -1,3 +1,21 @@
+#!/usr/bin/env ruby
+#
+# file::    publisher.rb
+# author::  Jon A. Lambert
+# version:: 2.8.0
+# date::    01/19/2006
+#
+# This source code copyright (C) 2005, 2006 by Jon A. Lambert
+# All rights reserved.
+#
+# Released under the terms of the TeensyMUD Public License
+# See LICENSE file for additional information.
+#
+$:.unshift "lib" if !$:.include? "lib"
+$:.unshift "vendor" if !$:.include? "vendor"
+
+require 'engine/engine'
+
 #
 # Publisher is a variation on Ruby's Observable.  We do not keep track
 # of any changed state; instead we assume that by virtue of calling publish
@@ -50,7 +68,7 @@ module Publisher
     if defined? @subscribers
       @subscribers.dup.each do |s|
         if s.respond_to?(:to_int)
-          $engine.world.db.get(s).update(*arg)
+          Engine.instance.db.get(s).update(*arg)
         else
           s.update(*arg)
         end

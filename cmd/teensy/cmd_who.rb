@@ -15,7 +15,7 @@ module Cmd
   # shows a list of all connected players
   def cmd_who(args)
     sendto("=== Who List ===")
-    $engine.world.players_connected.each {|p| sendto(p.name)}
+    world.connected_players.each {|pid| sendto(get_object(pid).name)}
   end
 
 end
