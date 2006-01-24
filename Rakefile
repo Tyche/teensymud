@@ -3,7 +3,7 @@ require 'rake/testtask'
 require 'rake/packagetask'
 
 # get version 
-require 'lib/version'
+require 'lib/utility/version'
 
 # files to distribute
 PKG_FILES = FileList[
@@ -29,8 +29,7 @@ Rake::RDocTask.new do |rd|
 #  rd.template = './rdoctemplate.rb'
   rd.rdoc_files.include('README', 'farts.grammar', 'TML', 'tmud.rb', 'tclient.rb',
     'dbload.rb', 'dbdump.rb',  
-    'lib/*.rb', 'lib/net/*.rb', 'lib/farts/*.rb', 'lib/protocol/*.rb', 
-    'lib/db/*.rb', 'lib/event/*.rb', 'cmd/**/*.rb')
+    'lib/*.rb', 'lib/**/*.rb', 'cmd/**/*.rb')
   rd.options << '-dSN -I gif' 
 end
 
@@ -62,12 +61,14 @@ task :stats do |t|
   CodeStatistics.new(
     ["Main", ".", /^tmud.rb$|^tclient.rb$/], 
     ["Library", "lib", /.*\.rb$/], 
-    ["Database", "lib/db", /.*\.rb$/], 
-    ["Event", "lib/event", /.*\.rb$/], 
+    ["Storage", "lib/storage", /.*\.rb$/], 
+    ["Engine", "lib/engine", /.*\.rb$/], 
     ["Farts", "lib/farts", /.*\.rb$/], 
-    ["Network", "lib/net", /.*\.rb$/], 
-    ["Protocol", "lib/protocol", /.*\.rb$/], 
-    ["Commands", "cmd", /.*\.rb$/],
+    ["Network", "lib/network", /.*\.rb$/], 
+    ["Utility", "lib/utility", /.*\.rb$/], 
+    ["Core", "lib/core", /.*\.rb$/], 
+    ["Protocol", "lib/network/protocol", /.*\.rb$/], 
+    ["Commands", "cmd/teensy", /.*\.rb$/],
     ["Tests", "test", /.*\.rb$/]
   ).to_s
 end

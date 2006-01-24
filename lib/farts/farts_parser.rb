@@ -10,15 +10,18 @@ require 'racc/parser'
 #
 # file::    farts_parser.rb
 # author::  Jon A. Lambert
-# version:: 2.4.0
-# date::    09/09/2005
+# version:: 2.8.0
+# date::    01/19/2006
 #
-# This source code copyright (C) 2005 by Jon A. Lambert
+# This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
 #
 # Released under the terms of the TeensyMUD Public License
 # See LICENSE file for additional information.
 #
+$:.unshift "lib" if !$:.include? "lib"
+$:.unshift "vendor" if !$:.include? "vendor"
+
 if $0 == __FILE__
   Dir.chdir("../..")
   $:.unshift "../../lib"
@@ -31,7 +34,7 @@ module Farts
 
   class Parser < Racc::Parser
 
-module_eval <<'..end lib/farts/farts_parser.y modeval..id252424a6e4', 'lib/farts/farts_parser.y', 106
+module_eval <<'..end lib/farts/farts_parser.y modeval..id574259359b', 'lib/farts/farts_parser.y', 109
 
   def initialize
     @scope = {}
@@ -39,7 +42,7 @@ module_eval <<'..end lib/farts/farts_parser.y modeval..id252424a6e4', 'lib/farts
 
   def parse( str )
     @sc = Farts::Lexer.new(str)
-    @yydebug = true if $DEBUG
+    @yydebug = true if $DEBUG              
     do_parse
   end
 
@@ -51,7 +54,7 @@ module_eval <<'..end lib/farts/farts_parser.y modeval..id252424a6e4', 'lib/farts
     raise Racc::ParseError, "Error: #{@sc.lineno}:#{@sc.tokenpos} syntax error at '#{val}'"
   end
 
-..end lib/farts/farts_parser.y modeval..id252424a6e4
+..end lib/farts/farts_parser.y modeval..id574259359b
 
 ##### racc 1.4.4 generates ###
 
@@ -791,13 +794,13 @@ module Farts
   class FartTrigger
     logger 'DEBUG'
     attr_accessor :fname, :event, :prog
-
+    
     def initialize(fname,event)
       @fname,@event = fname,event
-      @event = event.intern if event.respond_to?(:to_str)
+      @event = event.intern if event.respond_to?(to_str)
       @prog = nil
     end
-
+    
     def load
       str = ""
       File.open("farts/#{@fname}.fart") {|f|
@@ -815,7 +818,7 @@ module Farts
       @prog = nil
       false
     end
-
+    
     def execute(ev)
       retval = true
       vars = {}
@@ -825,7 +828,7 @@ module Farts
         vars['args'] = Engine.instance.db.get(ev.msg)
       else
         vars['args'] = ev.msg
-      end
+      end  
       load if !@prog
       retval = @prog.execute(vars) if @prog
     rescue WetFartsError
@@ -835,7 +838,7 @@ module Farts
     ensure
       retval
     end
-
+    
   end
 end
 
@@ -855,10 +858,10 @@ if $0 == __FILE__
     pp fart
     vars = { "actor" => "foo", "this" => "bar"}
     fart.execute(vars)
-
+    
   rescue Racc::ParseError, Exception
     log.error $!
-    exit
+    exit 
   end
 end
 

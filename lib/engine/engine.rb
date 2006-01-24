@@ -15,15 +15,15 @@ $:.unshift "vendor" if !$:.include? "vendor"
 
 require 'singleton'
 
-require 'configuration'
-require 'log'
-require 'net/reactor'
-require 'engine/world'
+require 'utility/configuration'
+require 'utility/log'
+require 'network/reactor'
+require 'core/world'
 require 'engine/eventmanager'
-require 'db/room'
-require 'db/player'
-require 'db/gameobject'
-require 'db/account'
+require 'core/room'
+require 'core/player'
+require 'core/gameobject'
+require 'core/account'
 
 # The Engine class sets up the server, polls it regularly and observes
 # acceptor for incoming connections.
@@ -55,16 +55,16 @@ class Engine
   def run
     case options['dbtype']
     when :yaml
-      require 'db/yamlstore'
+      require 'storage/yamlstore'
       @db = YamlStore.new(options['dbfile'])
     when :gdbm
-      require 'db/gdbmstore'
+      require 'storage/gdbmstore'
       @db = GdbmStore.new(options['dbfile'])
     when :sdbm
-      require 'db/sdbmstore'
+      require 'storage/sdbmstore'
       @db = SdbmStore.new(options['dbfile'])
     when :dbm
-      require 'db/dbmstore'
+      require 'storage/dbmstore'
       @db = DbmStore.new(options['dbfile'])
     end
 

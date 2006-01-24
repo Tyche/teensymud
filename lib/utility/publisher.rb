@@ -14,8 +14,6 @@
 $:.unshift "lib" if !$:.include? "lib"
 $:.unshift "vendor" if !$:.include? "vendor"
 
-require 'engine/engine'
-
 #
 # Publisher is a variation on Ruby's Observable.  We do not keep track
 # of any changed state; instead we assume that by virtue of calling publish

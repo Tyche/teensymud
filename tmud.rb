@@ -16,9 +16,9 @@ $:.unshift "vendor" if !$:.include? "vendor"
 
 require 'optparse'
 
-require 'configuration'
+require 'utility/configuration'
 require 'engine/engine'
-require 'version'
+require 'utility/version'
 
 #
 # Processes command line arguments

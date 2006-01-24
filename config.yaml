@@ -17,7 +17,7 @@ dbfile: db/world
 #
 # Valid values are: :yaml, :gdbm, :sdbm, :dbm
 #
-dbtype: :yaml
+dbtype: :sdbm
 
 # Cache sizes for dbm type databases
 cache_width: 23

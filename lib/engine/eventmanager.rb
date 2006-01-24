@@ -10,6 +10,8 @@
 # Released under the terms of the TeensyMUD Public License
 # See LICENSE file for additional information.
 #
+$:.unshift "lib" if !$:.include? "lib"
+$:.unshift "vendor" if !$:.include? "vendor"
 
 require 'engine/event'
 

@@ -1,17 +1,20 @@
 #
 # file::    gameobject.rb
 # author::  Jon A. Lambert
-# version:: 2.6.0
-# date::    10/12/2005
+# version:: 2.8.0
+# date::    01/19/2006
 #
-# This source code copyright (C) 2005 by Jon A. Lambert
+# This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
 #
 # Released under the terms of the TeensyMUD Public License
 # See LICENSE file for additional information.
 #
-require 'log'
-require 'db/root'
+$:.unshift "lib" if !$:.include? "lib"
+$:.unshift "vendor" if !$:.include? "vendor"
+
+require 'utility/log'
+require 'core/root'
 
 # The GameObject class is no longer the mother of all objects.
 #

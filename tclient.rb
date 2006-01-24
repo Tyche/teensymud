@@ -2,29 +2,28 @@
 #
 # file::    tclient.rb
 # author::  Jon A. Lambert
-# version:: 2.6.0
-# date::    09/30/2005
+# version:: 2.8.0
+# date::    01/19/2006
 #
-# This source code copyright (C) 2005 by Jon A. Lambert
+# This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
 #
 # Released under the terms of the TeensyMUD Public License
 # See LICENSE file for additional information.
 #
+$:.unshift "lib" if !$:.include? "lib"
+$:.unshift "vendor" if !$:.include? "vendor"
 
 require 'pp'
 
-$:.unshift "lib"
-$:.unshift "vendor"
-
-require 'net/reactor'
+require 'network/reactor'
 
 Version = "0.2.0"
 BANNER=<<-EOH
 
           This is TeensyClient version #{Version}
 
-          Copyright (C) 2005 by Jon A. Lambert
+        Copyright (C) 2005, 2006 by Jon A. Lambert
  Released under the terms of the TeensyMUD Public License
 
 EOH

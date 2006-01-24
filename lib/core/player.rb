@@ -1,18 +1,20 @@
 #
 # file::    player.rb
 # author::  Jon A. Lambert
-# version:: 2.6.0
-# date::    10/12/2005
+# version:: 2.8.0
+# date::    01/19/2006
 #
-# This source code copyright (C) 2005 by Jon A. Lambert
+# This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
 #
 # Released under the terms of the TeensyMUD Public License
 # See LICENSE file for additional information.
 #
+$:.unshift "lib" if !$:.include? "lib"
+$:.unshift "vendor" if !$:.include? "vendor"
 
-require 'publisher'
-require 'db/gameobject'
+require 'utility/publisher'
+require 'core/gameobject'
 
 # The Player class is the mother of all players.
 # Who's their daddy?
