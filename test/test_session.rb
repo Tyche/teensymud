@@ -4,7 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
-require 'net/session'
+require 'network/session'
 end
 
 class TestSession < Test::Unit::TestCase

@@ -4,8 +4,8 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
-require 'log'
-require 'protocol/telnetfilter'
+require 'utility/log'
+require 'network/protocol/telnetfilter'
 require 'flexmock'
 require 'ostruct'
 require 'strscan'

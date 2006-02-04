@@ -4,7 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
-require 'net/sockio'
+require 'network/sockio'
 require 'mocksocket'
 end
 

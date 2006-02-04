@@ -4,8 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
-require 'log'
-require 'net/acceptor'
+require 'network/acceptor'
 require 'flexmock'
 end
 
@@ -13,7 +12,7 @@ class TestAcceptor < Test::Unit::TestCase
   def setup
     @serv = FlexMock.new
     @serv.mock_handle(:register) { true }
-    @serv.mock_handle(:port) { 80 }
+    @serv.mock_handle(:port) { 9999 }
     @acceptor = Acceptor.new(@serv)
   end
 

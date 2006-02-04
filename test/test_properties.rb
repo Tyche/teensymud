@@ -4,9 +4,18 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
-require 'db/properties'
 require 'flexmock'
 require 'pp'
+class Engine
+  @@mock = FlexMock.new
+  @@mock.mock_handle(:db) {@@mock}
+  @@mock.mock_handle(:mark) {}
+  @@mock.mock_handle(:getid) {$id += 1}
+  def self.instance
+    @@mock
+  end
+end
+require 'storage/properties'
 end
 
 class A
@@ -21,12 +30,7 @@ end
 
 class TestProperties < Test::Unit::TestCase
   def setup
-    @nextid = 0
-    $engine = FlexMock.new
-    $engine.mock_handle(:world) {$engine}
-    $engine.mock_handle(:db) {$engine}
-    $engine.mock_handle(:mark) {false}
-    $engine.mock_handle(:getid) {@nextid += 1}
+    $id = 0
   end
 
   def test_properties

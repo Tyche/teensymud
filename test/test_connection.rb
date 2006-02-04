@@ -4,7 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
-require 'net/connection'
+require 'network/connection'
 require 'mocksocket'
 end
 

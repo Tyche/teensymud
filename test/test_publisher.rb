@@ -4,7 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
-require 'publisher'
+require 'utility/publisher'
 end
 
 class TestPublisher < Test::Unit::TestCase

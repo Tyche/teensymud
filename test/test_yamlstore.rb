@@ -4,23 +4,30 @@ unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'flexmock'
 require 'pp'
+class Engine
+  @@mock = FlexMock.new
+  @@mock.mock_handle(:db) {$db}
+  @@mock.mock_handle(:getid) {$id += 1}
+  def self.instance
+    @@mock
+  end
+end
 
-require 'configuration'
-require 'log'
-require 'db/yamlstore'
-require 'db/properties'
-require 'db/player'
-require 'db/room'
+require 'utility/configuration'
+require 'storage/yamlstore'
+require 'storage/properties'
+require 'core/world'
+require 'core/player'
+require 'core/room'
 end
 
 class TestYamlStore < Test::Unit::TestCase
   configuration
 
   def setup
+    $id = 0
     @db = YamlStore.new(options['dbfile'])
-    $engine = FlexMock.new
-    $engine.mock_handle(:world) {$engine}
-    $engine.mock_handle(:db) {@db}
+    $db = @db
     @r = Room.new("Here",0)
     @o = GameObject.new("Thing",0)
     @p = Player.new("Tyche", "tyche", nil)
@@ -73,7 +80,7 @@ class TestYamlStore < Test::Unit::TestCase
     assert_equal(@p, @db.put(@p))
     cnt = 0
     @db.each {cnt += 1}
-    assert_equal(4,cnt)
+    assert_equal(5,cnt)
   end
 
 #  def test_players_connected

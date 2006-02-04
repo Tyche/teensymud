@@ -5,20 +5,30 @@
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'flexmock'
+class Engine
+  @@mock = FlexMock.new
+  @@mock.mock_handle(:db) {@@mock}
+  @@mock.mock_handle(:mark) {}
+  @@mock.mock_handle(:getid) {$id += 1}
+  @@mock.mock_handle(:get) do |oid|
+    case oid
+    when 0 then @@mock
+    end
+  end
+  def self.instance
+    @@mock
+  end
+end
+
+require 'storage/properties'
+require 'core/player'
 require 'command'
-require 'db/properties'
-require 'db/player'
 end
 
 class TestCommand < Test::Unit::TestCase
   def setup
+    $id = 0
     @c = Command.new(:cmd, "name", "help")
-    @nextid = 0
-    $engine = FlexMock.new
-    $engine.mock_handle(:world) {$engine}
-    $engine.mock_handle(:db) {$engine}
-    $engine.mock_handle(:mark) {false}
-    $engine.mock_handle(:getid) {@nextid += 1}
   end
 
   def test_cmd

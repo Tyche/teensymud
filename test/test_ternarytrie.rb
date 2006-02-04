@@ -4,7 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
-require 'ternarytrie'
+require 'utility/ternarytrie'
 end
 
 class TestTernaryTrie < Test::Unit::TestCase

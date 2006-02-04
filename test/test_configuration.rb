@@ -4,8 +4,8 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
-require 'configuration'
-require 'log'
+require 'utility/configuration'
+require 'utility/log'
 require 'flexmock'
 end
 

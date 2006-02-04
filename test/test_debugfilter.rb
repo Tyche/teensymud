@@ -4,8 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
-require 'log'
-require 'protocol/debugfilter'
+require 'network/protocol/debugfilter'
 require 'flexmock'
 end
 

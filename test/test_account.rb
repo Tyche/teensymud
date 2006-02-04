@@ -4,8 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
-require 'log'
-require 'db/account'
+require 'core/account'
 end
 
 class TestAccount < Test::Unit::TestCase

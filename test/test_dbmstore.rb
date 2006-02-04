@@ -4,23 +4,30 @@ unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'flexmock'
 require 'pp'
+class Engine
+  @@mock = FlexMock.new
+  @@mock.mock_handle(:db) {$db}
+  @@mock.mock_handle(:getid) {$id += 1}
+  def self.instance
+    @@mock
+  end
+end
 
-require 'configuration'
-require 'log'
-require 'db/dbmstore'
-require 'db/properties'
-require 'db/player'
-require 'db/room'
+require 'utility/configuration'
+require 'storage/dbmstore'
+require 'storage/properties'
+require 'core/world'
+require 'core/player'
+require 'core/room'
 end
 
 class TestDbmStore < Test::Unit::TestCase
   configuration
 
   def setup
+    $id = 0
     @db = DbmStore.new(options['dbfile'])
-    $engine = FlexMock.new
-    $engine.mock_handle(:world) {$engine}
-    $engine.mock_handle(:db) {@db}
+    $db = @db
     @r = Room.new("Here",0)
     @o = GameObject.new("Thing",0)
     @p = Player.new("Tyche", "tyche", nil)
@@ -29,6 +36,22 @@ class TestDbmStore < Test::Unit::TestCase
   def teardown
     @db.close
     File.delete("#{options['dbfile']}.db")
+  end
+
+  def test_close
+    assert_respond_to(@db, :close)
+  end
+
+  def test_log
+    assert_respond_to(@db, :log)
+  end
+
+  def test_makenoswap
+    assert(@db.makenoswap(@r.id))
+  end
+
+  def test_makeswap
+    assert(@db.makeswap(@r.id))
   end
 
   def test_objectids
@@ -50,12 +73,6 @@ class TestDbmStore < Test::Unit::TestCase
     assert_equal(nil, @db.get(@o.id))
     assert_equal(nil, @db.get(@p.id))
   end
-
-#  def test_find_player_by_name
-#    assert_equal(@p, @db.put(@p))
-#    assert_equal(@p, @db.find_player_by_name("Tyche"))
-#    assert_equal(nil, @db.find_player_by_name("Bubba"))
-#  end
 
   def test_get
 #    pp @r, @o, @p
@@ -86,12 +103,8 @@ class TestDbmStore < Test::Unit::TestCase
     assert_equal(@p, @db.put(@p))
     cnt = 0
     @db.each {cnt += 1}
-    assert_equal(4,cnt)
+    assert_equal(5,cnt)
   end
-
-#  def test_players_connected
-#    assert(@db.players_connected)
-#  end
 
   def test_put
     assert_equal(@r, @db.put(@r))

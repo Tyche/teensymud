@@ -4,7 +4,7 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
-require 'net/reactor'
+require 'network/reactor'
 end
 
 class TestReactor < Test::Unit::TestCase
