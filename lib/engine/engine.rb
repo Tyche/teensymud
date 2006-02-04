@@ -93,8 +93,7 @@ class Engine
         @db.get(e.to).ass(e)
       end
     end # until
-    @world.shutdown
-    @server.stop
+    graceful_shutdown
   rescue
     log.fatal "Engine failed in run"
     log.fatal $!
@@ -112,6 +111,10 @@ class Engine
   # Setup traps - invoke one of these signals to shut down the mud
   def handle_signal(sig)
     log.warn "Signal caught request to shutdown."
+    graceful_shutdown
+  end
+
+  def graceful_shutdown
     @world.shutdown
     @server.stop
     log.info "Saving world..."
@@ -121,7 +124,6 @@ class Engine
     @db.close
     exit
   end
-
 end
 
 

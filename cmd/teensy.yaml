@@ -121,3 +121,7 @@
   cmd: :cmd_dumpcache
   help: "displays the contents of the store cache"
   name: '@dumpcache'
+- !ruby/object:Command 
+  cmd: :cmd_shutdown
+  help: "shutsdown the server"
+  name: '@shutdown'
