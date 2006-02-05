@@ -13,6 +13,7 @@
 $:.unshift "lib" if !$:.include? "lib"
 $:.unshift "vendor" if !$:.include? "vendor"
 
+require 'utility/log'
 require 'utility/publisher'
 
 # The Account class handles connection login and passes them to

@@ -144,7 +144,7 @@ private
       log.info "Building minimal world database..."
       GDBM.open(@dbfile, 0666) do |db|
         YAML::load(MINIMAL_DB).each do |o|
-          db[o.id.to_s] = YAML::dump(o)
+          db[o.id.to_s] = Marshal.dump(o)
         end
       end
     end

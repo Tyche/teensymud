@@ -59,6 +59,14 @@ class Module
         @props ||= {}
         @props[:id] ||= Engine.instance.db.getid
       end
+      def _dump(depth)
+        Marshal.dump(@props)
+      end
+      def self._load(str)
+        obj = allocate
+        obj.instance_variable_set(:@props,Marshal.load(str))
+        obj
+      end
     EOD
   end
 

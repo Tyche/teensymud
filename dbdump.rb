@@ -101,7 +101,7 @@ class Dumper
   end
 
   def store(v)
-    o = YAML::load(v)
+    o = Marshal.load(v)
     @dbtop = o.id if o.id > @dbtop
     @db[o.id]=o
     @count += 1

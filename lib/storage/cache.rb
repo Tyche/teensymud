@@ -13,7 +13,6 @@
 $:.unshift "lib" if !$:.include? "lib"
 $:.unshift "vendor" if !$:.include? "vendor"
 
-require 'yaml'
 require 'utility/configuration'
 require 'utility/log'
 
@@ -164,7 +163,7 @@ class CacheManager
 
     # cache miss - search the database
     if @db.has_key? oid.to_s
-      ret = YAML::load(@db[oid.to_s])
+      ret = Marshal.load(@db[oid.to_s])
     else
       @st.inc(:database_read_fails)
       return nil
@@ -175,7 +174,7 @@ class CacheManager
     ch = @cache[hv].pop
     # if its dirty we write it to the database
     if ch.dirty? && !ch.dead?
-      @db[ch.oid.to_s] = YAML::dump(ch.obj)
+      @db[ch.oid.to_s] = Marshal.dump(ch.obj)
       @st.inc(:database_writes)
       if ch.noswap?  # here we have a problem we can't use this
         # first push it back onto the list
@@ -228,7 +227,7 @@ class CacheManager
     # if its dirty we write it to the database
     if ch.dirty? && !ch.dead?
       # errors possible - check in store module
-      @db[ch.oid.to_s] = YAML::dump(ch.obj)
+      @db[ch.oid.to_s] = Marshal.dump(ch.obj)
       @st.inc(:database_writes)
       if ch.noswap?  # here we have a problem we can't use this
         # first push it back onto the list
@@ -292,7 +291,7 @@ class CacheManager
     @cwidth.times do |i|
       @cache[i].each do |ce|
         if ce.dirty?
-          @db[ce.oid.to_s] = YAML::dump(ce.obj)
+          @db[ce.oid.to_s] = Marshal.dump(ce.obj)
           @st.inc(:database_writes)
           ce.clean!
         end
@@ -306,7 +305,7 @@ class CacheManager
     @st.inc(:chain_syncs)
     @cache[i].each do |ce|
       if ce.dirty?
-        @db[ce.oid.to_s] = YAML::dump(ce.obj)
+        @db[ce.oid.to_s] = Marshal.dump(ce.obj)
         @st.inc(:database_writes)
         ce.clean!
       end

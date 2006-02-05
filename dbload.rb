@@ -114,15 +114,15 @@ class Loader
     case @opts.dbtype
     when :sdbm
       SDBM.open(@opts.ofile, 0666) do |db|
-        @db.each {|k,v| db[k.to_s] = YAML::dump(v)}
+        @db.each {|k,v| db[k.to_s] = Marshal.dump(v)}
       end
     when :gdbm
       GDBM.open(@opts.ofile, 0666) do |db|
-        @db.each {|k,v| db[k.to_s] = YAML::dump(v)}
+        @db.each {|k,v| db[k.to_s] = Marshal.dump(v)}
       end
     when :dbm
       DBM.open(@opts.ofile, 0666) do |db|
-        @db.each {|k,v| db[k.to_s] = YAML::dump(v)}
+        @db.each {|k,v| db[k.to_s] = Marshal.dump(v)}
       end
     end
 
