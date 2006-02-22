@@ -89,9 +89,7 @@ class Engine
     Signal.trap("KILL", method(:handle_signal))
     until @shutdown
       @server.poll(0.2)
-      while e = @eventmgr.get_event
-        @db.get(e.to).ass(e)
-      end
+      @eventmgr.process_events
     end # until
     graceful_shutdown
   rescue

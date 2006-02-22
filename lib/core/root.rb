@@ -57,12 +57,6 @@ class Root
     false
   end
 
-  # Event handler
-  # [+e+]      The event
-  # [+return+] Undefined
-  def ass(e)
-  end
-
   def world
     Engine.instance.db.get(0)
   end

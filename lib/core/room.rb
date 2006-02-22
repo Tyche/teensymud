@@ -32,59 +32,65 @@ class Room < GameObject
                                 # value is the room id at the end of the exit.
   end
 
-  # Event handler
+  # Event :describe
   # [+e+]      The event
   # [+return+] Undefined
-  def ass(e)
-    case e.kind
-    when :describe
-      msg = "[COLOR=green](#{id.to_s}) #{name}[/COLOR]\n#{desc}\n"
-      add_event(id,e.from,:show,msg)
-      fart(e)
-    when :describe_exits
-      msg = "[COLOR=red]Exits:\n"
-      s = exits.size
-      if s == 0
-        msg << "None.[/COLOR]"
-      else
-        i = 0
-        exits.keys.each do |ex|
-          msg << ex
-          i += 1
-          case s - i
-          when 1 then s > 2 ? msg << ", and " : msg << " and "
-          when 0 then msg << "."
-          else
-            msg << ", "
-          end
-        end
-        msg << "[/COLOR]"
-      end
-      add_event(id,e.from,:show,msg)
-      fart(e)
-    when :leave
-      plyr = get_object(e.from)
-      players(e.from).each do |x|
-        add_event(id,x.id,:show, plyr.name + " has left #{e.msg}.") if x.session
-      end
-      # remove player
-      delete_contents(plyr.id)
-      plyr.location = nil
-      add_event(id,exits[e.msg],:arrive,plyr.id)
-      fart(e)
-    when :arrive
-      plyr = get_object(e.msg)
-      # add player
-      add_contents(plyr.id)
-      plyr.location = id
-      players(e.msg).each do |x|
-        add_event(id,x.id,:show, plyr.name+" has arrived.") if x.session
-      end
-      plyr.parse('look')
-      fart(e)
+  def describe(e)
+    msg = "[COLOR=green](#{id.to_s}) #{name}[/COLOR]\n#{desc}\n"
+    add_event(id,e.from,:show,msg)
+  end
+
+  # Event :describe_exits
+  # [+e+]      The event
+  # [+return+] Undefined
+  def describe_exits(e)
+    msg = "[COLOR=red]Exits:\n"
+    s = exits.size
+    if s == 0
+      msg << "None.[/COLOR]"
     else
-      super(e)
+      i = 0
+      exits.keys.each do |ex|
+        msg << ex
+        i += 1
+        case s - i
+        when 1 then s > 2 ? msg << ", and " : msg << " and "
+        when 0 then msg << "."
+        else
+          msg << ", "
+        end
+      end
+      msg << "[/COLOR]"
     end
+    add_event(id,e.from,:show,msg)
+  end
+
+  # Event :leave
+  # [+e+]      The event
+  # [+return+] Undefined
+  def leave(e)
+    plyr = get_object(e.from)
+    players(e.from).each do |x|
+      add_event(id,x.id,:show, plyr.name + " has left #{e.msg}.") if x.session
+    end
+    # remove player
+    delete_contents(plyr.id)
+    plyr.location = nil
+    add_event(id,exits[e.msg],:arrive,plyr.id)
+  end
+
+  # Event :arrive
+  # [+e+]      The event
+  # [+return+] Undefined
+  def arrive(e)
+    plyr = get_object(e.msg)
+    # add player
+    add_contents(plyr.id)
+    plyr.location = id
+    players(e.msg).each do |x|
+      add_event(id,x.id,:show, plyr.name+" has arrived.") if x.session
+    end
+    plyr.parse('look')
   end
 
 end

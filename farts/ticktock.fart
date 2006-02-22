@@ -1,5 +1,5 @@
 if rand(50)
-  echoat "1 ***TICK!***"
+  echoat "3 ***TICK!***"
 else
-  echoat "1 ***TOCK!***"
+  echoat "3 ***TOCK!***"
 endif

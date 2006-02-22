@@ -31,7 +31,7 @@ MINIMAL_DB=<<EOH
     :desc: "This is home."
     :contents: []
     :exits: {}
-    :farts: {}
+    :triggers: {}
     :name: Home
 EOH
 

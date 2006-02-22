@@ -154,28 +154,20 @@ class Player < GameObject
     #prompt
   end
 
-  # Event handler
+  # Event :describe
   # [+e+]      The event
   # [+return+] Undefined
-  def ass(e)
-    case e.kind
-    when :describe
-      msg = "[COLOR=cyan]#{name} is here.[/COLOR]"
-      add_event(id,e.from,:show,msg)
-      fart(e)
-    when :show
-      sendto(e.msg)
-      fart(e)
-    when :timer
-      if e.msg == :prompt
-        prompt
-      end
-      fart(e)
-    else
-      super(e)
-    end
+  def describe(e)
+    msg = "[COLOR=cyan]#{name} is here.[/COLOR]"
+    add_event(id,e.from,:show,msg)
   end
 
+  # Event :show
+  # [+e+]      The event
+  # [+return+] Undefined
+  def show(e)
+    sendto(e.msg)
+  end
 
 private
   # Encrypts a password

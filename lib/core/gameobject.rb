@@ -19,7 +19,7 @@ require 'core/root'
 # The GameObject class is no longer the mother of all objects.
 #
 class GameObject < Root
-  property :location, :contents, :farts
+  property :location, :contents, :triggers
   logger 'DEBUG'
 
   # Create a new Object
@@ -31,7 +31,7 @@ class GameObject < Root
     super(name, owner)
     self.location = location    # The location of this object or nil if none
     self.contents = []
-    self.farts = {}
+    self.triggers = {}
   end
 
   # Add an object to the contents of this object
@@ -60,43 +60,31 @@ class GameObject < Root
     contents || []
   end
 
-  # Add a trigger to this object
-  # [+t+] The trigger to add
-  def add_trigger(t)
-    farts[t.event] = t
+  # Add a trigger script to this object
+  # [+s+] The script to add
+  def add_trigger(s)
+    triggers[s.event] = s
   end
 
-  # Deletes a trigger from this object
+  # Deletes a trigger script from this object
   # [+event+] The trigger event type to delete
   def delete_trigger(event)
     event = event.intern if event.respond_to?(:to_str)
-    farts.delete(event)
+    triggers.delete(event)
   end
 
-  # Returns a specific trigger from the object
+  # Returns a specific trigger script from the object
   # [+event+] The trigger event type to retrieve
   # [+return+] A trigger or nil
   def get_trigger(event)
     event = event.intern if event.respond_to?(:to_str)
-    farts[event]
+    triggers[event]
   end
 
-  # Returns the triggers on the object
-  # [+return+] An array of triggers
+  # Returns the trigger sscripts on the object
+  # [+return+] An array of trigger scripts
   def get_triggers
-    farts.values
-  end
-
-  # Fart handler
-  # [+e+]      The event
-  # [+return+] true or false
-  def fart(ev)
-    t = get_trigger(ev.kind)
-    if t
-      t.execute(ev)
-    else
-      true
-    end
+    triggers.values
   end
 
   # Finds all objects contained in this object
@@ -144,38 +132,46 @@ class GameObject < Root
     end
   end
 
-  # Event handler
+  # Event :describe
   # [+e+]      The event
   # [+return+] Undefined
-  def ass(e)
-    case e.kind
-    when :describe
-      msg = "[COLOR=yellow]A #{name} is here[/COLOR]"
-      add_event(id,e.from,:show,msg)
-      fart(e)
-    when :get
-      plyr = get_object(e.from)
-      place = get_object(location)
-      # remove it
-      place.delete_contents(id)
-      # add it
-      plyr.add_contents(id)
-      self.location = plyr.id
-      add_event(id,e.from,:show,"You get the #{name}")
-      fart(e)
-    when :drop
-      plyr = get_object(e.from)
-      place = get_object(plyr.location)
-      # remove it
-      plyr.delete_contents(id)
-      # add it
-      place.add_contents(id)
-      self.location = place.id
-      add_event(id,e.from,:show,"You drop the #{name}")
-      fart(e)
-    when :timer
-      fart(e)
-    end
+  def describe(e)
+    msg = "[COLOR=yellow]A #{name} is here[/COLOR]"
+    add_event(id,e.from,:show,msg)
+  end
+
+  # Event :get
+  # [+e+]      The event
+  # [+return+] Undefined
+  def get(e)
+    plyr = get_object(e.from)
+    place = get_object(location)
+    # remove it
+    place.delete_contents(id)
+    # add it
+    plyr.add_contents(id)
+    self.location = plyr.id
+    add_event(id,e.from,:show,"You get the #{name}")
+  end
+
+  # Event :drop
+  # [+e+]      The event
+  # [+return+] Undefined
+  def drop(e)
+    plyr = get_object(e.from)
+    place = get_object(plyr.location)
+    # remove it
+    plyr.delete_contents(id)
+    # add it
+    place.add_contents(id)
+    self.location = place.id
+    add_event(id,e.from,:show,"You drop the #{name}")
+  end
+
+  # Event :timer
+  # [+e+]      The event
+  # [+return+] Undefined
+  def timer(e)
   end
 end
 

@@ -96,12 +96,12 @@ class TestGameObject < Test::Unit::TestCase
     assert(@o.fart(m))
   end
 
-  def test_farts
-    assert_respond_to(@o, :farts)
+  def test_triggers
+    assert_respond_to(@o, :triggers)
   end
 
-  def test_farts_equals
-    assert_respond_to(@o, :farts=)
+  def test_triggers_equals
+    assert_respond_to(@o, :triggers=)
   end
 
   def test_get_contents

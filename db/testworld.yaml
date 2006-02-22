@@ -1,32 +1,46 @@
 --- 
+- !ruby/object:World 
+  props: 
+    :owner: 0
+    :connected_players: []
+
+    :name: World
+    :timer_list: 
+    - !ruby/object:Timer 
+      counter: 0
+      id: 3
+      name: :hamster
+      time: 2
+    :desc: This is the World object.
+    :all_players: []
+
+    :id: 0
 - !ruby/object:Room 
   props: 
     :contents: []
-    :desc: This is the starting home.
-    :exits: 
-      up: 2
-      dungeon: 3
-    :farts: 
+    :owner: 0
+    :triggers: 
       :arrive: !ruby/object:Farts::FartTrigger 
         event: :arrive
         fname: arrival
         prog: 
-    :location: 
+    :exits: 
+      up: 2
+      dungeon: 3
     :name: Home
+    :desc: This is the starting home.
     :id: 1
-    :powered: false
-    :owner: 0
+    :location: 
 - !ruby/object:Room 
   props: 
     :contents: []
     :desc: "You are flying!!!"
     :exits: 
       down: 1
-    :farts: {}
+    :triggers: {}
     :location: 
     :name: Up in the Air
     :id: 2
-    :powered: false
     :owner: 0
 - !ruby/object:Room 
   props: 
@@ -35,7 +49,7 @@
       of fancy electromagnetic servo mechanism."
     :exits: 
       up: 1
-    :farts: 
+    :triggers: 
       :timer: !ruby/object:Farts::FartTrigger 
         event: :timer
         fname: ticktock
@@ -43,5 +57,4 @@
     :location: 
     :name: The Dungeon
     :id: 3
-    :powered: true  
     :owner: 0    

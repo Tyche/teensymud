@@ -57,7 +57,7 @@ class World < Root
           @timer_list_mutex.synchronize do
             timer_list.each do |ti|
               if ti.fire?
-                Engine.instance.eventmgr.add_event(0, ti.id, :timer, ti.name)
+                add_event(0, ti.id, :timer, ti.name)
                 ti.reset
               end
             end
