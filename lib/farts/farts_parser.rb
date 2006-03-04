@@ -34,7 +34,7 @@ module Farts
 
   class Parser < Racc::Parser
 
-module_eval <<'..end lib/farts/farts_parser.y modeval..id574259359b', 'lib/farts/farts_parser.y', 109
+module_eval <<'..end lib/farts/farts_parser.y modeval..ida084379aaf', 'lib/farts/farts_parser.y', 109
 
   def initialize
     @scope = {}
@@ -54,7 +54,7 @@ module_eval <<'..end lib/farts/farts_parser.y modeval..id574259359b', 'lib/farts
     raise Racc::ParseError, "Error: #{@sc.lineno}:#{@sc.tokenpos} syntax error at '#{val}'"
   end
 
-..end lib/farts/farts_parser.y modeval..id574259359b
+..end lib/farts/farts_parser.y modeval..ida084379aaf
 
 ##### racc 1.4.4 generates ###
 
@@ -578,9 +578,6 @@ end   # module Farts
 
 module Farts
 
-  class WetFartsError < StandardError
-  end
-
   class SyntaxNode
     attr :lineno
 
@@ -598,7 +595,7 @@ module Farts
     end
 
     def fart_err(msg)
-      raise WetFartsError, "at #{lineno}: #{msg}"
+      raise "Error at #{lineno}: #{msg}"
     end
   end
 
@@ -791,55 +788,6 @@ module Farts
 
   end
 
-  class FartTrigger
-    logger 'DEBUG'
-    attr_accessor :fname, :event, :prog
-    
-    def initialize(fname,event)
-      @fname,@event = fname,event
-      @event = event.intern if event.respond_to?(to_str)
-      @prog = nil
-    end
-    
-    def load
-      str = ""
-      File.open("farts/#{@fname}.fart") {|f|
-        str = f.read
-      }
-      log.info "Load of FART program - #{@fname}"
-      @prog = Parser.new.parse( str )
-      true
-    rescue Racc::ParseError
-      log.error $!
-      @prog = nil
-      false
-    rescue Exception
-      log.error $!
-      @prog = nil
-      false
-    end
-    
-    def execute(ev)
-      retval = true
-      vars = {}
-      vars['actor'] = Engine.instance.db.get(ev.from)
-      vars['this'] = Engine.instance.db.get(ev.to)
-      if ev.msg.kind_of?(GameObject)
-        vars['args'] = Engine.instance.db.get(ev.msg)
-      else
-        vars['args'] = ev.msg
-      end  
-      load if !@prog
-      retval = @prog.execute(vars) if @prog
-    rescue WetFartsError
-      log.error $!
-    rescue Exception
-      log.error $!
-    ensure
-      retval
-    end
-    
-  end
 end
 
 

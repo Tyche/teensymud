@@ -52,16 +52,20 @@ class EventManager
     while e = get_event
       begin
         obj = Engine.instance.db.get(e.to)
-        t = obj.get_trigger("pre_"+e.kind.to_s)
-        if t
-          ret = t.execute(e)
+        sid = obj.get_trigger("pre_"+e.kind.to_s)
+        if sid
+          t = Engine.instance.db.get(sid)
+          ret = t.execute(e) if t
         else
           ret = true
         end
         next if !ret
         obj.send(e.kind,e)
-        t = obj.get_trigger(e.kind)
-        t.execute(e) if t
+        sid = obj.get_trigger(e.kind)
+        if sid
+          t = Engine.instance.db.get(sid)
+          t.execute(e) if t
+        end
       rescue
         log.error "Event failed: #{e}"
         log.error $!

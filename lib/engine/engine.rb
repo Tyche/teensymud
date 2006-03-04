@@ -24,6 +24,7 @@ require 'core/room'
 require 'core/player'
 require 'core/gameobject'
 require 'core/account'
+require 'core/script'
 
 # The Engine class sets up the server, polls it regularly and observes
 # acceptor for incoming connections.
@@ -117,7 +118,7 @@ class Engine
     @server.stop
     log.info "Saving world..."
     # clear compiled progs out before saving
-    @db.each {|o| o.get_triggers.each {|t| t.prog = nil } if o.respond_to?(:get_triggers) }
+#    @db.each {|o| o.get_triggers.each {|t| t.prog = nil } if o.respond_to?(:get_triggers) }
     @db.save
     @db.close
     exit

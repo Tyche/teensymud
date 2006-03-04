@@ -21,7 +21,7 @@ require 'core/gameobject'
 #
 class Player < GameObject
   include Publisher
-  logger 'DEBUG'
+  logger 'INFO'
 
   # The Session object this player is connected on or nil if not connected.
   attr_accessor :session

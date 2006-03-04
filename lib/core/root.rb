@@ -15,7 +15,6 @@ $:.unshift "vendor" if !$:.include? "vendor"
 
 require 'utility/log'
 require 'storage/properties'
-require 'farts/farts_parser'
 
 # The Root class is the mother of all objects.
 #

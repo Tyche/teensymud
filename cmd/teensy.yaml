@@ -1,10 +1,10 @@
 #
 # file::    teensy.yaml
 # author::  Jon A. Lambert
-# version:: 2.7.0
-# date::    01/12/2006
+# version:: 2.8.0
+# date::    02/21/2005
 #
-# This source code copyright (C) 2005 by Jon A. Lambert
+# This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
 #
 # Released under the terms of the TeensyMUD Public License
@@ -106,10 +106,6 @@
   help: "go through the exit specified (ex. go west)"
   name: 'go'
 - !ruby/object:Command 
-  cmd: :cmd_fart
-  help: "adds or deletes a farts trigger to an object\r\n\tSyntax:\r\n\t\t@fart add #<oid> <progname> <eventtype>\r\n\t\t@fart del #<oid> <eventtype>\r\n\t\t@fart show #<oid>\r\n\t\t(ex. @fart add #1 myprog arrive)"
-  name: '@fart'
-- !ruby/object:Command 
   cmd: :cmd_color
   help: "toggles colors on or off"
   name: '@color'
@@ -123,5 +119,28 @@
   name: '@dumpcache'
 - !ruby/object:Command 
   cmd: :cmd_shutdown
-  help: "shutsdown the server"
+  help: "shuts down the server"
   name: '@shutdown'
+- !ruby/object:Command 
+  cmd: :cmd_trigger
+  help: |
+    Adds, deletes or shows triggers on an object
+      Syntax:
+        @trigger add #<oid> #<scriptid> <eventtype>
+        @trigger del #<oid> <eventtype>
+        @trigger show #<oid>
+        (ex. @trigger add #1 #5 arrive)
+    
+  name: '@trigger'
+- !ruby/object:Command 
+  cmd: :cmd_script
+  help: |
+    Adds, deletes or shows a script
+      Syntax:
+        @script add <lang> <progname>|<code>
+        @script del #<scriptid>
+        @script show #<scriptid>
+        (ex. @script add fart myprog
+             @script add boolexp (#234|#42)&#34 )
+    
+  name: '@script'

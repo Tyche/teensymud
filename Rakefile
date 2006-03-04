@@ -14,6 +14,7 @@ PKG_FILES = FileList[
   'farts', 'farts/**/*',
   'test', 'test/**/*', 
   'logs', 'logs/README',
+  'benchmark', 'benchmark/README',
   'lib/**/*',
   'vendor/**/*',
   'cmd/**/*',
@@ -69,6 +70,7 @@ task :stats do |t|
     ["Core", "lib/core", /.*\.rb$/], 
     ["Protocol", "lib/network/protocol", /.*\.rb$/], 
     ["Commands", "cmd/teensy", /.*\.rb$/],
+    ["Benchmarks", "benchmark", /.*\.rb$/]
     ["Tests", "test", /.*\.rb$/]
   ).to_s
 end
@@ -84,8 +86,9 @@ task :release do
 end
 
 desc "Rebuild the FARTS interpreter"
-task :farts do
+task :build_parsers do
   sh "racc -o lib/farts/farts_parser.rb lib/farts/farts_parser.y"
+  sh "racc -o lib/utility/boolexp.rb lib/utility/boolexp.y"
 end
 
 task :release => [:package]

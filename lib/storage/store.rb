@@ -122,7 +122,7 @@ class Store
   # produces a statistical report of the database
   # [+return+] a string containing the report
   def stats
-    rooms = objs = players = 0
+    rooms = objs = scripts = players = 0
     self.each do |val|
       case val
       when Room
@@ -131,6 +131,8 @@ class Store
         players += 1
       when GameObject
         objs += 1
+      when Script
+        scripts += 1
       end
     end
     stats=<<EOD
@@ -139,7 +141,8 @@ class Store
   Rooms   - #{rooms}
   Players - #{players}
   Objects - #{objs}
-  Total Objects - #{rooms+objs+players}
+  Scripts - #{scripts}
+  Total Objects - #{rooms+objs+players+scripts}
   Highest OID in use - #{@dbtop}
 ---*                     *---
 [/COLOR]

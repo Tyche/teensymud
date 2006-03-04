@@ -90,12 +90,6 @@ class TestGameObject < Test::Unit::TestCase
     assert_equal(m,@o.delete_trigger(:describe))
   end
 
-  def test_fart
-    m = FlexMock.new
-    m.mock_handle(:kind) {1}
-    assert(@o.fart(m))
-  end
-
   def test_triggers
     assert_respond_to(@o, :triggers)
   end

@@ -28,7 +28,7 @@ class TelnetFilter < Filter
   include ASCIICodes
   include TelnetCodes
 
-  logger 'INFO'
+  logger 'DEBUG'
 
   # Initialize state of filter
   #
@@ -54,7 +54,7 @@ class TelnetFilter < Filter
   # [+args+] Optional initial options
   def init(args)
     return true if @server.service_type == :client  # let server offer and ask for client
-    # severl sorts of options here - server offer, ask client or both
+    # several sorts of options here - server offer, ask client or both
     @wopts.each do |key,val|
       case key
       when ECHO, SGA, BINARY, ZMP
@@ -122,7 +122,7 @@ class TelnetFilter < Filter
           end
         end
       when :cr
-        # handle CRLF and CRNUL by insertion of LF
+        # handle CRLF and CRNUL by insertion of LF into buffer
         case b[0]
         when LF, NUL
           buf << LF.chr
@@ -133,7 +133,7 @@ class TelnetFilter < Filter
         end
         set_mode(:normal)
       when :lf
-        # handle LF, LFCR
+        # liberally handle LF, LFCR for clients that aren't telnet correct
         case b[0]
         when CR # Handle LFCR by swallowing CR
         else  # Handle other stuff that follows - single LF
@@ -324,6 +324,9 @@ class TelnetFilter < Filter
       log.debug("(#{@pstack.conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.")
       @sneg_opts = []
       @pstack.conn.set_initdone
+      if !@pstack.terminal or @pstack.terminal.empty?
+        @pstack.terminal = "dumb"
+      end
     end
   end
 
@@ -385,7 +388,7 @@ private
           return if @pstack.terminal
           choose_terminal
         end
-      elsif data[0] == 1
+      elsif data[0] == 1  # send - should only be called by :client
         return if !@pstack.terminal
         @pstack.conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 0.chr + @pstack.terminal + IAC.chr + SE.chr)
       end
@@ -404,11 +407,17 @@ private
       @pstack.terminal = "dumb"
     end
 
-    @pstack.terminal = @ttype.find {|t| t =~  /(vt|VT)[-]?100/ } if !@pstack.terminal
-    @pstack.terminal = @ttype.find {|t| t =~ /(vt|VT)[-]?\d+/ } if !@pstack.terminal
-    @pstack.terminal = @ttype.find {|t| t =~ /(ansi|ANSI).*/ } if !@pstack.terminal
-    @pstack.terminal = @ttype.find {|t| t =~ /(xterm|XTERM).*/ } if !@pstack.terminal
-    @pstack.terminal = @ttype.find {|t| t =~ /mushclient/ } if !@pstack.terminal
+    # Pick most capable from list of terminals
+    @pstack.terminal = @ttype.find {|t| t =~ /mushclient/i } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~ /simplemu/i } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~ /(zmud).*/i } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~ /linux/i } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~ /cygwin/i } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~ /(cons25).*/i } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~ /(xterm).*/i } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~  /(vt)[-]?100/i } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~ /(vt)[-]?\d+/i } if !@pstack.terminal
+    @pstack.terminal = @ttype.find {|t| t =~ /(ansi).*/i } if !@pstack.terminal
 
     if @pstack.terminal && @ttype.last != @pstack.terminal # short circuit retraversal of options
       @ttype.each do |t|
@@ -419,7 +428,16 @@ private
       @pstack.terminal = 'dumb'
     end
 
-    log.debug("(#{@pstack.conn.object_id}) Terminal choice - #{@pstack.terminal} in list #{@ttype.inspect}")
+    @pstack.terminal.downcase!
+
+    # translate certain terminals to something meaningful
+    case @pstack.terminal
+    when /cygwin/i, /cons25/i, /linux/i
+      @pstack.terminal = 'vt100'
+    when /ansis/i then
+      @pstack.terminal = 'ansi'
+    end
+    log.debug("(#{@pstack.conn.object_id}) Terminal set to - #{@pstack.terminal} from list #{@ttype.inspect}")
   end
 
   # Get current parse mode

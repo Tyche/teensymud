@@ -103,7 +103,7 @@ class World < Root
   # [+return+] a string
   def memstats
     # initialize all counters
-    rooms = objs = players = strcount = strsize = ocount = 0
+    rooms = objs = players = scripts = strcount = strsize = ocount = 0
 
     # scan the ObjectSpace counting things
     ObjectSpace.each_object do |x|
@@ -117,6 +117,8 @@ class World < Root
         rooms += 1
       when GameObject
         objs += 1
+      when Script
+        scripts += 1
       else
         ocount += 1
       end
@@ -130,12 +132,13 @@ class World < Root
   Rooms   - #{rooms}
   Players - #{players}
   Objects - #{objs}
+  Scripts - #{scripts}
 -----------------------------
   Strings - #{strcount}
      size - #{strsize} bytes
   Other   - #{ocount}
 -----------------------------
-  Total Objects - #{rooms+objs+players+strcount+ocount}
+  Total Objects - #{rooms+objs+players+scripts+strcount+ocount}
 ----*                   *----
 [/COLOR]
 EOD

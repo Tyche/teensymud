@@ -62,8 +62,9 @@ class GameObject < Root
 
   # Add a trigger script to this object
   # [+s+] The script to add
-  def add_trigger(s)
-    triggers[s.event] = s
+  def add_trigger(event, sid)
+    event = event.intern if event.respond_to?(:to_str)
+    triggers[event] = sid
   end
 
   # Deletes a trigger script from this object
@@ -81,7 +82,7 @@ class GameObject < Root
     triggers[event]
   end
 
-  # Returns the trigger sscripts on the object
+  # Returns the trigger scripts on the object
   # [+return+] An array of trigger scripts
   def get_triggers
     triggers.values

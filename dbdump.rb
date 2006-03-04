@@ -22,7 +22,7 @@ require 'storage/properties'
 require 'core/player'
 require 'core/room'
 require 'core/world'
-require 'farts/farts_parser'
+require 'core/script'
 
 # This utility program dumps a database to yaml
 #
