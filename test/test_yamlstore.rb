@@ -4,21 +4,14 @@ unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'flexmock'
 require 'pp'
-class Engine
-  @@mock = FlexMock.new
-  @@mock.mock_handle(:db) {$db}
-  @@mock.mock_handle(:getid) {$id += 1}
-  def self.instance
-    @@mock
-  end
-end
-
+load 'mockengine.rb'
 require 'utility/configuration'
 require 'storage/yamlstore'
 require 'storage/properties'
 require 'core/world'
 require 'core/player'
 require 'core/room'
+require 'core/script'
 end
 
 class TestYamlStore < Test::Unit::TestCase
@@ -107,6 +100,7 @@ class TestYamlStore < Test::Unit::TestCase
   Rooms   - 2
   Players - 1
   Objects - 1
+  Scripts - 0
   Total Objects - 4
   Highest OID in use - 4
 ---*                     *---

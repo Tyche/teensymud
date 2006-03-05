@@ -17,14 +17,14 @@ PKG_FILES = FileList[
   'logs', 'logs/README',
   'benchmark', 'benchmark/README',
   'lib/**/*',
-  'vendor/**/*',
+  'vendor/**/bb*',
   'cmd/**/*',
   'doc/**/*'
 ]
 
 # make documentation
 Rake::RDocTask.new do |rd|
-  rd.rdoc_dir = 'tmp'
+  rd.rdoc_dir = 'doc'
   rd.main = 'README'
   rd.title = "TeensyMUD #{Version} Mud Server"
 #  rd.template = 'kilmer'
@@ -33,24 +33,23 @@ Rake::RDocTask.new do |rd|
     'dbload.rb', 'dbdump.rb',  
     'lib/*.rb', 'lib/**/*.rb', 'cmd/**/*.rb')
   rd.options << '-d' 
-  pp rd
-end
-
-task :rdoc do
-  sh 'cp -r tmp/* doc' 
-  sh 'rm -rf tmp'
 end
 
 # run tests
 Rake::TestTask.new do |t|
   t.libs << "vendor" << "test"  # default "lib"
   #t.pattern = 'test/test*.rb'  # default 'test/test*.rb'
-  t.test_files = FileList['test/test*.rb']
+  t.test_files = FileList['test/test*.rb'] - 
+    ["test/test_gameobject.rb",
+     "test/test_room.rb",
+     "test/test_root.rb",
+     "test/test_properties.rb",
+     "test/test_player.rb"]
   t.verbose = true
   t.options = "-c test/test_config.yaml"
 end
 
-# package up a distribution
+desc "Package up a distribution"
 Rake::PackageTask.new("tmud", Version) do |p|
     p.need_tar_gz = true
     p.need_zip = true
@@ -87,7 +86,7 @@ task :release do
   sh "svn cp -m 'tagged release #{Version}' #{baseurl}/trunk #{baseurl}/release/tmud-#{Version}"
 end
 
-desc "Rebuild the FARTS interpreter"
+desc "Rebuild the parsers"
 task :build_parsers do
   sh "racc -o lib/farts/farts_parser.rb lib/farts/farts_parser.y"
   sh "racc -o lib/utility/boolexp.rb lib/utility/boolexp.y"
@@ -96,4 +95,4 @@ end
 task :release => [:package]
 #task :clean => [:clobber_rdoc]
 task :package => [:rdoc]
-task :default => [:farts, :rdoc, :test]
+#task :default => [:build_parsers, :rdoc, :test]

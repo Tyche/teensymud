@@ -5,21 +5,7 @@
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'flexmock'
-class Engine
-  @@mock = FlexMock.new
-  @@mock.mock_handle(:db) {@@mock}
-  @@mock.mock_handle(:mark) {}
-  @@mock.mock_handle(:getid) {$id += 1}
-  @@mock.mock_handle(:get) do |oid|
-    case oid
-    when 0 then @@mock
-    end
-  end
-  def self.instance
-    @@mock
-  end
-end
-
+load 'mockengine.rb'
 require 'storage/properties'
 require 'core/player'
 require 'command'

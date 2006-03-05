@@ -5,28 +5,7 @@
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'flexmock'
-class Engine
-  @@mock = FlexMock.new
-  @@mock.mock_handle(:db) {@@mock}
-  @@mock.mock_handle(:getid) {$id += 1}
-  @@mock.mock_handle(:mark) {}
-  @@mock.mock_handle(:get) do |oid|
-    case oid
-    when 0 then @@mock
-    when 1 then $r
-    when 2 then $r2
-    end
-  end
-  @@mock.mock_handle(:put) {true}
-  @@mock.mock_handle(:delete) {true}
-  @@mock.mock_handle(:eventmgr) {@@mock}
-  @@mock.mock_handle(:add_event) {true}
-  @@mock.mock_handle(:ocmds) {@@mock}
-  @@mock.mock_handle(:find) {[]}
-  def self.instance
-    @@mock
-  end
-end
+load 'mockengine.rb'
 require 'storage/properties'
 require 'core/room'
 require 'core/player'
@@ -38,22 +17,39 @@ class TestRoom < Test::Unit::TestCase
     @r = Room.new("Here",0)
     $r = @r
     @r2 = Room.new("There",0)
-    $r2 = @r2
+    $p = @r2
   end
 
-  def test_ass
-    k = [:describe,:describe,:describe_exits,:describe_exits,:leave,:leave,
-      :arrive,:arrive,:timer,:timer,:timer,:foobar]
+  def test_arrive
     m = FlexMock.new
-    m.mock_handle(:kind) {k.shift}
+    m.mock_handle(:kind) {:arrive}
     m.mock_handle(:from) {1}
     m.mock_handle(:msg) {2}
-    assert(@r.ass(m))
-    assert(@r.ass(m))
-    assert(@r.ass(m))
-    assert(@r.ass(m))
-    assert(@r.ass(m))
-    assert_equal(nil,@r.ass(m))
+    assert(!@r.arrive(m))
+  end
+
+  def test_describe
+    m = FlexMock.new
+    m.mock_handle(:kind) {:describe}
+    m.mock_handle(:from) {1}
+    m.mock_handle(:msg) {2}
+    assert(@r.describe(m))
+  end
+
+  def test_describe_exits
+    m = FlexMock.new
+    m.mock_handle(:kind) {:describe_exits}
+    m.mock_handle(:from) {1}
+    m.mock_handle(:msg) {2}
+    assert(@r.describe_exits(m))
+  end
+
+  def test_leave
+    m = FlexMock.new
+    m.mock_handle(:kind) {:leave}
+    m.mock_handle(:from) {1}
+    m.mock_handle(:msg) {2}
+    assert(@r.leave(m))
   end
 
   def test_exits

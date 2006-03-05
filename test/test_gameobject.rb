@@ -5,29 +5,7 @@
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'flexmock'
-class Engine
-  @@mock = FlexMock.new
-  @@mock.mock_handle(:db) {@@mock}
-  @@mock.mock_handle(:getid) {$id += 1}
-  @@mock.mock_handle(:mark) {}
-  @@mock.mock_handle(:get) do |oid|
-    case oid
-    when 0 then @@mock
-    when 1 then $r
-    when 2 then $p
-    when 3 then $o
-    end
-  end
-  @@mock.mock_handle(:put) {true}
-  @@mock.mock_handle(:delete) {true}
-  @@mock.mock_handle(:eventmgr) {@@mock}
-  @@mock.mock_handle(:add_event) {true}
-  @@mock.mock_handle(:ocmds) {@@mock}
-  @@mock.mock_handle(:find) {[]}
-  def self.instance
-    @@mock
-  end
-end
+load 'mockengine.rb'
 require 'storage/properties'
 require 'core/gameobject'
 require 'core/player'
@@ -51,27 +29,11 @@ class TestGameObject < Test::Unit::TestCase
   end
 
   def test_add_trigger
-    m = FlexMock.new
-    m.mock_handle(:event) {:describe}
-    assert_equal(m,@o.add_trigger(m))
-  end
-
-  def test_ass
-    k = [:describe,:describe,:get,:get,:drop,:drop,:timer,:timer,:foobar]
-    m = FlexMock.new
-    m.mock_handle(:kind) {k.shift}
-    m.mock_handle(:from) {2}
-    assert_equal([3],@r.add_contents(3))
-    assert_equal(1,@o.location=1)
-    assert(@o.ass(m))
-    assert(@o.ass(m))
-    assert(@o.ass(m))
-    assert(@o.ass(m))
-    assert_equal(nil,@o.ass(m))
+    assert_equal(99,@o.add_trigger(:describe, 99))
   end
 
   def test_contents
-    assert_equal([2],@r.contents)
+    assert_equal([],@r.contents)
   end
 
   def test_contents_equals
@@ -84,10 +46,42 @@ class TestGameObject < Test::Unit::TestCase
   end
 
   def test_delete_trigger
+    assert_equal(99,@o.add_trigger(:describe, 99))
+    assert_equal(99,@o.delete_trigger(:describe))
+  end
+
+  def test_describe
     m = FlexMock.new
-    m.mock_handle(:event) {:describe}
-    assert_equal(m,@o.add_trigger(m))
-    assert_equal(m,@o.delete_trigger(:describe))
+    m.mock_handle(:kind) {:describe}
+    m.mock_handle(:from) {2}
+    assert_equal([3],@r.add_contents(3))
+    assert_equal(1,@o.location=1)
+    assert(@o.describe(m))
+  end
+
+  def test_drop
+    m = FlexMock.new
+    m.mock_handle(:kind) {:drop}
+    m.mock_handle(:from) {2}
+    assert_equal([3],@r.add_contents(3))
+    assert_equal(1,@o.location=1)
+    assert(@o.drop(m))
+  end
+
+  def test_get
+    m = FlexMock.new
+    m.mock_handle(:kind) {:get}
+    m.mock_handle(:from) {2}
+    assert_equal([3],@r.add_contents(3))
+    assert_equal(1,@o.location=1)
+    assert(@o.get(m))
+  end
+
+  def test_timer
+    m = FlexMock.new
+    m.mock_handle(:kind) {:timer}
+    m.mock_handle(:from) {2}
+    assert(!@o.timer(m))
   end
 
   def test_triggers
@@ -104,18 +98,14 @@ class TestGameObject < Test::Unit::TestCase
   end
 
   def test_get_trigger
-    m = FlexMock.new
-    m.mock_handle(:event) {:describe}
-    assert_equal(m,@o.add_trigger(m))
-    assert_equal(m,@o.get_trigger("describe"))
+    assert_equal(99,@o.add_trigger(:describe, 99))
+    assert_equal(99,@o.get_trigger("describe"))
   end
 
   def test_get_triggers
     assert_equal([],@o.get_triggers)
-    m = FlexMock.new
-    m.mock_handle(:event) {:describe}
-    assert_equal(m,@o.add_trigger(m))
-    assert_equal([m],@o.get_triggers)
+    assert_equal(99,@o.add_trigger(:describe, 99))
+    assert_equal([99],@o.get_triggers)
   end
 
   def test_location

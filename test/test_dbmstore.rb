@@ -4,15 +4,7 @@ unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'flexmock'
 require 'pp'
-class Engine
-  @@mock = FlexMock.new
-  @@mock.mock_handle(:db) {$db}
-  @@mock.mock_handle(:getid) {$id += 1}
-  def self.instance
-    @@mock
-  end
-end
-
+load 'mockengine.rb'
 require 'utility/configuration'
 require 'storage/dbmstore'
 require 'storage/properties'

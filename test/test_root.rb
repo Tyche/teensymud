@@ -5,32 +5,18 @@
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'flexmock'
-class Engine
-  @@id = 0
-  @@mock = FlexMock.new
-  @@mock.mock_handle(:db) {@@mock}
-  @@mock.mock_handle(:getid) {@@id += 1}
-  @@mock.mock_handle(:mark) {}
-  @@mock.mock_handle(:get) {|oid| oid == 0 ? 1 : 2}
-  @@mock.mock_handle(:put) {true}
-  @@mock.mock_handle(:delete) {true}
-  @@mock.mock_handle(:eventmgr) {@@mock}
-  @@mock.mock_handle(:add_event) {true}
-  def self.instance
-    @@mock
-  end
-end
+load 'mockengine.rb'
 require 'storage/properties'
 require 'core/root'
 end
 
 class TestRoot < Test::Unit::TestCase
-  def test_add_event
-    assert(Root.new("thing",0).add_event(0,1,:timer))
+  def setup
+    $id = 0
   end
 
-  def test_ass
-    assert_respond_to(Root.new("thing",0), :ass)
+  def test_add_event
+    assert(Root.new("thing",0).add_event(0,1,:timer))
   end
 
   def test_delete_object
@@ -88,7 +74,7 @@ class TestRoot < Test::Unit::TestCase
   end
 
   def test_world
-    assert_equal(1,Root.new("thing",0).world)
+    assert_respond_to(Root.new("thing",0), :world)
   end
 end
 

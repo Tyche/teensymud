@@ -5,28 +5,7 @@
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
 require 'flexmock'
-class Engine
-  @@mock = FlexMock.new
-  @@mock.mock_handle(:db) {@@mock}
-  @@mock.mock_handle(:getid) {$id += 1}
-  @@mock.mock_handle(:mark) {}
-  @@mock.mock_handle(:get) do |oid|
-    case oid
-    when 0 then @@mock
-    when 1 then $r
-    when 2 then $p
-    end
-  end
-  @@mock.mock_handle(:put) {true}
-  @@mock.mock_handle(:delete) {true}
-  @@mock.mock_handle(:eventmgr) {@@mock}
-  @@mock.mock_handle(:add_event) {true}
-  @@mock.mock_handle(:cmds) {@@mock}
-  @@mock.mock_handle(:find) {[]}
-  def self.instance
-    @@mock
-  end
-end
+load 'mockengine.rb'
 require 'storage/properties'
 require 'core/player'
 require 'core/room'
@@ -41,16 +20,20 @@ class TestPlayer < Test::Unit::TestCase
     $p = @p
   end
 
-  def test_ass
-    k = [:describe,:describe,:show,:show,:timer,:timer,:foobar]
+  def test_describe
     m = FlexMock.new
-    m.mock_handle(:kind) {k.shift}
+    m.mock_handle(:kind) {:describe}
     m.mock_handle(:from) {9}
     m.mock_handle(:msg) {}
-    assert(@p.ass(m))
-    assert(@p.ass(m))
-    assert(@p.ass(m))
-    assert_equal(nil,@p.ass(m))
+    assert(@p.describe(m))
+  end
+
+  def test_show
+    m = FlexMock.new
+    m.mock_handle(:kind) {:describe}
+    m.mock_handle(:from) {9}
+    m.mock_handle(:msg) {}
+    assert(!@p.show(m))
   end
 
   def test_check_passwd
