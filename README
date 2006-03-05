@@ -1,7 +1,6 @@
 = TeensyMUD Server
-= v2.7.0
+= v2.8.0
 
----
 == Introduction
 TeensyMUD is a very simple mud server written in Ruby.  It uses a multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns and YAML formatted text files as a database.  It is also a pure event driven system where all game objects communicate with each other via events.  
 
@@ -58,9 +57,9 @@ The latest release can be found at http://teensymud.kicks-ass.org
 * New logging system controlled at the class level
 * Configuration support.  Configuration information stored in easily readable file.
 * Object properties.  Properties define attributes that are persistent.  Set them and forget them. 
+* Pre and post event triggers
+* Boolean expression parser
 
-
----
 == Installation
 
 1. $ tar xzvf tmud*
@@ -114,7 +113,6 @@ That's it.  It will boot on port 4000 and build an initial database in the db di
 - @memstats  - displays the memory statistics by scanning ruby's object space
 - @dumpcache - inspects the cache (for debugging).
 
----
 == Contributors
 :include:CONTRIBUTORS
 

@@ -30,6 +30,9 @@ cache_depth: 7
 # Ex. Player.name.capitalize! - uses read accessor but modifies receiver
 safe_read: true
 
+# This turns property into attr_accessor 
+props_are_accessors_only: false
+
 ###########################################################
 ### Network configuration section
 ###########################################################

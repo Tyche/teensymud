@@ -1,6 +1,7 @@
 require 'rake/rdoctask'
 require 'rake/testtask'
 require 'rake/packagetask'
+require 'pp'
 
 # get version 
 require 'lib/utility/version'
@@ -31,7 +32,8 @@ Rake::RDocTask.new do |rd|
   rd.rdoc_files.include('README', 'farts.grammar', 'TML', 'tmud.rb', 'tclient.rb',
     'dbload.rb', 'dbdump.rb',  
     'lib/*.rb', 'lib/**/*.rb', 'cmd/**/*.rb')
-  rd.options << '-dSN -I gif' 
+  rd.options << '-d' 
+  pp rd
 end
 
 task :rdoc do
@@ -70,7 +72,7 @@ task :stats do |t|
     ["Core", "lib/core", /.*\.rb$/], 
     ["Protocol", "lib/network/protocol", /.*\.rb$/], 
     ["Commands", "cmd/teensy", /.*\.rb$/],
-    ["Benchmarks", "benchmark", /.*\.rb$/]
+    ["Benchmarks", "benchmark", /.*\.rb$/],
     ["Tests", "test", /.*\.rb$/]
   ).to_s
 end

@@ -3,7 +3,6 @@
 == Introduction
 Teensy Markup Language is a general mechanism used to markup mud text.  Markup directives are translated to the best format the client can handle whether it be VTxxx/ANSI, HTML, MXP, ZMP or raw text.  If the client cannot handle a particular directive, then it is stripped from the stream before sending it to the client. 
 
-----
 == Syntax
 Markup is placed inline in strings using keywords in brackets.  Keywords are case insensitive.  Normal use of brackets is allowed and needs no special escaping.
 
