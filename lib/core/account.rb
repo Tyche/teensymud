@@ -70,20 +70,20 @@ class Account
     case msg
     when :logged_out, :disconnected
       unsubscribe_all
+    when :termsize
+      @ts = @conn.query(:termsize)
+      publish("[home #{@ts[1]},1][clearline][cursave]" +
+        "[home 1,1][scrreset][clear][scrreg 1,#{@ts[1]-3}][currest]")
     when :initdone
       @echo = @conn.query(:echo)
       @initdone = true
-      publish(BANNER)
-      ts = @conn.query(:termsize)
- # ansi test COMMENTED OUT as this screws up some clients
-#      publish("[cursave]")
-#      15.times do
-#        publish("[home #{rand(ts[1])+1},#{rand(ts[0])+1}]*")
-#      end
-#      publish("[currest]")
+      @ts = @conn.query(:termsize)
+      publish("[home #{@ts[1]},1][clearline][cursave]" +
+        "[home 1,1][scrreset][clear][scrreg 1,#{@ts[1]-3}][currest]")
+      prompt(BANNER)
       prompt("login> ")
     when String
-      if @initdone
+        publish("[clearline]")
         case @state
         when :name
           @login_name = msg
@@ -100,17 +100,19 @@ class Account
           if @player
             if @player.check_passwd(@login_passwd)  # good login
               @player.session = @conn
+              @player.ts = @ts
               login
             else  # bad login
               @checked -= 1
-              prompt("Sorry wrong password.\n")
+              prompt("Sorry wrong password.")
               if @checked < 1
-                publish("Bye!\n")
+                #publish("Bye!")
+                publish("Bye![reset]")
                 publish(:logged_out)
                 unsubscribe_all
               else
                 @state = :name
-                publish("login> ")
+                prompt("login> ")
               end
             end
           else  # new player
@@ -129,13 +131,13 @@ class Account
               Engine.instance.db.put(@player)
               Engine.instance.db.get(options['home'] || 1).add_contents(@player.id)
               Engine.instance.world.all_players << @player.id
+              @player.ts = @ts
               login
             end
           else
             @state = :name
             prompt("login> ")
           end
-        end
       end
     else
       log.error "Account#update unknown message - #{msg.inspect}"
@@ -144,8 +146,8 @@ class Account
 
 private
   def prompt(msg)
-    msg = "\n" + msg if !@echo
-    publish(msg)
+#    msg = "\n" + msg if !@echo
+    publish("[cursave][home #{@ts[1]-3},1]#{msg}\n[currest]")
   end
 
   # Called on successful login
@@ -159,7 +161,7 @@ private
     if @player.subscriber_count > 0
       @player.publish(:reconnecting)
       @player.unsubscribe_all
-      @player.sendto("\nWelcome reconnecting #{@login_name}@#{@conn.query(:host)}!")
+      @player.sendto("Welcome reconnecting #{@login_name}@#{@conn.query(:host)}!")
     end
 
     # deregister all observers here and on connection
@@ -170,7 +172,7 @@ private
     @conn.subscribe(@player.id)
     @player.subscribe(@conn)
 
-    @player.sendto("\nWelcome #{@login_name}@#{@conn.query(:host)}!")
+    @player.sendto("Welcome #{@login_name}@#{@conn.query(:host)}!")
     Engine.instance.world.connected_players.each do |pid|
       if pid != @player.id
         Engine.instance.eventmgr.add_event(@player.id,pid,:show,"#{@player.name} has connected.")

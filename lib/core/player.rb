@@ -24,7 +24,7 @@ class Player < GameObject
   logger 'INFO'
 
   # The Session object this player is connected on or nil if not connected.
-  attr_accessor :session
+  attr_accessor :session, :mode, :ts
   property :color, :passwd
 
   # Create a new Player object
@@ -37,6 +37,7 @@ class Player < GameObject
   def initialize(name,passwd,session)
     super(name, nil, options['home'] || 1)
     @session = session
+    @mode = nil
     self.passwd = encrypt(passwd)
 
     # session related - only color settable
@@ -47,11 +48,11 @@ class Player < GameObject
   # [+s+]      The message string
   # [+return+] Undefined.
   def sendto(s)
-    publish(s+"\n") if @session
+    publish("[cursave][home #{@ts[1]-3},1]#{s}\n[currest]") if @session
   end
 
   def prompt
-    publish("[COLOR=red]@[COLOR=green]-,-[/COLOR]> ") if @session
+    publish("[COLOR=red]@[COLOR=green]-`,-[/COLOR]> ") if @session
   end
 
   # Receives messages from a Connection being observed and handles them
@@ -87,6 +88,10 @@ class Player < GameObject
         add_event(id,pid,:show,"#{name} has disconnected.")
       end
       Engine.instance.db.makeswap(id)
+    when :termsize
+      @ts = @session.query(:termsize)
+      publish("[home #{@ts[1]},1][clearline][cursave]" +
+        "[home 1,1][scrreset][clear][scrreg 1,#{@ts[1]-3}][currest]")
     when String
       parse(msg)
     else
@@ -103,6 +108,7 @@ class Player < GameObject
 
   # Disconnects this player
   def disconnect
+    publish("Bye![reset]")
     publish(:logged_out)
   end
 
@@ -110,6 +116,13 @@ class Player < GameObject
   # [+m+]      The input message to be parsed
   # [+return+] Undefined.
   def parse(m)
+    publish("[clearline]")
+    # handle edit mode
+    if @mode == :edit
+      edit_parser m
+      return
+    end
+
     # match legal command
     m=~/([A-Za-z0-9_@?"'#!\]\[]+)(.*)/
     cmd=$1
@@ -150,8 +163,9 @@ class Player < GameObject
       end
       sendto(ln)
     end
-    # prompt after every command
-    #prompt
+  rescue Exception
+    # keep player alive after exceptions
+    log.fatal $!
   end
 
   # Event :describe

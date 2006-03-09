@@ -340,17 +340,27 @@ class TerminalFilter < Filter
   # [+str+]    The string to be processed
   # [+return+] The filtered data
   def filter_out(str)
-    VTKeys.each do |key,val|
-      while str =~ key do
-        s = val.dup
-        p1 = $1.dup if $1
-        p2 = $2.dup if $2
-        if p1 && p2
-          s.sub!(/\$;\$/, "#{p1};#{p2}")
-        elsif p1
-          s.sub!(/\$/, p1)
+    return "" if str.nil? || str.empty?
+    case @pstack.terminal
+    when /^vt/, 'xterm'
+      VTKeys.each do |key,val|
+        while str =~ key do
+          s = val.dup
+          p1 = $1.dup if $1
+          p2 = $2.dup if $2
+          if p1 && p2
+            s.sub!(/\$;\$/, "#{p1};#{p2}")
+          elsif p1
+            s.sub!(/\$/, p1)
+          end
+          str.sub!(key,s)
         end
-        str.sub!(key,s)
+      end
+    else
+      VTKeys.each do |key,val|
+        while str =~ key do
+          str.sub!(key,"")
+        end
       end
     end
     str

@@ -37,8 +37,8 @@ class Connector < Session
   def init
     # Open a socket for the server to connect on.
     @sock = TCPSocket.new(@address , @server.port)
-    #@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
-    #@sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_LINGER, 0)
+    @sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, true)
+    @sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_LINGER, false)
     unless RUBY_PLATFORM =~ /win32/
       @sock.fcntl(Fcntl::F_SETFL, Fcntl::O_NONBLOCK)
     end

@@ -144,3 +144,12 @@
              @script add boolexp (#234|#42)&#34 )
     
   name: '@script'
+- !ruby/object:Command 
+  cmd: :cmd_edit
+  help: |
+    Adds, deletes or shows a script
+      Syntax:
+        @edit #<oid> <field>
+        (ex. @edit #7 desc)
+    
+  name: '@edit'
