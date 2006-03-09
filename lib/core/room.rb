@@ -36,7 +36,7 @@ class Room < GameObject
   # [+e+]      The event
   # [+return+] Undefined
   def describe(e)
-    msg = "[COLOR=green](#{id.to_s}) #{name}[/COLOR]\n#{desc}\n"
+    msg = "[COLOR Green](#{id.to_s}) #{name}[/COLOR]\n#{desc}\n"
     add_event(id,e.from,:show,msg)
   end
 
@@ -44,7 +44,7 @@ class Room < GameObject
   # [+e+]      The event
   # [+return+] Undefined
   def describe_exits(e)
-    msg = "[COLOR=red]Exits:\n"
+    msg = "[COLOR Red]Exits:\n"
     s = exits.size
     if s == 0
       msg << "None.[/COLOR]"

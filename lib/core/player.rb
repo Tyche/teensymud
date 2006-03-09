@@ -52,7 +52,7 @@ class Player < GameObject
   end
 
   def prompt
-    publish("[COLOR=red]@[COLOR=green]-`,-[/COLOR]> ") if @session
+    publish("[COLOR Red]@[COLOR Green]-`,-[/COLOR]> ") if @session
   end
 
   # Receives messages from a Connection being observed and handles them
@@ -172,7 +172,7 @@ class Player < GameObject
   # [+e+]      The event
   # [+return+] Undefined
   def describe(e)
-    msg = "[COLOR=cyan]#{name} is here.[/COLOR]"
+    msg = "[COLOR Cyan]#{name} is here.[/COLOR]"
     add_event(id,e.from,:show,msg)
   end
 

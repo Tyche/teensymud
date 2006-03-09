@@ -14,7 +14,7 @@ $:.unshift "lib" if !$:.include? "lib"
 $:.unshift "vendor" if !$:.include? "vendor"
 
 require 'network/protocol/filter'
-require 'bbcode'
+require 'network/protocol/colorcodes'
 
 # The ColorFilter class implements ANSI color (SGR) support.
 #
@@ -22,24 +22,38 @@ require 'bbcode'
 class ColorFilter < Filter
   logger 'DEBUG'
 
-  # Construct filter
-  #
-  # [+pstack+] The ProtocolStack associated with this filter
-  def initialize(pstack)
-    super(pstack)
-  end
-
   # The filter_out method filters output data
   # [+str+]    The string to be processed
   # [+return+] The filtered data
   def filter_out(str)
     return "" if str.nil? || str.empty?
     if @pstack.color_on
-      s = BBCode.bbcode_to_ansi(str)
+      str.gsub!(/\[COLOR\s+(\w+)\s+ON\s+(\w+)\]/mi) do |m|
+        ColorTable[$1][2]+ColorTable[$2][3]
+      end
+      str.gsub!(/\[COLOR\s+(\w+)\]/mi) do |m|
+        ColorTable[$1][2]
+      end
+      str.gsub!(/\[\/COLOR\]/mi) do |m|
+        ANSICODE['reset']
+      end
+      str.gsub!(/\[[BI]\]/mi) do |m|
+        ANSICODE['bold']
+      end
+      str.gsub!(/\[U\]/mi) do |m|
+        ANSICODE['underline']
+      end
+      str.gsub!(/\[\/[BUI]\]/mi) do |m|
+        ANSICODE['reset']
+      end
     else
-      s = BBCode.strip_bbcode(str)
+      str.gsub!(/\[COLOR\s+(\w+)\s+ON\s+(\w+)\]/mi,'')
+      str.gsub!(/\[COLOR\s+(\w+)\]|\[\/COLOR\]/mi, '')
+      str.gsub!(/\[SIZE .*?\]|\[\/SIZE\]/mi, '')
+      str.gsub!(/\[FONT .*?\]|\[\/FONT\]/mi, '')
+      str.gsub!(/\[[BUI]\]|\[\/[BUI]\]/mi, '')
     end
-    return s
+    str
   end
 
 end

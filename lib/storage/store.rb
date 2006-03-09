@@ -136,7 +136,7 @@ class Store
       end
     end
     stats=<<EOD
-[COLOR=cyan]
+[COLOR Cyan]
 ---* Database Statistics *---
   Rooms   - #{rooms}
   Players - #{players}

@@ -18,11 +18,11 @@ module Cmd
     when nil, ""
       sendto("What are you trying to tell everyone?")
     else
-      sendto("[COLOR=magenta]You chat, \"#{args}\".[/COLOR]")
+      sendto("[COLOR Magenta]You chat, \"#{args}\".[/COLOR]")
       world.connected_players.each do |pid|
         if id != pid
           add_event(id,pid,:show,
-            "[COLOR=magenta]#{name} chats, \"#{args}\".[/COLOR]")
+            "[COLOR Magenta]#{name} chats, \"#{args}\".[/COLOR]")
         end
       end
     end

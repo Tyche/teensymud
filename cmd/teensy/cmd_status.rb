@@ -17,7 +17,7 @@ module Cmd
     sendto("Terminal: #{@session.query(:terminal)}")
     ts = @session.query(:termsize)
     sendto("Terminal size: #{ts[0]} X #{ts[1]}")
-    sendto("Colors toggled #{color ? "[COLOR=magenta]ON[/COLOR]" : "OFF" }")
+    sendto("Colors toggled #{color ? "[COLOR Magenta]ON[/COLOR]" : "OFF" }")
     sendto("Echo is #{@session.query(:echo) ? "ON" : "OFF" }")
     sendto("ZMP is #{@session.query(:zmp) ? "ON" : "OFF" }")
   end

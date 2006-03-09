@@ -162,3 +162,9 @@ ColorTable = {
   "Yellow"               => ["#FFFF00" , "yellow",     "\e[1;33m", "\e[43m"],
   "YellowGreen"          => ["#9ACD32" , "lightgreen", "\e[1;32m", "\e[42m"]
 }
+
+
+ANSICODE= { "reset"     => "\e[0m", "bold"  => "\e[1m",
+            "underline" => "\e[4m", "blink"      => "\e[5m",
+            "reverse"   => "\e[7m", "invisible"  => "\e[8m"
+          }

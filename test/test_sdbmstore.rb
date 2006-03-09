@@ -111,7 +111,7 @@ class TestSdbmStore < Test::Unit::TestCase
     @db.get(@r.id)
     @db.get(99)
     stats=<<EOH
-[COLOR=cyan]
+[COLOR Cyan]
 ---* Database Statistics *---
   Rooms   - 2
   Players - 1

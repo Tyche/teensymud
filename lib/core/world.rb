@@ -127,7 +127,7 @@ class World < Root
     # our report  :
     # :NOTE: sprintf would be better
     memstats=<<EOD
-[COLOR=cyan]
+[COLOR Cyan]
 ----* Memory Statistics *----
   Rooms   - #{rooms}
   Players - #{players}

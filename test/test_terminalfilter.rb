@@ -24,7 +24,7 @@ class TestTerminalFilter < Test::Unit::TestCase
   end
 
   def test_filter_in
-    assert_equal("[COLOR=black]black[RESET][UP 1][END]",
+    assert_equal("[COLOR Black]black[RESET][UP 1][END]",
       @filter.filter_in("\e[30mblack\e[0m\e[A\e[4~"))
   end
 

@@ -137,7 +137,7 @@ class GameObject < Root
   # [+e+]      The event
   # [+return+] Undefined
   def describe(e)
-    msg = "[COLOR=yellow]A #{name} is here[/COLOR]"
+    msg = "[COLOR Yellow]A #{name} is here[/COLOR]"
     add_event(id,e.from,:show,msg)
   end
 
