@@ -19,7 +19,7 @@ require 'core/root'
 # The GameObject class is no longer the mother of all objects.
 #
 class GameObject < Root
-  property :location, :contents, :triggers
+  property :location, :contents, :triggers, :msgfail, :msgsucc
   logger 'DEBUG'
 
   # Create a new Object
@@ -32,6 +32,8 @@ class GameObject < Root
     self.location = location    # The location of this object or nil if none
     self.contents = []
     self.triggers = {}
+    self.msgfail = ''
+    self.msgsucc = ''
   end
 
   # Add an object to the contents of this object

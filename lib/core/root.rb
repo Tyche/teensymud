@@ -20,7 +20,7 @@ require 'storage/properties'
 #
 class Root
   configuration
-  property :name, :owner, :desc
+  property :name, :owner, :desc, :created_on, :updated_on
   logger 'DEBUG'
 
   # Create a new Root
@@ -32,6 +32,8 @@ class Root
     self.name = name            # The displayed name of the object
     self.owner = owner || id    # The owner of the object or itself.
     self.desc = ""              # The description of the object
+    self.created_on = Time.now
+    self.updated_on = created_on.dup
   end
 
   # Clone an object

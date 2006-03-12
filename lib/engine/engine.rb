@@ -58,6 +58,9 @@ class Engine
     when :yaml
       require 'storage/yamlstore'
       @db = YamlStore.new(options['dbfile'])
+    when :xml
+      require 'storage/xmlstore'
+      @db = XmlStore.new(options['dbfile'])
     when :gdbm
       require 'storage/gdbmstore'
       @db = GdbmStore.new(options['dbfile'])

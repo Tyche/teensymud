@@ -153,3 +153,12 @@
         (ex. @edit #7 desc)
     
   name: '@edit'
+- !ruby/object:Command 
+  cmd: :cmd_show
+  help: |
+    Displays object
+      Syntax:
+        @show #<oid>|me
+        (ex. @show me)
+    
+  name: '@show'

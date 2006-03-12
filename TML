@@ -105,6 +105,10 @@ Client sends us the position of the cursor in row, col.
 
 Clear the client screen
 
+=== [CLEARLINE]
+
+Clear the current line
+
 === [CURSAVE] | [CURREST]
 
 Ask client to save cursor or restore the saved cursor
@@ -115,6 +119,10 @@ Example:
 === [SCRREG n,n] 
 
 Tell client to setup a scroll region with start and end rows.
+
+=== [SCRRESET] 
+
+Clear the setup scroll region.
 
 === [INSERT]
 

@@ -15,7 +15,7 @@ dbfile: db/world
 
 # Type of database
 #
-# Valid values are: :yaml, :gdbm, :sdbm, :dbm
+# Valid values are: :yaml, :gdbm, :sdbm, :dbm, :xml
 #
 dbtype: :yaml
 
@@ -67,7 +67,7 @@ server_io: :sockio
 #     :colorfilter - attach color filter (default)
 #     :terminalfilter - attach terminal filter
 server_filters:  
-#  - :debugfilter
+  - :debugfilter
   - :telnetfilter
   - :terminalfilter
   - :colorfilter
@@ -82,8 +82,10 @@ server_filters:
 #     :ttype - negotiate terminal type
 #     :zmp - negotiate zmp protocol
 #     :binary - binary stream
+#     :eorec - end of record support
 server_negotiation:
   - :sga
+#  - :eorec
   - :echo
   - :naws
   - :ttype
@@ -105,6 +107,7 @@ home: 1
 # command interfaces to load (in order)
 player_interface:
   - teensy
+  - tiny
 
 object_interface:
   - objects

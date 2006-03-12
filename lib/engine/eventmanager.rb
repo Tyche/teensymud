@@ -15,6 +15,7 @@ $:.unshift "vendor" if !$:.include? "vendor"
 
 require 'engine/event'
 require 'utility/log'
+require 'core/player'
 
 class EventManager
   logger 'DEBUG'
@@ -51,20 +52,79 @@ class EventManager
   def process_events
     while e = get_event
       begin
+        # pre triggers
         obj = Engine.instance.db.get(e.to)
+        obj2 = Engine.instance.db.get(e.from)
         sid = obj.get_trigger("pre_"+e.kind.to_s)
         if sid
-          t = Engine.instance.db.get(sid)
-          ret = t.execute(e) if t
-        else
-          ret = true
+          script = Engine.instance.db.get(sid)
+          if script
+            if script.execute(e)
+              # success
+              if obj2.class == Player
+                s,o = obj.msgsucc.split("|")
+                obj2.sendto(s) if s && !s.empty?
+                if o && !o.empty?
+                  Engine.instance.db.get(obj2.location).players(obj2.id).each do |p|
+                    add_event(obj2.id,p.id,:show,"#{obj2.name} #{o}")
+                  end
+                end
+              end
+            else
+              # failure
+              if obj2.class == Player
+                s,o = obj.msgfail.split("|")
+                obj2.sendto(s) if s && !s.empty?
+                if o && !o.empty?
+                  Engine.instance.db.get(obj2.location).players(obj2.id).each do |p|
+                    add_event(obj2.id,p.id,:show,"#{obj2.name} #{o}")
+                  end
+                end
+              end
+              next
+            end
+          else
+            log.error "Script not found: #{sid} for Event: #{e}"
+            # We fail the action slently
+            next
+          end
         end
-        next if !ret
+
+        # action receiver
         obj.send(e.kind,e)
+
+        # post triggers
         sid = obj.get_trigger(e.kind)
         if sid
-          t = Engine.instance.db.get(sid)
-          t.execute(e) if t
+          script = Engine.instance.db.get(sid)
+          if script
+            if script.execute(e)
+              # success
+              if obj2.class == Player
+                s,o = obj.msgsucc.split("|")
+                obj2.sendto(s) if s && !s.empty?
+                if o && !o.empty?
+                  Engine.instance.db.get(obj2.location).players(obj2.id).each do |p|
+                    add_event(obj2.id,p.id,:show,"#{obj2.name} #{o}")
+                  end
+                end
+              end
+            else
+              # failure
+              if obj2.class == Player
+                s,o = obj.msgfail.split("|")
+                obj2.sendto(s) if s && !s.empty?
+                if o && !o.empty?
+                  Engine.instance.db.get(obj2.location).players(obj2.id).each do |p|
+                    add_event(obj2.id,p.id,:show,"#{obj2.name} #{o}")
+                  end
+                end
+              end
+            end
+          else
+            log.error "Script not found: #{sid} for Event: #{e}"
+            # We fail the action slently
+          end
         end
       rescue
         log.error "Event failed: #{e}"

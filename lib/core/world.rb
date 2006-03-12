@@ -33,7 +33,7 @@ require 'engine/timer'
 class World < Root
   configuration
   logger 'DEBUG'
-  property :timer_list, :all_players
+  property :timer_list, :all_players, :builders, :admins
   attr_accessor :cmds, :ocmds, :connected_players
 
   # Create the World.  This loads or creates the database depending on
@@ -42,6 +42,8 @@ class World < Root
   def initialize
     self.timer_list = []
     self.all_players = []
+    self.admins = []
+    self.builders = []
     @connected_players = []
   end
 
@@ -97,6 +99,56 @@ class World < Root
         timer_list.delete_if {|ti| ti.id == id && ti.name == name }
       end
     end
+  end
+
+  # Is player a builder?
+  # [+oid+] player object id
+  # [+return+] true or false
+  def is_builder? oid
+    builders.include? oid
+  end
+
+  # Is player an admin?
+  # [+oid+] player object id
+  # [+return+] true or false
+  def is_admin? oid
+    admins.include? oid
+  end
+
+  # Make the player an admin
+  # [+oid+] player object id
+  # [+return+] undefined
+  def add_admin oid
+    self.admins << oid if Player && !admin?(oid)
+  end
+
+  # Remove admin priviledges from player
+  # [+oid+] player object id
+  # [+return+] undefined
+  def rem_admin oid
+    self.admins.delete oid
+  end
+
+  # Make the player a builder
+  # [+oid+] player object id
+  # [+return+] undefined
+  def add_builder oid
+    self.builders << oid if Player && !builder?(oid)
+  end
+
+  # Remove admin priviledges from player
+  # [+oid+] player object id
+  # [+return+] undefined
+  def rem_builder oid
+    self.builders.delete oid
+  end
+
+  # Does player own the object?
+  # [+pid+] player object id
+  # [+oid+] object id
+  # [+return+] true or false
+  def is_owner?(pid, oid)
+    oid.owner == get_object(pid).owner
   end
 
   # memstats scans all objects in memory and produces a report

@@ -22,7 +22,11 @@ MINIMAL_DB=<<EOH
     :name: World
     :connected_players: []
     :all_players: []
+    :builders: []
+    :admins: []
     :timer_list: []
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
 - !ruby/object:Room
   props:
     :location:
@@ -33,6 +37,10 @@ MINIMAL_DB=<<EOH
     :exits: {}
     :triggers: {}
     :name: Home
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
+    :msgfail: ""
+    :msgsucc: ""
 EOH
 
 

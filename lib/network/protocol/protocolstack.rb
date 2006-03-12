@@ -27,7 +27,7 @@ require 'network/protocol/terminalfilter'
 # Remarks:: This should have its own configuration file.
 #
 class ProtocolStack
-  attr_accessor :echo_on, :binary_on, :zmp_on, :color_on, :urgent_on, :hide_on
+  attr_accessor :echo_on, :binary_on, :zmp_on, :color_on, :urgent_on, :hide_on, :eorec_on
   attr_accessor :terminal, :twidth, :theight
   attr :conn
   logger 'INFO'
@@ -60,15 +60,11 @@ class ProtocolStack
     @echo_on = false
     @binary_on = false
     @zmp_on = false
+    @eorec_on = false
     @color_on = false
     @urgent_on = false
     @hide_on = false
-    # This is a hack as set(:terminal, "vt100") is too late from client session.
-#    if @opts.include? :vt100
-#      @terminal = "vt100"
-#    else
-      @terminal = nil
-#    end
+    @terminal = nil
     @twidth = 80
     @theight = 23
   end
@@ -112,6 +108,8 @@ class ProtocolStack
       retval =  @echo_on
     when :binary
       retval =  @binary_on
+    when :eorec
+      retval =  @eorec_on
     when :urgent
       retval =  @urgent_on
     when :hide

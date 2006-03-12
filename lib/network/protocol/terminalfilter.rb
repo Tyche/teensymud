@@ -180,28 +180,40 @@ class TerminalFilter < Filter
         when ?r # Set scrolling region
           # Enable scrolling entire display \e[r or just a region \e[<srow>;<erow>r
           a = @collect.split(";")
-          a = ["1","1"] if a.empty?  # lines numbered from 1
-                 # This should be 1 to n or the whole screen if no parms
-          buf << "[SCRREG #{a[0]},#{a[1]}]"
+          if a.empty?  # lines numbered from 1
+            # This should be 1 to n or the whole screen if no parms
+            buf << "[SCRRESET]"
+          else
+            buf << "[SCRREG #{a[0]},#{a[1]}]"
+          end
           set_mode :ground
         when ?J
           if @collect.to_i == 2
             buf << "[CLEAR]"
           end
+          set_mode :ground
 #     Erase from cursor to end of screen         Esc [ 0 J    or Esc [ J
 #     Erase from beginning of screen to cursor   Esc [ 1 J
 #     Erase entire screen                        Esc [ 2 J
-
-        when ?K, ?g, ?c, ?h, ?l, ?s, ?u, ?x, ?y, ?q, ?i, ?p, ?G
-          # unhandled
+        when ?K
+          if @collect.to_i == 2
+            buf << "[CLEARLINE]"
+          end
           set_mode :ground
-#        when ?c  DA request/response - Device code - response is \e[<code>0c
-#        when ?G  Set starting column of presentation
-
 #        when ?K  Erase line
 #     Erase from cursor to end of line           Esc [ 0 K    or Esc [ K
 #     Erase from beginning of line to cursor     Esc [ 1 K
 #     Erase line containing cursor               Esc [ 2 K
+        when ?G
+          buf << "[POS #{@collect.to_i == 0 ? 1 : @collect.to_i}]"
+          set_mode :ground
+#        when ?G  Set starting column of presentation
+
+        when ?g, ?c, ?h, ?l, ?s, ?u, ?x, ?y, ?q, ?i, ?p
+          # unhandled
+          set_mode :ground
+#        when ?c  DA request/response - Device code - response is \e[<code>0c
+
 
 #        when ?g  Tab clear at current position
 #  CSI 3 g is clear all tabs
@@ -340,7 +352,7 @@ class TerminalFilter < Filter
   # [+str+]    The string to be processed
   # [+return+] The filtered data
   def filter_out(str)
-    return "" if str.nil? || str.empty?
+    return '' if str.nil? || str.empty?
     case @pstack.terminal
     when /^vt/, 'xterm'
       VTKeys.each do |key,val|

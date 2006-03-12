@@ -21,8 +21,8 @@ require 'network/protocol/asciicodes'
 
 # The TelnetFilter class implements the Telnet protocol.
 #
-# This implements most of basic Telnet as per RFC 854/855/1143 and
-# options in RFC 857/858/1073/1091
+# This implements most of basic Telnet as per RFCs 854/855/1129/1143 and
+# options in RFCs 857/858/1073/1091
 #
 class TelnetFilter < Filter
   include ASCIICodes
@@ -53,14 +53,25 @@ class TelnetFilter < Filter
   #
   # [+args+] Optional initial options
   def init(args)
-    return true if @server.service_type == :client  # let server offer and ask for client
-    # several sorts of options here - server offer, ask client or both
-    @wopts.each do |key,val|
-      case key
-      when ECHO, SGA, BINARY, ZMP
-        offer_us(key,val)
-      else
-        ask_him(key,val)
+    if @server.service_type == :client  # let server offer and ask for client
+      # several sorts of options here - server offer, ask client or both
+      @wopts.each do |key,val|
+        case key
+        when ECHO, SGA, BINARY, ZMP, EOREC
+          ask_him(key,val)
+        else
+          offer_us(key,val)
+        end
+      end
+    else
+      # several sorts of options here - server offer, ask client or both
+      @wopts.each do |key,val|
+        case key
+        when ECHO, SGA, BINARY, ZMP, EOREC
+          offer_us(key,val)
+        else
+          ask_him(key,val)
+        end
       end
     end
     true
@@ -104,7 +115,7 @@ class TelnetFilter < Filter
             buf << b
             echo(b)
           else
-            log.error("(#{@pstack.conn.object_id}) unexpected NUL found in stream")
+            log.debug("(#{@pstack.conn.object_id}) unexpected NUL found in stream")
           end
         when BS, DEL
           next if @synch
@@ -113,20 +124,30 @@ class TelnetFilter < Filter
           echo(BS.chr)
         else
           next if @synch
+          ### NOTE - we will allow 8-bit NVT against RFC 1123 recommendation "should not"
+          ###
           # Only let 7-bit values through in normal mode
-          if (b[0] & 0x80 == 0) && !@pstack.binary_on
+          #if (b[0] & 0x80 == 0) && !@pstack.binary_on
             buf << b
             echo(b)
-          else
-            log.error("(#{@pstack.conn.object_id}) unexpected 8-bit byte found in stream '#{b[0]}'")
-          end
+          #else
+          #  log.debug("(#{@pstack.conn.object_id}) unexpected 8-bit byte found in stream '#{b[0]}'")
+          #end
         end
       when :cr
         # handle CRLF and CRNUL by insertion of LF into buffer
         case b[0]
-        when LF, NUL
+        when LF
           buf << LF.chr
           echo(CR.chr + LF.chr)
+        when NUL
+          if @server.service_type == :client  # Don't xlate CRNUL when client
+            buf << CR.chr
+            echo(CR.chr)
+          else
+            buf << LF.chr
+            echo(CR.chr + LF.chr)
+          end
         else # eat lone CR
           buf << b
           echo(b)
@@ -193,11 +214,11 @@ class TelnetFilter < Filter
           end
           set_mode(:normal)
         when DO, DONT, WILL, WONT
-          opt = @sc.get_byte
-          if opt.nil?
+          if @sc.eos?
             @sc.unscan
             break
           end
+          opt = @sc.get_byte
           case b[0]
           when WILL
             replies_him(opt[0],true)
@@ -219,11 +240,10 @@ class TelnetFilter < Filter
           end
           set_mode(:normal)
         when SB
+          @sc.unscan
+          break if @sc.check_until(/#{IAC.chr}#{SE.chr}/).nil?
+          @sc.get_byte
           opt = @sc.get_byte
-          if opt.nil? || @sc.check_until(/#{IAC.chr}#{SE.chr}/).nil?
-            @sc.unscan
-            break
-          end
           data = @sc.scan_until(/#{IAC.chr}#{SE.chr}/).chop.chop
           parse_subneg(opt[0],data)
           set_mode(:normal)
@@ -242,13 +262,11 @@ class TelnetFilter < Filter
   # [+str+]    The string to be processed
   # [+return+] The filtered data
   def filter_out(str)
-    buf = ""
-    return buf if str.nil? || str.empty?
-
+    return '' if str.nil? || str.empty?
     if !@pstack.binary_on
-      buf = str.gsub(/\n/, "\r\n")
+      str.gsub!(/\n/, "\r\n")
     end
-    buf
+    str
   end
 
   ###### Custom public methods
@@ -271,7 +289,10 @@ class TelnetFilter < Filter
   end
 
   # Handle server-side echo
+  # [+ch+] character string to echo
   def echo(ch)
+    return if @server.service_type == :client  # Never echo for server when client
+                                  # Remove this if it makes sense for peer to peer
     if @pstack.echo_on
       if @pstack.hide_on && ch[0] != CR
         @pstack.conn.sock.send('*',0)
@@ -333,7 +354,7 @@ class TelnetFilter < Filter
   def send_naws
     return if !enabled?(NAWS, :us)
     ts = @pstack.query(:termsize)
-    data = [ts[1][0]].pack('n') + [ts[1][1]].pack('n')
+    data = [ts[0]].pack('n') + [ts[1]].pack('n')
     data.gsub!(/#{IAC}/, IAC.chr + IAC.chr) # 255 needs to be doubled
     @pstack.conn.sendmsg(IAC.chr + SB.chr + NAWS.chr + data + IAC.chr + SE.chr)
   end
@@ -353,6 +374,8 @@ private
         @wopts[SGA] = true
       when :naws
         @wopts[NAWS] = true
+      when :eorec
+        @wopts[EOREC] = true
       when :binary
         @wopts[BINARY] = true
       when :zmp

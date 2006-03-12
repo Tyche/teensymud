@@ -52,7 +52,14 @@ class Player < GameObject
   end
 
   def prompt
-    publish("[COLOR Red]@[COLOR Green]-`,-[/COLOR]> ") if @session
+    return if @session.nil?
+    case @session.query(:terminal)
+    when /^vt/, 'xterm'
+      publish("[cursave][home #{@ts[1]-2},1]" +
+        "[color Yellow on Red]#{" "*@ts[0]}[/color]" +
+        "[home #{@ts[1]-1},1][clearline][color Blue](#{name})[#{@mode}][/color]" +
+        "[currest][clearline]> ")
+    end
   end
 
   # Receives messages from a Connection being observed and handles them
@@ -116,7 +123,7 @@ class Player < GameObject
   # [+m+]      The input message to be parsed
   # [+return+] Undefined.
   def parse(m)
-    publish("[clearline]")
+    prompt
     # handle edit mode
     if @mode == :edit
       edit_parser m

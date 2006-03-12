@@ -41,12 +41,14 @@ class Module
           @props ||= {}
           if options['safe_read'] && !@props[:#{s}].kind_of?(Numeric)
             Engine.instance.db.mark(self.id)
+            @props[:updated_on] = Time.now
           end
           @props[:#{s}]
         end
         def #{s}=(val)
           @props ||= {}
           Engine.instance.db.mark(self.id)
+          @props[:updated_on] = Time.now
           @props[:#{s}] = val
         end
       EOD

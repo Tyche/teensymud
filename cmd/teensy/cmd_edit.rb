@@ -33,10 +33,6 @@ module Cmd
           @editfield = $2
           @editstr = o.send $2
 
-          sendto "-========- Entering EDIT Mode -=========-"
-          sendto "    Type .h on a new line for help"
-          sendto "   Terminate with a @ on a blank line."
-          sendto "-=======================================-"
           sendto(edit_display(@editstr))
         else
           sendto("Field #$2 not found on object.")
@@ -50,8 +46,14 @@ module Cmd
   end
 
   def edit_display(str)
+    header =<<EOD
+======== Teensy String Editor ========
+   Type .h on a new line for help
+ Terminate with a @ on a blank line.
+======================================
+EOD
     i = 0
-    str.gsub(/^/){"#{i+=1}: "}
+    header + str.gsub(/^/){"#{i+=1}: "}
   end
 
   def word_wrap(s, len)

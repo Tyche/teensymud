@@ -29,10 +29,18 @@ class ColorFilter < Filter
     return "" if str.nil? || str.empty?
     if @pstack.color_on
       str.gsub!(/\[COLOR\s+(\w+)\s+ON\s+(\w+)\]/mi) do |m|
-        ColorTable[$1][2]+ColorTable[$2][3]
+        if ColorTable[$1] && ColorTable[$2]
+          ColorTable[$1][2]+ColorTable[$2][3]
+        else
+          ''
+        end
       end
       str.gsub!(/\[COLOR\s+(\w+)\]/mi) do |m|
-        ColorTable[$1][2]
+        if ColorTable[$1]
+          ColorTable[$1][2]
+        else
+          ''
+        end
       end
       str.gsub!(/\[\/COLOR\]/mi) do |m|
         ANSICODE['reset']

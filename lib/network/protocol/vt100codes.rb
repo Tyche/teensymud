@@ -28,12 +28,14 @@ module VT100Codes
                "46", "[COLOR=bgcyan]",  "47", "[COLOR=bgwhite]" }
 
 
-  VTKeys = { /\[SCROLLDOWN\]/mi, "\eD", /\[SCROLLUP\]/mi, "\eM",
+  VTKeys = { /\[SCROLLDOWN\]/mi, "\eD",
+             /\[SCROLLUP\]/mi, "\eM",
              /\[UP (\d+)?\]/mi, "\e$A", /\[DOWN (\d+)?\]/mi, "\e$B",
              /\[RIGHT (\d+)?\]/mi, "\e$C", /\[LEFT (\d+)?\]/mi, "\e$D",
              /\[CURSAVE\]/mi, "\e7", /\[CURREST\]/mi, "\e8",
              /\[RESET\]/mi, "\ec",
              /\[TAB\]/mi, "\t", /\[BELL\]/mi, "\a", /\[BS\]/mi, "\b",
+             /\[POS (\d+)\]/mi, CSI+"$G",
              /\[HOME (\d+)?,(\d+)?\]/mi, CSI+"$;$H",
              /\[CURSOR (\d+)?,(\d+)?\]/mi, CSI+"$;$R",
              /\[SCRREG (\d+)?,(\d+)?\]/mi, CSI+"$;$r",

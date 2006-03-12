@@ -80,9 +80,11 @@ class Account
       @ts = @conn.query(:termsize)
       publish("[home #{@ts[1]},1][clearline][cursave]" +
         "[home 1,1][scrreset][clear][scrreg 1,#{@ts[1]-3}][currest]")
+      prompt(LOGO) if @conn.query(:terminal) =~ /^vt|xterm/
       prompt(BANNER)
       prompt("login> ")
     when String
+      if @initdone
         publish("[clearline]")
         case @state
         when :name
@@ -138,6 +140,7 @@ class Account
             @state = :name
             prompt("login> ")
           end
+        end
       end
     else
       log.error "Account#update unknown message - #{msg.inspect}"

@@ -1,6 +1,8 @@
 --- 
 - !ruby/object:World 
   props: 
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
     :owner: 0
     :timer_list: 
     - !ruby/object:Timer 
@@ -10,6 +12,10 @@
       time: 2
     :all_players: 
     - 7
+    :admins: 
+    - 7
+    :builders: 
+    - 7
     :name: World
     :desc: This is the World object.
     :id: 0
@@ -17,6 +23,10 @@
 
 - !ruby/object:Room 
   props: 
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
+    :msgfail: ""
+    :msgsucc: ""
     :triggers: 
       :pre_leave: 9
       :arrive: 5
@@ -33,6 +43,10 @@
     :id: 1
 - !ruby/object:Room 
   props: 
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
+    :msgfail: ""
+    :msgsucc: ""
     :owner: 0
     :triggers: {}
 
@@ -46,6 +60,10 @@
     :id: 2
 - !ruby/object:Room 
   props: 
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
+    :msgfail: ""
+    :msgsucc: ""
     :owner: 0
     :triggers: 
       :timer: 4
@@ -59,18 +77,26 @@
     :id: 3
 - !ruby/object:Script 
   props: 
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
     :owner: 0
     :name: ticktock
     :language: :fart
     :id: 4
 - !ruby/object:Script 
   props: 
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
     :owner: 0
     :name: arrival
     :language: :fart
     :id: 5
 - !ruby/object:Player 
   props: 
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
+    :msgfail: ""
+    :msgsucc: ""
     :triggers: {}
 
     :owner: 7
@@ -84,6 +110,10 @@
     :id: 7
 - !ruby/object:GameObject 
   props: 
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
+    :msgfail: ""
+    :msgsucc: ""
     :triggers: {}
 
     :owner: 0
@@ -95,6 +125,8 @@
     :id: 8
 - !ruby/object:Script 
   props: 
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
     :owner: 0
     :src: "#8"
     :name: 
