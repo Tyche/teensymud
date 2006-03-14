@@ -36,6 +36,17 @@ class Root
     self.updated_on = created_on.dup
   end
 
+  # formatted dump of object properties
+  # [+return+] a string
+  def inspect
+    s = ''
+    @props.each do |key,val|
+      s << sprintf("%20-20s : %40-40s\n", key.to_s, val.inspect)
+    end
+    s
+  end
+
+
   # Clone an object
   # This does a deepcopy then assign a new database id
   #

@@ -57,7 +57,7 @@ class Player < GameObject
     when /^vt/, 'xterm'
       publish("[cursave][home #{@ts[1]-2},1]" +
         "[color Yellow on Red]#{" "*@ts[0]}[/color]" +
-        "[home #{@ts[1]-1},1][clearline][color Blue](#{name})[#{@mode}][/color]" +
+        "[home #{@ts[1]-1},1][clearline][color Magenta](#{name})[#{@mode}][/color]" +
         "[currest][clearline]> ")
     end
   end

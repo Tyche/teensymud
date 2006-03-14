@@ -309,7 +309,7 @@ if $0 == __FILE__
   $conntype = :client
   $connio = :sockio
   $connopts = [:zmp, :ttype, :naws]
-  $connfilters = [:telnetfilter, :debugfilter, :terminalfilter]
+  $connfilters = [:telnetfilter, :debugfilter] #, :terminalfilter]
   $opts = get_options
 
   if $opts.echo

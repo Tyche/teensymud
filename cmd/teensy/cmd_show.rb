@@ -18,8 +18,10 @@ module Cmd
   # (ex. @show me)
   def cmd_show(args)
     case args
-    when /#(\d+)|(me)/
-      sendto($1 == 'me' ? self.inspect : get_object($1.to_i).inspect)
+    when /#(\d+)/
+      sendto(get_object($1.to_i).inspect)
+    when /me/
+      sendto(get_object(id).inspect)
     else
       sendto("What??")
     end

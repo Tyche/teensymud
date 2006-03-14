@@ -16,6 +16,7 @@ $:.unshift "vendor" if !$:.include? "vendor"
 
 require 'optparse'
 
+require 'utility/utility'
 require 'utility/configuration'
 require 'engine/engine'
 require 'utility/version'
