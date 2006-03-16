@@ -12,10 +12,10 @@
 #
 module Cmd
 
-  # shows a list of all connected players
+  # shows a list of all connected characters
   def cmd_who(args)
     sendto("=== Who List ===")
-    world.connected_players.each {|pid| sendto(get_object(pid).name)}
+    world.connected_characters.each {|pid| sendto(get_object(pid).name)}
   end
 
 end

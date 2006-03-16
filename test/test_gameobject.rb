@@ -8,7 +8,7 @@ require 'flexmock'
 load 'mockengine.rb'
 require 'storage/properties'
 require 'core/gameobject'
-require 'core/player'
+require 'core/character'
 require 'core/room'
 end
 
@@ -18,7 +18,7 @@ class TestGameObject < Test::Unit::TestCase
     $id = 0
     @r = Room.new("Here",0)
     $r = @r
-    @p = Player.new("Tyche","tyche",nil)
+    @p = Character.new("Tyche",nil)
     $p = @p
     @o = GameObject.new("Thing",0)
     $o = @o
@@ -135,8 +135,8 @@ class TestGameObject < Test::Unit::TestCase
     assert_equal(false,@o.parse(m))
   end
 
-  def test_players
-    assert(@o.players)
+  def test_characters
+    assert(@o.characters)
   end
 
 end

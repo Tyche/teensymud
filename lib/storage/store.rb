@@ -20,8 +20,9 @@ MINIMAL_DB=<<EOH
     :id: 0
     :desc: "This is the World object."
     :name: World
-    :connected_players: []
-    :all_players: []
+    :msgs: {}
+    :all_characters: []
+    :all_accounts: []
     :builders: []
     :admins: []
     :timer_list: []
@@ -130,27 +131,30 @@ class Store
   # produces a statistical report of the database
   # [+return+] a string containing the report
   def stats
-    rooms = objs = scripts = players = 0
+    rooms = objs = scripts = characters = accounts = 0
     self.each do |val|
       case val
       when Room
         rooms += 1
-      when Player
-        players += 1
+      when Character
+        characters += 1
       when GameObject
         objs += 1
       when Script
         scripts += 1
+      when Account
+        accounts += 1
       end
     end
     stats=<<EOD
 [COLOR Cyan]
 ---* Database Statistics *---
-  Rooms   - #{rooms}
-  Players - #{players}
-  Objects - #{objs}
-  Scripts - #{scripts}
-  Total Objects - #{rooms+objs+players+scripts}
+  Rooms      - #{rooms}
+  Objects    - #{objs}
+  Scripts    - #{scripts}
+  Accounts   - #{accounts}
+  Characters - #{characters}
+  Total Objects - #{rooms+objs+characters+accounts+scripts}
   Highest OID in use - #{@dbtop}
 ---*                     *---
 [/COLOR]

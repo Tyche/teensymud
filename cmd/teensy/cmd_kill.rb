@@ -12,13 +12,13 @@
 #
 module Cmd
 
-  # This kills a player anywhere - it's link death (30% chance)
+  # This kills a character anywhere - it's link death (30% chance)
   def cmd_kill(args)
     case args
     when nil, ""
       sendto("Who do you want to kill?")
     else
-      d = world.all_players.find {|pid| args == get_object(pid).name }
+      d = world.all_characters.find {|pid| args == get_object(pid).name }
       if !d
         sendto("Can't find them.")
         return
@@ -26,16 +26,16 @@ module Cmd
       d = get_object(d)  # get object
       if rand < 0.3
         sendto("You kill #{d.name}.")
-        world.connected_players.each {|pid|
+        world.connected_characters.each {|pid|
           if pid != id
             add_event(id,pid,:show,"#{name} kills #{d.name}.")
           end
         }
         d.disconnect
-        # delete_object(d)  Dont delete player, it's annoying
+        # delete_object(d)  Dont delete character, it's annoying
       else
         sendto("You attacks and misses #{d.name}.")
-        world.connected_players.each {|pid|
+        world.connected_characters.each {|pid|
           if pid != id
             add_event(id,pid,:show,"#{name} attacks and misses #{d.name}.")
           end

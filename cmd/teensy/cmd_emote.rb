@@ -12,14 +12,14 @@
 #
 module Cmd
 
-  # sends <message> to all players in the room
+  # sends <message> to all characters in the room
   def cmd_emote(args)
     case args
     when nil, ""
       sendto("What are you trying to emote?")
     else
       sendto("You #{args}.")
-      get_object(location).players(id).each do |p|
+      get_object(location).characters(id).each do |p|
         add_event(id,p.id,:show,"#{name} #{args}.")
       end
     end

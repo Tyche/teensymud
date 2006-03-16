@@ -8,7 +8,7 @@ require 'flexmock'
 load 'mockengine.rb'
 require 'storage/properties'
 require 'core/room'
-require 'core/player'
+require 'core/character'
 end
 
 class TestRoom < Test::Unit::TestCase

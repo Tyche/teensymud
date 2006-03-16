@@ -23,7 +23,7 @@ module Cmd
     when /#(\d+)\s+(\w+)/
       o = get_object($1.to_i)
       case o
-      when GameObject, Room, Player, Script
+      when GameObject, Room, Character, Script
         if o.respond_to?($2) &&
            o.respond_to?("#$2=") &&
            o.send($2).class == String

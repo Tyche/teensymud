@@ -12,14 +12,14 @@
 #
 module Cmd
 
-  # sends <message> to all players in the game
+  # sends <message> to all characters in the game
   def cmd_chat(args)
     case args
     when nil, ""
       sendto("What are you trying to tell everyone?")
     else
       sendto("[COLOR Magenta]You chat, \"#{args}\".[/COLOR]")
-      world.connected_players.each do |pid|
+      world.connected_characters.each do |pid|
         if id != pid
           add_event(id,pid,:show,
             "[COLOR Magenta]#{name} chats, \"#{args}\".[/COLOR]")

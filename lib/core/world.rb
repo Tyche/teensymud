@@ -25,30 +25,30 @@ require 'engine/timer'
 # It contains world state information, the world timer, utility functions,
 # and delegates to the Engine.
 #
-# [+cmds+] is a handle to the player commands table.
+# [+cmds+] is a handle to the character commands table.
 # [+ocmds+] is a handle to the object commands table.
 # [+timer_list+] is a list of all installed timer objects (persistent)
-# [+all_players+] is a list of all players (persistent)
-# [+timer_list+] is a list of all connected players
+# [+all_characters+] is a list of all characters (persistent)
+# [+timer_list+] is a list of all connected characters
 class World < Root
-  configuration
   logger 'DEBUG'
-  property :timer_list, :all_players, :builders, :admins
-  attr_accessor :cmds, :ocmds, :connected_players
+  property :timer_list, :all_characters, :all_accounts, :builders, :admins, :msgs
+  attr_accessor :cmds, :ocmds, :connected_characters
 
   # Create the World.  This loads or creates the database depending on
   # whether it finds it.
   # [+return+] A handle to the World object.
   def initialize
     self.timer_list = []
-    self.all_players = []
+    self.all_characters = []
+    self.all_accounts = []
     self.admins = []
     self.builders = []
-    @connected_players = []
+    @connected_characters = []
   end
 
   def startup
-    @connected_players = []
+    @connected_characters = []
     @cmds, @ocmds = Command.load
     log.info "Starting Timer..."
     @timer_list_mutex = Mutex.new
@@ -74,7 +74,7 @@ class World < Root
   end
 
   def shutdown
-    connected_players.each{|pid| get_object(pid).disconnect}
+    connected_characters.each{|pid| get_object(pid).disconnect}
     Thread.kill(@timer)
   end
 
@@ -101,50 +101,50 @@ class World < Root
     end
   end
 
-  # Is player a builder?
-  # [+oid+] player object id
+  # Is character a builder?
+  # [+oid+] character object id
   # [+return+] true or false
   def is_builder? oid
     builders.include? oid
   end
 
-  # Is player an admin?
-  # [+oid+] player object id
+  # Is character an admin?
+  # [+oid+] character object id
   # [+return+] true or false
   def is_admin? oid
     admins.include? oid
   end
 
-  # Make the player an admin
-  # [+oid+] player object id
+  # Make the character an admin
+  # [+oid+] character object id
   # [+return+] undefined
   def add_admin oid
-    self.admins << oid if Player && !admin?(oid)
+    self.admins << oid if Character && !admin?(oid)
   end
 
-  # Remove admin priviledges from player
-  # [+oid+] player object id
+  # Remove admin priviledges from character
+  # [+oid+] character object id
   # [+return+] undefined
   def rem_admin oid
     self.admins.delete oid
   end
 
-  # Make the player a builder
-  # [+oid+] player object id
+  # Make the character a builder
+  # [+oid+] character object id
   # [+return+] undefined
   def add_builder oid
-    self.builders << oid if Player && !builder?(oid)
+    self.builders << oid if Character && !builder?(oid)
   end
 
-  # Remove admin priviledges from player
-  # [+oid+] player object id
+  # Remove admin priviledges from character
+  # [+oid+] character object id
   # [+return+] undefined
   def rem_builder oid
     self.builders.delete oid
   end
 
-  # Does player own the object?
-  # [+pid+] player object id
+  # Does character own the object?
+  # [+pid+] character object id
   # [+oid+] object id
   # [+return+] true or false
   def is_owner?(pid, oid)
@@ -155,7 +155,7 @@ class World < Root
   # [+return+] a string
   def memstats
     # initialize all counters
-    rooms = objs = players = scripts = strcount = strsize = ocount = 0
+    rooms = objs = chars = accounts = scripts = strcount = strsize = ocount = 0
 
     # scan the ObjectSpace counting things
     ObjectSpace.each_object do |x|
@@ -163,8 +163,10 @@ class World < Root
       when String
         strcount += 1
         strsize += x.size
-      when Player
-        players += 1
+      when Character
+        chars += 1
+      when Account
+        accounts += 1
       when Room
         rooms += 1
       when GameObject
@@ -181,16 +183,17 @@ class World < Root
     memstats=<<EOD
 [COLOR Cyan]
 ----* Memory Statistics *----
-  Rooms   - #{rooms}
-  Players - #{players}
-  Objects - #{objs}
-  Scripts - #{scripts}
+  Rooms      - #{rooms}
+  Objects    - #{objs}
+  Scripts    - #{scripts}
+  Accounts   - #{accounts}
+  Characters - #{chars}
 -----------------------------
   Strings - #{strcount}
      size - #{strsize} bytes
   Other   - #{ocount}
 -----------------------------
-  Total Objects - #{rooms+objs+players+scripts+strcount+ocount}
+  Total Objects - #{rooms+objs+chars+accounts+scripts+strcount+ocount}
 ----*                   *----
 [/COLOR]
 EOD

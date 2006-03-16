@@ -11,7 +11,7 @@
 # See LICENSE file for additional information.
 #
 
-# These are the Player commands for the teensy interface
+# These are the character commands for the teensy interface
 --- 
 - !ruby/object:Command 
   cmd: :cmd_help
@@ -31,11 +31,11 @@
   name: examine
 - !ruby/object:Command 
   cmd: :cmd_quit
-  help: quits the game (saves player)
+  help: quits the game (saves character)
   name: quit
 - !ruby/object:Command 
   cmd: :cmd_inv
-  help: displays player inventory
+  help: displays character inventory
   name: inventory
 - !ruby/object:Command 
   cmd: :cmd_reload
@@ -47,27 +47,27 @@
   name: hello
 - !ruby/object:Command 
   cmd: :cmd_kill
-  help: attempts to kill player (e.g. kill Bubba)
+  help: attempts to kill character (e.g. kill Bubba)
   name: kill
 - !ruby/object:Command 
   cmd: :cmd_say
-  help: "sends <message> to all players in the room"
+  help: "sends <message> to all characters in the room"
   name: say
 - !ruby/object:Command 
   cmd: :cmd_say
-  help: "sends <message> to all players in the room"
+  help: "sends <message> to all characters in the room"
   name: "\""
 - !ruby/object:Command 
   cmd: :cmd_emote
-  help: "displays <message> to all players in the room"
+  help: "displays <message> to all characters in the room"
   name: emote
 - !ruby/object:Command 
   cmd: :cmd_emote
-  help: "displays <message> to all players in the room"
+  help: "displays <message> to all characters in the room"
   name: "!"
 - !ruby/object:Command 
   cmd: :cmd_chat
-  help: "sends <message> to all players in the game"
+  help: "sends <message> to all characters in the game"
   name: chat
 - !ruby/object:Command 
   cmd: :cmd_get
@@ -91,7 +91,7 @@
   name: '@set'
 - !ruby/object:Command 
   cmd: :cmd_who
-  help: shows a list of all connected players
+  help: shows a list of all connected characters
   name: who
 - !ruby/object:Command 
   cmd: :cmd_stats

@@ -9,7 +9,7 @@ require 'utility/configuration'
 require 'storage/dbmstore'
 require 'storage/properties'
 require 'core/world'
-require 'core/player'
+require 'core/character'
 require 'core/room'
 end
 
@@ -22,7 +22,7 @@ class TestDbmStore < Test::Unit::TestCase
     $db = @db
     @r = Room.new("Here",0)
     @o = GameObject.new("Thing",0)
-    @p = Player.new("Tyche", "tyche", nil)
+    @p = Character.new("Tyche", nil)
   end
 
   def teardown
@@ -107,42 +107,6 @@ class TestDbmStore < Test::Unit::TestCase
   def test_save
     assert(@db.save)
   end
-
-=begin
-# These be hit and miss as the cache code is too variable
-  def test_stats
-    assert_equal(@r, @db.put(@r))
-    assert_equal(@o, @db.put(@o))
-    assert_equal(@p, @db.put(@p))
-    assert(@db.save)
-    @db.get(@r.id)
-    @db.get(99)
-    stats=<<EOH
-[COLOR Cyan]
----* Database Statistics *---
-  Rooms   - 2
-  Players - 1
-  Objects - 1
-  Total Objects - 4
-  Highest OID in use - 4
----*                     *---
-[/COLOR]
-----------* Cache Statistics *----------
-cache marks               : 25
-cache size                : 161
-database read fails       : 1
-cache mark misses         : 25
-database reads            : 1
-reads                     : 6
-cache syncs               : 1
-database writes           : 3
-writes                    : 3
-cache read hits           : 4
-----------*                  *----------
-EOH
-    assert_equal(stats,@db.stats)
-  end
-=end
 
 end
 

@@ -14,12 +14,7 @@ module Cmd
 
   # displays session information
   def cmd_status(args)
-    sendto("Terminal: #{@session.query(:terminal)}")
-    ts = @session.query(:termsize)
-    sendto("Terminal size: #{ts[0]} X #{ts[1]}")
-    sendto("Colors toggled #{color ? "[COLOR Magenta]ON[/COLOR]" : "OFF" }")
-    sendto("Echo is #{@session.query(:echo) ? "ON" : "OFF" }")
-    sendto("ZMP is #{@session.query(:zmp) ? "ON" : "OFF" }")
+    sendto @account.status_rept
   end
 
 end

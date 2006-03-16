@@ -9,7 +9,7 @@ require 'utility/configuration'
 require 'storage/yamlstore'
 require 'storage/properties'
 require 'core/world'
-require 'core/player'
+require 'core/character'
 require 'core/room'
 require 'core/script'
 end
@@ -23,7 +23,7 @@ class TestYamlStore < Test::Unit::TestCase
     $db = @db
     @r = Room.new("Here",0)
     @o = GameObject.new("Thing",0)
-    @p = Player.new("Tyche", "tyche", nil)
+    @p = Character.new("Tyche", nil)
   end
 
   def teardown
@@ -42,12 +42,6 @@ class TestYamlStore < Test::Unit::TestCase
     assert_equal(nil, @db.get(@o.id))
     assert_equal(nil, @db.get(@p.id))
   end
-
-#  def test_find_player_by_name
-#    assert_equal(@p, @db.put(@p))
-#    assert_equal(@p, @db.find_player_by_name("Tyche"))
-#    assert_equal(nil, @db.find_player_by_name("Bubba"))
-#  end
 
   def test_get
 #    pp @r, @o, @p
@@ -76,10 +70,6 @@ class TestYamlStore < Test::Unit::TestCase
     assert_equal(5,cnt)
   end
 
-#  def test_players_connected
-#    assert(@db.players_connected)
-#  end
-
   def test_put
     assert_equal(@r, @db.put(@r))
     assert_equal(@o, @db.put(@o))
@@ -98,7 +88,7 @@ class TestYamlStore < Test::Unit::TestCase
 [COLOR=cyan]
 ---* Database Statistics *---
   Rooms   - 2
-  Players - 1
+  Characters - 1
   Objects - 1
   Scripts - 0
   Total Objects - 4

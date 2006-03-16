@@ -25,7 +25,7 @@ module Cmd
     when /del\s+#(\d+)\s+(\w+)/
       o = get_object($1.to_i)
       case o
-      when GameObject, Room, Player
+      when GameObject, Room, Character
         if o.get_trigger($2)
           o.delete_trigger($2)
           sendto("Object ##$1 trigger deleted.")
@@ -38,7 +38,7 @@ module Cmd
     when /add\s+#(\d+)\s+#(\d+)\s+(\w+)/i
       o = get_object($1.to_i)
       case o
-      when GameObject, Room, Player
+      when GameObject, Room, Character
         s = get_object($2.to_i)
         case s
         when Script
@@ -53,7 +53,7 @@ module Cmd
     when /show\s+#(\d+)/
       o = get_object($1.to_i)
       case o
-      when GameObject, Room, Player
+      when GameObject, Room, Character
         sendto("===========TRIGGERS============")
         sendto(sprintf("%-15s %-15s", "Event", "Program"))
         o.triggers.each do |e, t|

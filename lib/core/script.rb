@@ -21,7 +21,6 @@ require 'utility/boolexp'
 # The Script class defines te characteristic of an executable program.
 #
 class Script < Root
-  configuration
   property :language, :src
   attr_accessor :prog
   logger 'DEBUG'

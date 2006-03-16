@@ -22,9 +22,9 @@ class Lib
     Kernel::rand(100) < num
   end
 
-  # Is actor a Player
-  def isplayer(actor)
-    actor.class == Player
+  # Is actor a Character
+  def ischaracter(actor)
+    actor.class == Character
   end
 
   # Is actor a Critter

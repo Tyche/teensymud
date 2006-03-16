@@ -15,7 +15,7 @@ dbfile: db/world
 
 # Type of database
 #
-# Valid values are: :yaml, :gdbm, :sdbm, :dbm, :xml
+# Valid values are: :yaml, :gdbm, :sdbm, :dbm, :xml, :sqlite, :sqlite3
 #
 dbtype: :yaml
 
@@ -27,7 +27,7 @@ cache_depth: 7
 # changed when you use read accessors that modify the object. Write
 # accessors are automatically safe.  No affect with yaml store.
 #
-# Ex. Player.name.capitalize! - uses read accessor but modifies receiver
+# Ex. Character.name.capitalize! - uses read accessor but modifies receiver
 safe_read: true
 
 # This turns property into attr_accessor 
@@ -66,8 +66,10 @@ server_io: :sockio
 #     :telnetfilter - attach telnet filter (default)
 #     :colorfilter - attach color filter (default)
 #     :terminalfilter - attach terminal filter
+#
+# Order is important here.
 server_filters:  
-  - :debugfilter
+#  - :debugfilter
   - :telnetfilter
   - :terminalfilter
   - :colorfilter
@@ -101,16 +103,28 @@ verbose: false
 # tracing on - sllooooow
 trace: false
 
-# starting location for players
+# starting location for characters
 home: 1
 
 # command interfaces to load (in order)
-player_interface:
+character_interface:
   - teensy
   - tiny
 
 object_interface:
   - objects
+
+# account system
+# true - Account has multiple Characters
+# false - Account is associated with one Character
+account_system: false
+
+# Max number of characters per account
+character_limit: 10
+
+# allow guest accounts
+# guest accounts are not saved - names are "Guest #<acctid>" 
+guest_accounts: false
 
 ###########################################################
 ### Utility configuration section

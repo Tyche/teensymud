@@ -19,7 +19,7 @@ module Cmd
     place.objects.each do |x|
       add_event(id,x.id,:describe)
     end
-    place.players(id).each do |x|
+    place.characters(id).each do |x|
       add_event(id,x.id,:describe)
     end
     add_event(id,location,:describe_exits)

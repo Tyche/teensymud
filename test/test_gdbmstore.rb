@@ -8,7 +8,7 @@ load 'mockengine.rb'
 require 'utility/configuration'
 require 'storage/gdbmstore'
 require 'core/world'
-require 'core/player'
+require 'core/character'
 require 'core/room'
 end
 
@@ -21,7 +21,7 @@ class TestGdbmStore < Test::Unit::TestCase
     $db = @db
     @r = Room.new("Here",0)
     @o = GameObject.new("Thing",0)
-    @p = Player.new("Tyche", "tyche", nil)
+    @p = Character.new("Tyche", nil)
   end
 
   def teardown

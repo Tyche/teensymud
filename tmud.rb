@@ -48,7 +48,7 @@ def get_options
         "Select the name of the log file",
         "  (default is 'logs/server.log')") {|myopts['logfile']|}
       opts.on("-h", "--home LOCATIONID", Integer,
-        "Select the object id where new players will start") {|myopts['home']|}
+        "Select the object id where new characters will start") {|myopts['home']|}
       opts.on("-t", "--[no-]trace", "Trace execution") {|myopts['trace']|}
       opts.on("-v", "--[no-]verbose", "Run verbosely") {|myopts['verbose']|}
       opts.on_tail("-h", "--help", "Show this message") do

@@ -14,9 +14,7 @@ module Cmd
 
   # toggles colors on or off
   def cmd_color(args)
-    color ? self.color = false : self.color = true
-    @session.set(:color,color)
-    sendto("Colors toggled #{color ? "[COLOR Magenta]ON[/COLOR]" : "OFF" }")
+    sendto @account.toggle_color
   end
 
 end

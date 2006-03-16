@@ -30,6 +30,31 @@ class String
     end
     false
   end
+
+  # Compares the password with the string
+  # [+pwd+] The encrypted password
+  # [+return+] true if they are equal, false if not
+  def is_passwd?(pwd)
+    pwd == self.crypt(pwd)
+  end
+
+  # Encrypts a password
+  # [+return+] The encrypted string
+  def encrypt
+    alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./'
+    salt = "#{alphabet[rand(64)].chr}#{alphabet[rand(64)].chr}"
+    self.crypt(salt)
+  end
+
+  # Make string into proper name
+  # removes digits, downcases and then capitalizes words.
+  # Sorry it doesn't like McManus but likes O'Mally
+  def proper_name
+    str = self.dup
+    str.gsub!(/\d+/,'')
+    str.gsub!(/\w+/) {|m|  m.downcase!; m[0] = m[0].chr.upcase; m}
+    str
+  end
 end
 
 module Utility

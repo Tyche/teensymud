@@ -100,13 +100,13 @@ class GameObject < Root
     ary.compact
   end
 
-  # Finds all the players contained in this object except the passed player.
-  # [+exempt+]  The player id exempted from the list.
-  # [+return+] Handle to a list of the Player objects.
-  def players(exempt=nil)
+  # Finds all the characters contained in this object except the passed character.
+  # [+exempt+]  The character id exempted from the list.
+  # [+return+] Handle to a list of the Character objects.
+  def characters(exempt=nil)
     ary = contents.collect do |oid|
       o = get_object(oid)
-      (o.class == Player && oid != exempt && o.session) ? o : nil
+      (o.class == Character && oid != exempt && o.session) ? o : nil
     end
     ary.compact
   end

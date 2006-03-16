@@ -18,7 +18,7 @@ module ObjCmd
     when nil, ""
       false
     when /(\d+) (.*)/
-      get_object($1.to_i).players(id).each do |p|
+      get_object($1.to_i).characters(id).each do |p|
         add_event(id,p.id,:show,$2)
       end
       true

@@ -456,7 +456,7 @@ private
 
     # translate certain terminals to something meaningful
     case @pstack.terminal
-    when /cygwin/i, /cons25/i, /linux/i
+    when /cygwin/i, /cons25/i, /linux/i, /dec-vt/i
       @pstack.terminal = 'vt100'
     when /ansis/i then
       @pstack.terminal = 'ansi'
@@ -716,7 +716,7 @@ private
     when "zmp.support"
     when "zmp.no-support"
     when "zmp.input"
-      # Now we just simply pass this whole load to the Player.parse
+      # Now we just simply pass this whole load to the Character.parse
       # WARN: This means there is a possibility of out-of-order processing
       #       of @inbuffer, though extremely unlikely.
       @pstack.conn.publish(args[0])

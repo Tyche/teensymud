@@ -52,19 +52,19 @@ class Command
       @log.warn "No command interfaces for GameObject"
     end
 
-    # now load the commands for players
+    # now load the commands for characters
     cmdtable = TernaryTrie.new
-    if options['player_interface'] && !options['player_interface'].empty?
-      options['player_interface'].each do |i|
+    if options['character_interface'] && !options['character_interface'].empty?
+      options['character_interface'].each do |i|
         cmds = YAML::load_file("cmd/#{i}.yaml")
         cmds.each do |c|
           Kernel::load("cmd/#{i}/#{c.cmd}.rb")
           cmdtable.insert(c.name, c)
         end
-        Player.send(:include,Cmd)
+        Character.send(:include,Cmd)
       end
     else
-      @log.error "No command interfaces for Player"
+      @log.error "No command interfaces for Character"
     end
 
     @log.info "Done."

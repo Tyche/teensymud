@@ -11,7 +11,7 @@
 # See LICENSE file for additional information.
 #
 
-# These are the Player commands for the Tiny interface
+# These are the character commands for the Tiny interface
 --- 
 - !ruby/object:Command 
   cmd: :cmd_get

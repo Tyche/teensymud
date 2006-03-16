@@ -21,7 +21,7 @@ require 'network/reactor'
 require 'core/world'
 require 'engine/eventmanager'
 require 'core/room'
-require 'core/player'
+require 'core/character'
 require 'core/gameobject'
 require 'core/account'
 require 'core/script'
@@ -70,6 +70,12 @@ class Engine
     when :dbm
       require 'storage/dbmstore'
       @db = DbmStore.new(options['dbfile'])
+    when :sqlite
+      require 'storage/dbmstore'
+      @db = SqliteStore.new(options['dbfile'])
+    else
+      log.fatal "Invalid 'dbtype' in Configuration"
+      raise RunTimeError
     end
 
     # Get the world object

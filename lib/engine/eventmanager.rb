@@ -15,7 +15,7 @@ $:.unshift "vendor" if !$:.include? "vendor"
 
 require 'engine/event'
 require 'utility/log'
-require 'core/player'
+require 'core/character'
 
 class EventManager
   logger 'DEBUG'
@@ -61,22 +61,22 @@ class EventManager
           if script
             if script.execute(e)
               # success
-              if obj2.class == Player
+              if obj2.class == Character
                 s,o = obj.msgsucc.split("|")
                 obj2.sendto(s) if s && !s.empty?
                 if o && !o.empty?
-                  Engine.instance.db.get(obj2.location).players(obj2.id).each do |p|
+                  Engine.instance.db.get(obj2.location).characters(obj2.id).each do |p|
                     add_event(obj2.id,p.id,:show,"#{obj2.name} #{o}")
                   end
                 end
               end
             else
               # failure
-              if obj2.class == Player
+              if obj2.class == Character
                 s,o = obj.msgfail.split("|")
                 obj2.sendto(s) if s && !s.empty?
                 if o && !o.empty?
-                  Engine.instance.db.get(obj2.location).players(obj2.id).each do |p|
+                  Engine.instance.db.get(obj2.location).characters(obj2.id).each do |p|
                     add_event(obj2.id,p.id,:show,"#{obj2.name} #{o}")
                   end
                 end
@@ -100,34 +100,34 @@ class EventManager
           if script
             if script.execute(e)
               # success
-              if obj2.class == Player
+              if obj2.class == Character
                 s,o = obj.msgsucc.split("|")
                 obj2.sendto(s) if s && !s.empty?
                 if o && !o.empty?
-                  Engine.instance.db.get(obj2.location).players(obj2.id).each do |p|
+                  Engine.instance.db.get(obj2.location).characters(obj2.id).each do |p|
                     add_event(obj2.id,p.id,:show,"#{obj2.name} #{o}")
                   end
                 end
               end
             else
               # failure
-              if obj2.class == Player
+              if obj2.class == Character
                 s,o = obj.msgfail.split("|")
                 obj2.sendto(s) if s && !s.empty?
                 if o && !o.empty?
-                  Engine.instance.db.get(obj2.location).players(obj2.id).each do |p|
+                  Engine.instance.db.get(obj2.location).characters(obj2.id).each do |p|
                     add_event(obj2.id,p.id,:show,"#{obj2.name} #{o}")
                   end
                 end
               end
             end
           else
-            log.error "Script not found: #{sid} for Event: #{e}"
+            log.error "Script not found: #{sid} for Event: #{e.inspect}"
             # We fail the action slently
           end
         end
       rescue
-        log.error "Event failed: #{e}"
+        log.error "Event failed: #{e.inspect}"
         log.error $!
       end
     end

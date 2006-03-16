@@ -12,7 +12,7 @@
 #
 module Cmd
 
-  # sends <message> to all players in the room
+  # sends <message> to all characters in the room
   def cmd_go(args)
     case args
     when nil, ""

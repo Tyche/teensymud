@@ -69,28 +69,28 @@ class Room < GameObject
   # [+e+]      The event
   # [+return+] Undefined
   def leave(e)
-    plyr = get_object(e.from)
-    players(e.from).each do |x|
-      add_event(id,x.id,:show, plyr.name + " has left #{e.msg}.") if x.session
+    ch = get_object(e.from)
+    characters(e.from).each do |x|
+      add_event(id,x.id,:show, ch.name + " has left #{e.msg}.") if x.session
     end
-    # remove player
-    delete_contents(plyr.id)
-    plyr.location = nil
-    add_event(id,exits[e.msg],:arrive,plyr.id)
+    # remove character
+    delete_contents(ch.id)
+    ch.location = nil
+    add_event(id,exits[e.msg],:arrive,ch.id)
   end
 
   # Event :arrive
   # [+e+]      The event
   # [+return+] Undefined
   def arrive(e)
-    plyr = get_object(e.msg)
-    # add player
-    add_contents(plyr.id)
-    plyr.location = id
-    players(e.msg).each do |x|
-      add_event(id,x.id,:show, plyr.name+" has arrived.") if x.session
+    ch = get_object(e.msg)
+    # add character
+    add_contents(ch.id)
+    ch.location = id
+    characters(e.msg).each do |x|
+      add_event(id,x.id,:show, ch.name+" has arrived.") if x.session
     end
-    plyr.parse('look')
+    ch.parse('look')
   end
 
 end

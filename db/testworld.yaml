@@ -4,13 +4,16 @@
     :created_on: 2006-03-09 22:45:33.695862 -05:00
     :updated_on: 2006-03-09 22:45:33.695862 -05:00
     :owner: 0
+    :msgs: {}
+
     :timer_list: 
     - !ruby/object:Timer 
       counter: 1
       id: 3
       name: :hamster
       time: 2
-    :all_players: 
+    :all_accounts: []
+    :all_characters: 
     - 7
     :admins: 
     - 7
@@ -19,7 +22,6 @@
     :name: World
     :desc: This is the World object.
     :id: 0
-    :connected_players: []
 
 - !ruby/object:Room 
   props: 
@@ -91,7 +93,19 @@
     :name: arrival
     :language: :fart
     :id: 5
-- !ruby/object:Player 
+- !ruby/object:Account 
+  props: 
+    :updated_on: 2006-03-15 18:28:44.460017 -05:00
+    :name: Wizard
+    :passwd: s9l3wU5HryDEw
+    :characters: 
+    - 7
+    :desc: ""
+    :owner: 6
+    :color: true
+    :created_on: 2006-03-15 13:38:57.308361 -05:00
+    :id: 6
+- !ruby/object:Character 
   props: 
     :created_on: 2006-03-09 22:45:33.695862 -05:00
     :updated_on: 2006-03-09 22:45:33.695862 -05:00
@@ -104,9 +118,8 @@
 
     :location: 1
     :name: Wizard
-    :passwd: s9l3wU5HryDEw
+    :acctid: 6
     :desc: ""
-    :color: true
     :id: 7
 - !ruby/object:GameObject 
   props: 

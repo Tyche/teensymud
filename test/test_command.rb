@@ -7,7 +7,7 @@ require 'test/unit'
 require 'flexmock'
 load 'mockengine.rb'
 require 'storage/properties'
-require 'core/player'
+require 'core/character'
 require 'command'
 end
 
