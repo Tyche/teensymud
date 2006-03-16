@@ -27,7 +27,7 @@ class Character < GameObject
 
   # Create a new Character object
   # IMPORTANT :Character objects must be marked nonswappable while connected!!!
-  #       Otherwise we risk losing the contants of @session
+  #       Otherwise we risk losing the contants of @account
   # [+name+]    The displayed name of the character.
   # [+acctid+]  The account id this character belongs to.
   # [+return+]  A handle to the new Character.

@@ -71,7 +71,7 @@ class Room < GameObject
   def leave(e)
     ch = get_object(e.from)
     characters(e.from).each do |x|
-      add_event(id,x.id,:show, ch.name + " has left #{e.msg}.") if x.session
+      add_event(id,x.id,:show, ch.name + " has left #{e.msg}.") if x.account
     end
     # remove character
     delete_contents(ch.id)
@@ -88,7 +88,7 @@ class Room < GameObject
     add_contents(ch.id)
     ch.location = id
     characters(e.msg).each do |x|
-      add_event(id,x.id,:show, ch.name+" has arrived.") if x.session
+      add_event(id,x.id,:show, ch.name+" has arrived.") if x.account
     end
     ch.parse('look')
   end

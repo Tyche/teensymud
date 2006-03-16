@@ -106,7 +106,7 @@ class GameObject < Root
   def characters(exempt=nil)
     ary = contents.collect do |oid|
       o = get_object(oid)
-      (o.class == Character && oid != exempt && o.session) ? o : nil
+      (o.class == Character && oid != exempt && o.account) ? o : nil
     end
     ary.compact
   end

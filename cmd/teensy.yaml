@@ -162,3 +162,7 @@
         (ex. @show me)
     
   name: '@show'
+- !ruby/object:Command 
+  cmd: :cmd_gc
+  help: runs garbage collection
+  name: @gc
