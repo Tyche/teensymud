@@ -15,6 +15,7 @@ $:.unshift "vendor" if !$:.include? "vendor"
 
 require 'utility/configuration'
 require 'utility/log'
+require 'utility/utility'
 
 # The object cache is limited in size since the purpose is to control the
 # number of objects present in storage and provide a reasonably efficient
@@ -163,7 +164,7 @@ class CacheManager
 
     # cache miss - search the database
     if @db.has_key? oid.to_s
-      ret = Marshal.load(@db[oid.to_s])
+      ret = Utility.decode(@db[oid.to_s])
     else
       @st.inc(:database_read_fails)
       return nil
@@ -174,7 +175,7 @@ class CacheManager
     ch = @cache[hv].pop
     # if its dirty we write it to the database
     if ch.dirty? && !ch.dead?
-      @db[ch.oid.to_s] = Marshal.dump(ch.obj)
+      @db[ch.oid.to_s] = Utility.encode(ch.obj)
       @st.inc(:database_writes)
       if ch.noswap?  # here we have a problem we can't use this
         # first push it back onto the list
@@ -227,7 +228,7 @@ class CacheManager
     # if its dirty we write it to the database
     if ch.dirty? && !ch.dead?
       # errors possible - check in store module
-      @db[ch.oid.to_s] = Marshal.dump(ch.obj)
+      @db[ch.oid.to_s] = Utility.encode(ch.obj)
       @st.inc(:database_writes)
       if ch.noswap?  # here we have a problem we can't use this
         # first push it back onto the list
@@ -291,7 +292,7 @@ class CacheManager
     @cwidth.times do |i|
       @cache[i].each do |ce|
         if ce.dirty?
-          @db[ce.oid.to_s] = Marshal.dump(ce.obj)
+          @db[ce.oid.to_s] = Utility.encode(ce.obj)
           @st.inc(:database_writes)
           ce.clean!
         end
@@ -305,7 +306,7 @@ class CacheManager
     @st.inc(:chain_syncs)
     @cache[i].each do |ce|
       if ce.dirty?
-        @db[ce.oid.to_s] = Marshal.dump(ce.obj)
+        @db[ce.oid.to_s] = Utility.encode(ce.obj)
         @st.inc(:database_writes)
         ce.clean!
       end

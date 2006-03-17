@@ -2,8 +2,8 @@
 #
 # file::    dbdump.rb
 # author::  Jon A. Lambert
-# version:: 2.8.0
-# date::    01/19/2006
+# version:: 2.9.0
+# date::    03/16/2006
 #
 # This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
@@ -18,19 +18,21 @@ require 'yaml'
 require 'optparse'
 require 'ostruct'
 require 'pp'
+require 'utility/utility'
 require 'storage/properties'
 require 'core/character'
 require 'core/room'
 require 'core/world'
 require 'core/script'
+require 'core/account'
 
 # This utility program dumps a database to yaml
 #
 class Dumper
-  VERSION = "0.1.0"
+  VERSION = "0.2.0"
 
   attr_accessor :opts
-  DATABASES = [:dbm, :gdbm, :sdbm]
+  DATABASES = [:dbm, :gdbm, :sdbm, :sqlite]
 
   def initialize
     @opts = get_options
@@ -41,6 +43,8 @@ class Dumper
       require 'gdbm'
     when :sdbm
       require 'sdbm'
+    when :sqlite
+      require 'sqlite'
     end
     @dbtop = 0
     @db = {}
@@ -90,6 +94,7 @@ class Dumper
     raise(OptionParser::ParseError, "Must specify input file!") if myopts.ifile.nil?
     myopts.ofile = myopts.ifile.dup if myopts.ofile.nil?
     myopts.ifile << ".gdbm" if myopts.dbtype == :gdbm
+    myopts.ifile << ".sqlite" if myopts.dbtype == :sqlite
     myopts.ofile << ".yaml"
 
     return myopts
@@ -101,7 +106,7 @@ class Dumper
   end
 
   def store(v)
-    o = Marshal.load(v)
+    o = Utility.decode(v)
     @dbtop = o.id if o.id > @dbtop
     @db[o.id]=o
     @count += 1
@@ -124,6 +129,12 @@ class Dumper
       DBM.open(@opts.ifile, 0666) do |db|
         db.each_value {|v| store v}
       end
+    when :sqlite
+      db = SQLite::Database.open(@opts.ifile)
+      db.execute("select data from tmud;") do |v|
+        store v.first
+      end
+      db.close
     end
 
     File.open(@opts.ofile,'wb') do |f|

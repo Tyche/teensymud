@@ -71,7 +71,7 @@ class Engine
       require 'storage/dbmstore'
       @db = DbmStore.new(options['dbfile'])
     when :sqlite
-      require 'storage/dbmstore'
+      require 'storage/sqlitestore'
       @db = SqliteStore.new(options['dbfile'])
     else
       log.fatal "Invalid 'dbtype' in Configuration"

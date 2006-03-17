@@ -2,8 +2,8 @@
 #
 # file::    dbload.rb
 # author::  Jon A. Lambert
-# version:: 2.8.0
-# date::    01/19/2006
+# version:: 2.9.0
+# date::    03/16/2006
 #
 # This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
@@ -18,19 +18,21 @@ require 'yaml'
 require 'optparse'
 require 'ostruct'
 require 'pp'
+require 'utility/utility'
 require 'storage/properties'
 require 'core/character'
 require 'core/room'
 require 'core/world'
 require 'core/script'
+require 'core/account'
 
 # This utility program loads a yaml file to a database
 #
 class Loader
-  VERSION = "0.1.0"
+  VERSION = "0.2.0"
 
   attr_accessor :opts
-  DATABASES = [:dbm, :gdbm, :sdbm]
+  DATABASES = [:dbm, :gdbm, :sdbm, :sqlite]
 
   def initialize
     @opts = get_options
@@ -41,6 +43,9 @@ class Loader
       require 'gdbm'
     when :sdbm
       require 'sdbm'
+    when :sqlite
+      require 'sqlite'
+      require 'storage/sqlitehash'
     end
     @dbtop = 0
     @db = {}
@@ -90,6 +95,7 @@ class Loader
     raise(OptionParser::ParseError, "Must specify input file!") if myopts.ifile.nil?
     myopts.ofile = myopts.ifile.dup if myopts.ofile.nil?
     myopts.ofile << ".gdbm" if myopts.dbtype == :gdbm
+    myopts.ofile << ".sqlite" if myopts.dbtype == :sqlite
     myopts.ifile << ".yaml"
 
     return myopts
@@ -114,16 +120,25 @@ class Loader
     case @opts.dbtype
     when :sdbm
       SDBM.open(@opts.ofile, 0666) do |db|
-        @db.each {|k,v| db[k.to_s] = Marshal.dump(v)}
+        @db.each {|k,v| db[k.to_s] = Utility.encode(v)}
       end
     when :gdbm
       GDBM.open(@opts.ofile, 0666) do |db|
-        @db.each {|k,v| db[k.to_s] = Marshal.dump(v)}
+        @db.each {|k,v| db[k.to_s] = Utility.encode(v)}
       end
     when :dbm
       DBM.open(@opts.ofile, 0666) do |db|
-        @db.each {|k,v| db[k.to_s] = Marshal.dump(v)}
+        @db.each {|k,v| db[k.to_s] = Utility.encode(v)}
       end
+    when :sqlite
+      db = SQLite::Database.open(@opts.ofile)
+      begin
+        db.execute("drop table tmud;")
+      rescue
+      end
+      db.execute("create table tmud (id integer unique, data text);")
+      @db.each {|k,v| db[k.to_s] = Utility.encode(v)}
+      db.close
     end
 
     puts "Highest object in use   : #{@dbtop}"

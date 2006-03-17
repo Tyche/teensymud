@@ -1,8 +1,8 @@
 #
 # file::    dbmstore.rb
 # author::  Jon A. Lambert
-# version:: 2.8.0
-# date::    01/19/2006
+# version:: 2.9.0
+# date::    03/16/2006
 #
 # This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
@@ -144,12 +144,12 @@ private
       log.info "Building minimal world database..."
       DBM.open(@dbfile, 0666) do |db|
         YAML::load(MINIMAL_DB).each do |o|
-          db[o.id.to_s] = Marshal.dump(o)
+          db[o.id.to_s] = Utility.encode(o)
         end
       end
     end
   rescue
-    log.fatal "Unable to find or build database - '#{options['dbfile']}'[#{options['dbtype']}]"
+    log.fatal "Unable to find or build database - '#{@dbfile}'"
     log.fatal $!
     raise
   end

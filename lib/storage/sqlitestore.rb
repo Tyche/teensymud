@@ -1,5 +1,5 @@
 #
-# file::    sdbmstore.rb
+# file::    sqlitestore.rb
 # author::  Jon A. Lambert
 # version:: 2.9.0
 # date::    03/16/2006
@@ -13,31 +13,33 @@
 $:.unshift "lib" if !$:.include? "lib"
 $:.unshift "vendor" if !$:.include? "vendor"
 
-require 'sdbm'
+require 'sqlite'
+require 'storage/sqlitehash'
 require 'utility/log'
 require 'storage/store'
 require 'storage/cache'
 
-# The SdbmStore class manages access to all object storage.
+
+# The SqliteStore class manages access to all object storage.
 #
 # [+db+] is a handle to the database.
 # [+dbtop+] stores the highest id used in the database.
 # [+cache+] is a handle to the cache
-class SdbmStore < Store
+class SqliteStore < Store
   logger 'DEBUG'
 
   def initialize(dbfile)
     super()
-    @dbfile = "#{dbfile}"
+    @dbfile = "#{dbfile}.sqlite"
 
     # check if database exists and build it if not
     build_database
     log.info "Loading world..."
 
     # open database and sets @dbtop to highest object id
-    @db = SDBM.open(@dbfile, 0666)
-    @db.each_key do |o|
-      @dbtop = o.to_i if o.to_i > @dbtop
+    @db = SQLite::Database.open(@dbfile)
+    @db.execute("select id from tmud;") do |i|
+      @dbtop = i.first.to_i if i.first.to_i > @dbtop
     end
 
     @cache = CacheManager.new(@db)
@@ -123,7 +125,9 @@ class SdbmStore < Store
   # [+yield+] Each object in database to block of caller.
   def each
     kys = @cache.keys
-    @db.each_key {|k| kys << k.to_i}
+    @db.execute("select id from tmud;") do |k|
+      kys << k.to_i
+    end
     kys.uniq!
     kys.each {|k| yield @cache.get(k)}
   end
@@ -140,13 +144,15 @@ private
   # Checks that the database exists and builds one if not
   # Will raise an exception if something goes wrong.
   def build_database
-    if !test(?e, "#{@dbfile}.pag")
+    if !test(?e, @dbfile)
       log.info "Building minimal world database..."
-      SDBM.open(@dbfile, 0666) do |db|
-        YAML::load(MINIMAL_DB).each do |o|
-          db[o.id.to_s] = Utility.encode(o)
-        end
+      db = SQLite::Database.open(@dbfile)
+      db.execute("create table tmud (id integer unique, data text);")
+      YAML::load(MINIMAL_DB).each do |o|
+        db[o.id] = Utility.encode(o)
+        log.info "insert #{o.id}:#{db[o.id]}"
       end
+      db.close
     end
   rescue
     log.fatal "Unable to find or build database - '#{@dbfile}'"

@@ -43,8 +43,8 @@ Rake::TestTask.new do |t|
     ["test/test_gameobject.rb",
      "test/test_room.rb",
      "test/test_root.rb",
-     "test/test_properties.rb",
-     "test/test_player.rb"]
+     "test/test_properties.rb"
+    ]
   t.verbose = true
   t.options = "-c test/test_config.yaml"
 end

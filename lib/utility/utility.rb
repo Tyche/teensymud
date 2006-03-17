@@ -10,6 +10,7 @@
 # Released under the terms of the TeensyMUD Public License
 # See LICENSE file for additional information.
 #
+require 'base64'
 
 class String
 
@@ -55,10 +56,18 @@ class String
     str.gsub!(/\w+/) {|m|  m.downcase!; m[0] = m[0].chr.upcase; m}
     str
   end
+
 end
 
 module Utility
 
+  def self.decode(str)
+    Marshal.load(Base64.decode64(str))
+  end
+
+  def self.encode(obj)
+    Base64.encode64(Marshal.dump(obj)).strip
+  end
 
 end
 
