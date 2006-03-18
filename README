@@ -77,20 +77,19 @@ That's it.  It will boot on port 4000 and build an initial database in the db di
 
 == Help 
 - look       - displays the contents of a room
-- chat       - sends <message> to all players in the game
-- emote | !  - displays <message> to all players in the room
-- quit       - quits the game (saves player)
+- chat       - sends <message> to all characters in the game
+- emote | !  - displays <message> to all characters in the room
+- quit       - quits the game (saves character)
 - help | ?   - displays help
 - get        - gets all objects in the room into your inventory
 - examine    - displays the contents of a room
-- say | "    - sends <message> to all players in the room
-- go         - go through the exit specified (ex. go west)
-- inventory  - displays player inventory
+- say | "    - sends <message> to all characters in the room
+- go | <ex>  - go through the exit specified (ex. go west)
+- inventory  - displays chracter inventory
 - drop       - drops all objects in your inventory into the room
-- say        - sends <message> to all players in the room
-- kill       - attempts to kill player (e.g. kill Bubba)
+- kill       - attempts to kill character (e.g. kill Bubba)
 - hello      - the hello social
-- who        - shows a list of all connected players
+- who        - shows a list of all connected characters
 
 - @echoat    - echos input to location
 - @object    - creates a new object (ex. @object rose)
@@ -121,6 +120,16 @@ That's it.  It will boot on port 4000 and build an initial database in the db di
                @script show #<scriptid>
                (ex. @script add fart myprog
                     @script add boolexp (#234|#42)&#34 )
+- @edit      - Edits a string field on an object or system message.
+        Syntax:
+               @edit sysmsg <name>
+               @edit #<oid> <field>
+               (ex. @edit #7 desc)
+- @gc        - runs garbage collection
+- @show      - Displays object
+        Syntax:
+               @show #<oid>|me
+               (ex. @show me)
 
 == Contributors
 :include:CONTRIBUTORS

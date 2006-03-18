@@ -16,6 +16,7 @@ class TestTerminalFilter < Test::Unit::TestCase
     @pstack = FlexMock.new
     @pstack.mock_handle(:conn) { @conn }
     @pstack.mock_handle(:echo_on) { false }
+    @pstack.mock_handle(:terminal) { 'xterm' }
     @filter = TerminalFilter.new(@pstack)
   end
 

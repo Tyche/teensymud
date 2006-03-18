@@ -4,10 +4,16 @@
 
 unless defined? $ZENTEST and $ZENTEST
 require 'test/unit'
+require 'flexmock'
+load 'mockengine.rb'
 require 'core/account'
 end
 
 class TestAccount < Test::Unit::TestCase
+  def setup
+    $id = 0
+  end
+
   def test_update
     assert_equal(nil,Account.new(5).update("foo"))
   end

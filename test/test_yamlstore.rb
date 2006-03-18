@@ -85,12 +85,13 @@ class TestYamlStore < Test::Unit::TestCase
     assert_equal(@o, @db.put(@o))
     assert_equal(@p, @db.put(@p))
     stats=<<EOH
-[COLOR=cyan]
+[COLOR Cyan]
 ---* Database Statistics *---
-  Rooms   - 2
+  Rooms      - 2
+  Objects    - 1
+  Scripts    - 0
+  Accounts   - 0
   Characters - 1
-  Objects - 1
-  Scripts - 0
   Total Objects - 4
   Highest OID in use - 4
 ---*                     *---
@@ -100,4 +101,3 @@ EOH
   end
 
 end
-

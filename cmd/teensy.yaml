@@ -147,8 +147,9 @@
 - !ruby/object:Command 
   cmd: :cmd_edit
   help: |
-    Adds, deletes or shows a script
+    Edits a string field on an object or system message.
       Syntax:
+        @edit sysmsg <name>
         @edit #<oid> <field>
         (ex. @edit #7 desc)
     

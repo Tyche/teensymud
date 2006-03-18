@@ -23,7 +23,7 @@ class Account < Root
   include Publisher
   logger 'DEBUG'
   property :color, :passwd, :characters
-  attr_accessor :mode, :echo, :termsize, :terminal
+  attr_accessor :mode, :echo, :termsize, :terminal, :conn, :character
 
   # Create an Account connection.  This is a temporary object that handles
   # login for character and gets them connected.
@@ -162,6 +162,9 @@ class Account < Root
         @conn.set(:color, color)
         welcome
         @mode = :playing
+      elsif @login_name.empty?
+        sendmsg(append_echo("login> "))
+        @mode = :name
       else
         acctid = world.all_accounts.find {|a|
           @login_name == get_object(a).name
@@ -197,7 +200,7 @@ class Account < Root
           end
           @account.subscribe(@conn)
           if options['account_system']
-            sendmsg(append_echo("1) Create a character\n2) Play\nQ) Quit\n> "))
+            @account.sendmsg(append_echo(login_menu))
             @account.mode = :menu
           else
             @character = get_object(@account.characters.first)
@@ -225,15 +228,15 @@ class Account < Root
         self.name = @login_name
         self.passwd = @login_passwd.encrypt
         put_object(self)
+        # make the account non-swappable so we dont lose connection
         Engine.instance.db.makenoswap(id)
         world.all_accounts << id
+        @conn.set(:color, color)
         if options['account_system']
-          sendmsg(append_echo("1) Create a character\n2) Play\nQ) Quit\n> "))
+          sendmsg(append_echo(login_menu))
           @mode = :menu
         else
           @character = new_char
-          # make the account non-swappable so we dont lose connection
-          @conn.set(:color, color)
           welcome
           @mode = :playing
         end
@@ -241,7 +244,7 @@ class Account < Root
         @mode = :name
         sendmsg(append_echo("login> "))
       end
-    when :menu
+    when :menu, :menucr, :menupl
       parse_menu(msg)
     when :playing
       @character.parse(msg)
@@ -260,17 +263,61 @@ class Account < Root
   #
   # The following state transition diagram illustrates the possible transitions.
   #
-  # :menu      -> ????          ???
+  # :menu      -> :menucr       Create a character
+  #            -> :menupl       Play a character
+  # :menucr    -> :playing      Get character name, create character and play
   #
   def parse_menu(msg)
-    case msg
-    when /^1/i
-    when /^2/i
-    when /^Q/i
-      disconnect
-    else                        # Any other key
-      sendmsg(append_echo("1) Create a character\n2) Play\nQ) Quit\n> "))
-      @mode = :menu
+    case @mode
+    when :menu
+      case msg
+      when /^1/i
+        sendmsg(append_echo("Enter character name> "))
+        @mode = :menucr
+      when /^2/i
+        if characters.size == 0
+          sendmsg(append_echo(login_menu))
+          @mode = :menu
+        else
+          sendmsg(append_echo(character_menu))
+          @mode = :menupl
+        end
+      when /^Q/i
+        disconnect
+      else                        # Any other key
+        sendmsg(append_echo(login_menu))
+        @mode = :menu
+      end
+    when :menucr
+      if msg.proper_name.empty?
+        sendmsg(append_echo(login_menu))
+        @mode = :menu
+      else
+        @character = new_char(msg.proper_name)
+        @conn.set(:color, color)
+        welcome
+        @mode = :playing
+      end
+    when :menupl
+      case msg
+      when /(\d+)/
+        if $1.to_i >= characters.size
+          sendmsg(append_echo(character_menu))
+        else
+          @character = get_object(characters[$1.to_i])
+          # make the character non-swappable so we dont lose references
+          Engine.instance.db.makenoswap(@character.id)
+          world.connected_characters << @character.id
+          @character.account = self
+          welcome
+          @mode = :playing
+        end
+      else
+        sendmsg(append_echo(login_menu))
+        @mode = :menu
+      end
+    else
+      log.error "Account#parse_menu unknown :mode - #{@mode.inspect}"
     end
   end
 
@@ -300,6 +347,8 @@ class Account < Root
         "[color Yellow on Red]#{" "*@termsize[0]}[/color]" +
         "[home #{@termsize[1]-1},1][clearline][color Magenta](#{name})[#{@mode}][/color]" +
         "[home #{@termsize[1]},1][clearline]> ")
+    else
+#      publish("> ")
     end
   end
 
@@ -327,9 +376,25 @@ class Account < Root
     unsubscribe_all
   end
 
+  def character_menu
+    str = '[color Yellow]'
+    characters.each_index do |i|
+      str << "#{i}) #{get_object(characters[i]).name}\n"
+    end
+    str << "Pick a character>[/color] "
+  end
+
+  def login_menu
+    "[color Yellow]1) Create a character\n2) Play\nQ) Quit\n>[/color] "
+  end
+
 private
-  def new_char
-    ch = Character.new(name,id)
+  def new_char(nm=nil)
+    if nm.nil?
+      ch = Character.new(name,id)
+    else
+      ch = Character.new(nm,id)
+    end
     self.characters << ch.id
     world.all_characters << ch.id
     ch.account = self

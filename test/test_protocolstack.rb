@@ -11,6 +11,7 @@ end
 class TestProtocolStack < Test::Unit::TestCase
   def setup
     @serv = FlexMock.new
+    @serv.mock_handle(:service_type) { :server }
     @serv.mock_handle(:service_io) { :sockio }
     @serv.mock_handle(:service_filters) { [:telnetfilter, :debugfilter] }
     @serv.mock_handle(:service_negotiation) { [:supga, :zmp, :echo] }
