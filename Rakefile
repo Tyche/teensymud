@@ -17,7 +17,6 @@ PKG_FILES = FileList[
   'logs', 'logs/README',
   'benchmark', 'benchmark/README',
   'lib/**/*',
-  'vendor/**/bb*',
   'cmd/**/*',
   'doc/**/*'
 ]

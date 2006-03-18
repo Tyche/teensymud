@@ -1,27 +1,25 @@
 = TeensyMUD Server
-= v2.8.0
+= v2.9.0
 
 == Introduction
 TeensyMUD is a very simple mud server written in Ruby.  It uses a multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns and YAML formatted text files as a database.  It is also a pure event driven system where all game objects communicate with each other via events.  
 
 This server was initially created in response to an Aprils Fool's joke posted by Erwin Andreasen on TheMudConnector forum announcing a 1K mud contest.  Those obfuscated versions can be found in the repository.
 
-Does TeensyMUD have a future?  Who knows?  I don't.
-
 == Download
 The latest release can be found at http://teensymud.kicks-ass.org
 
 == System Dependencies
 === Required
-[Ruby 1.8.2] Can be obtained at the home of Ruby, http://www.ruby-lang.org.  It runs on most platforms.
+[Ruby 1.8.4] Can be obtained at the home of Ruby, http://www.ruby-lang.org.  It runs on most platforms.
 [Log4r] All logging done through this now. Install from Ruby Gems, or http://log4r.sourceforge.net/ 
 
 === Optional
 [RubyGems] To install rake and various things.  See - http://rubyforge.org/projects/rubygems
 [Rake] To build documentation, run tests, etc.  See - http://rake.rubyforge.org
-[Racc] To rebuild FARTS parser.  Ruby comes with Racc runtime so this is not needed for execution. See - http://i.loveruby.net/en/prog/racc.html
+[Racc] To rebuild FARTS or BoolExp parser.  Ruby comes with Racc runtime so this is not needed for execution. See - http://i.loveruby.net/en/prog/racc.html
 [FlexMock] To run regression tests.  See - http://onestepback.org/software/flexmock/
-[Curses] To run tclient in curses mode under windows.  The Windows one-click installer is missing the pdcurses.dll, or if you built it yourself from source the curses.so extension probably wasn't built.  You can get binaries for it at http://www.dave.burt.id.au/ruby/curses.zip.  The pdcurses.dll should be placed in your ruby\bin directory and not your windows directories.   See http://jarp.does.notwork.org/win32/ for the sources.
+[Curses] To run tclient in curses mode under windows.  The Windows one-click installer may be missing the pdcurses.dll, or if you built it yourself from source the curses.so extension probably wasn't built.  You can get binaries for it at http://www.dave.burt.id.au/ruby/curses.zip.  The pdcurses.dll should be placed in your ruby\bin directory and not your windows directories.   See http://jarp.does.notwork.org/win32/ for the sources.
 
 == Features
 * Multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns
@@ -33,7 +31,7 @@ The latest release can be found at http://teensymud.kicks-ass.org
 * Client detection (15+ clients tested so far)
 * Includes TeensyClient an vt-xxx/xterm capable client for testing.
 * Fully persistent virtual world
-* DBM, GDBM, SDBM and YAML supported database back ends
+* DBM, GDBM, SDBM, SQLite2, SQLite3 and YAML supported database back ends
 * Includes database load and dump utilities
 * Configurable object caching support for disk-based databases
 * Automatic persistent properties for objects. 
@@ -69,6 +67,16 @@ The latest release can be found at http://teensymud.kicks-ass.org
 3. $ ruby tmud.rb
 
 That's it.  It will boot on port 4000 and build an initial database in the db directory. 
+
+See config.yaml file for more configuration information.  Documentation inside.
+
+There is a sample database, db/testworld.yaml that illustrates the use of triggers.  The admin account is 'Wizard' and the password is 'potrzebie'.
+
+To start using the sample database either specify it in the config file or on the command line:
+
+1. $ ruby tmud.rb -db/testworld
+
+Have Fun.
 
 == Operation
 * CTL-C  - Will shut down the server
