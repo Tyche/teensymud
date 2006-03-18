@@ -32,7 +32,7 @@ class Dumper
   VERSION = "0.2.0"
 
   attr_accessor :opts
-  DATABASES = [:dbm, :gdbm, :sdbm, :sqlite]
+  DATABASES = [:dbm, :gdbm, :sdbm, :sqlite, :sqlite3]
 
   def initialize
     @opts = get_options
@@ -45,6 +45,8 @@ class Dumper
       require 'sdbm'
     when :sqlite
       require 'sqlite'
+    when :sqlite3
+      require 'sqlite3'
     end
     @dbtop = 0
     @db = {}
@@ -95,6 +97,7 @@ class Dumper
     myopts.ofile = myopts.ifile.dup if myopts.ofile.nil?
     myopts.ifile << ".gdbm" if myopts.dbtype == :gdbm
     myopts.ifile << ".sqlite" if myopts.dbtype == :sqlite
+    myopts.ifile << ".sqlite3" if myopts.dbtype == :sqlite3
     myopts.ofile << ".yaml"
 
     return myopts
@@ -131,6 +134,12 @@ class Dumper
       end
     when :sqlite
       db = SQLite::Database.open(@opts.ifile)
+      db.execute("select data from tmud;") do |v|
+        store v.first
+      end
+      db.close
+    when :sqlite3
+      db = SQLite3::Database.open(@opts.ifile)
       db.execute("select data from tmud;") do |v|
         store v.first
       end

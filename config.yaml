@@ -124,7 +124,7 @@ character_limit: 10
 
 # allow guest accounts
 # guest accounts are not saved - names are "Guest #<acctid>" 
-guest_accounts: false
+guest_accounts: true
 
 ###########################################################
 ### Utility configuration section

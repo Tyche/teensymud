@@ -23,7 +23,7 @@ class Account < Root
   include Publisher
   logger 'DEBUG'
   property :color, :passwd, :characters
-  attr_accessor :conn, :mode, :echo, :termsize, :terminal, :character
+  attr_accessor :mode, :echo, :termsize, :terminal
 
   # Create an Account connection.  This is a temporary object that handles
   # login for character and gets them connected.
@@ -34,57 +34,68 @@ class Account < Root
     self.passwd = nil
     self.color = false
     self.characters = []
-    @conn = conn
+    @conn = conn                # Reference to network session (connection)
     @mode = :initialize
     @echo = false
     @termsize = nil
     @terminal = nil
-    @checked = 3
-    @account = nil
-    @character = nil
+    @checked = 3                # Login retry counter - on 0 disconnect
+    @account = nil              # used only during sign-in process
+    @character = nil            # reference to the currently played Character.
   end
 
   # Receives messages from a Connection being observed and handles login
-  # state.  On successful login the observer status will be transferred
-  # to the character object.
+  # state.
   #
   # [+msg+]      The message string
   #
   # This supports the following:
-  # [:logged_out] - This symbol from the server informs us that the
-  #                 Connection has disconnected in an expected manner.
   # [:disconnected] - This symbol from the server informs us that the
-  #                 Connection has disconnected in an unexpected manner.
-  #                 There is no practical difference from :logged_out to
-  #                 us.
+  #                 Connection has disconnected.
   # [:initdone] - This symbol from the server indicates that the Connection
   #               is done setting up and done negotiating an initial state.
   #               It triggers us to start sending output and parsing input.
   # [:termsize] - This is sent everytime the terminal size changes (NAWS)
   # [String] - A String is assumed to be input from the Session and we
-  #            parse and handle it here.
+  #            send it to parse_messages.
   #
   def update(msg)
     case msg
-    when :logged_out, :disconnected
+    # Handle disconnection from server
+    # Note that publishing a :quit event (see #disconnect) will return a
+    #  :disconnected event when server has closed the connection.
+    # Guest accounts and characters are deleted here.
+    when :disconnected
       @conn = nil
       unsubscribe_all
       Engine.instance.db.makeswap(id)
       if @character
         world.connected_characters.delete(@character.id)
         world.connected_characters.each do |pid|
-          add_event(@character.id,pid,:show,"#{name} has #{msg.id2name}.")
+          add_event(@character.id,pid,:show,"#{name} has disconnected.")
         end
         Engine.instance.db.makeswap(@character.id)
         @character.account = nil
+        if @character.name =~ /Guest/i
+          world.all_characters.delete(@character.id)
+          delete_object(@character.id)
+        end
         @character = nil
       end
+      if name =~ /Guest/i
+        world.all_accounts.delete(id)
+        delete_object(id)
+      end
+    # Issued when a NAWS event occurs
+    # Currently this clears and resets the screen.  Ideally it should attempt
+    # to redraw it.
     when :termsize
       @termsize = @conn.query(:termsize)
       if @terminal =~ /^vt|xterm/
         publish("[home #{@termsize[1]},1][clearline][cursave]" +
           "[home 1,1][scrreset][clear][scrreg 1,#{@termsize[1]-3}][currest]")
       end
+    # Negotiation with client done.  Start talking to it.
     when :initdone
       @echo = @conn.query(:echo)
       @termsize = @conn.query(:termsize)
@@ -95,131 +106,182 @@ class Account < Root
         sendmsg(LOGO)
       end
       sendmsg(BANNER)
-      sendmsg("login> ")
+      sendmsg(append_echo("login> "))
       @mode = :name
+    # This is a message from our user
     when String
-      case @mode
-      when :initialize
-        # ignore everything until negotiation done
-      when :name
-        publish("[clearline]") if @terminal =~ /^vt|xterm/
-        @login_name = msg.proper_name
-        if options['guest_accounts'] && @login_name =~ /Guest/i
-          self.name = "Guest#{id}"
-          @character = new_char
-          Engine.instance.db.put(self)
-          Engine.instance.world.all_accounts << id
-          # make the account non-swappable so we dont lose connection
-          Engine.instance.db.makenoswap(id)
-          @conn.set(:color, color)
-          welcome
-          @mode = :playing
-        else
-          acctid = Engine.instance.world.all_accounts.find {|a|
-            @login_name == Engine.instance.db.get(a).name
-          }
-          @account = Engine.instance.db.get(acctid)
-          sendmsg("password> ")
-          @conn.set(:hide, true)
-          @mode = :password
-        end
-      when :password
-        @login_passwd = msg
-        @conn.set(:hide, false)
-        if @account.nil?  # new account
-          sendmsg("Create new user?\n'Y/y' to create, Hit enter to retry login> ")
-          @mode = :newacct
-        else
-          if @login_passwd.is_passwd?(@account.passwd)  # good login
-            # deregister all observers here and on connection
-            unsubscribe_all
-            @conn.unsubscribe_all
-            # reregister all observers to @account
-            @conn.subscribe(@account.id)
-            # make the account non-swappable so we dont lose connection
-            Engine.instance.db.makenoswap(@account.id)
-            @conn.set(:color, @account.color)
-            switch_acct(@account)
-            # Check if this account already logged in
-            reconnect = false
-            if @account.subscriber_count > 0
-              @account.unsubscribe_all
-              reconnect = true
-            end
-            @account.subscribe(@conn)
-            if options['account_system']
-              sendmsg("1) Create a character\n2) Play\nQ) Quit\n> ")
-              @account.mode = :menu
-            else
-              @character = Engine.instance.db.get(@account.characters.first)
-              # make the character non-swappable so we dont lose references
-              Engine.instance.db.makenoswap(@character.id)
-              Engine.instance.world.connected_characters << @character.id
-              @character.account = @account
-              @account.character = @character
-              welcome(reconnect)
-              @account.mode = :playing
-            end
-          else  # bad login
-            @checked -= 1
-            sendmsg("Sorry wrong password.")
-            if @checked < 1
-              publish("Bye!")
-              publish("[home 1,1][scrreset][clear]") if @terminal =~ /^vt|xterm/
-              publish(:logged_out)
-              unsubscribe_all
-            else
-              @mode = :name
-              sendmsg("login> ")
-            end
-          end
-        end
-      when :newacct
-        if msg =~ /^y/i
-          self.name = @login_name
-          self.passwd = @login_passwd.encrypt
-          if options['account_system']
-            sendmsg("1) Create a character\n2) Play\nQ) Quit\n> ")
-            @mode = :menu
-          else
-            @character = new_char
-            Engine.instance.db.put(self)
-            Engine.instance.world.all_accounts << id
-            # make the account non-swappable so we dont lose connection
-            Engine.instance.db.makenoswap(id)
-            @conn.set(:color, color)
-            welcome
-            @mode = :playing
-          end
-        else
-          @mode = :name
-          sendmsg("login> ")
-        end
-      when :menu
-        case msg
-        when /^1/i
-        when /^2/i
-        when /^Q/i
-          publish("Bye!")
-          publish("[home 1,1][scrreset][clear]") if @terminal =~ /^vt|xterm/
-          publish(:logged_out)
-          unsubscribe_all
-        else
-          sendmsg("1) Create a character\n2) Play\nQ) Quit\n> ")
-          @mode = :menu
-        end
-      when :playing
-        @character.parse(msg)
-      else
-        log.error "Account#update unknown state - #{@mode.inspect}"
-      end
+      parse_messages(msg)
     else
       log.error "Account#update unknown message - #{msg.inspect}"
     end
+  rescue
+    # We squash and print out all exceptions here.  There is no reason to
+    # throw these back at the Connection.
+    log.error $!
+  end
+
+
+  # Handles String messages from Connection - called by update.
+  # This was refactored out of Account#update for length reasons.
+  #
+  # [+msg+]      The message string
+  #
+  # @mode tracks the state changes,  The Account is created with the
+  # initial state of :initialize.  The following state transition
+  # diagram illustrates the possible transitions.
+  #
+  # :intialize -> :name         Set when Account:update receives :initdone msg
+  # :name      -> :password     Sets @login_name and finds @account
+  #               :playing      Creates a new character if Guest account
+  # :password  -> :newacct      Sets @login_passwd
+  #            -> :menu         Good passwd, switches account, if account_system
+  #                             option on goes to menu
+  #            -> :playing      Good passwd, switches account, loads character
+  #            -> :name         Bad passwd
+  #            -> disconnect    Bad passwd, exceeds @check attempts
+  #                             (see Account#disconnect)
+  # :newacct   -> :menu           If account_system option on goes to menu
+  #            -> :playing        Creates new character, adds account
+  # :menu      -> parse_menu    Redirect message (see Account#parse_menu)
+  # :playing   -> @character    Redirect message (see Character#parse)
+  #
+  def parse_messages(msg)
+    case @mode
+    when :initialize
+      # ignore everything until negotiation done
+    when :name
+      publish("[clearline]") if @terminal =~ /^vt|xterm/
+      @login_name = msg.proper_name
+      if options['guest_accounts'] && @login_name =~ /Guest/i
+        self.name = "Guest#{id}"
+        @character = new_char
+        put_object(self)
+        world.all_accounts << id
+        # make the account non-swappable so we dont lose connection
+        Engine.instance.db.makenoswap(id)
+        @conn.set(:color, color)
+        welcome
+        @mode = :playing
+      else
+        acctid = world.all_accounts.find {|a|
+          @login_name == get_object(a).name
+        }
+        @account = get_object(acctid)
+        sendmsg(append_echo("password> "))
+        @conn.set(:hide, true)
+        @mode = :password
+      end
+    when :password
+      @login_passwd = msg
+      @conn.set(:hide, false)
+      if @account.nil?  # new account
+        sendmsg(append_echo("Create new user?\n'Y/y' to create, Hit enter to retry login> "))
+        @mode = :newacct
+      else
+        if @login_passwd.is_passwd?(@account.passwd)  # good login
+          # deregister all observers here and on connection
+          unsubscribe_all
+          @conn.unsubscribe_all
+          # reregister all observers to @account
+          @conn.subscribe(@account.id)
+          # make the account non-swappable so we dont lose connection
+          Engine.instance.db.makenoswap(@account.id)
+          @conn.set(:color, @account.color)
+          switch_acct(@account)
+          # Check if this account already logged in
+          reconnect = false
+          if @account.subscriber_count > 0
+            @account.publish(:reconnecting)
+            @account.unsubscribe_all
+            reconnect = true
+          end
+          @account.subscribe(@conn)
+          if options['account_system']
+            sendmsg(append_echo("1) Create a character\n2) Play\nQ) Quit\n> "))
+            @account.mode = :menu
+          else
+            @character = get_object(@account.characters.first)
+            # make the character non-swappable so we dont lose references
+            Engine.instance.db.makenoswap(@character.id)
+            world.connected_characters << @character.id
+            @character.account = @account
+            @account.character = @character
+            welcome(reconnect)
+            @account.mode = :playing
+          end
+        else  # bad login
+          @checked -= 1
+          sendmsg(append_echo("Sorry wrong password."))
+          if @checked < 1
+            disconnect
+          else
+            @mode = :name
+            sendmsg(append_echo("login> "))
+          end
+        end
+      end
+    when :newacct
+      if msg =~ /^y/i
+        self.name = @login_name
+        self.passwd = @login_passwd.encrypt
+        put_object(self)
+        Engine.instance.db.makenoswap(id)
+        world.all_accounts << id
+        if options['account_system']
+          sendmsg(append_echo("1) Create a character\n2) Play\nQ) Quit\n> "))
+          @mode = :menu
+        else
+          @character = new_char
+          # make the account non-swappable so we dont lose connection
+          @conn.set(:color, color)
+          welcome
+          @mode = :playing
+        end
+      else
+        @mode = :name
+        sendmsg(append_echo("login> "))
+      end
+    when :menu
+      parse_menu(msg)
+    when :playing
+      @character.parse(msg)
+    else
+      log.error "Account#parse_messages unknown :mode - #{@mode.inspect}"
+    end
+  end
+
+  # Handles message while in the login menu - called by parse_messages.
+  # This was refactored out of Account#parse_messages for length reasons.
+  #
+  # [+msg+]      The message string
+  #
+  # @mode tracks the state changes,  This routine is entered by any @modes
+  # staring with :menu.
+  #
+  # The following state transition diagram illustrates the possible transitions.
+  #
+  # :menu      -> ????          ???
+  #
+  def parse_menu(msg)
+    case msg
+    when /^1/i
+    when /^2/i
+    when /^Q/i
+      disconnect
+    else                        # Any other key
+      sendmsg(append_echo("1) Create a character\n2) Play\nQ) Quit\n> "))
+      @mode = :menu
+    end
+  end
+
+  # If echo hasn't been negotiated, we want to leave the cursor after
+  # the message prompt, so we prepend linefeeds in front of messages.
+  # This is hackish.
+  def append_echo(msg)
+    @echo ? msg : "\n" + msg
   end
 
   def sendmsg(msg)
-#    msg = "\n" + msg if !@echo
     publish("[cursave][home #{@termsize[1]-3},1]") if @terminal =~ /^vt|xterm/
     publish(msg)
     publish("[currest]") if @terminal =~ /^vt|xterm/
@@ -255,16 +317,26 @@ class Account < Root
     "Colors toggled #{color ? '[COLOR Magenta]ON[/COLOR]' : 'OFF' }\n"
   end
 
+
+  # Disconnects this account
+  def disconnect(msg=nil)
+    publish("[home 1,1][scrreset][clear]") if @terminal =~ /^vt|xterm/
+    publish(msg + "\n") if msg
+    publish("Bye!\n")
+    publish(:quit)
+    unsubscribe_all
+  end
+
 private
   def new_char
     ch = Character.new(name,id)
     self.characters << ch.id
-    Engine.instance.world.all_characters << ch.id
+    world.all_characters << ch.id
     ch.account = self
-    Engine.instance.db.get(options['home'] || 1).add_contents(ch.id)
-    Engine.instance.db.put(ch)
+    get_object(options['home'] || 1).add_contents(ch.id)
+    put_object(ch)
     Engine.instance.db.makenoswap(ch.id)
-    Engine.instance.world.connected_characters << ch.id
+    world.connected_characters << ch.id
     ch
   end
 
@@ -278,10 +350,10 @@ private
 
   def welcome(reconnect=false)
     rstr = reconnect ? 'reconnected' : 'connected'
-    @character.sendto("Welcome #{@character.name}@#{@conn.query(:host)}!")
-    Engine.instance.world.connected_characters.each do |pid|
+    @character.sendto(append_echo("Welcome #{@character.name}@#{@conn.query(:host)}!"))
+    world.connected_characters.each do |pid|
       if pid != @character.id
-        Engine.instance.eventmgr.add_event(@character.id,pid,:show,"#{@character.name} has #{rstr}.")
+        add_event(@character.id,pid,:show,"#{@character.name} has #{rstr}.")
       end
     end
     @character.parse('look')

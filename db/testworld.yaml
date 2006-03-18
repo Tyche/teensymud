@@ -12,7 +12,8 @@
       id: 3
       name: :hamster
       time: 2
-    :all_accounts: []
+    :all_accounts: 
+    - 6
     :all_characters: 
     - 7
     :admins: 

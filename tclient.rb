@@ -87,7 +87,7 @@ class CursesClient < Client
     case msg
     when Connection, :initdone
       super(msg)
-    when :logged_out, :disconnected
+    when :disconnected
       unsubscribe_all
       $shutdown = true
       Curses.addstr "Disconnected."
@@ -151,7 +151,7 @@ class ConsoleClient < Client
     case msg
     when Connection, :initdone
       super(msg)
-    when :logged_out, :disconnected
+    when :disconnected
       unsubscribe_all
       $shutdown = true
       puts "Disconnected."

@@ -31,7 +31,7 @@ module Cmd
             add_event(id,pid,:show,"#{name} kills #{d.name}.")
           end
         }
-        d.disconnect
+        d.account.disconnect("You have been pwn3d!")
         # delete_object(d)  Dont delete character, it's annoying
       else
         sendto("You attacks and misses #{d.name}.")

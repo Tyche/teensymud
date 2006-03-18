@@ -44,6 +44,7 @@ class World < Root
     self.all_accounts = []
     self.admins = []
     self.builders = []
+    self.msgs = {}
     @connected_characters = []
   end
 
@@ -74,7 +75,7 @@ class World < Root
   end
 
   def shutdown
-    connected_characters.each{|pid| get_object(pid).disconnect}
+    connected_characters.each{|pid| get_object(pid).account.disconnect("Shutdown.")}
     Thread.kill(@timer)
   end
 

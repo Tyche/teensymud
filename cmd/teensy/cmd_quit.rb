@@ -14,7 +14,7 @@ module Cmd
 
   # The quit command
   def cmd_quit(args)
-    disconnect
+    @account.disconnect
   end
 
 end

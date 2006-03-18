@@ -73,6 +73,9 @@ class Engine
     when :sqlite
       require 'storage/sqlitestore'
       @db = SqliteStore.new(options['dbfile'])
+    when :sqlite3
+      require 'storage/sqlite3store'
+      @db = Sqlite3Store.new(options['dbfile'])
     else
       log.fatal "Invalid 'dbtype' in Configuration"
       raise RunTimeError
@@ -80,7 +83,7 @@ class Engine
 
     # Get the world object
     @world = @db.get(0)
-    log.debug @world.inspect
+#    log.debug @world.inspect
     @db.makenoswap(0)
     @world.startup
 
@@ -126,8 +129,6 @@ class Engine
     @world.shutdown
     @server.stop
     log.info "Saving world..."
-    # clear compiled progs out before saving
-#    @db.each {|o| o.get_triggers.each {|t| t.prog = nil } if o.respond_to?(:get_triggers) }
     @db.save
     @db.close
     exit

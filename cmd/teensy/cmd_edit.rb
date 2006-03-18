@@ -15,11 +15,18 @@ module Cmd
   # @edits a string field on an object
   # Syntax:
   #   @edit #<id> <field>
+  #   @edit sysmsg <field>
   # (ex. @edit #1 desc
   def cmd_edit(args)
     case args
     when nil, ""
       sendto("What??")
+    when /sysmsg\s+(\w+)/
+      @mode = :edit
+      @editobj = world.msgs
+      @editfield = $1.intern
+      @editstr = world.msgs[$1.intern] || ''
+      sendto(edit_display(@editstr))
     when /#(\d+)\s+(\w+)/
       o = get_object($1.to_i)
       case o
@@ -114,7 +121,11 @@ EOD
       @editstr = lines.compact.join("\n")
     when /^@/
       @mode = nil
-      @editobj.send(@editfield+"=", @editstr)
+      if @editobj.object_id == world.msgs.object_id  # detect sysmsgs
+        @editobj.send("[]=", @editfield, @editstr)
+      else
+        @editobj.send(@editfield+"=", @editstr)
+      end
     when /^\./
       sendto "Invalid command."
     else

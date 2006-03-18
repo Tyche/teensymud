@@ -1,5 +1,5 @@
 #
-# file::    sqlitestore.rb
+# file::    sqlite3store.rb
 # author::  Jon A. Lambert
 # version:: 2.9.0
 # date::    03/16/2006
@@ -13,8 +13,8 @@
 $:.unshift "lib" if !$:.include? "lib"
 $:.unshift "vendor" if !$:.include? "vendor"
 
-require 'sqlite'
-require 'storage/sqlitehash'
+require 'sqlite3'
+require 'storage/sqlite3hash'
 require 'utility/log'
 require 'storage/store'
 require 'storage/cache'
@@ -25,19 +25,19 @@ require 'storage/cache'
 # [+db+] is a handle to the database.
 # [+dbtop+] stores the highest id used in the database.
 # [+cache+] is a handle to the cache
-class SqliteStore < Store
+class Sqlite3Store < Store
   logger 'INFO'
 
   def initialize(dbfile)
     super()
-    @dbfile = "#{dbfile}.sqlite"
+    @dbfile = "#{dbfile}.sqlite3"
 
     # check if database exists and build it if not
     build_database
     log.info "Loading world..."
 
     # open database and sets @dbtop to highest object id
-    @db = SQLite::Database.open(@dbfile)
+    @db = SQLite3::Database.open(@dbfile)
     @db.cache_size = 1000;     # default is 2000 1.5K pages
     @db.synchronous = 0;       # dangerous if OS crash, but fast
     @db.type_translation = true;
@@ -149,7 +149,7 @@ private
   def build_database
     if !test(?e, @dbfile)
       log.info "Building minimal world database..."
-      db = SQLite::Database.open(@dbfile)
+      db = SQLite3::Database.open(@dbfile)
       db.type_translation = true;
       db.execute("create table tmud (id integer primary key, data text);")
       YAML::load(MINIMAL_DB).each do |o|

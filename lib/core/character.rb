@@ -34,7 +34,10 @@ class Character < GameObject
   def initialize(name,acctid)
     super(name, nil, options['home'] || 1)
     self.acctid = acctid
-    @account = nil
+    @account = nil              # reference to the Account.  If nil this
+                                # character is not logged in.
+                                # We could use get_object(acctid) but
+                                # holding the reference is faster
   end
 
   # Sends a message to the character if they are connected.
@@ -42,12 +45,6 @@ class Character < GameObject
   # [+return+] Undefined.
   def sendto(s)
     @account.sendmsg(s+"\n") if @account
-  end
-
-  # Disconnects this character
-  def disconnect
-    @account.sendmsg("Bye![scrreset]")
-    @account.publish(:logged_out)
   end
 
   # All command input routed through here and parsed.

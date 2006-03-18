@@ -32,7 +32,7 @@ class Loader
   VERSION = "0.2.0"
 
   attr_accessor :opts
-  DATABASES = [:dbm, :gdbm, :sdbm, :sqlite]
+  DATABASES = [:dbm, :gdbm, :sdbm, :sqlite, :sqlite3]
 
   def initialize
     @opts = get_options
@@ -46,6 +46,9 @@ class Loader
     when :sqlite
       require 'sqlite'
       require 'storage/sqlitehash'
+    when :sqlite3
+      require 'sqlite3'
+      require 'storage/sqlite3hash'
     end
     @dbtop = 0
     @db = {}
@@ -96,6 +99,7 @@ class Loader
     myopts.ofile = myopts.ifile.dup if myopts.ofile.nil?
     myopts.ofile << ".gdbm" if myopts.dbtype == :gdbm
     myopts.ofile << ".sqlite" if myopts.dbtype == :sqlite
+    myopts.ofile << ".sqlite3" if myopts.dbtype == :sqlite3
     myopts.ifile << ".yaml"
 
     return myopts
@@ -136,8 +140,17 @@ class Loader
         db.execute("drop table tmud;")
       rescue
       end
-      db.execute("create table tmud (id integer unique, data text);")
-      @db.each {|k,v| db[k.to_s] = Utility.encode(v)}
+      db.execute("create table tmud (id integer primary key, data text);")
+      @db.each {|k,v| db[k] = Utility.encode(v)}
+      db.close
+    when :sqlite3
+      db = SQLite3::Database.open(@opts.ofile)
+      begin
+        db.execute("drop table tmud;")
+      rescue Exception
+      end
+      db.execute("create table tmud (id integer primary key, data text);")
+      @db.each {|k,v| db[k] = Utility.encode(v)}
       db.close
     end
 

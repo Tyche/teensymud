@@ -91,7 +91,7 @@ class Connection < Session
     end
   rescue EOFError, Errno::ECONNRESET, Errno::ECONNABORTED
     @closing = true
-    publish(:logged_out)
+    publish(:disconnected)
     unsubscribe_all
     log.info "(#{self.object_id}) Connection '#{@host}(#{@addr})' disconnecting"
     log.error $!
@@ -99,7 +99,7 @@ class Connection < Session
     @closing = true
     publish(:disconnected)
     unsubscribe_all
-    log.error "(#{self.object_id}) Connection#handle_input"
+    log.error "(#{self.object_id}) Connection#handle_input disconnecting"
     log.error $!
   end
 
@@ -116,28 +116,28 @@ class Connection < Session
     end
   rescue EOFError, Errno::ECONNABORTED, Errno::ECONNRESET
     @closing = true
-    publish(:logged_out)
+    publish(:disconnected)
     unsubscribe_all
     log.info "(#{self.object_id}) Connection '#{@host}(#{@addr})' disconnecting"
   rescue Exception
     @closing = true
     publish(:disconnected)
     unsubscribe_all
-    log.error "(#{self.object_id}) Connection#handle_output"
+    log.error "(#{self.object_id}) Connection#handle_output disconnecting"
     log.error $!
   end
 
   # handle_close is called to when an close event occurs for this session.
   def handle_close
     @connected = false
-    publish(:logged_out)
+    publish(:disconnected)
     unsubscribe_all
     log.info "(#{self.object_id}) Connection '#{@host}(#{@addr})' closing"
     @server.unregister(self)
 #    @sock.shutdown   # odd errors thrown with this
     @sock.close
   rescue Exception
-    log.error "(#{self.object_id}) Connection#handle_close"
+    log.error "(#{self.object_id}) Connection#handle_close closing"
     log.error $!
   end
 
@@ -171,13 +171,14 @@ class Connection < Session
   # prevent tight coupling.
   #
   # This supports the following:
-  # [:logged_out] - This symbol message from the client is a request to
+  # [:quit] - This symbol message from the client is a request to
   #               close the Connection.  It is handled here.
   # [String] - A String is assumed to be output and placed in our
   #            @outbuffer.
   def update(msg)
     case msg
-    when :logged_out
+    when :quit
+      handle_output
       @closing = true
     when :reconnecting
       unsubscribe_all
@@ -190,6 +191,10 @@ class Connection < Session
     else
       log.error "(#{self.object_id}) Connection#update - unknown message '#{@msg.inspect}'"
     end
+  rescue
+    # We squash and print out all exceptions here.  There is no reason to
+    # throw these back at out subscribers.
+    log.error $!
   end
 
   # [+attrib+] - A Symbol not handled here is assumed to be a query and
