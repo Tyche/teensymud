@@ -97,7 +97,7 @@ To start using the sample database either specify it in the config file or on th
 
 There are two converted databases from the original tinymud and dikumud.  To run with those use:
 
-* $ ruby tmud.rb --dbfile db/tinyworld 
+* $ ruby tmud.rb --dbfile db/tinyworld --home 17
 * $ ruby tmud.rb --dbfile db/dikuworld --home 13
 
 See db/license.tiny and db/license.diku for more inforamtion. 
