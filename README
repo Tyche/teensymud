@@ -95,15 +95,14 @@ To start using the sample database either specify it in the config file or on th
 
 * $ ruby tmud.rb --dbfile db/testworld
 
-There are two converted databases from the original tinymud and dikumud.  To run with those use:
+There are two converted databases from the original tinymud and dikumud.  The admin account on both is 'Wizard' and the password is 'potrzebie'.  To run with those use:
 
 * $ ruby tmud.rb --dbfile db/tinyworld --home 17
 * $ ruby tmud.rb --dbfile db/dikuworld --home 13
 
-See db/license.tiny and db/license.diku for more inforamtion. 
+The TinyMud scripts are only partially operable, which may severely restrict your movement.
 
-
-Have Fun.
+See db/license.tiny and db/license.diku for more informtion. 
 
 == Operation
 * CTL-C  - Will shut down the server
