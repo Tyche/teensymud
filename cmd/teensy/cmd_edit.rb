@@ -1,8 +1,8 @@
 #
 # file::    cmd_edit.rb
 # author::  Jon A. Lambert
-# version:: 2.9.0
-# date::    03/09/2006
+# version:: 2.10.0
+# date::    06/25/2006
 #
 # This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
@@ -30,7 +30,7 @@ module Cmd
     when /#(\d+)\s+(\w+)/
       o = get_object($1.to_i)
       case o
-      when GameObject, Room, Character, Script
+      when GameObject, Room, Character, Script, Exit
         if o.respond_to?($2) &&
            o.respond_to?("#$2=") &&
            o.send($2).class == String

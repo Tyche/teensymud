@@ -1,8 +1,8 @@
 #
 # file::    cmd_room.rb
 # author::  Jon A. Lambert
-# version:: 2.2.0
-# date::    08/29/2005
+# version:: 2.10.0
+# date::    06/25/2006
 #
 # This source code copyright (C) 2005 by Jon A. Lambert
 # All rights reserved.
@@ -24,8 +24,13 @@ module Cmd
         return
       end
       put_object(d)
-      get_object(location).exits[$2]=d.id
-      d.exits[$3] = get_object(location).id
+      curr = get_object(location)
+      e1 = Exit.new($2, id, curr.id, d.id)
+      curr.exits << e1.id
+      put_object(e1)
+      e2 = Exit.new($3, id, d.id, curr.id)
+      d.exits << e2.id
+      put_object(e2)
       sendto("Ok.")
     else
       sendto("say what??")

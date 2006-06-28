@@ -1,8 +1,8 @@
 #
 # file::    character.rb
 # author::  Jon A. Lambert
-# version:: 2.9.0
-# date::    03/15/2006
+# version:: 2.10.0
+# date::    06/25/2006
 #
 # This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
@@ -18,7 +18,7 @@ require 'core/gameobject'
 # Who's their daddy?
 #
 class Character < GameObject
-  logger 'INFO'
+  logger 'DEBUG'
 
   # The acctid object this character is associated with.
   property :acctid
@@ -78,11 +78,14 @@ class Character < GameObject
     check.gsub!(/\#/,"\\#")
     check.gsub!(/\[/,"\\[")
     check.gsub!(/\]/,"\\]")
-    get_object(location).exits.keys.grep(/^#{check}/).each do |ex|
-      c << Command.new(:cmd_go,"go #{ex}",nil)
-      arg = ex
+    get_object(location).exits.each do |exid|
+      ext = get_object(exid)
+      ext.name.split(/;/).grep(/^#{check}/).each do |ex|
+        c << Command.new(:cmd_go,"go #{ex}",nil)
+        arg = ex
+      end
     end
-    log.debug "parse commands - '#{c.inspect}', arguments - '#{arg}'"
+    log.debug "parse commands - '#{c.inspect}', arguments - '#{arg}', check - '#{check}'"
 
     # there are three possibilities here
     case c.size

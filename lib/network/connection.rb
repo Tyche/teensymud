@@ -74,7 +74,7 @@ class Connection < Session
   # is left in the connection's inbuffer.
   def handle_input
     buf = @sockio.read
-    return if buf.nil?
+    raise(EOFError) if !buf || buf.empty?
     buf = @pstack.filter_call(:filter_in,buf)
     if @server.service_io == :packetio ||
        @server.service_type == :client

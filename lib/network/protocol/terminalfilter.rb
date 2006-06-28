@@ -250,6 +250,9 @@ class TerminalFilter < Filter
             buf << s if s
           end
           set_mode :ground
+        when ?z  # MXP mode
+          buf << "[MXP @collect.to_i]"
+          set_mode :ground
         when ?~  # keys
           i = @collect.to_i
           case i

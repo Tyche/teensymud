@@ -11,7 +11,7 @@
 # See LICENSE file for additional information.
 #
 
-Version = "2.9.0"
+Version = "2.10.0"
 
 BANNER=<<-EOD
 
@@ -21,7 +21,6 @@ BANNER=<<-EOD
        Copyright (C) 2005, 2006 by Jon A. Lambert
  Released under the terms of the TeensyMUD Public License
 
-CR test\rblank it out
 EOD
 
 # Displayed upon connecting
@@ -33,6 +32,7 @@ LOGO=<<EOD
 \e[5mblinking\e[m
 \e[7mitalics\e[m
 \e[8mhidden\e[m<-hidden?
+CR test\r\0blank it out
 \e[0;31m
 #######                                           #      ##  #     ##  ######
   ##                                              ##    ###  #     ##  #    ##
@@ -48,5 +48,4 @@ LOGO=<<EOD
                                            ##
                                          ###
 \e[m
-CR test\rblank it out
 EOD

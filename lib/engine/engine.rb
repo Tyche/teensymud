@@ -1,8 +1,8 @@
 #
 # file::    engine.rb
 # author::  Jon A. Lambert
-# version:: 2.8.0
-# date::    01/19/2006
+# version:: 2.10.0
+# date::    06/25/2006
 #
 # This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
@@ -24,6 +24,7 @@ require 'core/room'
 require 'core/character'
 require 'core/gameobject'
 require 'core/account'
+require 'core/exit'
 require 'core/script'
 
 # The Engine class sets up the server, polls it regularly and observes
@@ -101,7 +102,7 @@ class Engine
     Signal.trap("TERM", method(:handle_signal))
     Signal.trap("KILL", method(:handle_signal))
     until @shutdown
-      @server.poll(0.2)
+      @server.poll(0.3)
       @eventmgr.process_events
     end # until
     graceful_shutdown

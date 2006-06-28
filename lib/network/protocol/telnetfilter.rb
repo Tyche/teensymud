@@ -47,6 +47,7 @@ class TelnetFilter < Filter
     @ttype = []
     @init_tries = 0   # Number of tries at negotitating sub options
     @synch = false
+    log.debug "telnet filter initialized - #{@init_tries}"
   end
 
   # Negotiate starting wanted options
@@ -305,13 +306,11 @@ class TelnetFilter < Filter
   # Negotiate starting wanted options that imply subnegotation
   # So far only terminal type
   def init_subneg
-    return if @init_tries > 31
-
+    return if @init_tries > 20
     @init_tries += 1
-
     @wopts.each_key do |opt|
       next if !@sneg_opts.include?(opt)
-#      log.debug("(#{@pstack.conn.object_id}) Subnegotiation attempt for option #{opt}.")
+      log.debug("(#{@pstack.conn.object_id}) Subnegotiation attempt for option #{opt}.")
       case opt
       when TTYPE
         who = :him
@@ -341,7 +340,7 @@ class TelnetFilter < Filter
       end
     end
 
-    if @init_tries > 31
+    if @init_tries > 20
       log.debug("(#{@pstack.conn.object_id}) Telnet init_subneg option - Timed out after #{@init_tries} tries.")
       @sneg_opts = []
       @pstack.conn.set_initdone
@@ -399,6 +398,12 @@ private
       if data[0] == 0
         log.debug("(#{@pstack.conn.object_id}) Terminal type - #{data[1..-1]}")
         if !@ttype.include?(data[1..-1])
+          # short-circuit choice because of Zmud
+          if data[1..-1].downcase == 'zmud'
+            @ttype << data[1..-1]
+            @pstack.terminal = 'zmud'
+            log.debug("(#{@pstack.conn.object_id}) Terminal choice - #{@pstack.terminal} in list #{@ttype.inspect}")
+          end
           # short-circuit choice because of Windows telnet client
           if data[1..-1].downcase == 'vt100'
             @ttype << data[1..-1]

@@ -1,8 +1,8 @@
 #
 # file::    store.rb
 # author::  Jon A. Lambert
-# version:: 2.8.0
-# date::    01/19/2006
+# version:: 2.10.0
+# date::    06/25/2006
 #
 # This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
@@ -35,7 +35,7 @@ MINIMAL_DB=<<EOH
     :id: 1
     :desc: "This is home."
     :contents: []
-    :exits: {}
+    :exits: []
     :triggers: {}
     :name: Home
     :created_on: 2006-03-09 22:45:33.695862 -05:00

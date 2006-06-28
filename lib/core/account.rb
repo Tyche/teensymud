@@ -91,7 +91,7 @@ class Account < Root
     # to redraw it.
     when :termsize
       @termsize = @conn.query(:termsize)
-      if @terminal =~ /^vt|xterm/
+      if vtsupport?
         publish("[home #{@termsize[1]},1][clearline][cursave]" +
           "[home 1,1][scrreset][clear][scrreg 1,#{@termsize[1]-3}][currest]")
       end
@@ -100,7 +100,7 @@ class Account < Root
       @echo = @conn.query(:echo)
       @termsize = @conn.query(:termsize)
       @terminal = @conn.query(:terminal)
-      if @terminal =~ /^vt|xterm/
+      if vtsupport?
         publish("[home #{@termsize[1]},1][clearline][cursave]" +
           "[home 1,1][scrreset][clear][scrreg 1,#{@termsize[1]-3}][currest]")
         sendmsg(LOGO)
@@ -150,7 +150,7 @@ class Account < Root
     when :initialize
       # ignore everything until negotiation done
     when :name
-      publish("[clearline]") if @terminal =~ /^vt|xterm/
+      publish("[clearline]") if vtsupport?
       @login_name = msg.proper_name
       if options['guest_accounts'] && @login_name =~ /Guest/i
         self.name = "Guest#{id}"
@@ -329,14 +329,14 @@ class Account < Root
   end
 
   def sendmsg(msg)
-    publish("[cursave][home #{@termsize[1]-3},1]") if @terminal =~ /^vt|xterm/
+    publish("[cursave][home #{@termsize[1]-3},1]") if vtsupport?
     publish(msg)
-    publish("[currest]") if @terminal =~ /^vt|xterm/
+    publish("[currest]") if vtsupport?
     prompt
   end
 
   def prompt
-    if @terminal =~ /^vt|xterm/
+    if vtsupport?
 =begin
       publish("[cursave][home #{@termsize[1]-2},1]" +
         "[color Yellow on Red]#{" "*@termsize[0]}[/color]" +
@@ -369,7 +369,7 @@ class Account < Root
 
   # Disconnects this account
   def disconnect(msg=nil)
-    publish("[home 1,1][scrreset][clear]") if @terminal =~ /^vt|xterm/
+    publish("[home 1,1][scrreset][clear]") if vtsupport?
     publish(msg + "\n") if msg
     publish("Bye!\n")
     publish(:quit)
@@ -388,6 +388,9 @@ class Account < Root
     "[color Yellow]1) Create a character\n2) Play\nQ) Quit\n>[/color] "
   end
 
+  def vtsupport?
+    @terminal =~ /^vt|xterm/
+  end
 private
   def new_char(nm=nil)
     if nm.nil?

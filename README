@@ -1,5 +1,5 @@
 = TeensyMUD Server
-= v2.9.0
+= v2.10.0
 
 == Introduction
 TeensyMUD is a very simple mud server written in Ruby.  It uses a multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns and YAML formatted text files as a database.  It is also a pure event driven system where all game objects communicate with each other via events.  
@@ -28,7 +28,7 @@ The latest release can be found at http://teensymud.kicks-ass.org
 * VT-52/100/102/220 support
 * Partial Xterm support
 * ZMP protocol support
-* Client detection (15+ clients tested so far)
+* Client detection (18+ clients tested so far)
 * Includes TeensyClient an vt-xxx/xterm capable client for testing.
 * Fully persistent virtual world
 * DBM, GDBM, SDBM, SQLite2, SQLite3 and YAML supported database back ends
@@ -70,11 +70,38 @@ That's it.  It will boot on port 4000 and build an initial database in the db di
 
 See config.yaml file for more configuration information.  Documentation inside.
 
+== Starting the mud
+
+Usage: ruby ./tmud.rb [options]
+
+    -p, --port PORT                  Select the port the mud will run on
+    -d, --dbfile DBFILE              Select the name of the database file
+                                       (default is 'db/world.yaml')
+    -c, --config CONFIGFILE          Select the name of the configuration file
+                                       (default is 'config.yaml')
+    -l, --logfile LOGFILE            Select the name of the log file
+                                       (default is 'logs/server.log')
+    -h, --home LOCATIONID            Select the object id where new characters will start
+    -t, --[no-]trace                 Trace execution
+    -v, --[no-]verbose               Run verbosely
+        --help                       Show this message
+        --version                    Show version
+
+Options specified on the command line will override those in the config.yaml file.
+
 There is a sample database, db/testworld.yaml that illustrates the use of triggers.  The admin account is 'Wizard' and the password is 'potrzebie'.
 
 To start using the sample database either specify it in the config file or on the command line:
 
-1. $ ruby tmud.rb -db/testworld
+* $ ruby tmud.rb --dbfile db/testworld
+
+There are two converted databases from the original tinymud and dikumud.  To run with those use:
+
+* $ ruby tmud.rb --dbfile db/tinyworld 
+* $ ruby tmud.rb --dbfile db/dikuworld --home 13
+
+See db/license.tiny and db/license.diku for more inforamtion. 
+
 
 Have Fun.
 

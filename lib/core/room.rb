@@ -1,8 +1,8 @@
 #
 # file::    room.rb
 # author::  Jon A. Lambert
-# version:: 2.8.0
-# date::    01/19/2006
+# version:: 2.10.0
+# date::    06/25/2006
 #
 # This source code copyright (C) 2005, 2006 by Jon A. Lambert
 # All rights reserved.
@@ -27,9 +27,7 @@ class Room < GameObject
   # [+return+] A handle to the new Room.
   def initialize(name, owner)
     super(name, owner)
-    self.exits={}               # The hash of exits for this room, where the
-                                # key is the displayed name of the exit and the
-                                # value is the room id at the end of the exit.
+    self.exits=[]               # The list of exits for this room.
   end
 
   # Event :describe
@@ -50,8 +48,10 @@ class Room < GameObject
       msg << "None.[/COLOR]"
     else
       i = 0
-      exits.keys.each do |ex|
-        msg << ex
+      exits.each do |exid|
+        ex = get_object(exid)
+        key = ex.name.split(/;/).first
+        msg << key
         i += 1
         case s - i
         when 1 then s > 2 ? msg << ", and " : msg << " and "
@@ -63,20 +63,6 @@ class Room < GameObject
       msg << "[/COLOR]"
     end
     add_event(id,e.from,:show,msg)
-  end
-
-  # Event :leave
-  # [+e+]      The event
-  # [+return+] Undefined
-  def leave(e)
-    ch = get_object(e.from)
-    characters(e.from).each do |x|
-      add_event(id,x.id,:show, ch.name + " has left #{e.msg}.") if x.account
-    end
-    # remove character
-    delete_contents(ch.id)
-    ch.location = nil
-    add_event(id,exits[e.msg],:arrive,ch.id)
   end
 
   # Event :arrive
