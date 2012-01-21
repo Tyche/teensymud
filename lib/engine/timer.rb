@@ -18,11 +18,10 @@ class Timer
   attr_accessor :id, :name, :time
 
   # Constructor for a Timer object.
-  # [+from+]   The id of the issuer of the event.
-  # [+to+]     The id of the target of the event.
-  # [+kind+]   The symbol that defines the kind of event.
-  # [+msg+]    Optional information needed to process the event.
-  # [+return+] A reference to the Event.
+  # [+id+]     The id of the object
+  # [+name+]   The symbol that defines the kind of timer event.
+  # [+time+]   Optional information needed to process the event.
+  # [+return+] A reference to the Timer.
   def initialize(id,name,time)
     @id,@name,@time,@counter=id,name,time,time
   end

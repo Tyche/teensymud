@@ -41,7 +41,7 @@ class Root
   def inspect
     s = ''
     @props.each do |key,val|
-      s << sprintf("%20-20s : %40-40s\n", key.to_s, val.inspect)
+      s << sprintf("%-20.20s : %-40.40s\n", key.to_s, val.inspect)
     end
     s
   end
