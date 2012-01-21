@@ -1,197 +1,218 @@
 --- 
-- !ruby/object:World 
+- !ruby/object:Script 
   props: 
+    :language: :fart
+    :owner: 0
     :created_on: 2006-03-09 22:45:33.695862 -05:00
     :updated_on: 2006-03-09 22:45:33.695862 -05:00
+    :name: arrival
+    :id: 5
+- !ruby/object:Exit 
+  props: 
+    :msgsucc: You unlock the dungeon.|unlocks the dungeon.
     :owner: 0
+    :contents: []
+
+    :created_on: 2006-06-27 23:10:35.022856 -04:00
+    :location: 1
+    :updated_on: 2006-06-28 06:00:12.042553 -04:00
+    :name: dungeon
+    :to_room: 3
+    :id: 11
+    :desc: ""
+    :msgfail: You need the key.|fumbles with the dungeon door.
+    :triggers: 
+      :pre_leave: 9
+- !ruby/object:World 
+  props: 
     :msgs: {}
 
+    :owner: 0
     :timer_list: 
     - !ruby/object:Timer 
-      counter: 1
+      counter: 2
       id: 3
       name: :hamster
       time: 2
-    :all_accounts: 
-    - 6
     :all_characters: 
     - 7
-    :admins: 
-    - 7
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :all_accounts: 
+    - 6
+    :updated_on: 2008-08-21 03:35:12.391718 -04:00
+    :name: World
     :builders: 
     - 7
-    :name: World
-    :desc: This is the World object.
     :id: 0
+    :desc: This is the World object.
+    :admins: 
+    - 7
+- !ruby/object:Account 
+  props: 
+    :owner: 6
+    :created_on: 2006-03-15 14:38:57.308361 -04:00
+    :passwd: s9l3wU5HryDEw
+    :color: true
+    :characters: 
+    - 7
+    :updated_on: 2006-03-15 19:28:44.460017 -04:00
+    :name: Wizard
+    :id: 6
+    :desc: ""
+- !ruby/object:Exit 
+  props: 
+    :msgsucc: ""
+    :owner: 0
+    :contents: []
+
+    :created_on: 2006-06-27 23:10:35.022856 -04:00
+    :location: 2
+    :updated_on: 2006-06-28 06:00:12.042553 -04:00
+    :name: down
+    :to_room: 1
+    :id: 12
+    :desc: ""
+    :msgfail: ""
+    :triggers: {}
+
 - !ruby/object:Room 
   props: 
-    :created_on: 2006-03-09 22:45:33.695862 -05:00
-    :updated_on: 2006-03-09 22:45:33.695862 -05:00
-    :msgfail: ""
-    :msgsucc: ""
-    :triggers: 
-      :arrive: 5
-    :owner: 0
-    :contents: 
-    - 7
-    - 8
     :exits: 
     - 10
     - 11
-    :location: 
-    :name: Home
-    :desc: This is the starting home.
-    :id: 1
-- !ruby/object:Room 
-  props: 
-    :created_on: 2006-03-09 22:45:33.695862 -05:00
-    :updated_on: 2006-03-09 22:45:33.695862 -05:00
-    :msgfail: ""
     :msgsucc: ""
-    :owner: 0
-    :triggers: {}
-    :contents: []
-    :exits: 
-    - 12
-    :location: 
-    :name: Up in the Air
-    :desc: You are flying!!!
-    :id: 2
-- !ruby/object:Room 
-  props: 
-    :created_on: 2006-03-09 22:45:33.695862 -05:00
-    :updated_on: 2006-03-09 22:45:33.695862 -05:00
-    :msgfail: ""
-    :msgsucc: ""
-    :owner: 0
-    :triggers: 
-      :timer: 4
-    :contents: []
-    :exits: 
-    - 13
-    :location: 
-    :name: The Dungeon
-    :desc: There is a hamster running on a large metal wheel that's connected to some sort of fancy electromagnetic servo mechanism.
-    :id: 3
-- !ruby/object:Script 
-  props: 
-    :created_on: 2006-03-09 22:45:33.695862 -05:00
-    :updated_on: 2006-03-09 22:45:33.695862 -05:00
-    :owner: 0
-    :name: ticktock
-    :language: :fart
-    :id: 4
-- !ruby/object:Script 
-  props: 
-    :created_on: 2006-03-09 22:45:33.695862 -05:00
-    :updated_on: 2006-03-09 22:45:33.695862 -05:00
-    :owner: 0
-    :name: arrival
-    :language: :fart
-    :id: 5
-- !ruby/object:Account 
-  props: 
-    :updated_on: 2006-03-15 18:28:44.460017 -05:00
-    :name: Wizard
-    :passwd: s9l3wU5HryDEw
-    :characters: 
+    :contents: 
     - 7
-    :desc: ""
-    :owner: 6
-    :color: true
-    :created_on: 2006-03-15 13:38:57.308361 -05:00
-    :id: 6
+    - 8
+    :owner: 0
+    :location: 
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
+    :name: Home
+    :id: 1
+    :desc: This is the starting home.
+    :triggers: 
+      :arrive: 5
+    :msgfail: ""
 - !ruby/object:Character 
   props: 
+    :msgsucc: ""
+    :contents: []
+
+    :owner: 7
+    :acctid: 6
+    :location: 1
     :created_on: 2006-03-09 22:45:33.695862 -05:00
     :updated_on: 2006-03-09 22:45:33.695862 -05:00
-    :msgfail: ""
-    :msgsucc: ""
-    :triggers: {}
-    :owner: 7
-    :contents: []
-    :location: 1
     :name: Wizard
-    :acctid: 6
-    :desc: ""
     :id: 7
+    :desc: ""
+    :triggers: {}
+
+    :msgfail: ""
+- !ruby/object:Exit 
+  props: 
+    :msgsucc: ""
+    :owner: 0
+    :contents: []
+
+    :created_on: 2006-06-27 23:10:35.022856 -04:00
+    :location: 3
+    :updated_on: 2006-06-28 06:00:12.042553 -04:00
+    :name: up
+    :to_room: 1
+    :id: 13
+    :desc: ""
+    :msgfail: ""
+    :triggers: {}
+
+- !ruby/object:Room 
+  props: 
+    :exits: 
+    - 12
+    :msgsucc: ""
+    :contents: []
+
+    :owner: 0
+    :location: 
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
+    :name: Up in the Air
+    :id: 2
+    :desc: You are flying!!!
+    :triggers: {}
+
+    :msgfail: ""
 - !ruby/object:GameObject 
   props: 
+    :msgsucc: ""
+    :contents: []
+
+    :owner: 0
+    :location: 1
     :created_on: 2006-03-09 22:45:33.695862 -05:00
     :updated_on: 2006-03-09 22:45:33.695862 -05:00
-    :msgfail: ""
-    :msgsucc: ""
-    :triggers: {}
-    :owner: 0
-    :contents: []
-    :location: 1
     :name: key
-    :desc: ""
     :id: 8
+    :desc: ""
+    :triggers: {}
+
+    :msgfail: ""
+- !ruby/object:Room 
+  props: 
+    :exits: 
+    - 13
+    :msgsucc: ""
+    :contents: []
+
+    :owner: 0
+    :location: 
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2008-08-21 03:35:12.449718 -04:00
+    :name: The Dungeon
+    :id: 3
+    :desc: There is a hamster running on a large metal wheel that's connected to some sort of fancy electromagnetic servo mechanism.
+    :triggers: 
+      :timer: 4
+    :msgfail: ""
 - !ruby/object:Script 
   props: 
-    :created_on: 2006-03-09 22:45:33.695862 -05:00
-    :updated_on: 2006-03-09 22:45:33.695862 -05:00
+    :language: :boolexp
     :owner: 0
     :src: "#8"
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2006-03-09 22:45:33.695862 -05:00
     :name: 
-    :desc: ""
-    :language: :boolexp
     :id: 9
+    :desc: ""
+- !ruby/object:Script 
+  props: 
+    :language: :fart
+    :owner: 0
+    :src: |
+      if rand(50)
+        echoat "3 ***TICK!***"
+      else
+        echoat "3 ***TOCK!***"
+      endif
+
+    :created_on: 2006-03-09 22:45:33.695862 -05:00
+    :updated_on: 2008-08-21 03:35:12.449718 -04:00
+    :name: ticktock
+    :id: 4
 - !ruby/object:Exit 
   props: 
     :msgsucc: ""
-    :updated_on: 2006-06-28 06:00:12.042553 -04:00
-    :triggers: {}
+    :owner: 0
     :contents: []
+
+    :created_on: 2006-06-27 23:10:35.022856 -04:00
+    :location: 1
+    :updated_on: 2006-06-28 06:00:12.042553 -04:00
+    :name: up
     :to_room: 2
-    :location: 1
-    :owner: 0
-    :name: up
-    :desc: ""
-    :created_on: 2006-06-27 23:10:35.022856 -04:00
     :id: 10
-    :msgfail: ""
-- !ruby/object:Exit 
-  props: 
-    :msgsucc: "You unlock the dungeon.|unlocks the dungeon."
-    :updated_on: 2006-06-28 06:00:12.042553 -04:00
-    :triggers: 
-      :pre_leave: 9
-    :contents: []
-    :to_room: 3
-    :location: 1
-    :owner: 0
-    :name: dungeon
     :desc: ""
-    :created_on: 2006-06-27 23:10:35.022856 -04:00
-    :id: 11
-    :msgfail: "You need the key.|fumbles with the dungeon door."
-- !ruby/object:Exit 
-  props: 
-    :msgsucc: ""
-    :updated_on: 2006-06-28 06:00:12.042553 -04:00
+    :msgfail: ""
     :triggers: {}
-    :contents: []
-    :to_room: 1
-    :location: 2
-    :owner: 0
-    :name: down
-    :desc: ""
-    :created_on: 2006-06-27 23:10:35.022856 -04:00
-    :id: 12
-    :msgfail: ""
-- !ruby/object:Exit 
-  props: 
-    :msgsucc: ""
-    :updated_on: 2006-06-28 06:00:12.042553 -04:00
-    :triggers: {}
-    :contents: []
-    :to_room: 1
-    :location: 3
-    :owner: 0
-    :name: up
-    :desc: ""
-    :created_on: 2006-06-27 23:10:35.022856 -04:00
-    :id: 13
-    :msgfail: ""
+
