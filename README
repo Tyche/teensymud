@@ -1,5 +1,5 @@
 = TeensyMUD Server
-= v2.10.0
+= v3.0.0
 
 == Introduction
 TeensyMUD is a very simple mud server written in Ruby.  It uses a multiplexed single-threaded network driver using Acceptor/Reactor and Observer patterns and YAML formatted text files as a database.  It is also a pure event driven system where all game objects communicate with each other via events.  
@@ -11,7 +11,7 @@ The latest release can be found at http://teensymud.kicks-ass.org
 
 == System Dependencies
 === Required
-[Ruby 1.8.4] Can be obtained at the home of Ruby, http://www.ruby-lang.org.  It runs on most platforms.
+[Ruby 1.9.x] Can be obtained at the home of Ruby, http://www.ruby-lang.org.  It runs on most platforms.
 [Log4r] All logging done through this now. Install from Ruby Gems, or http://log4r.sourceforge.net/ 
 
 === Optional
@@ -75,13 +75,15 @@ See config.yaml file for more configuration information.  Documentation inside.
 Usage: ruby ./tmud.rb [options]
 
     -p, --port PORT                  Select the port the mud will run on
+                                       (default is 4000)
     -d, --dbfile DBFILE              Select the name of the database file
-                                       (default is 'db/world.yaml')
+                                       (default is 'db/testworld.yaml')
     -c, --config CONFIGFILE          Select the name of the configuration file
                                        (default is 'config.yaml')
     -l, --logfile LOGFILE            Select the name of the log file
                                        (default is 'logs/server.log')
     -h, --home LOCATIONID            Select the object id where new characters will start
+                                       (default is 1) 
     -t, --[no-]trace                 Trace execution
     -v, --[no-]verbose               Run verbosely
         --help                       Show this message

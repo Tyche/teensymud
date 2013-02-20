@@ -166,4 +166,4 @@
 - !ruby/object:Command 
   cmd: :cmd_gc
   help: runs garbage collection
-  name: @gc
+  name: '@gc'

@@ -90,7 +90,7 @@ class TelnetFilter < Filter
     while b = @sc.get_byte
 
       # OOB sync data
-      if @pstack.urgent_on || b[0] == DM
+      if @pstack.urgent_on || b.getbyte(0) == DM
         log.debug("(#{@pstack.conn.object_id}) Sync mode on")
         @pstack.urgent_on = false
         @synch = true
@@ -99,7 +99,7 @@ class TelnetFilter < Filter
 
       case mode?
       when :normal
-        case b[0]
+        case b.getbyte(0)
         when CR
           next if @synch
           set_mode(:cr) if !@pstack.binary_on
@@ -137,7 +137,7 @@ class TelnetFilter < Filter
         end
       when :cr
         # handle CRLF and CRNUL by insertion of LF into buffer
-        case b[0]
+        case b.getbyte(0)
         when LF
           buf << LF.chr
           echo(CR.chr + LF.chr)
@@ -156,7 +156,7 @@ class TelnetFilter < Filter
         set_mode(:normal)
       when :lf
         # liberally handle LF, LFCR for clients that aren't telnet correct
-        case b[0]
+        case b.getbyte(0)
         when CR # Handle LFCR by swallowing CR
         else  # Handle other stuff that follows - single LF
           buf << b
@@ -164,7 +164,7 @@ class TelnetFilter < Filter
         end
         set_mode(:normal)
       when :cmd
-        case b[0]
+        case b.getbyte(0)
         when IAC
           # IAC escapes IAC
           buf << IAC.chr
@@ -220,18 +220,18 @@ class TelnetFilter < Filter
             break
           end
           opt = @sc.get_byte
-          case b[0]
+          case b.getbyte(0)
           when WILL
-            replies_him(opt[0],true)
+            replies_him(opt.getbyte(0),true)
           when WONT
-            replies_him(opt[0],false)
+            replies_him(opt.getbyte(0),false)
           when DO
-            requests_us(opt[0],true)
+            requests_us(opt.getbyte(0),true)
           when DONT
-            requests_us(opt[0],false)
+            requests_us(opt.getbyte(0),false)
           end
           # Update interesting things in ProtocolStack after negotiation
-          case opt[0]
+          case opt.getbyte(0)
           when ECHO
             @pstack.echo_on = enabled?(ECHO, :us)
           when BINARY
@@ -246,10 +246,10 @@ class TelnetFilter < Filter
           @sc.get_byte
           opt = @sc.get_byte
           data = @sc.scan_until(/#{IAC.chr}#{SE.chr}/).chop.chop
-          parse_subneg(opt[0],data)
+          parse_subneg(opt.getbyte(0),data)
           set_mode(:normal)
         else
-          log.debug("(#{@pstack.conn.object_id}) Unknown Telnet command - #{b[0]}")
+          log.debug("(#{@pstack.conn.object_id}) Unknown Telnet command - #{b.getbyte(0)}")
           set_mode(:normal)
         end
       end
@@ -295,7 +295,7 @@ class TelnetFilter < Filter
     return if @server.service_type == :client  # Never echo for server when client
                                   # Remove this if it makes sense for peer to peer
     if @pstack.echo_on
-      if @pstack.hide_on && ch[0] != CR
+      if @pstack.hide_on && ch.getbyte(0) != CR
         @pstack.conn.sock.send('*',0)
       else
         @pstack.conn.sock.send(ch,0)
@@ -395,7 +395,7 @@ private
       @pstack.conn.publish(:termsize)
       log.debug("(#{@pstack.conn.object_id}) Terminal width #{@pstack.twidth} / height #{@pstack.theight}")
     when TTYPE
-      if data[0] == 0
+      if data.getbyte(0) == 0
         log.debug("(#{@pstack.conn.object_id}) Terminal type - #{data[1..-1]}")
         if !@ttype.include?(data[1..-1])
           # short-circuit choice because of Zmud
@@ -417,7 +417,7 @@ private
           return if @pstack.terminal
           choose_terminal
         end
-      elsif data[0] == 1  # send - should only be called by :client
+      elsif data.getbyte(0) == 1  # send - should only be called by :client
         return if !@pstack.terminal
         @pstack.conn.sendmsg(IAC.chr + SB.chr + TTYPE.chr + 0.chr + @pstack.terminal + IAC.chr + SE.chr)
       end

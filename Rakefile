@@ -1,10 +1,10 @@
-require 'rake/rdoctask'
+require 'rdoc/task'
 require 'rake/testtask'
 require 'rake/packagetask'
 require 'pp'
 
 # get version 
-require 'lib/utility/version'
+require './lib/utility/version'
 
 # files to distribute
 PKG_FILES = FileList[
@@ -60,7 +60,7 @@ end
   
 desc "Report code statistics (KLOCs, etc) from the application"
 task :stats do |t|
-  require 'code_statistics'
+  require './code_statistics'
   CodeStatistics.new(
     ["Main", ".", /^tmud.rb$|^tclient.rb$/], 
     ["Library", "lib", /.*\.rb$/], 

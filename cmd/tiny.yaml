@@ -20,4 +20,4 @@
 - !ruby/object:Command 
   cmd: :cmd_shutdown
   help: Shut down the server.
-  name: @shutdown
+  name: "@shutdown"

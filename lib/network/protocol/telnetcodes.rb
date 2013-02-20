@@ -101,11 +101,19 @@ module TelnetCodes
   PHEARTBEAT     = 140 # Telnat Pragma Heartbeat
   EXOPL          = 255 # Extended-Options-List - RFC 861
 
-  COMPRESS =  85 # MCCP 1 support (broken)
+  MSDP     = 69  # Mud Server Data Protocol
+  MSSP     = 70  # MUD Server Status Protocol
+  COMPRESS =  85 # MCCP 1 support (broken deprecated)
   COMPRESS2 = 86 # MCCP 2 support
   MSP  = 90 # MSP  support
+  MXP  = 91 # MUD eXtension Protocol (MXP)
   MSP2 = 92 # MSP2 support
     MUSIC = 0
     SOUND = 1
+
   ZMP = 93 # ZMP support
+  AARD = 102 # Aardwolf client protocol (deprecated?)
+  MULTIPLEX = 112 # Crystal client telnet multiplex 
+  ATCP = 200 # Achaea telnet client protocol
+  GMCP = 201 # GMCP/ATCP2 client protocol
 end

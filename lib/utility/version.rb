@@ -11,14 +11,14 @@
 # See LICENSE file for additional information.
 #
 
-Version = "2.10.1"
+Version = "3.0.0"
 
 BANNER=<<-EOD
 
 
             This is TeensyMUD version #{Version}
 
-       Copyright (C) 2005, 2006 by Jon A. Lambert
+       Copyright (C) 2005-2013 by Jon A. Lambert
  Released under the terms of the TeensyMUD Public License
 
 EOD

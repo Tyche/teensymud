@@ -5,15 +5,15 @@
 # in this configuration file.  The default configuration is named
 # 'config.yaml' and can only be overridden on the command line.
 # 
-# version:: 2.10.0
-# date::    06/25/2006
+# version:: 3.0.0
+# date::    02/19/2013
 
 ###########################################################
 ### Storage configuration section
 ###########################################################
 
 # Name of the database without extension 'dbtype' will determine it.
-dbfile: db/world
+dbfile: db/testworld
 
 # Type of database
 #
@@ -96,7 +96,7 @@ server_negotiation:
   - :echo
   - :naws
   - :ttype
-  - :zmp
+#  - :zmp
 
 ###########################################################
 ### Engine configuration section

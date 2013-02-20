@@ -37,20 +37,20 @@ def get_options
       opts.separator "Usage: ruby #{$0} [options]"
       opts.separator ""
       opts.on("-p", "--port PORT", Integer,
-        "Select the port the mud will run on") {|opt| myopts['server_port'] = opt}
+        "Select the port the mud will run on") {|port| myopts['server_port'] = port}
       opts.on("-d", "--dbfile DBFILE", String,
         "Select the name of the database file",
-        " (default is 'db/world.yaml')") {|opt| myopts['dbfile'] = opt}
+        "  (default is 'db/world.yaml')") {|db| myopts['dbfile'] = db}
       opts.on("-c", "--config CONFIGFILE", String,
         "Select the name of the configuration file",
-        " (default is 'config.yaml')") {|opt| myopts['configfile'] = opt}
+        "  (default is 'config.yaml')") {|cfile| myopts['configfile'] = cfile}
       opts.on("-l", "--logfile LOGFILE", String,
         "Select the name of the log file",
-        " (default is 'logs/server.log')") {|opt| myopts['logfile'] = opt}
+        "  (default is 'logs/server.log')") {|lfile| myopts['logfile'] = lfile}
       opts.on("-h", "--home LOCATIONID", Integer,
-        "Select the object id where new characters will start") {|opt| myopts['home'] = opt}
-      opts.on("-t", "--[no-]trace", "Trace execution") {myopts['trace'] = true}
-      opts.on("-v", "--[no-]verbose", "Run verbosely") {myopts['verbose'] = true}
+        "Select the object id where new characters will start") {|home| myopts['home'] = home}
+      opts.on("-t", "--[no-]trace", "Trace execution") {|t| myopts['trace'] = t}
+      opts.on("-v", "--[no-]verbose", "Run verbosely") {|v| myopts['verbose'] = v}
       opts.on_tail("-h", "--help", "Show this message") do
         $stdout.puts opts.help
         exit
