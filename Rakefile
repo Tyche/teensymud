@@ -35,6 +35,7 @@ Rake::RDocTask.new do |rd|
   rd.options << '-d' 
 end
 
+=begin
 # run tests
 Rake::TestTask.new do |t|
   t.libs << "vendor" << "test"  # default "lib"
@@ -49,6 +50,7 @@ Rake::TestTask.new do |t|
   t.verbose = true
   t.options = "-c test/test_config.yaml"
 end
+=end
 
 desc "Package up a distribution"
 Rake::PackageTask.new("tmud", Version) do |p|
@@ -96,4 +98,4 @@ end
 task :release => [:package]
 #task :clean => [:clobber_rdoc]
 task :package => [:rdoc]
-#task :default => [:build_parsers, :rdoc, :test]
+task :default => [:build_parsers, :rdoc]
