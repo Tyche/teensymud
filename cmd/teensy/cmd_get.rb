@@ -1,10 +1,10 @@
 #
 # file::    cmd_get.rb
-# author::  Jon A. Lambert
-# version:: 2.2.0
-# date::    08/29/2005
+# author::  Jon A. Lambert, Chris Bailey
+# version:: 3.0.0
+# date::    02/20/2013
 #
-# This source code copyright (C) 2005 by Jon A. Lambert
+# This source code copyright (C) 2005-2013 by Jon A. Lambert
 # All rights reserved.
 #
 # Released under the terms of the TeensyMUD Public License
@@ -12,10 +12,25 @@
 #
 module Cmd
 
-  # gets all objects in the room into your inventory
+  # gets a specific object from the room you are in.
   def cmd_get(args)
-    get_object(location).objects.each do |q|
-      add_event(id,q.id,:get)
+    if args == "all"
+      get_object(location).objects.each do |q|
+        add_event(id,q.id,:get)
+      end
+      return
+    end
+    found_object = false
+    get_object(location).objects.each do |obj|
+      if (obj.name.is_match?(args) || args.is_prefix?(obj.name))
+        found_object = true
+        add_event(id,obj.id,:get)
+        break
+      end
+    end
+    
+    if !found_object
+      sendto "You cannot find that object."
     end
   end
 
