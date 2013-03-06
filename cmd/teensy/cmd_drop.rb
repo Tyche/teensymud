@@ -14,6 +14,12 @@ module Cmd
 
   # drops an object in your inventory into the room
   def cmd_drop(args)
+    if args == "all"
+      objects.each do |obj|
+        add_event(id,obj.id,:drop)
+      end
+      return
+    end
     found_object = false
     objects.each do |obj|
       if (obj.name.is_match?(args) || args.is_prefix?(obj.name))

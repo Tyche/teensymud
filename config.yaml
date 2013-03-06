@@ -114,7 +114,7 @@ home: 1
 # command interfaces to load (in order)
 character_interface:
   - teensy
-  - tiny
+#  - tiny
 
 object_interface:
   - objects
