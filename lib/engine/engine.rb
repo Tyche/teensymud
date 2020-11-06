@@ -100,7 +100,7 @@ class Engine
 
     Signal.trap("INT", method(:handle_signal))
     Signal.trap("TERM", method(:handle_signal))
-    Signal.trap("KILL", method(:handle_signal))
+#    Signal.trap("KILL", method(:handle_signal))
     until @shutdown
       @server.poll(0.3)
       @eventmgr.process_events
